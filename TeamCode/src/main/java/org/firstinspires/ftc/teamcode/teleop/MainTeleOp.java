@@ -17,7 +17,7 @@ public class MainTeleOp extends Methods {
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
-            forwards = gamepad1.left_stick_y;
+            forwards = -gamepad1.left_stick_y;
 
             drive();
             
