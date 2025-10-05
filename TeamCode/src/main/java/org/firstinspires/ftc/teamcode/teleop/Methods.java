@@ -21,6 +21,7 @@ public abstract class Methods extends LinearOpMode {
     Limelight3A limelight;
     
     float turn, strafe, forwards;
+    boolean fire, transferToggle, cycleLeft, cycleRight;
     public VisionPortal visionPortal;
     public AprilTagProcessor aprilTag;
     List<AprilTagDetection> currentApriltagDetections;
@@ -69,7 +70,7 @@ public abstract class Methods extends LinearOpMode {
     }
 
     public void launch() {
-        
+        //no outtake :(
     }
     public void detectAprilTag() {
         currentApriltagDetections = aprilTag.getDetections();
