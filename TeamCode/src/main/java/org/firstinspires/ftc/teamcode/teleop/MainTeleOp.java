@@ -19,6 +19,12 @@ public class MainTeleOp extends Methods {
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
 
+            fire = gamepad2.a;
+            transferToggle = gamepad2.b;
+            cycleLeft = gamepad2.dpad_left;
+            cycleRight = gamepad2.dpad_right;
+
+
             drive();
             
             intake.setPower(gamepad2.right_trigger);
