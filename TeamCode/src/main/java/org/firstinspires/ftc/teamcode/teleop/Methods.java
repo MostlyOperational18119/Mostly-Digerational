@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -21,6 +23,8 @@ public abstract class Methods extends LinearOpMode {
     DcMotor motorFR, motorFL, motorBR, motorBL, intake, outtake, liftR, liftL;
     Servo revolver, launcherYaw, launcherPitch, transferServo, limelightServo, intakeGate;
     Limelight3A limelight;
+    RevColorSensorV3 colorSensor;
+    DigitalChannel breakBeamSensor;
     float turn, strafe, forwards; //driver controls
     double currentRevolver, currentIntakeGate, currentTransferServo;
     double transferServoUp = 0.0;
@@ -56,6 +60,9 @@ public abstract class Methods extends LinearOpMode {
         intakeGate = hardwareMap.servo.get("intakeGate");
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
+        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
+
 
         aprilTag = new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
