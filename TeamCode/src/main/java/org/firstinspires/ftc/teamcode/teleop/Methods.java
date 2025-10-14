@@ -87,6 +87,11 @@ public abstract class Methods extends LinearOpMode {
         motorBR.setPower(Math.pow((forwards - strafe - turn), 1.67));
         motorBL.setPower(-Math.pow((forwards - strafe + turn), 1.67));
     }
+
+    public void haveBall() {
+
+    }
+
     public void detectAprilTag() {
         currentApriltagDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentApriltagDetections) {
