@@ -62,7 +62,7 @@ public abstract class Methods extends LinearOpMode {
         intakeGate = hardwareMap.servo.get("intakeGate");
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
+        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beamSensor");
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
 

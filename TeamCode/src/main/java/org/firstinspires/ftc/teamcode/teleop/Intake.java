@@ -49,7 +49,7 @@ public class Intake {
         currentState = Intake.State.IDLE;
     }
     public void update() {
-        methods.telemetry.addData("Current Launch State", currentState);
+        methods.telemetry.addData("Current Intake State", currentState);
         switch (currentState) {
             case INTAKE:
                 methods.revolver.setPosition(1); //placeholder value for servo position (ramp down)
