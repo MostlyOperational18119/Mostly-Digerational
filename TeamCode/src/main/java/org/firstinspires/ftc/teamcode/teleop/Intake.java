@@ -45,7 +45,7 @@ public class Intake {
     public Intake(Methods methods) {
         this.methods = methods;
     }
-    public void startLaunch() {
+    public void startIntake() {
         currentState = Intake.State.IDLE;
     }
     public void update() {

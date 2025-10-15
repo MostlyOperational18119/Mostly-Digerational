@@ -14,6 +14,7 @@ public class MainTeleOp extends Methods {
         initialize();
         waitForStart();
         Launch launch = new Launch(this);
+        Intake intakeState = new Intake(this);
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -23,10 +24,12 @@ public class MainTeleOp extends Methods {
             transferToggle = gamepad2.bWasPressed();
             cycleLeft = gamepad2.dpadLeftWasPressed();
             cycleRight = gamepad2.dpadRightWasPressed();
+            intakeBall = gamepad2.right_trigger;
 
             detectAprilTag();
             drive();
             launch.update();
+            intakeState.update();
 
             if (fire) {
                 launch.startLaunch();}
@@ -42,6 +45,10 @@ public class MainTeleOp extends Methods {
                 case THREE:
                     revolver.setPosition(0.2);
                     break;
+            }
+
+            if (intakeBall != 0){
+                intakeState.startIntake();
             }
 
             telemetry.update();

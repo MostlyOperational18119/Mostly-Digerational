@@ -26,7 +26,7 @@ public abstract class Methods extends LinearOpMode {
     Limelight3A limelight;
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
-    float turn, strafe, forwards; //driver controls
+    float turn, strafe, forwards, intakeBall; //driver controls
     double currentRevolver, currentIntakeGate, currentTransferServo;
     double transferServoUp = 0.0;
     BallPositions ballPosition;
