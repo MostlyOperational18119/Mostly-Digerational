@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -34,6 +35,7 @@ public abstract class Methods extends LinearOpMode {
         TWO,
         THREE;
     }
+
     boolean fire, transferToggle, cycleLeft, cycleRight;
 
     //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
@@ -86,10 +88,6 @@ public abstract class Methods extends LinearOpMode {
         motorFL.setPower(-Math.pow((forwards + strafe + turn), 1.67));
         motorBR.setPower(Math.pow((forwards - strafe - turn), 1.67));
         motorBL.setPower(-Math.pow((forwards - strafe + turn), 1.67));
-    }
-
-    public void haveBall() {
-
     }
 
     public void detectAprilTag() {
