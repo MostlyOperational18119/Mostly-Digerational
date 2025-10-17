@@ -94,6 +94,11 @@ public abstract class Methods extends LinearOpMode {
         }
     }
 
+    public void saarangHateButton() {
+        telemetry.addLine("fuck you saarang");
+        telemetry.update();
+    }
+
     public BallPositions chooseNextBall() {
 
         BallPositions nextBall = BallPositions.ONE; //CHANGE TO LIMELIGHT CODE
