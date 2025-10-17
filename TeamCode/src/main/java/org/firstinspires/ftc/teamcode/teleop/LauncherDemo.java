@@ -35,11 +35,23 @@ public class LauncherDemo extends Methods {
 
             power = targetRPM/maxRPM + P * (targetRPM - measuredRPM)/maxRPM + D;
 
-            /*if (gamepad1.dpadUpWasPressed()) {
-                speed += 0.1;
+            if (gamepad1.dpadUpWasPressed()) {
+                constant += 0.1;
             } else if (gamepad1.dpadDownWasPressed()) {
-                speed -= 0.1;
-            }*/
+                constant -= 0.1;
+            }
+
+            if (gamepad1.bWasPressed()) {
+                P += 0.01;
+            } else if (gamepad1.xWasPressed()) {
+                P -= 0.01;
+            }
+
+            if (gamepad1.rightBumperWasPressed()) {
+                D += 0.01;
+            } else if (gamepad1.leftBumperWasPressed()) {
+                D -= 0.01;
+            }
 
             if (gamepad1.yWasPressed()) {
                 hoodPos += 0.01;
@@ -50,7 +62,9 @@ public class LauncherDemo extends Methods {
             hood.setPosition(hoodPos);
             flywheel.setPower(power);
             telemetry.addData("flywheel Speed", power);
-            telemetry.addData("flywheel velocity", flywheel.getVelocity());
+            telemetry.addData("constant", constant);
+            telemetry.addData("P", P);
+            telemetry.addData("D", D);
             telemetry.addData("hood position", hoodPos);
             telemetry.update();
         }

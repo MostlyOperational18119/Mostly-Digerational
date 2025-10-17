@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-public class Launch {
+public class LaunchSequence {
     private enum State {
         PREP_LAUNCH,
         LAUNCH,
@@ -8,8 +8,8 @@ public class Launch {
     }
     private State currentState = State.IDLE;
     private long startTime;
-    private final Methods methods;
-    public Launch(Methods methods) {
+    private Methods methods;
+    public void InitLaunchSequence(Methods methods) {
         this.methods = methods;
     }
     public void startLaunch() {
@@ -32,5 +32,9 @@ public class Launch {
             case IDLE:
                 break;
         }
+    }
+
+    public void onBeamBreak() {
+        methods.colorSensor
     }
 }
