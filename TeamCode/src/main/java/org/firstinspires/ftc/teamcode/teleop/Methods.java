@@ -99,6 +99,11 @@ public abstract class Methods extends LinearOpMode {
         telemetry.update();
     }
 
+    public void saarangLoveButton() {
+        telemetry.addLine("kiss me saarang");
+        telemetry.update();
+    }
+
     public BallPositions chooseNextBall() {
 
         BallPositions nextBall = BallPositions.ONE; //CHANGE TO LIMELIGHT CODE
