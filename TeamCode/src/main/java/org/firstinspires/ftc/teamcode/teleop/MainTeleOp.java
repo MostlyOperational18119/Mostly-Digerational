@@ -1,11 +1,5 @@
 package org.firstinspires.ftc.teamcode.teleop;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-
-import java.util.List;
 
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends Methods {
@@ -13,7 +7,7 @@ public class MainTeleOp extends Methods {
     public void runOpMode() {
         initialize();
         waitForStart();
-        Launch launch = new Launch(this);
+        //LaunchSequence launch = new LaunchSequence(this);
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -26,10 +20,11 @@ public class MainTeleOp extends Methods {
 
             detectAprilTag();
             drive();
-            launch.update();
+            //launch.update();
 
             if (fire) {
-                launch.startLaunch();}
+                //launch.startLaunch();
+            }
             intake.setPower(gamepad2.right_trigger);
 
             switch (ballPosition) {

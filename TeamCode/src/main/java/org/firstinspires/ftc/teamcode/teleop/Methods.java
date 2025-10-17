@@ -91,9 +91,9 @@ public abstract class Methods extends LinearOpMode {
         currentApriltagDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentApriltagDetections) {
             telemetry.addData("ID: ", detection.id);
-        }
-    }
 
+}
+    }
     public void saarangHateButton() {
         telemetry.addLine("fuck you saarang");
         telemetry.update();
