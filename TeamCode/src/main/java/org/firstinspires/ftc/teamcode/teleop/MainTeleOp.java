@@ -22,6 +22,12 @@ public class MainTeleOp extends Methods {
             drive();
             //launch.update();
 
+            if (Math.random() >= 0.5) {
+                saarangHateButton();
+            } else {
+                saarangLoveButton();
+            }
+
             if (fire) {
                 //launch.startLaunch();
             }

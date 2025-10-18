@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -21,12 +22,12 @@ import java.util.List;
 public abstract class Methods extends LinearOpMode {
     //defines all hardware
     DcMotor motorFR, motorFL, motorBR, motorBL, intake, outtake, liftR, liftL;
-    Servo revolver, launcherYaw, launcherPitch, transferServo, limelightServo, intakeGate;
+    Servo revolver, launcherYaw, launcherPitch, transferServo, limelightServo, intakeRamp;
     Limelight3A limelight;
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
     float turn, strafe, forwards; //driver controls
-    double currentRevolver, currentIntakeGate, currentTransferServo;
+//    double currentRevolver, currentintakeRamp, currentTransferServo;
     double transferServoUp = 0.0;
     BallPositions ballPosition;
     public enum BallPositions {
@@ -34,6 +35,12 @@ public abstract class Methods extends LinearOpMode {
         TWO,
         THREE;
     }
+    public enum BallColor {
+        GREEN,
+        PURPLE;
+    }
+   
+    public BallColor[] ballcolor = new BallColor[3];
     boolean fire, transferToggle, cycleLeft, cycleRight;
 
     //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
@@ -57,10 +64,11 @@ public abstract class Methods extends LinearOpMode {
         revolver = hardwareMap.servo.get("revolver");
         transferServo = hardwareMap.servo.get("transferServo");
         limelightServo = hardwareMap.servo.get("limelightServo");
-        intakeGate = hardwareMap.servo.get("intakeGate");
+        intakeRamp = hardwareMap.servo.get("intakeRamp");
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
+        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
 
@@ -96,17 +104,35 @@ public abstract class Methods extends LinearOpMode {
     }
     public void saarangHateButton() {
         telemetry.addLine("fuck you saarang");
-        telemetry.update();
     }
 
     public void saarangLoveButton() {
         telemetry.addLine("kiss me saarang");
-        telemetry.update();
     }
 
     public BallPositions chooseNextBall() {
 
         BallPositions nextBall = BallPositions.ONE; //CHANGE TO LIMELIGHT CODE
         return nextBall;
+    }
+
+    //when beam is broken: check ball caller, update array, rotate/ramp movement
+    public void onBeamBreak() {
+        boolean broken = breakBeamSensor.getState();
+
+        intakeRamp.setPosition(0); //push ball up position
+
+        if (!broken) {
+            NormalizedRGBA rgba = colorSensor.getNormalizedColors();
+            if (rgba.green > rgba.red & rgba.green > rgba.blue) {
+                BallColor.GREEN;
+            } else {
+                BallColor.PURPLE;
+            }
+        }
+        
+
+
+        
     }
 }
