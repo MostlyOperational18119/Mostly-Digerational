@@ -7,7 +7,7 @@ public class MainTeleOp extends Methods {
     public void runOpMode() {
         initialize();
         waitForStart();
-        //LaunchSequence launch = new LaunchSequence(this);
+        //LaunchSequence launch = new LaunchSequence(this);8
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -18,7 +18,7 @@ public class MainTeleOp extends Methods {
             cycleLeft = gamepad2.dpadLeftWasPressed();
             cycleRight = gamepad2.dpadRightWasPressed();
 
-            detectAprilTag();
+            //detectAprilTag();
             drive();
             //launch.update();
 
@@ -28,22 +28,22 @@ public class MainTeleOp extends Methods {
                 saarangLoveButton();
             }
 
-            if (fire) {
-                //launch.startLaunch();
-            }
-            intake.setPower(gamepad2.right_trigger);
-
-            switch (ballPosition) {
-                case ONE:
-                    revolver.setPosition(0);
-                    break;
-                case TWO:
-                    revolver.setPosition(0.1);
-                    break;
-                case THREE:
-                    revolver.setPosition(0.2);
-                    break;
-            }
+//            if (fire) {
+//                //launch.startLaunch();
+//            }
+//            intake.setPower(gamepad2.right_trigger);
+//
+//            switch (ballPosition) {
+//                case ONE:
+//                    revolver.setPosition(0);
+//                    break;
+//                case TWO:
+//                    revolver.setPosition(0.1);
+//                    break;
+//                case THREE:
+//                    revolver.setPosition(0.2);
+//                    break;
+//            }
 
             telemetry.update();
         }
