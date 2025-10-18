@@ -9,21 +9,27 @@ public class LaunchSequence {
         LAUNCH,
         IDLE;
     }
+
     private State currentState = State.IDLE;
+    private Indexer index = new Indexer();
     private long startTime;
     private Methods methods;
+    boolean broken = methods.breakBeamSensor.getState();
+
     public void InitLaunchSequence(Methods methods) {
         this.methods = methods;
     }
+
     public void startLaunch() {
         currentState = State.PREP_LAUNCH;
     }
+
     public void update() {
         methods.telemetry.addData("Current Launch State", currentState);
         switch (currentState) {
             case PREP_LAUNCH:
                 methods.outtake.setPower(1);
-                methods.ballPosition = methods.chooseNextBall();
+
                 if (System.currentTimeMillis() - startTime > 2000) {
                     startTime = System.currentTimeMillis();
                     currentState = State.LAUNCH;
@@ -36,4 +42,31 @@ public class LaunchSequence {
                 break;
         }
     }
+
+    //when beam is broken: check ball color
+    public void onBeamBreak() {
+        if (!broken) {
+            methods.intakeRamp.setPosition(0); //push ball up position
+
+            NormalizedRGBA rgba = methods.colorSensor.getNormalizedColors();
+
+            //change later --> variable that has empty position (indexer automatically rotates before intaking)
+//            for (int i = 0; i < 3; i++) {
+//                if (index.slots[i] == Indexer.BallColor.EMPTY) {
+//                    if (rgba.green > rgba.red & rgba.green > rgba.blue) {
+//                        index.setSlots(i, Indexer.BallColor.GREEN);
+//                    } else {
+//                        index.setSlots(i, Indexer.BallColor.PURPLE);
+//                    }
+//                } else {
+//
+//                }
+//            }
+        }
+    }
+
+    public void whereIsEmpty() {
+
+    }
+
 }
