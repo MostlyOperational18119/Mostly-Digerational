@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+
 public class LaunchSequence {
     private enum State {
         PREP_LAUNCH,
@@ -32,9 +35,5 @@ public class LaunchSequence {
             case IDLE:
                 break;
         }
-    }
-
-    public void onBeamBreak() {
-        methods.colorSensor
     }
 }
