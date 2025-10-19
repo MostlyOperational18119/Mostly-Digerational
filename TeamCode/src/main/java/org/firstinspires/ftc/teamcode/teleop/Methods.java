@@ -28,10 +28,6 @@ public abstract class Methods extends LinearOpMode {
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
     float turn, strafe, forwards; //driver controls
-    float motorFRPower = forwards - strafe - turn;
-    float motorFLPower = forwards + strafe + turn;
-    float motorBRPower = forwards + strafe - turn;
-    float motorBLPower = forwards - strafe + turn;
 //    double currentRevolver, currentintakeRamp, currentTransferServo;
     double transferServoUp = 0.0;
 
@@ -51,15 +47,11 @@ public abstract class Methods extends LinearOpMode {
     //initializes all the hardware and the apriltag detection
     public void initialize() {
         motorFR = hardwareMap.dcMotor.get("motorFR"); //ex 3
-        motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFL = hardwareMap.dcMotor.get("motorFL"); //ex 1
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBR = hardwareMap.dcMotor.get("motorBR"); //ex 2
-        motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBL = hardwareMap.dcMotor.get("motorBL"); //ex 0
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        intake = hardwareMap.dcMotor.get("intake");
 //        outtake = hardwareMap.dcMotor.get("outtake");
 //        liftR = hardwareMap.dcMotor.get("liftR");
@@ -97,17 +89,10 @@ public abstract class Methods extends LinearOpMode {
 
     }
     public void drive() {
-        if (motorFLPower >= 0.2 && motorFRPower >= 0.2 && motorBRPower >= 0.2 && motorBLPower >= 0.2) {
-            motorFR.setPower(motorFRPower);
-            motorFL.setPower(motorFLPower);
-            motorBR.setPower(motorBRPower);
-            motorBL.setPower(motorBLPower);
-        } else {
-            motorFR.setPower(0);
-            motorFL.setPower(0);
-            motorBR.setPower(0);
-            motorBL.setPower(0);
-        }
+        motorFR.setPower((forwards - strafe - turn));
+        motorFL.setPower((forwards + strafe + turn));
+        motorBR.setPower((forwards + strafe - turn));
+        motorBL.setPower((forwards - strafe + turn));
     }
     public void detectAprilTag() {
         currentApriltagDetections = aprilTag.getDetections();
