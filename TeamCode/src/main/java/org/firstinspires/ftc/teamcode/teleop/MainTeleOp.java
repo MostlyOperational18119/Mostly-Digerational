@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends Methods {
@@ -12,6 +13,16 @@ public class MainTeleOp extends Methods {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
+            motorFRPower = (forwards - strafe - turn);
+            motorFLPower = (forwards + strafe + turn);
+            motorBLPower = (forwards - strafe + turn);
+            motorBRPower = (forwards + strafe - turn);
+
+            motorFRPower = (float) Range.clip(motorFRPower, -1.0, 1.0);
+            motorFLPower = (float) Range.clip(motorFLPower, -1.0, 1.0);
+            motorBRPower = (float) Range.clip(motorBRPower, -1.0, 1.0);
+            motorBLPower = (float) Range.clip(motorBLPower, -1.0, 1.0);
+
 
             fire = gamepad2.aWasPressed();
             transferToggle = gamepad2.bWasPressed();

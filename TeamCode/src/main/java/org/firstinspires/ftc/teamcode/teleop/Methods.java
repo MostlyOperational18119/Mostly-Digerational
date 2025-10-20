@@ -27,7 +27,7 @@ public abstract class Methods extends LinearOpMode {
     Limelight3A limelight;
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
-    float turn, strafe, forwards; //driver controls
+    float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
 //    double currentRevolver, currentintakeRamp, currentTransferServo;
     double transferServoUp = 0.0;
 
@@ -47,11 +47,13 @@ public abstract class Methods extends LinearOpMode {
     //initializes all the hardware and the apriltag detection
     public void initialize() {
         motorFR = hardwareMap.dcMotor.get("motorFR"); //ex 3
+        //motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
         motorFL = hardwareMap.dcMotor.get("motorFL"); //ex 1
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBR = hardwareMap.dcMotor.get("motorBR"); //ex 2
+        motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBL = hardwareMap.dcMotor.get("motorBL"); //ex 0
-        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        //motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
 //        intake = hardwareMap.dcMotor.get("intake");
 //        outtake = hardwareMap.dcMotor.get("outtake");
 //        liftR = hardwareMap.dcMotor.get("liftR");
@@ -89,10 +91,17 @@ public abstract class Methods extends LinearOpMode {
 
     }
     public void drive() {
-        motorFR.setPower((forwards - strafe - turn));
-        motorFL.setPower((forwards + strafe + turn));
-        motorBR.setPower((forwards + strafe - turn));
-        motorBL.setPower((forwards - strafe + turn));
+        motorFL.setPower(motorFLPower);
+        motorFR.setPower(motorFRPower);
+        motorBL.setPower(motorBLPower);
+        motorBR.setPower(motorBRPower);
+
+//        if (motorFLPower <= 0.2 && motorFRPower <= 0.2 && motorBLPower <= 0.2 && motorBRPower <= 0.2) {
+//            motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        }
     }
     public void detectAprilTag() {
         currentApriltagDetections = aprilTag.getDetections();
