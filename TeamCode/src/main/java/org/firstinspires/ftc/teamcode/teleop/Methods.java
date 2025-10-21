@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -46,14 +47,12 @@ public abstract class Methods extends LinearOpMode {
     List<AprilTagDetection> currentApriltagDetections;
     //initializes all the hardware and the apriltag detection
     public void initialize() {
-        motorFR = hardwareMap.dcMotor.get("motorFR"); //ex 3
-        //motorFR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorFL = hardwareMap.dcMotor.get("motorFL"); //ex 1
+        motorFR = hardwareMap.dcMotor.get("motorFR");
+        motorFL = hardwareMap.dcMotor.get("motorFL");
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBR = hardwareMap.dcMotor.get("motorBR"); //ex 2
-        motorBR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motorBL = hardwareMap.dcMotor.get("motorBL"); //ex 0
-        //motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBR = hardwareMap.dcMotor.get("motorBR");
+        motorBL = hardwareMap.dcMotor.get("motorBL");
+        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
 //        intake = hardwareMap.dcMotor.get("intake");
 //        outtake = hardwareMap.dcMotor.get("outtake");
 //        liftR = hardwareMap.dcMotor.get("liftR");
@@ -91,17 +90,23 @@ public abstract class Methods extends LinearOpMode {
 
     }
     public void drive() {
+
+        motorFRPower = (float) Range.clip(motorFRPower, -1.0, 1.0);
+        motorFLPower = (float) Range.clip(motorFLPower, -1.0, 1.0);
+        motorBRPower = (float) Range.clip(motorBRPower, -1.0, 1.0);
+        motorBLPower = (float) Range.clip(motorBLPower, -1.0, 1.0);
+
         motorFL.setPower(motorFLPower);
         motorFR.setPower(motorFRPower);
         motorBL.setPower(motorBLPower);
         motorBR.setPower(motorBRPower);
 
-//        if (motorFLPower <= 0.2 && motorFRPower <= 0.2 && motorBLPower <= 0.2 && motorBRPower <= 0.2) {
-//            motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//            motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//            motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//            motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        }
+        if (motorFLPower <= 0.2 && motorFRPower <= 0.2 && motorBLPower <= 0.2 && motorBRPower <= 0.2) {
+            motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
     }
     public void detectAprilTag() {
         currentApriltagDetections = aprilTag.getDetections();

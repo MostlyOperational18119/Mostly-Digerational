@@ -18,11 +18,6 @@ public class MainTeleOp extends Methods {
             motorBLPower = (forwards - strafe + turn);
             motorBRPower = (forwards + strafe - turn);
 
-            motorFRPower = (float) Range.clip(motorFRPower, -1.0, 1.0);
-            motorFLPower = (float) Range.clip(motorFLPower, -1.0, 1.0);
-            motorBRPower = (float) Range.clip(motorBRPower, -1.0, 1.0);
-            motorBLPower = (float) Range.clip(motorBLPower, -1.0, 1.0);
-
 
             fire = gamepad2.aWasPressed();
             transferToggle = gamepad2.bWasPressed();
