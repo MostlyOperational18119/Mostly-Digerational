@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 public class MainTeleOp extends Methods {
     @Override
     public void runOpMode() {
+        saarangHateLoveButton();
         initialize();
         waitForStart();
         //LaunchSequence launch = new LaunchSequence(this);8
@@ -27,12 +28,6 @@ public class MainTeleOp extends Methods {
             //detectAprilTag();
             drive();
             //launch.update();
-
-            if (Math.random() >= 0.5) {
-                saarangHateButton();
-            } else {
-                saarangLoveButton();
-            }
 
 //            if (fire) {
 //                //launch.startLaunch();
