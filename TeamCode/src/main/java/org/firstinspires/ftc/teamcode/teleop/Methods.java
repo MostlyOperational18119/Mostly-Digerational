@@ -28,6 +28,7 @@ public abstract class Methods extends LinearOpMode {
     Limelight3A limelight;
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
+    Indexer indexer = new Indexer(this);
     float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
     //    double currentRevolver, currentintakeRamp, currentTransferServo;
     double transferServoUp = 0.0;
@@ -39,7 +40,7 @@ public abstract class Methods extends LinearOpMode {
     }
 
     //public BallColor[] ballcolor = new BallColor[3];
-    boolean fire, transferToggle, cycleLeft, cycleRight;
+    boolean fire, transferToggle, cycleLeft, cycleRight, toGreen, toPurple;
 
     //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
     public VisionPortal visionPortal;
@@ -69,28 +70,28 @@ public abstract class Methods extends LinearOpMode {
         transferServo = hardwareMap.servo.get("transferServo");
         limelightServo = hardwareMap.servo.get("limelightServo");
         intakeRamp = hardwareMap.servo.get("intakeRamp");
-//
-//        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-//        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
-//        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
-//        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
+
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
+        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
+        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
 
-//        aprilTag = new AprilTagProcessor.Builder()
-//                .setDrawAxes(true)
-//                .setDrawCubeProjection(true)
-//                .setDrawTagOutline(true)
-//                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-//                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
-//                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-//                .build();
-//        VisionPortal.Builder builder = new VisionPortal.Builder();
-//        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam"));
-//        builder.enableLiveView(true);
-//        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
-//        builder.setAutoStopLiveView(false);
-//        builder.addProcessor(aprilTag);
-//        visionPortal = builder.build();
+        aprilTag = new AprilTagProcessor.Builder()
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setDrawTagOutline(true)
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .build();
+        VisionPortal.Builder builder = new VisionPortal.Builder();
+        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam"));
+        builder.enableLiveView(true);
+        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+        builder.setAutoStopLiveView(false);
+        builder.addProcessor(aprilTag);
+        visionPortal = builder.build();
 
     }
 
