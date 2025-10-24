@@ -9,7 +9,8 @@ public class MainTeleOp extends Methods {
         saarangHateLoveButton();
         initialize();
         waitForStart();
-        //LaunchSequence launch = new LaunchSequence(this);8
+        LaunchSequence launch = new LaunchSequence();
+        launch.InitLaunchSequence(this);
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -24,16 +25,25 @@ public class MainTeleOp extends Methods {
             transferToggle = gamepad2.bWasPressed();
             cycleLeft = gamepad2.dpadLeftWasPressed();
             cycleRight = gamepad2.dpadRightWasPressed();
+            toGreen = gamepad2.rightBumperWasPressed();
+            toPurple = gamepad2.leftBumperWasPressed();
 
             //detectAprilTag();
             drive();
-            //launch.update();
+            launch.update();
+            indexer.update();
 
-//            if (fire) {
-//                //launch.startLaunch();
-//            }
-//            intake.setPower(gamepad2.right_trigger);
-//
+            if (fire) {
+                launch.startLaunch();
+            }
+            if (toGreen) {
+                indexer.rotateToColor(Indexer.BallColor.GREEN);
+            }
+            if (toPurple) {
+                indexer.rotateToColor(Indexer.BallColor.PURPLE);
+            }
+            intake.setPower(gamepad2.right_trigger);
+
 //            switch (ballPosition) {
 //                case ONE:
 //                    revolver.setPosition(0);

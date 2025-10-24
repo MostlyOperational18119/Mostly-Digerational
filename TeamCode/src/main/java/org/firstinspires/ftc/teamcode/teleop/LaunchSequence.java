@@ -11,13 +11,13 @@ public class LaunchSequence {
     }
 
     private State currentState = State.IDLE;
-    private Indexer index = new Indexer();
+    private Indexer index;
     private long startTime;
     private Methods methods;
-    boolean broken = methods.breakBeamSensor.getState();
-
+    boolean broken;
     public void InitLaunchSequence(Methods methods) {
         this.methods = methods;
+        index = methods.indexer;
     }
 
     public void startLaunch() {
@@ -25,6 +25,7 @@ public class LaunchSequence {
     }
 
     public void update() {
+        broken = methods.breakBeamSensor.getState();
         methods.telemetry.addData("Current Launch State", currentState);
         switch (currentState) {
             case PREP_LAUNCH:
