@@ -58,18 +58,17 @@ public abstract class Methods extends LinearOpMode {
         motorBL = hardwareMap.dcMotor.get("motorBL");
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        intake = hardwareMap.dcMotor.get("intake");
-//        outtake = hardwareMap.dcMotor.get("outtake");
-//        liftR = hardwareMap.dcMotor.get("liftR");
-//        liftL = hardwareMap.dcMotor.get("liftL");
-//        //ballPosition = BallPositions.ONE;
-//
-//        launcherYaw = hardwareMap.servo.get("launcherYaw");
-//        launcherPitch = hardwareMap.servo.get("launcherPitch");
-//        revolver = hardwareMap.servo.get("revolver");
-//        transferServo = hardwareMap.servo.get("transferServo");
-//        limelightServo = hardwareMap.servo.get("limelightServo");
-//        intakeRamp = hardwareMap.servo.get("intakeRamp");
+        intake = hardwareMap.dcMotor.get("intake");
+        outtake = hardwareMap.dcMotor.get("outtake");
+        liftR = hardwareMap.dcMotor.get("liftR");
+        liftL = hardwareMap.dcMotor.get("liftL");
+
+        launcherYaw = hardwareMap.servo.get("launcherYaw");
+        launcherPitch = hardwareMap.servo.get("launcherPitch");
+        revolver = hardwareMap.servo.get("revolver");
+        transferServo = hardwareMap.servo.get("transferServo");
+        limelightServo = hardwareMap.servo.get("limelightServo");
+        intakeRamp = hardwareMap.servo.get("intakeRamp");
 //
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 //        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");

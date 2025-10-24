@@ -51,22 +51,17 @@ public class LaunchSequence {
             NormalizedRGBA rgba = methods.colorSensor.getNormalizedColors();
 
             //change later --> variable that has empty position (indexer automatically rotates before intaking)
-//            for (int i = 0; i < 3; i++) {
-//                if (index.slots[i] == Indexer.BallColor.EMPTY) {
-//                    if (rgba.green > rgba.red & rgba.green > rgba.blue) {
-//                        index.setSlots(i, Indexer.BallColor.GREEN);
-//                    } else {
-//                        index.setSlots(i, Indexer.BallColor.PURPLE);
-//                    }
-//                } else {
-//
-//                }
-//            }
+            for (int i = 0; i < 3; i++) {
+                if (index.slots[i] == Indexer.BallColor.EMPTY) {
+                    if (rgba.green > rgba.red & rgba.green > rgba.blue) {
+                        index.setSlots(i, Indexer.BallColor.GREEN);
+                    } else {
+                        index.setSlots(i, Indexer.BallColor.PURPLE);
+                    }
+                } else {
+
+                }
+            }
         }
     }
-
-    public void whereIsEmpty() {
-
-    }
-
 }
