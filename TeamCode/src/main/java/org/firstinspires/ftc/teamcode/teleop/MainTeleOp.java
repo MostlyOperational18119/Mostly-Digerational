@@ -9,8 +9,8 @@ public class MainTeleOp extends Methods {
         saarangHateLoveButton();
         initialize();
         waitForStart();
-        LaunchSequence launch = new LaunchSequence();
-        launch.InitLaunchSequence(this);
+        LaunchSequence launch = new LaunchSequence(this);
+        //launch.InitLaunchSequence(this);
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
