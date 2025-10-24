@@ -13,9 +13,13 @@ public class LaunchSequence {
     private State currentState = State.IDLE;
     private Indexer index;
     private long startTime;
-    private Methods methods;
+    private final Methods methods;
     boolean broken;
-    public void InitLaunchSequence(Methods methods) {
+    /*public void InitLaunchSequence(Methods methods) {
+        this.methods = methods;
+        index = methods.indexer;
+    }*/
+    public LaunchSequence(Methods methods) {
         this.methods = methods;
         index = methods.indexer;
     }
