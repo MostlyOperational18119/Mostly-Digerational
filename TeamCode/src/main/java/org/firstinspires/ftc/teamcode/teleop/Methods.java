@@ -4,9 +4,12 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -21,46 +24,56 @@ import java.util.List;
 public abstract class Methods extends LinearOpMode {
     //defines all hardware
     DcMotor motorFR, motorFL, motorBR, motorBL, intake, outtake, liftR, liftL;
-    Servo revolver, launcherYaw, launcherPitch, transferServo, limelightServo, intakeGate;
+    Servo revolver, launcherYaw, launcherPitch, transferServo, limelightServo, intakeRamp;
     Limelight3A limelight;
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
-    float turn, strafe, forwards; //driver controls
-    double currentRevolver, currentIntakeGate, currentTransferServo;
+    Indexer indexer = new Indexer(this);
+    float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
+    //    double currentRevolver, currentintakeRamp, currentTransferServo;
     double transferServoUp = 0.0;
-    BallPositions ballPosition;
-    public enum BallPositions {
-        ONE,
-        TWO,
-        THREE;
+
+    public enum BallColor {
+        GREEN,
+        EMPTY,
+        PURPLE;
     }
-    boolean fire, transferToggle, cycleLeft, cycleRight;
+
+    //public BallColor[] ballcolor = new BallColor[3];
+    boolean fire, transferToggle, cycleLeft, cycleRight, toGreen, toPurple;
 
     //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
     public VisionPortal visionPortal;
     public AprilTagProcessor aprilTag;
     List<AprilTagDetection> currentApriltagDetections;
+
     //initializes all the hardware and the apriltag detection
     public void initialize() {
         motorFR = hardwareMap.dcMotor.get("motorFR");
+        motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFL = hardwareMap.dcMotor.get("motorFL");
+        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBR = hardwareMap.dcMotor.get("motorBR");
+        motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBL = hardwareMap.dcMotor.get("motorBL");
+        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake = hardwareMap.dcMotor.get("intake");
         outtake = hardwareMap.dcMotor.get("outtake");
         liftR = hardwareMap.dcMotor.get("liftR");
         liftL = hardwareMap.dcMotor.get("liftL");
-        ballPosition = BallPositions.ONE;
 
         launcherYaw = hardwareMap.servo.get("launcherYaw");
         launcherPitch = hardwareMap.servo.get("launcherPitch");
         revolver = hardwareMap.servo.get("revolver");
         transferServo = hardwareMap.servo.get("transferServo");
         limelightServo = hardwareMap.servo.get("limelightServo");
-        intakeGate = hardwareMap.servo.get("intakeGate");
+        intakeRamp = hardwareMap.servo.get("intakeRamp");
 
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
+        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
 
@@ -81,32 +94,35 @@ public abstract class Methods extends LinearOpMode {
         visionPortal = builder.build();
 
     }
+
     public void drive() {
-        motorFR.setPower(Math.pow((forwards + strafe - turn), 1.67));
-        motorFL.setPower(-Math.pow((forwards + strafe + turn), 1.67));
-        motorBR.setPower(Math.pow((forwards - strafe - turn), 1.67));
-        motorBL.setPower(-Math.pow((forwards - strafe + turn), 1.67));
+
+        motorFRPower = (float) Range.clip(motorFRPower, -1.0, 1.0);
+        motorFLPower = (float) Range.clip(motorFLPower, -1.0, 1.0);
+        motorBRPower = (float) Range.clip(motorBRPower, -1.0, 1.0);
+        motorBLPower = (float) Range.clip(motorBLPower, -1.0, 1.0);
+
+        motorFL.setPower(motorFLPower);
+        motorFR.setPower(motorFRPower);
+        motorBL.setPower(motorBLPower);
+        motorBR.setPower(motorBRPower);
+
     }
+
     public void detectAprilTag() {
         currentApriltagDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentApriltagDetections) {
             telemetry.addData("ID: ", detection.id);
 
-}
-    }
-    public void saarangHateButton() {
-        telemetry.addLine("fuck you saarang");
-        telemetry.update();
+        }
     }
 
-    public void saarangLoveButton() {
-        telemetry.addLine("kiss me saarang");
-        telemetry.update();
-    }
-
-    public BallPositions chooseNextBall() {
-
-        BallPositions nextBall = BallPositions.ONE; //CHANGE TO LIMELIGHT CODE
-        return nextBall;
+    public void saarangHateLoveButton() {
+        if (Math.random() >= 0.5) {
+            telemetry.addLine("fuck you saarang");
+        } else {
+            telemetry.addLine("kiss me saarang");
+        }
     }
 }
+

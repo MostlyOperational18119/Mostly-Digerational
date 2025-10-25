@@ -1,12 +1,14 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.teleop.outreach;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "alex")
-public class whateverYouWant extends Methods {
+import org.firstinspires.ftc.teamcode.teleop.Methods;
+
+@TeleOp(name = "BigBot")
+public class BigBot extends Methods {
     @Override
     public void runOpMode(){
         float turn, strafe, forwards;
