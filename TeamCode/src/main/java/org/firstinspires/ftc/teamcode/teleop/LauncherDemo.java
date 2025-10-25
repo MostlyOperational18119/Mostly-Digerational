@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 @TeleOp(name = "Launcher Demo")
 public class LauncherDemo extends Methods {
 
-    double speed = 8, hoodPos = 0;
+    double speed = 8, hoodPos = 0.3;
     @Override
     public void runOpMode() {
         VoltageSensor voltageSensor;
@@ -18,19 +18,21 @@ public class LauncherDemo extends Methods {
         Servo hood = hardwareMap.get(Servo.class, "hood");
         Servo flicker = hardwareMap.get(Servo.class, "flicker");
 
-        double constant = 19.5;
-        double distance = 180; //placeholder
+        double constant = 0;
+        double lowestRPM = 999999;
+        double distance = 148; //placeholder
         int maxRPM = 5800;
         double targetRPM = 0;
         double measuredRPM = 0;
-        double P = 1, D = 1;
+        double P = 0, D = 0;
         double power = 0;
         //double measuredAngularAcceleration = 0;
 
         waitForStart();
         while (opModeIsActive()) {
             targetRPM = constant * distance;
-            measuredRPM = flywheel.getVelocity();
+            measuredRPM = (flywheel.getVelocity()/28) * 60;
+            constant = 23.716/12.7 * voltageSensor.getVoltage();
             //measuredAngularAcceleration = measuredRPM/60;
 
             power = targetRPM/maxRPM + P * (targetRPM - measuredRPM)/maxRPM + D;
@@ -59,10 +61,20 @@ public class LauncherDemo extends Methods {
                 hoodPos -= 0.01;
             }
 
+            if (gamepad1.leftStickButtonWasPressed()) {
+                lowestRPM = 999999;
+            }
+
+            if (measuredRPM < lowestRPM) {
+                lowestRPM = measuredRPM;
+            }
+
             hood.setPosition(hoodPos);
             flywheel.setPower(power);
             telemetry.addData("flywheel Speed", power);
             telemetry.addData("constant", constant);
+            telemetry.addData("measured RPM", measuredRPM);
+            telemetry.addData("Lowest RPM", lowestRPM);
             telemetry.addData("P", P);
             telemetry.addData("D", D);
             telemetry.addData("hood position", hoodPos);
