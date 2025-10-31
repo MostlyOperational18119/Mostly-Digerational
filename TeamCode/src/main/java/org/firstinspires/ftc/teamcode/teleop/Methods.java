@@ -4,10 +4,12 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -36,15 +38,20 @@ import java.util.List;
 
 public abstract class Methods extends LinearOpMode {
     //defines all hardware
-    DcMotor motorFR, motorFL, motorBR, motorBL, intake, outtake, liftR, liftL;
+    DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
+    DcMotorEx outtake;
     Servo revolver, launcherYaw, daHood, transferServo, limelightServo, intakeRamp;
+    VoltageSensor voltageSensor;
     Limelight3A limelight;
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
     Indexer indexer = new Indexer(this);
     float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
     //    double currentRevolver, currentintakeRamp, currentTransferServo;
+    float P_FAR = 0.005F, P_CLOSE = 0.005F;
+    double power;
     double transferServoUp = 0.0;
+    int maxRPM = 5900, targetRPM, measuredRPM;
 
     public enum BallColor {
         GREEN,
@@ -73,7 +80,7 @@ public abstract class Methods extends LinearOpMode {
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake = hardwareMap.dcMotor.get("intake");
-        outtake = hardwareMap.dcMotor.get("outtake");
+        outtake = hardwareMap.get(DcMotorEx.class, "outtake");
         //liftR = hardwareMap.dcMotor.get("liftR");
         //liftL = hardwareMap.dcMotor.get("liftL");
 
@@ -83,6 +90,7 @@ public abstract class Methods extends LinearOpMode {
         revolver = hardwareMap.servo.get("revolver");
         transferServo = hardwareMap.servo.get("transferServo");
         limelightServo = hardwareMap.servo.get("limelightServo");
+        voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
         //intakeRamp = hardwareMap.servo.get("intakeRamp");
 
         //limelight = hardwareMap.get(Limelight3A.class, "limelight");
