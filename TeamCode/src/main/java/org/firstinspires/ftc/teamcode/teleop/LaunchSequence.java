@@ -15,10 +15,6 @@ public class LaunchSequence {
     private long startTime;
     private final Methods methods;
     boolean broken;
-    /*public void InitLaunchSequence(Methods methods) {
-        this.methods = methods;
-        index = methods.indexer;
-    }*/
     public LaunchSequence(Methods methods) {
         this.methods = methods;
         index = methods.indexer;
@@ -33,7 +29,7 @@ public class LaunchSequence {
         methods.telemetry.addData("Current Launch State", currentState);
         switch (currentState) {
             case PREP_LAUNCH:
-                methods.outtake.setPower(1);
+                //methods.outtake.setPower(1);
 
                 if (System.currentTimeMillis() - startTime > 2000) {
                     startTime = System.currentTimeMillis();
@@ -49,7 +45,7 @@ public class LaunchSequence {
     }
 
     //when beam is broken: check ball color
-    public void onBeamBreak() {
+    /*public void onBeamBreak() {
         if (!broken) {
             methods.intakeRamp.setPosition(0); //push ball up position
 
@@ -68,5 +64,5 @@ public class LaunchSequence {
                 }
             }
         }
-    }
+    }*/
 }
