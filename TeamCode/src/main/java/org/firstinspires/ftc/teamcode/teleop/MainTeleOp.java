@@ -12,18 +12,22 @@ public class MainTeleOp extends Methods {
         teamHateLoveButton();
         initialize();
         waitForStart();
+        launcherYaw.setPosition(0.5);
         int launchDebounce = 0;
-        int currentIndex = 0;
+        int currentIndexIntake = 0;
+        int currentIndexOuttake = 0;
+        float speedDivider = 1.2F;
+        boolean isIntake = true;
         boolean isUp = true;
         LaunchSequence launch = new LaunchSequence(this);
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
-            motorFRPower = (forwards - strafe - turn);
-            motorFLPower = (forwards + strafe + turn);
-            motorBLPower = (forwards - strafe + turn);
-            motorBRPower = (forwards + strafe - turn);
+            motorFRPower = (forwards - strafe - turn)/speedDivider;
+            motorFLPower = (forwards + strafe + turn)/speedDivider;
+            motorBLPower = (forwards - strafe + turn)/speedDivider;
+            motorBRPower = (forwards + strafe - turn)/speedDivider;
 
 
             fire = gamepad2.aWasPressed();
@@ -48,27 +52,38 @@ public class MainTeleOp extends Methods {
                 isUp = !isUp;
             }
 
+            if (gamepad1.right_trigger >= 0.5) {
+                speedDivider = 2F;
+            } else if (gamepad1.left_trigger >= 0.5) {
+                speedDivider = 1F;
+            } else {
+                speedDivider = 1.2F;
+            }
+
             if (cycleLeft) {
-                currentIndex -= 1;
-                if (currentIndex < 0) {
-                    currentIndex = 5;
+                currentIndexIntake += 1;
+                if (currentIndexIntake > 3) {
+                    currentIndexIntake = 0;
                 }
+                isIntake = true;
             } else if (cycleRight) {
-                currentIndex += 1;
-                if (currentIndex > 5) {
-                    currentIndex = 0;
+                currentIndexOuttake += 1;
+                if (currentIndexOuttake > 3) {
+                    currentIndexOuttake = 0;
                 }
+                isIntake = false;
             }
 
             if (fire) {
                 transferServo.setPosition(0.8);
-                launchDebounce = 5;
+                launchDebounce = 50
+
+                ;
             }
 
             telemetry.addData("red: ", colorSensor.red());
             telemetry.addData("green: ", colorSensor.green());
             telemetry.addData("blue: ", colorSensor.blue());
-            telemetry.addData("current rotation: ", currentIndex);
             telemetry.addData("launch debounce", launchDebounce);
             telemetry.update();
 
@@ -80,7 +95,11 @@ public class MainTeleOp extends Methods {
                 launchDebounce -= 1;
             }
 
-            setIndexer(currentIndex);
+            if (isIntake) {
+                setIndexerIntake(currentIndexIntake);
+            } else {
+                setIndexerOuttake(currentIndexOuttake);
+            }
 
 //            if (fire) {
 //                launch.startLaunch();
