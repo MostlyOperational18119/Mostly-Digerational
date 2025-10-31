@@ -18,8 +18,9 @@ public class MainTeleOp extends Methods {
         int currentIndexIntake = 0;
         int currentIndexOuttake = 0;
         float speedDivider = 1.2F;
+        double hoodPosition = 0.3;
         boolean isIntake = true;
-        boolean isUp = true;
+        boolean isFar = true;
         LaunchSequence launch = new LaunchSequence(this);
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
@@ -29,7 +30,6 @@ public class MainTeleOp extends Methods {
             motorFLPower = (forwards + strafe + turn)/speedDivider;
             motorBLPower = (forwards - strafe + turn)/speedDivider;
             motorBRPower = (forwards + strafe - turn)/speedDivider;
-
 
             fire = gamepad2.aWasPressed();
             transferToggle = gamepad2.bWasPressed();
@@ -51,15 +51,7 @@ public class MainTeleOp extends Methods {
                 speedDivider = 1.2F;
             }
 
-            if (gamepad2.xWasPressed()) {
-                if (isUp) {
-                    daHood.setPosition(0.3);
-                } else {
-                    daHood.setPosition(0);
-                }
-
-                isUp = !isUp;
-            }
+            daHood.setPosition(hoodPosition);
 
             if (gamepad2.left_bumper) {
                 if (launcherYawRotation > 0) {
@@ -98,9 +90,30 @@ public class MainTeleOp extends Methods {
             telemetry.addData("green: ", colorSensor.green());
             telemetry.addData("blue: ", colorSensor.blue());
             telemetry.addData("launch debounce", launchDebounce);
+            telemetry.addData("velocity", outtake.getVelocity());
+            telemetry.addData("hood position", hoodPosition);
+            telemetry.addData("is far", isFar);
             telemetry.update();
 
-            outtake.setPower(0.6);
+            if (isFar) {
+                targetRPM = (int) (0.575 * maxRPM * 13.1 / voltageSensor.getVoltage());
+                measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
+                power = 0.575 + (targetRPM - measuredRPM) * P_FAR;
+                hoodPosition = 0.3;
+                outtake.setPower(power);
+            } else {
+                targetRPM = (int) (0.525 * maxRPM * 12.5 / voltageSensor.getVoltage());
+                measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
+                power = 0.525 + (targetRPM - measuredRPM) * P_CLOSE;
+                outtake.setPower(power);
+
+
+                  hoodPosition = 0.7;
+            }
+
+            if (gamepad2.bWasPressed()) {
+                isFar = !isFar;
+            }
 
             if (launchDebounce <= 0) {
                 transferServo.setPosition(1);
