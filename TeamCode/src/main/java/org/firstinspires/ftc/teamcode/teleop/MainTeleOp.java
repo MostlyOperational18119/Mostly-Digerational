@@ -13,6 +13,7 @@ public class MainTeleOp extends Methods {
         initialize();
         waitForStart();
         launcherYaw.setPosition(0.5);
+        double launcherYawRotation = 0.5;
         int launchDebounce = 0;
         int currentIndexIntake = 0;
         int currentIndexOuttake = 0;
@@ -42,6 +43,14 @@ public class MainTeleOp extends Methods {
             //launch.update();
             //indexer.update();
 
+            if (gamepad1.right_trigger >= 0.5) {
+                speedDivider = 2F;
+            } else if (gamepad1.left_trigger >= 0.5) {
+                speedDivider = 1F;
+            } else {
+                speedDivider = 1.2F;
+            }
+
             if (gamepad2.xWasPressed()) {
                 if (isUp) {
                     daHood.setPosition(0.3);
@@ -52,13 +61,19 @@ public class MainTeleOp extends Methods {
                 isUp = !isUp;
             }
 
-            if (gamepad1.right_trigger >= 0.5) {
-                speedDivider = 2F;
-            } else if (gamepad1.left_trigger >= 0.5) {
-                speedDivider = 1F;
-            } else {
-                speedDivider = 1.2F;
+            if (gamepad2.left_bumper) {
+                if (launcherYawRotation > 0) {
+                    launcherYawRotation -= 0.03;
+                }
             }
+
+            if (gamepad2.right_bumper) {
+                if (launcherYawRotation < 1) {
+                    launcherYawRotation += 0.03;
+                }
+            }
+
+            launcherYaw.setPosition(launcherYawRotation);
 
             if (cycleLeft) {
                 currentIndexIntake += 1;
@@ -76,9 +91,7 @@ public class MainTeleOp extends Methods {
 
             if (fire) {
                 transferServo.setPosition(0.8);
-                launchDebounce = 50
-
-                ;
+                launchDebounce = 50;
             }
 
             telemetry.addData("red: ", colorSensor.red());
