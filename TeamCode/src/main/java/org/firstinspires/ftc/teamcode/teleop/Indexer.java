@@ -16,22 +16,22 @@ public class Indexer {
     public void update() {
         switch (rotation) {
             case zeroIn:
-                methods.revolver.setPosition(0); // find servo positions
+                methods.revolver.setPosition(0.0);
                 break;
             case zeroOut:
-                methods.revolver.setPosition(0.1);
+                methods.revolver.setPosition(0.55);
                 break;
             case oneIn:
-                methods.revolver.setPosition(0.2);
+                methods.revolver.setPosition(0.74);
                 break;
             case oneOut:
-                methods.revolver.setPosition(0.3);
+                methods.revolver.setPosition(0.2);
                 break;
             case twoIn:
-                methods.revolver.setPosition(0.4);
+                methods.revolver.setPosition(0.37);
                 break;
             case twoOut:
-                methods.revolver.setPosition(0.5);
+                methods.revolver.setPosition(0.92);
                 break;
         }
     }

@@ -2,15 +2,20 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
+//flicker down 0.97
+//up 0.75
+
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends Methods {
     @Override
     public void runOpMode() {
-        saarangHateLoveButton();
+        teamHateLoveButton();
         initialize();
         waitForStart();
+        int launchDebounce = 0;
+        int currentIndex = 0;
+        boolean isUp = true;
         LaunchSequence launch = new LaunchSequence(this);
-        //launch.InitLaunchSequence(this);
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -30,18 +35,62 @@ public class MainTeleOp extends Methods {
 
             //detectAprilTag();
             drive();
-            launch.update();
-            indexer.update();
+            //launch.update();
+            //indexer.update();
+
+            if (gamepad2.xWasPressed()) {
+                if (isUp) {
+                    daHood.setPosition(0.3);
+                } else {
+                    daHood.setPosition(0);
+                }
+
+                isUp = !isUp;
+            }
+
+            if (cycleLeft) {
+                currentIndex -= 1;
+                if (currentIndex < 0) {
+                    currentIndex = 5;
+                }
+            } else if (cycleRight) {
+                currentIndex += 1;
+                if (currentIndex > 5) {
+                    currentIndex = 0;
+                }
+            }
 
             if (fire) {
-                launch.startLaunch();
+                transferServo.setPosition(0.8);
+                launchDebounce = 5;
             }
-            if (toGreen) {
-                indexer.rotateToColor(Indexer.BallColor.GREEN);
+
+            telemetry.addData("red: ", colorSensor.red());
+            telemetry.addData("green: ", colorSensor.green());
+            telemetry.addData("blue: ", colorSensor.blue());
+            telemetry.addData("current rotation: ", currentIndex);
+            telemetry.addData("launch debounce", launchDebounce);
+            telemetry.update();
+
+            outtake.setPower(0.6);
+
+            if (launchDebounce <= 0) {
+                transferServo.setPosition(1);
+            } else {
+                launchDebounce -= 1;
             }
-            if (toPurple) {
-                indexer.rotateToColor(Indexer.BallColor.PURPLE);
-            }
+
+            setIndexer(currentIndex);
+
+//            if (fire) {
+//                launch.startLaunch();
+//            }
+//            if (toGreen) {
+//                indexer.rotateToColor(Indexer.BallColor.GREEN);
+//            }
+//            if (toPurple) {
+//                indexer.rotateToColor(Indexer.BallColor.PURPLE);
+//            }
             intake.setPower(gamepad2.right_trigger);
 
 //            switch (ballPosition) {

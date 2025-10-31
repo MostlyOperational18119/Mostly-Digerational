@@ -19,12 +19,25 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+//--SERVO 6V THING--\\
+//0 out hood
+//1 limelight rotation
+//2 rotation for ball holder
+//3 intake ramp
+//4 outtake flicker
+//5 outtake rotation
+
+//--EXPANSION--\\
+//0 intake
+//1 outtake
+//2 silly saarang
+
 import java.util.List;
 
 public abstract class Methods extends LinearOpMode {
     //defines all hardware
     DcMotor motorFR, motorFL, motorBR, motorBL, intake, outtake, liftR, liftL;
-    Servo revolver, launcherYaw, launcherPitch, transferServo, limelightServo, intakeRamp;
+    Servo revolver, launcherYaw, daHood, transferServo, limelightServo, intakeRamp;
     Limelight3A limelight;
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
@@ -61,23 +74,24 @@ public abstract class Methods extends LinearOpMode {
         motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake = hardwareMap.dcMotor.get("intake");
         outtake = hardwareMap.dcMotor.get("outtake");
-        liftR = hardwareMap.dcMotor.get("liftR");
-        liftL = hardwareMap.dcMotor.get("liftL");
+        //liftR = hardwareMap.dcMotor.get("liftR");
+        //liftL = hardwareMap.dcMotor.get("liftL");
 
         launcherYaw = hardwareMap.servo.get("launcherYaw");
-        launcherPitch = hardwareMap.servo.get("launcherPitch");
+        daHood = hardwareMap.servo.get("daHood");
+        daHood.setPosition(0.3);
         revolver = hardwareMap.servo.get("revolver");
         transferServo = hardwareMap.servo.get("transferServo");
         limelightServo = hardwareMap.servo.get("limelightServo");
-        intakeRamp = hardwareMap.servo.get("intakeRamp");
+        //intakeRamp = hardwareMap.servo.get("intakeRamp");
 
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
-        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
+        //limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        //breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
+        //breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
 
-        aprilTag = new AprilTagProcessor.Builder()
+        /*aprilTag = new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)
@@ -91,7 +105,7 @@ public abstract class Methods extends LinearOpMode {
         builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
         builder.setAutoStopLiveView(false);
         builder.addProcessor(aprilTag);
-        visionPortal = builder.build();
+        visionPortal = builder.build();*/
 
     }
 
@@ -109,6 +123,29 @@ public abstract class Methods extends LinearOpMode {
 
     }
 
+    public void setIndexer(int index) { //placeholder
+        switch (index) {
+            case 0:
+                revolver.setPosition(0.0);
+                break;
+            case 1:
+                revolver.setPosition(0.55);
+                break;
+            case 2:
+                revolver.setPosition(0.74);
+                break;
+            case 3:
+                revolver.setPosition(0.2);
+                break;
+            case 4:
+                revolver.setPosition(0.37);
+                break;
+            case 5:
+                revolver.setPosition(0.92);
+                break;
+        }
+    }
+
     public void detectAprilTag() {
         currentApriltagDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentApriltagDetections) {
@@ -117,7 +154,7 @@ public abstract class Methods extends LinearOpMode {
         }
     }
 
-    public void saarangHateLoveButton() {
+    public void teamHateLoveButton() {
         if (Math.random() >= 0.5) {
             telemetry.addLine("fuck you saarang");
         } else {

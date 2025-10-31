@@ -7,7 +7,7 @@ public class servoTester extends Methods{
     @Override
     public void runOpMode(){
         double servoPosition = 0;
-        Servo testServo = hardwareMap.get(Servo.class, "flicker");
+        Servo testServo = hardwareMap.get(Servo.class, "transferServo ");
 
         waitForStart();
 
