@@ -48,18 +48,11 @@ public abstract class Methods extends LinearOpMode {
     Indexer indexer = new Indexer(this);
     float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
     //    double currentRevolver, currentintakeRamp, currentTransferServo;
-    float P_FAR = 0.005F, P_CLOSE = 0.005F;
+    float P_FAR = 0.0F, P_CLOSE = 0.0F;
     double power;
     double transferServoUp = 0.0;
     int maxRPM = 5900, targetRPM, measuredRPM;
 
-    public enum BallColor {
-        GREEN,
-        EMPTY,
-        PURPLE;
-    }
-
-    //public BallColor[] ballcolor = new BallColor[3];
     boolean fire, transferToggle, cycleLeft, cycleRight, toGreen, toPurple;
 
     //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
@@ -80,23 +73,23 @@ public abstract class Methods extends LinearOpMode {
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake = hardwareMap.dcMotor.get("intake");
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         outtake = hardwareMap.get(DcMotorEx.class, "outtake");
         //liftR = hardwareMap.dcMotor.get("liftR");
         //liftL = hardwareMap.dcMotor.get("liftL");
 
         launcherYaw = hardwareMap.servo.get("launcherYaw");
         daHood = hardwareMap.servo.get("daHood");
-        daHood.setPosition(0.3);
+        daHood.setPosition(0);
         revolver = hardwareMap.servo.get("revolver");
         transferServo = hardwareMap.servo.get("transferServo");
         limelightServo = hardwareMap.servo.get("limelightServo");
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
-        //intakeRamp = hardwareMap.servo.get("intakeRamp");
 
         //limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        //breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
-        //breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
-        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
+//        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
+//        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
+//        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
 
         /*aprilTag = new AprilTagProcessor.Builder()
