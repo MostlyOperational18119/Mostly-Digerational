@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
-//flicker down 0.97
-//up 0.75
+//flicker down 0.21
+//up 0
 
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends Methods {
@@ -23,13 +23,13 @@ public class MainTeleOp extends Methods {
         boolean isFar = true;
         LaunchSequence launch = new LaunchSequence(this);
         while (opModeIsActive()) {
-            turn = gamepad1.right_stick_x;
+            turn = -gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
-            motorFRPower = (forwards - strafe - turn)/speedDivider;
-            motorFLPower = (forwards + strafe + turn)/speedDivider;
-            motorBLPower = (forwards - strafe + turn)/speedDivider;
-            motorBRPower = (forwards + strafe - turn)/speedDivider;
+            motorFRPower = -(forwards - strafe - turn)/speedDivider;
+            motorFLPower = -(forwards + strafe + turn)/speedDivider;
+            motorBLPower = -(forwards - strafe + turn)/speedDivider;
+            motorBRPower = -(forwards + strafe - turn)/speedDivider;
 
             fire = gamepad2.aWasPressed();
             transferToggle = gamepad2.bWasPressed();
@@ -82,13 +82,13 @@ public class MainTeleOp extends Methods {
             }
 
             if (fire) {
-                transferServo.setPosition(0.8);
+                transferServo.setPosition(0);
                 launchDebounce = 50;
             }
 
-            telemetry.addData("red: ", colorSensor.red());
-            telemetry.addData("green: ", colorSensor.green());
-            telemetry.addData("blue: ", colorSensor.blue());
+//            telemetry.addData("red: ", colorSensor.red());
+//            telemetry.addData("green: ", colorSensor.green());
+//            telemetry.addData("blue: ", colorSensor.blue());
             telemetry.addData("launch debounce", launchDebounce);
             telemetry.addData("velocity", outtake.getVelocity());
             telemetry.addData("hood position", hoodPosition);
@@ -102,12 +102,10 @@ public class MainTeleOp extends Methods {
                 hoodPosition = 0.3;
                 outtake.setPower(power);
             } else {
-                targetRPM = (int) (0.525 * maxRPM * 12.5 / voltageSensor.getVoltage());
+                targetRPM = (int) (0.5 * maxRPM * 12.5 / voltageSensor.getVoltage());
                 measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
-                power = 0.525 + (targetRPM - measuredRPM) * P_CLOSE;
+                power = 0.5 + (targetRPM - measuredRPM) * P_CLOSE;
                 outtake.setPower(power);
-
-
                   hoodPosition = 0.7;
             }
 
@@ -116,7 +114,7 @@ public class MainTeleOp extends Methods {
             }
 
             if (launchDebounce <= 0) {
-                transferServo.setPosition(1);
+                transferServo.setPosition(0.21);
             } else {
                 launchDebounce -= 1;
             }
