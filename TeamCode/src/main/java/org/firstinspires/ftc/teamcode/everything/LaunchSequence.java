@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.everything;
 
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 public class LaunchSequence {
@@ -45,22 +44,22 @@ public class LaunchSequence {
     }
 
     //when beam is broken: check ball color
-//    public void onBeamBreak() {
-//        if (!broken) {
-//            NormalizedRGBA rgba = methods.colorSensor.getNormalizedColors();
-//
-//            //change later --> variable that has empty position (indexer automatically rotates before intaking)
-//            for (int i = 0; i < 3; i++) {
-//                if (index.slots[i] == Indexer.BallColor.EMPTY) {
-//                    if (rgba.green > rgba.red & rgba.green > rgba.blue) {
-//                        index.setSlots(i, Indexer.BallColor.GREEN);
-//                    } else {
-//                        index.setSlots(i, Indexer.BallColor.PURPLE);
-//                    }
-//                } else {
-//
-//                }
-//            }
-//        }
-//    }
+    public void onBeamBreak() {
+        if (!broken) {
+            NormalizedRGBA rgba = methods.colorSensor.getNormalizedColors();
+
+            //change later --> variable that has empty position (indexer automatically rotates before intaking)
+            for (int i = 0; i < 3; i++) {
+                if (index.slots[i] == Indexer.BallColor.EMPTY) {
+                    if (rgba.green > rgba.red & rgba.green > rgba.blue) {
+                        index.setSlots(i, Indexer.BallColor.GREEN);
+                    } else {
+                        index.setSlots(i, Indexer.BallColor.PURPLE);
+                    }
+                } else {
+
+                }
+            }
+        }
+    }
 }

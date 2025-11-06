@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.everything;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
@@ -7,10 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -40,14 +38,13 @@ public abstract class Methods extends LinearOpMode {
     //defines all hardware
     DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
     DcMotorEx outtake;
-    Servo revolver, launcherYaw, daHood, transferServo, limelightServo, intakeRamp;
+    Servo revolver, launcherYaw, daHood, transferServo, limelightServo;
     VoltageSensor voltageSensor;
     Limelight3A limelight;
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
     Indexer indexer = new Indexer(this);
     float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
-    //    double currentRevolver, currentintakeRamp, currentTransferServo;
     float P_FAR = 0.0F, P_CLOSE = 0.0F;
     double power;
     double transferServoUp = 0.0;
@@ -86,27 +83,27 @@ public abstract class Methods extends LinearOpMode {
         limelightServo = hardwareMap.servo.get("limelightServo");
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
 
-        //limelight = hardwareMap.get(Limelight3A.class, "limelight");
+//        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 //        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
 //        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
-//        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
+        colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
 
-        /*aprilTag = new AprilTagProcessor.Builder()
-                .setDrawAxes(true)
-                .setDrawCubeProjection(true)
-                .setDrawTagOutline(true)
-                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-                .build();
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam"));
-        builder.enableLiveView(true);
-        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
-        builder.setAutoStopLiveView(false);
-        builder.addProcessor(aprilTag);
-        visionPortal = builder.build();*/
+//        aprilTag = new AprilTagProcessor.Builder()
+//                .setDrawAxes(true)
+//                .setDrawCubeProjection(true)
+//                .setDrawTagOutline(true)
+//                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+//                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+//                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+//                .build();
+//        VisionPortal.Builder builder = new VisionPortal.Builder();
+//        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam"));
+//        builder.enableLiveView(true);
+//        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+//        builder.setAutoStopLiveView(false);
+//        builder.addProcessor(aprilTag);
+//        visionPortal = builder.build();
 
     }
 

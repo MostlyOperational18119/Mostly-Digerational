@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.everything;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "servo tester")
-public class servoTester extends Methods{
+public class servoTester extends Methods {
     @Override
     public void runOpMode(){
         double servoPosition = 0;
