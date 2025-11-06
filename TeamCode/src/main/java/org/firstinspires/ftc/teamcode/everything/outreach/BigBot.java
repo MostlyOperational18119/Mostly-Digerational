@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.teleop.outreach;
+package org.firstinspires.ftc.teamcode.everything.outreach;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.teleop.Methods;
+import org.firstinspires.ftc.teamcode.everything.Methods;
 
 @TeleOp(name = "BigBot")
 public class BigBot extends Methods {
