@@ -84,8 +84,8 @@ public abstract class Methods extends LinearOpMode {
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
 
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-//        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beam_sensor");
-//        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
+        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beamSensor");
+        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
 

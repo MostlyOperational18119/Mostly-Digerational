@@ -22,13 +22,13 @@ public class MainTeleOp extends Methods {
         boolean isFar = true;
         LaunchSequence launch = new LaunchSequence(this);
         while (opModeIsActive()) {
-            turn = -gamepad1.right_stick_x;
+            turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
-            motorFRPower = -(forwards - strafe - turn)/speedDivider;
-            motorFLPower = -(forwards + strafe + turn)/speedDivider;
-            motorBLPower = -(forwards - strafe + turn)/speedDivider;
-            motorBRPower = -(forwards + strafe - turn)/speedDivider;
+            motorFRPower = (forwards - strafe - turn)/speedDivider;
+            motorFLPower = (forwards + strafe + turn)/speedDivider;
+            motorBLPower = (forwards - strafe + turn)/speedDivider;
+            motorBRPower = (forwards + strafe - turn)/speedDivider;
 
             fire = gamepad2.aWasPressed();
             transferToggle = gamepad2.bWasPressed();
