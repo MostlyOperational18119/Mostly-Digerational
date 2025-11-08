@@ -31,10 +31,10 @@ public class MainTeleOp extends Methods {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
-            motorFRPower = (forwards - strafe - turn)/speedDivider;
-            motorFLPower = (forwards + strafe + turn)/speedDivider;
-            motorBLPower = (forwards - strafe + turn)/speedDivider;
-            motorBRPower = (forwards + strafe - turn)/speedDivider;
+            motorFRPower = (forwards - strafe - turn) / speedDivider;
+            motorFLPower = (forwards + strafe + turn) / speedDivider;
+            motorBLPower = (forwards - strafe + turn) / speedDivider;
+            motorBRPower = (forwards + strafe - turn) / speedDivider;
 
             fire = gamepad2.aWasPressed();
             transferToggle = gamepad2.bWasPressed();
@@ -64,108 +64,108 @@ public class MainTeleOp extends Methods {
 //                } else  {
 //                    breakTripped = false;
 //                }
-           
+
 
 //            if ((getRuntime() - debounceStart) >= 1) {
 //                beamDebounce = false;
 //            }
 
-            //gamepad 1 speed clutch
-            if (gamepad1.right_trigger >= 0.5) {
-                speedDivider = 2F;
-            } else if (gamepad1.left_trigger >= 0.5) {
-                speedDivider = 1F;
-            } else {
-                speedDivider = 1.2F;
-            }
-
-            daHood.setPosition(hoodPosition);
-
-            //gamepad 2 outtake YAW
-            if (gamepad2.left_bumper) {
-                if (launcherYawRotation > 0) {
-                    launcherYawRotation -= 0.03;
+                //gamepad 1 speed clutch
+                if (gamepad1.right_trigger >= 0.5) {
+                    speedDivider = 2F;
+                } else if (gamepad1.left_trigger >= 0.5) {
+                    speedDivider = 1F;
+                } else {
+                    speedDivider = 1.2F;
                 }
-            }
 
-            if (gamepad2.right_bumper) {
-                if (launcherYawRotation < 1) {
-                    launcherYawRotation += 0.03;
+                daHood.setPosition(hoodPosition);
+
+                //gamepad 2 outtake YAW
+                if (gamepad2.left_bumper) {
+                    if (launcherYawRotation > 0) {
+                        launcherYawRotation -= 0.03;
+                    }
                 }
-            }
 
-            launcherYaw.setPosition(launcherYawRotation);
-
-            //gamepad 2 manual cycle (intake/outtake)
-            if (cycleLeft) {
-                currentIndexIntake += 1;
-                if (currentIndexIntake > 3) {
-                    currentIndexIntake = 0;
+                if (gamepad2.right_bumper) {
+                    if (launcherYawRotation < 1) {
+                        launcherYawRotation += 0.03;
+                    }
                 }
-                isIntake = true;
-            } else if (cycleRight) {
-                currentIndexOuttake += 1;
-                if (currentIndexOuttake > 3) {
-                    currentIndexOuttake = 0;
+
+                launcherYaw.setPosition(launcherYawRotation);
+
+                //gamepad 2 manual cycle (intake/outtake)
+                if (cycleLeft) {
+                    currentIndexIntake += 1;
+                    if (currentIndexIntake > 3) {
+                        currentIndexIntake = 0;
+                    }
+                    isIntake = true;
+                } else if (cycleRight) {
+                    currentIndexOuttake += 1;
+                    if (currentIndexOuttake > 3) {
+                        currentIndexOuttake = 0;
+                    }
+                    isIntake = false;
                 }
-                isIntake = false;
-            }
 
-            //gamepad 2 press launch
-            if (fire) {
-                transferServo.setPosition(0);
-                launchDebounce = 50;
-            }
+                //gamepad 2 press launch
+                if (fire) {
+                    transferServo.setPosition(0);
+                    launchDebounce = 50;
+                }
 
-            telemetry.addData("beam break: ", breakTripped);
+                telemetry.addData("beam break: ", breakTripped);
 //            telemetry.addData("db: ", beamDebounce);
 //            telemetry.addData("last db: ", debounceStart);
 //            telemetry.addData("current time: ", getRuntime());
-            telemetry.addData("red: ", colorSensor.red());
-            telemetry.addData("green: ", colorSensor.green());
-            telemetry.addData("blue: ", colorSensor.blue());
-            telemetry.addData("slot 1", indexer.slots[0]);
-            telemetry.addData("slot 2", indexer.slots[1]);
-            telemetry.addData("slot 3", indexer.slots[2]);
+                telemetry.addData("red: ", colorSensor.red());
+                telemetry.addData("green: ", colorSensor.green());
+                telemetry.addData("blue: ", colorSensor.blue());
+                telemetry.addData("slot 1", indexer.slots[0]);
+                telemetry.addData("slot 2", indexer.slots[1]);
+                telemetry.addData("slot 3", indexer.slots[2]);
 //            telemetry.addData("launch debounce", launchDebounce);
 //            telemetry.addData("velocity", outtake.getVelocity());
 //            telemetry.addData("hood position", hoodPosition);
 //            telemetry.addData("is far", isFar);
-            telemetry.update();
+                telemetry.update();
 
 
-            //gamepad 2 launcher positions
-            if (isFar) {
-                targetRPM = (int) (0.575 * maxRPM * 13.1 / voltageSensor.getVoltage());
-                measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
-                power = 0.575 + (targetRPM - measuredRPM) * P_FAR;
-                hoodPosition = 0.3;
-                outtake.setPower(power);
-            } else {
-                targetRPM = (int) (0.5 * maxRPM * 12.5 / voltageSensor.getVoltage());
-                measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
-                power = 0.5 + (targetRPM - measuredRPM) * P_CLOSE;
-                outtake.setPower(power);
-                  hoodPosition = 0.7;
-            }
+                //gamepad 2 launcher positions
+                if (isFar) {
+                    targetRPM = (int) (0.575 * maxRPM * 13.1 / voltageSensor.getVoltage());
+                    measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
+                    power = 0.575 + (targetRPM - measuredRPM) * P_FAR;
+                    hoodPosition = 0.3;
+                    outtake.setPower(power);
+                } else {
+                    targetRPM = (int) (0.5 * maxRPM * 12.5 / voltageSensor.getVoltage());
+                    measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
+                    power = 0.5 + (targetRPM - measuredRPM) * P_CLOSE;
+                    outtake.setPower(power);
+                    hoodPosition = 0.7;
+                }
 
-            //gamepad 2 button press to toggle between launch positions
-            if (gamepad2.bWasPressed()) {
-                isFar = !isFar;
-            }
+                //gamepad 2 button press to toggle between launch positions
+                if (gamepad2.bWasPressed()) {
+                    isFar = !isFar;
+                }
 
-            //debounce for transfer flicker
-            if (launchDebounce <= 0) {
-                transferServo.setPosition(0.21);
-            } else {
-                launchDebounce -= 1;
-            }
+                //debounce for transfer flicker
+                if (launchDebounce <= 0) {
+                    transferServo.setPosition(0.21);
+                } else {
+                    launchDebounce -= 1;
+                }
 
-            if (isIntake) {
-                setIndexerIntake(currentIndexIntake);
-            } else {
-                setIndexerOuttake(currentIndexOuttake);
-            }
+                if (isIntake) {
+                    setIndexerIntake(currentIndexIntake);
+                } else {
+                    setIndexerOuttake(currentIndexOuttake);
+                }
 
 //            if (fire) {
 //                launch.startLaunch();
@@ -178,9 +178,8 @@ public class MainTeleOp extends Methods {
 //            }
 
 
-
-
-            telemetry.update();
+                telemetry.update();
+            }
         }
     }
 }
