@@ -26,7 +26,7 @@ public class TestLimelight extends Methods {
         }
 
         waitForStart();
-        BallColor[] balls = new Indexer.BallColor[9];
+        Indexer.BallColor[] balls = new Indexer.BallColor[9];
 
 
         while (opModeIsActive()) {
@@ -47,6 +47,10 @@ public class TestLimelight extends Methods {
                                 telemetry.addLine("LimeLight says hi");
                             case CurrentData:
                                 telemetry.addLine("LimeLight gave us some results :D");
+
+                                for (int i = 0; i < balls.length; i++) {
+                                    balls[i] = Indexer.BallColor.values()[message.otherData[i]];
+                                }
                         }
 
                     } else {
