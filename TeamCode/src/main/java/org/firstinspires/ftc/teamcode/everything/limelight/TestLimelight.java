@@ -67,6 +67,8 @@ public class TestLimelight extends Methods {
                 telemetry.addLine("Not connected");
             }
 
+            telemetry.addData("Ball colors:", balls);
+
             telemetry.update();
             sleep(20);
         }
