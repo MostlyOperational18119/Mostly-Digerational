@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.everything;
 
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+
 public class Indexer {
     public Positions rotation = Positions.zeroIn;
     public enum Positions {zeroIn, zeroOut, oneIn, oneOut, twoIn, twoOut;}
@@ -89,5 +91,17 @@ public class Indexer {
     }
     public void setSlots(int index, BallColor state) {
         slots[index] = state;
+    }
+    //when beam is broken: check ball color
+    public void onBeamBreak(boolean broken, int i) {
+        if (!broken) {
+            NormalizedRGBA rgba = methods.colorSensor.getNormalizedColors();
+
+            if (rgba.green > rgba.red & rgba.green > rgba.blue) {
+                setSlots(i, BallColor.GREEN);
+            } else {
+                setSlots(i, BallColor.PURPLE);
+            }
+        }
     }
 }

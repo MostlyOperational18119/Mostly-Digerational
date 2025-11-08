@@ -20,7 +20,11 @@ public class MainTeleOp extends Methods {
         double hoodPosition = 0.3;
         boolean isIntake = true;
         boolean isFar = true;
+        boolean breakTripped = false;
+
         LaunchSequence launch = new LaunchSequence(this);
+        Indexer indexer = new Indexer(this);
+
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -39,9 +43,19 @@ public class MainTeleOp extends Methods {
 
             //detectAprilTag();
             drive();
-            //launch.update();
-            //indexer.update();
+            launch.update();
+            indexer.update();
 
+            if (gamepad2.right_trigger > 0.5) {
+                indexer.rotateToColor(Indexer.BallColor.EMPTY);
+                
+                intake.setPower(gamepad2.right_trigger);
+
+                indexer.onBeamBreak();
+
+            }
+
+            //gamepad 1 speed clutch
             if (gamepad1.right_trigger >= 0.5) {
                 speedDivider = 2F;
             } else if (gamepad1.left_trigger >= 0.5) {
@@ -52,6 +66,7 @@ public class MainTeleOp extends Methods {
 
             daHood.setPosition(hoodPosition);
 
+            //gamepad 2 outtake YAW
             if (gamepad2.left_bumper) {
                 if (launcherYawRotation > 0) {
                     launcherYawRotation -= 0.03;
@@ -66,6 +81,7 @@ public class MainTeleOp extends Methods {
 
             launcherYaw.setPosition(launcherYawRotation);
 
+            //gamepad 2 manual cycle (intake/outtake)
             if (cycleLeft) {
                 currentIndexIntake += 1;
                 if (currentIndexIntake > 3) {
@@ -80,6 +96,7 @@ public class MainTeleOp extends Methods {
                 isIntake = false;
             }
 
+            //gamepad 2 press launch
             if (fire) {
                 transferServo.setPosition(0);
                 launchDebounce = 50;
@@ -94,6 +111,8 @@ public class MainTeleOp extends Methods {
             telemetry.addData("is far", isFar);
             telemetry.update();
 
+
+            //gamepad 2 launcher positions
             if (isFar) {
                 targetRPM = (int) (0.575 * maxRPM * 13.1 / voltageSensor.getVoltage());
                 measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
@@ -108,10 +127,12 @@ public class MainTeleOp extends Methods {
                   hoodPosition = 0.7;
             }
 
+            //gamepad 2 button press to toggle between launch positions
             if (gamepad2.bWasPressed()) {
                 isFar = !isFar;
             }
 
+            //debounce for transfer flicker
             if (launchDebounce <= 0) {
                 transferServo.setPosition(0.21);
             } else {
@@ -133,19 +154,9 @@ public class MainTeleOp extends Methods {
 //            if (toPurple) {
 //                indexer.rotateToColor(Indexer.BallColor.PURPLE);
 //            }
-            intake.setPower(gamepad2.right_trigger);
 
-//            switch (ballPosition) {
-//                case ONE:
-//                    revolver.setPosition(0);
-//                    break;
-//                case TWO:
-//                    revolver.setPosition(0.1);
-//                    break;
-//                case THREE:
-//                    revolver.setPosition(0.2);
-//                    break;
-//            }
+
+            intake.setPower(gamepad2.right_trigger);
 
             telemetry.update();
         }
