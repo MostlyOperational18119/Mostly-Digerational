@@ -7,7 +7,7 @@ public class servoTester extends Methods {
     @Override
     public void runOpMode(){
         double servoPosition = 0;
-        Servo testServo = hardwareMap.get(Servo.class, "daHood");
+        Servo testServo = hardwareMap.get(Servo.class, "revolver");
 
         waitForStart();
 
