@@ -62,8 +62,8 @@ public abstract class Methods extends LinearOpMode {
         motorFR = hardwareMap.dcMotor.get("motorFR");
         motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFL = hardwareMap.dcMotor.get("motorFL");
-        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBR = hardwareMap.dcMotor.get("motorBR");
         motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBL = hardwareMap.dcMotor.get("motorBL");
