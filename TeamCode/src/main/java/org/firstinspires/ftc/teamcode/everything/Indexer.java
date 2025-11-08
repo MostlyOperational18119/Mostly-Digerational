@@ -87,7 +87,7 @@ public class Indexer {
             }
             index++;
         }
-        return 0;
+        return -1;
     }
     public void setSlots(int index, BallColor state) {
         slots[index] = state;
@@ -97,9 +97,9 @@ public class Indexer {
         if (!broken) {
             NormalizedRGBA rgba = methods.colorSensor.getNormalizedColors();
 
-            if (rgba.green > rgba.red & rgba.green > rgba.blue) {
+            if (rgba.green > rgba.blue) {
                 setSlots(i, BallColor.GREEN);
-            } else {
+            } else if (rgba.blue > rgba.green){
                 setSlots(i, BallColor.PURPLE);
             }
         }

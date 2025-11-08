@@ -18,9 +18,11 @@ public class MainTeleOp extends Methods {
         int currentIndexOuttake = 0;
         float speedDivider = 1.2F;
         double hoodPosition = 0.3;
+        double debounceStart = 0;
         boolean isIntake = true;
         boolean isFar = true;
         boolean breakTripped = false;
+        boolean beamDebounce = false;
 
         LaunchSequence launch = new LaunchSequence(this);
         Indexer indexer = new Indexer(this);
@@ -42,18 +44,31 @@ public class MainTeleOp extends Methods {
             toPurple = gamepad2.leftBumperWasPressed();
 
             //detectAprilTag();
+
             drive();
             launch.update();
             indexer.update();
 
-            if (gamepad2.right_trigger > 0.5) {
-                indexer.rotateToColor(Indexer.BallColor.EMPTY);
-                
-                intake.setPower(gamepad2.right_trigger);
+            intake.setPower(gamepad2.right_trigger);
+            if (gamepad2.right_trigger >= 0.5) {
+                breakTripped = !breakBeamSensor.getState();
+                if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
+                    int index = indexer.findColor(Indexer.BallColor.EMPTY);
+                    indexer.rotateToColor(Indexer.BallColor.EMPTY);
+                    indexer.onBeamBreak(breakTripped, index);
+                }
+//                if (!beamDebounce) {
+//                    beamDebounce = true;
+//                    debounceStart = getRuntime();
+//
+//                } else  {
+//                    breakTripped = false;
+//                }
+           
 
-//                indexer.onBeamBreak();
-
-            }
+//            if ((getRuntime() - debounceStart) >= 1) {
+//                beamDebounce = false;
+//            }
 
             //gamepad 1 speed clutch
             if (gamepad1.right_trigger >= 0.5) {
@@ -102,13 +117,20 @@ public class MainTeleOp extends Methods {
                 launchDebounce = 50;
             }
 
-//            telemetry.addData("red: ", colorSensor.red());
-//            telemetry.addData("green: ", colorSensor.green());
-//            telemetry.addData("blue: ", colorSensor.blue());
-            telemetry.addData("launch debounce", launchDebounce);
-            telemetry.addData("velocity", outtake.getVelocity());
-            telemetry.addData("hood position", hoodPosition);
-            telemetry.addData("is far", isFar);
+            telemetry.addData("beam break: ", breakTripped);
+//            telemetry.addData("db: ", beamDebounce);
+//            telemetry.addData("last db: ", debounceStart);
+//            telemetry.addData("current time: ", getRuntime());
+            telemetry.addData("red: ", colorSensor.red());
+            telemetry.addData("green: ", colorSensor.green());
+            telemetry.addData("blue: ", colorSensor.blue());
+            telemetry.addData("slot 1", indexer.slots[0]);
+            telemetry.addData("slot 2", indexer.slots[1]);
+            telemetry.addData("slot 3", indexer.slots[2]);
+//            telemetry.addData("launch debounce", launchDebounce);
+//            telemetry.addData("velocity", outtake.getVelocity());
+//            telemetry.addData("hood position", hoodPosition);
+//            telemetry.addData("is far", isFar);
             telemetry.update();
 
 
@@ -156,7 +178,7 @@ public class MainTeleOp extends Methods {
 //            }
 
 
-            intake.setPower(gamepad2.right_trigger);
+
 
             telemetry.update();
         }
