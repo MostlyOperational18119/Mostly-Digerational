@@ -51,7 +51,7 @@ public class MainTeleOp extends Methods {
                 
                 intake.setPower(gamepad2.right_trigger);
 
-                indexer.onBeamBreak();
+//                indexer.onBeamBreak();
 
             }
 
