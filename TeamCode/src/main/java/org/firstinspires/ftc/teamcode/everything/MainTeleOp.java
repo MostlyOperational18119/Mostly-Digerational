@@ -49,21 +49,13 @@ public class MainTeleOp extends Methods {
             launch.update();
             indexer.update();
 
-            intake.setPower(gamepad2.right_trigger);
-            if (gamepad2.right_trigger >= 0.5) {
-                breakTripped = !breakBeamSensor.getState();
-                if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
-                    int index = indexer.findColor(Indexer.BallColor.EMPTY);
-                    indexer.rotateToColor(Indexer.BallColor.EMPTY);
-                    indexer.onBeamBreak(breakTripped, index);
-                }
-//                if (!beamDebounce) {
-//                    beamDebounce = true;
-//                    debounceStart = getRuntime();
-//
-//                } else  {
-//                    breakTripped = false;
-//                }
+            if (gamepad2.right_trigger > 0.5) {
+                indexer.rotateToColor(Indexer.BallColor.EMPTY);
+                
+                intake.setPower(gamepad2.right_trigger);
+
+//                indexer.onBeamBreak();
+
             }
 
 //            if ((getRuntime() - debounceStart) >= 1) {
