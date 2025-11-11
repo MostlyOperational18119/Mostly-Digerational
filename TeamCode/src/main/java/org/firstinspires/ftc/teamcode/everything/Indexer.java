@@ -4,7 +4,10 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 public class Indexer {
     public Positions rotation = Positions.zeroIn;
+    public Positions nextRotation = Positions.zeroIn;
     public enum Positions {zeroIn, zeroOut, oneIn, oneOut, twoIn, twoOut;}
+
+    public String lastColor = "empty";
     Methods methods;
     public enum BallColor {
         GREEN,
@@ -14,27 +17,36 @@ public class Indexer {
     public Indexer(Methods methods) {
         this.methods = methods;
     }
-    public BallColor[] slots = new BallColor[3];
+    public BallColor[] slots = {BallColor.EMPTY, BallColor.EMPTY, BallColor.EMPTY};
+
     public void update() {
-        switch (rotation) {
-            case zeroIn:
-                methods.revolver.setPosition(0.0);
-                break;
-            case zeroOut:
-                methods.revolver.setPosition(0.55);
-                break;
-            case oneIn:
-                methods.revolver.setPosition(0.74);
-                break;
-            case oneOut:
-                methods.revolver.setPosition(0.2);
-                break;
-            case twoIn:
-                methods.revolver.setPosition(0.37);
-                break;
-            case twoOut:
-                methods.revolver.setPosition(0.92);
-                break;
+        if (rotation != nextRotation) {
+            switch (nextRotation) {
+                case zeroIn:
+                    methods.revolver.setPosition(0.0);
+                    rotation = nextRotation;
+                    break;
+                case zeroOut:
+                    methods.revolver.setPosition(0.55);
+                    rotation = nextRotation;
+                    break;
+                case oneIn:
+                    methods.revolver.setPosition(0.74);
+                    rotation = nextRotation;
+                    break;
+                case oneOut:
+                    methods.revolver.setPosition(0.2);
+                    rotation = nextRotation;
+                    break;
+                case twoIn:
+                    methods.revolver.setPosition(0.37);
+                    rotation = nextRotation;
+                    break;
+                case twoOut:
+                    methods.revolver.setPosition(0.92);
+                    rotation = nextRotation;
+                    break;
+            }
         }
     }
     public void rotateToColor(BallColor color) {
@@ -46,25 +58,25 @@ public class Indexer {
         if (color != BallColor.EMPTY) {
             switch (index) {
                 case 0:
-                    rotation = Positions.zeroOut;
+                    nextRotation = Positions.zeroOut;
                     break;
                 case 1:
-                    rotation = Positions.oneOut;
+                    nextRotation = Positions.oneOut;
                     break;
                 case 2:
-                    rotation = Positions.twoOut;
+                    nextRotation = Positions.twoOut;
                     break;
             }
         } else {
             switch (index) {
                 case 0:
-                    rotation = Positions.zeroIn;
+                    nextRotation = Positions.zeroIn;
                     break;
                 case 1:
-                    rotation = Positions.oneIn;
+                    nextRotation = Positions.oneIn;
                     break;
                 case 2:
-                    rotation = Positions.twoIn;
+                    nextRotation = Positions.twoIn;
                     break;
             }
         }
@@ -80,28 +92,26 @@ public class Indexer {
     }
     public int findColor(BallColor color) {
         int index = 0;
-        for (BallColor pos:
-             slots) {
+        for (BallColor pos: slots) {
             if (pos == color) {
                 return index;
             }
             index++;
         }
-        return -1;
+        return index;
     }
     public void setSlots(int index, BallColor state) {
         slots[index] = state;
     }
     //when beam is broken: check ball color
-    public void onBeamBreak(boolean broken, int i) {
-        if (!broken) {
-            NormalizedRGBA rgba = methods.colorSensor.getNormalizedColors();
-
-            if (rgba.green > rgba.blue) {
-                setSlots(i, BallColor.GREEN);
-            } else if (rgba.blue > rgba.green){
-                setSlots(i, BallColor.PURPLE);
-            }
+    public void onBeamBreak(int i, int green, int blue) {
+        lastColor = "empty";
+        if ((green > 75) && (green > blue)) {
+            setSlots(i, BallColor.GREEN);
+            lastColor = "green";
+        } else if ((blue > 75) && (blue > green)) {
+            setSlots(i, BallColor.PURPLE);
+            lastColor = "purple";
         }
     }
 }

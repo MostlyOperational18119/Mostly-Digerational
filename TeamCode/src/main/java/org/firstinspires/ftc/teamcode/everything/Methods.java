@@ -149,6 +149,8 @@ public abstract class Methods extends LinearOpMode {
         }
     }
 
+
+
     public void detectAprilTag() {
         currentApriltagDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentApriltagDetections) {
