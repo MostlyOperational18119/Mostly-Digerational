@@ -46,29 +46,27 @@ public class MainTeleOp extends Methods {
             //detectAprilTag();
 
             drive();
-            launch.update();
+            //launch.update();
             indexer.update();
 
             intake.setPower(gamepad2.right_trigger);
-            if (gamepad2.right_trigger >= 0.5) {
-                breakTripped = !breakBeamSensor.getState();
-                if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
-                    int index = indexer.findColor(Indexer.BallColor.EMPTY);
-                    indexer.rotateToColor(Indexer.BallColor.EMPTY);
-                    indexer.onBeamBreak(breakTripped, index);
+            if (gamepad2.right_trigger > 0) {
+                if (!beamDebounce) {
+                    beamDebounce = true;
+                    debounceStart = getRuntime();
+                    if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
+                        int index = indexer.findColor(Indexer.BallColor.EMPTY);
+                        indexer.rotateToColor(Indexer.BallColor.EMPTY);
+                        indexer.onBeamBreak(index, colorSensor.green(), colorSensor.blue());
+                    }
+
+
                 }
-//                if (!beamDebounce) {
-//                    beamDebounce = true;
-//                    debounceStart = getRuntime();
-//
-//                } else  {
-//                    breakTripped = false;
-//                }
+            }
 
-
-//            if ((getRuntime() - debounceStart) >= 1) {
-//                beamDebounce = false;
-//            }
+            if ((getRuntime() - debounceStart) >= 1) {
+                beamDebounce = false;
+            }
 
                 //gamepad 1 speed clutch
                 if (gamepad1.right_trigger >= 0.5) {
@@ -97,19 +95,19 @@ public class MainTeleOp extends Methods {
                 launcherYaw.setPosition(launcherYawRotation);
 
                 //gamepad 2 manual cycle (intake/outtake)
-                if (cycleLeft) {
-                    currentIndexIntake += 1;
-                    if (currentIndexIntake > 3) {
-                        currentIndexIntake = 0;
-                    }
-                    isIntake = true;
-                } else if (cycleRight) {
-                    currentIndexOuttake += 1;
-                    if (currentIndexOuttake > 3) {
-                        currentIndexOuttake = 0;
-                    }
-                    isIntake = false;
-                }
+//                if (cycleLeft) {
+//                    currentIndexIntake += 1;
+//                    if (currentIndexIntake > 3) {
+//                        currentIndexIntake = 0;
+//                    }
+//                    isIntake = true;
+//                } else if (cycleRight) {
+//                    currentIndexOuttake += 1;
+//                    if (currentIndexOuttake > 3) {
+//                        currentIndexOuttake = 0;
+//                    }
+//                    isIntake = false;
+//                }
 
                 //gamepad 2 press launch
                 if (fire) {
@@ -117,16 +115,19 @@ public class MainTeleOp extends Methods {
                     launchDebounce = 50;
                 }
 
-                telemetry.addData("beam break: ", breakTripped);
-//            telemetry.addData("db: ", beamDebounce);
-//            telemetry.addData("last db: ", debounceStart);
-//            telemetry.addData("current time: ", getRuntime());
-                telemetry.addData("red: ", colorSensor.red());
-                telemetry.addData("green: ", colorSensor.green());
-                telemetry.addData("blue: ", colorSensor.blue());
-                telemetry.addData("slot 1", indexer.slots[0]);
-                telemetry.addData("slot 2", indexer.slots[1]);
-                telemetry.addData("slot 3", indexer.slots[2]);
+                telemetry.addData("beam break", !breakBeamSensor.getState());
+                telemetry.addData("indexer position", indexer.rotation);
+                telemetry.addData("indexer next pos", indexer.nextRotation);
+//                telemetry.addData("db: ", beamDebounce);
+//                telemetry.addData("last db: ", debounceStart);
+//                telemetry.addData("current time: ", getRuntime());
+                telemetry.addData("red", colorSensor.red());
+                telemetry.addData("green", colorSensor.green());
+                telemetry.addData("blue", colorSensor.blue());
+                telemetry.addData("slot 0", indexer.slots[0]);
+                telemetry.addData("slot 1", indexer.slots[1]);
+                telemetry.addData("slot 2", indexer.slots[2]);
+                telemetry.addData("last color read", indexer.lastColor);
 //            telemetry.addData("launch debounce", launchDebounce);
 //            telemetry.addData("velocity", outtake.getVelocity());
 //            telemetry.addData("hood position", hoodPosition);
@@ -176,10 +177,6 @@ public class MainTeleOp extends Methods {
 //            if (toPurple) {
 //                indexer.rotateToColor(Indexer.BallColor.PURPLE);
 //            }
-
-
-                telemetry.update();
             }
         }
     }
-}
