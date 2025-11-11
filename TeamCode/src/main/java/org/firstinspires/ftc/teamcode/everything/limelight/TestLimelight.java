@@ -17,7 +17,7 @@ public class TestLimelight extends Methods {
         boolean connected = true;
 
         try {
-           socket = new Socket("limelight.local", 8888);
+           socket = new Socket("172.29.0.21", 8888);
 
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
