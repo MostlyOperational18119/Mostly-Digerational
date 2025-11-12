@@ -51,16 +51,18 @@ public class MainTeleOp extends Methods {
 
             intake.setPower(gamepad2.right_trigger);
             if (gamepad2.right_trigger > 0) {
-                if (!beamDebounce) {
-                    beamDebounce = true;
-                    debounceStart = getRuntime();
-                    if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
-                        int index = indexer.findColor(Indexer.BallColor.EMPTY);
-                        indexer.rotateToColor(Indexer.BallColor.EMPTY);
-                        indexer.onBeamBreak(index, colorSensor.green(), colorSensor.blue());
+                if (!breakBeamSensor.getState()) {
+                    if (!beamDebounce) {
+                        beamDebounce = true;
+                        debounceStart = getRuntime();
+                        if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
+                            int index = indexer.findColor(Indexer.BallColor.EMPTY);
+                            indexer.rotateToColor(Indexer.BallColor.EMPTY);
+                            indexer.onBeamBreak(index, colorSensor.green(), colorSensor.blue());
+                        } else {
+                            intake.setPower(0);
+                        }
                     }
-
-
                 }
             }
 
@@ -115,6 +117,7 @@ public class MainTeleOp extends Methods {
                     launchDebounce = 50;
                 }
 
+                telemetry.addData("revolver position", revolver.getPosition());
                 telemetry.addData("beam break", !breakBeamSensor.getState());
                 telemetry.addData("indexer position", indexer.rotation);
                 telemetry.addData("indexer next pos", indexer.nextRotation);
