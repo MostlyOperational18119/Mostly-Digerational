@@ -1,22 +1,27 @@
 package org.firstinspires.ftc.teamcode.everything;
 
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Indexer {
     public Positions rotation = Positions.zeroIn;
     public Positions nextRotation = Positions.zeroIn;
+    public boolean findColorHappened = false;
+
     public enum Positions {zeroIn, zeroOut, oneIn, oneOut, twoIn, twoOut;}
 
     public String lastColor = "empty";
     Methods methods;
+
     public enum BallColor {
         GREEN,
         EMPTY,
         PURPLE;
     }
+
     public Indexer(Methods methods) {
         this.methods = methods;
     }
+
     public BallColor[] slots = {BallColor.EMPTY, BallColor.EMPTY, BallColor.EMPTY};
 
     public void update() {
@@ -49,6 +54,7 @@ public class Indexer {
             }
         }
     }
+
     public void rotateToColor(BallColor color) {
         int index;
         if (!colorInArray(color)) {
@@ -81,8 +87,9 @@ public class Indexer {
             }
         }
     }
+
     public boolean colorInArray(BallColor color) {
-        for (BallColor ball:
+        for (BallColor ball :
                 slots) {
             if (ball == color) {
                 return true;
@@ -90,28 +97,60 @@ public class Indexer {
         }
         return false;
     }
+
     public int findColor(BallColor color) {
-        int index = 0;
-        for (BallColor pos: slots) {
-            if (pos == color) {
-                return index;
+        for (int i = 0; i<slots.length; i++) {
+            if (slots[i] == color) {
+                findColorHappened = true;
+                return i;
             }
-            index++;
         }
-        return index;
+        return 0;
     }
+
     public void setSlots(int index, BallColor state) {
         slots[index] = state;
     }
+
     //when beam is broken: check ball color
-    public void onBeamBreak(int i, int green, int blue) {
-        lastColor = "empty";
-        if ((green > 75) && (green > blue)) {
-            setSlots(i, BallColor.GREEN);
-            lastColor = "green";
-        } else if ((blue > 75) && (blue > green)) {
-            setSlots(i, BallColor.PURPLE);
-            lastColor = "purple";
+    public void setIndexerColor() {
+        int blue = methods.colorSensor.blue();
+        int green = methods.colorSensor.green();
+        int currentIndex = currentIntakeIndex();
+        BallColor ballIn = BallColor.EMPTY;
+
+        if (blue > green) {
+            ballIn = BallColor.PURPLE;
+        } else if (green > blue) {
+            ballIn = BallColor.GREEN;
         }
+
+        if (currentIndex > -1) {
+            setSlots(currentIndex, ballIn);
+        }
+    }
+
+    public void rotateWithDistanceCheck() {
+        double distance = methods.colorSensor.getDistance(DistanceUnit.INCH);
+
+        if (distance <= 1.167) {
+            rotateToColor(BallColor.EMPTY);
+        }
+    }
+
+    public int currentIntakeIndex() {
+        int index = -1;
+        switch (rotation) {
+            case zeroIn:
+                index = 0;
+                break;
+            case oneIn:
+                index = 1;
+                break;
+            case twoIn:
+                index = 2;
+                break;
+        }
+        return index;
     }
 }
