@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.everything;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 //flicker down 0.21
 //up 0
 
@@ -16,13 +18,14 @@ public class MainTeleOp extends Methods {
         int launchDebounce = 0;
         int currentIndexIntake = 0;
         int currentIndexOuttake = 0;
+        double debounceStart = 0;
         float speedDivider = 1.2F;
         double hoodPosition = 0.3;
-        double debounceStart = 0;
         boolean isIntake = true;
         boolean isFar = true;
-        boolean breakTripped = false;
-        boolean beamDebounce = false;
+        boolean colorDebounce = false;
+
+        long beamBreakStartTime;
 
         LaunchSequence launch = new LaunchSequence(this);
         Indexer indexer = new Indexer(this);
@@ -50,24 +53,36 @@ public class MainTeleOp extends Methods {
             indexer.update();
 
             intake.setPower(gamepad2.right_trigger);
-            if (gamepad2.right_trigger > 0) {
-                if (!breakBeamSensor.getState()) {
-                    if (!beamDebounce) {
-                        beamDebounce = true;
-                        debounceStart = getRuntime();
-                        if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
-                            int index = indexer.findColor(Indexer.BallColor.EMPTY);
-                            indexer.rotateToColor(Indexer.BallColor.EMPTY);
-                            indexer.onBeamBreak(index, colorSensor.green(), colorSensor.blue());
-                        } else {
-                            intake.setPower(0);
-                        }
-                    }
+//            if (gamepad2.right_trigger > 0) {
+//                    if (!beamDebounce) {
+//                        beamDebounce = true;
+//                        debounceStart = getRuntime();
+//                        if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
+//                            int index = indexer.findColor(Indexer.BallColor.EMPTY);
+//                            indexer.rotateToColor(Indexer.BallColor.EMPTY);
+//                            indexer.onBeamBreak(index, colorSensor.green(), colorSensor.blue());
+//                        } else {
+//                            intake.setPower(0);
+//                        }
+//                    }
+//            }
+//
+//            if ((getRuntime() - debounceStart) >= 1) {
+//                beamDebounce = false;
+//            }
+
+            if (!breakBeamSensor.getState()) {
+                if (!colorDebounce) {
+                    colorDebounce = true;
+                    debounceStart = getRuntime();
+                    indexer.setIndexerColor();
+                    indexer.rotateWithDistanceCheck();
                 }
             }
+            
 
-            if ((getRuntime() - debounceStart) >= 1) {
-                beamDebounce = false;
+            if ((getRuntime() - debounceStart) >= 0.3) {
+                colorDebounce = false;
             }
 
                 //gamepad 1 speed clutch
@@ -117,6 +132,8 @@ public class MainTeleOp extends Methods {
                     launchDebounce = 50;
                 }
 
+                telemetry.addData("findColorHappened", indexer.findColorHappened);
+                telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.INCH));
                 telemetry.addData("revolver position", revolver.getPosition());
                 telemetry.addData("beam break", !breakBeamSensor.getState());
                 telemetry.addData("indexer position", indexer.rotation);
