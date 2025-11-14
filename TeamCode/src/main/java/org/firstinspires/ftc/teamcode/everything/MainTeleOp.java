@@ -29,6 +29,7 @@ public class MainTeleOp extends Methods {
 
         LaunchSequence launch = new LaunchSequence(this);
         Indexer indexer = new Indexer(this);
+        Intake intakeSequence = new Intake(this);
 
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
@@ -51,39 +52,28 @@ public class MainTeleOp extends Methods {
             drive();
             //launch.update();
             indexer.update();
+            intakeSequence.update();
 
             intake.setPower(gamepad2.right_trigger);
-//            if (gamepad2.right_trigger > 0) {
-//                    if (!beamDebounce) {
-//                        beamDebounce = true;
-//                        debounceStart = getRuntime();
-//                        if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
-//                            int index = indexer.findColor(Indexer.BallColor.EMPTY);
-//                            indexer.rotateToColor(Indexer.BallColor.EMPTY);
-//                            indexer.onBeamBreak(index, colorSensor.green(), colorSensor.blue());
-//                        } else {
-//                            intake.setPower(0);
-//                        }
-//                    }
+
+//            if (!breakBeamSensor.getState()) {
+//                if (!colorDebounce) {
+//                    colorDebounce = true;
+//                    debounceStart = getRuntime();
+//                    indexer.setIndexerColor();
+//                    indexer.rotateWithDistanceCheck();
+//                }
 //            }
-//
-//            if ((getRuntime() - debounceStart) >= 1) {
-//                beamDebounce = false;
+//            if ((getRuntime() - debounceStart) >= 0.3) {
+//                colorDebounce = false;
 //            }
 
-            if (!breakBeamSensor.getState()) {
-                if (!colorDebounce) {
-                    colorDebounce = true;
-                    debounceStart = getRuntime();
-                    indexer.setIndexerColor();
-                    indexer.rotateWithDistanceCheck();
-                }
+
+            if (indexer.colorInArray(Indexer.BallColor.EMPTY) && !breakBeamSensor.getState() && intakeSequence.currentState == Intake.State.IDLE) {
+                intakeSequence.start();
             }
 
 
-            if ((getRuntime() - debounceStart) >= 0.3) {
-                colorDebounce = false;
-            }
 
                 //gamepad 1 speed clutch
                 if (gamepad1.right_trigger >= 0.5) {
@@ -132,6 +122,7 @@ public class MainTeleOp extends Methods {
                     launchDebounce = 50;
                 }
 
+                telemetry.addData("intake sequence state", intakeSequence.currentState);
                 telemetry.addData("findColorHappened", indexer.findColorHappened);
                 telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
                 telemetry.addData("revolver position", revolver.getPosition());
