@@ -79,7 +79,7 @@ public class MainTeleOp extends Methods {
                     indexer.rotateWithDistanceCheck();
                 }
             }
-            
+
 
             if ((getRuntime() - debounceStart) >= 0.3) {
                 colorDebounce = false;
@@ -133,7 +133,7 @@ public class MainTeleOp extends Methods {
                 }
 
                 telemetry.addData("findColorHappened", indexer.findColorHappened);
-                telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.INCH));
+                telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
                 telemetry.addData("revolver position", revolver.getPosition());
                 telemetry.addData("beam break", !breakBeamSensor.getState());
                 telemetry.addData("indexer position", indexer.rotation);
@@ -147,7 +147,6 @@ public class MainTeleOp extends Methods {
                 telemetry.addData("slot 0", indexer.slots[0]);
                 telemetry.addData("slot 1", indexer.slots[1]);
                 telemetry.addData("slot 2", indexer.slots[2]);
-                telemetry.addData("last color read", indexer.lastColor);
 //            telemetry.addData("launch debounce", launchDebounce);
 //            telemetry.addData("velocity", outtake.getVelocity());
 //            telemetry.addData("hood position", hoodPosition);

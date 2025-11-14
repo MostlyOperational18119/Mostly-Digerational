@@ -8,8 +8,6 @@ public class Indexer {
     public boolean findColorHappened = false;
 
     public enum Positions {zeroIn, zeroOut, oneIn, oneOut, twoIn, twoOut;}
-
-    public String lastColor = "empty";
     Methods methods;
 
     public enum BallColor {
@@ -131,9 +129,9 @@ public class Indexer {
     }
 
     public void rotateWithDistanceCheck() {
-        double distance = methods.colorSensor.getDistance(DistanceUnit.INCH);
+        double distance = methods.colorSensor.getDistance(DistanceUnit.MM);
 
-        if (distance <= 1.167) {
+        if (distance <= 78) {
             rotateToColor(BallColor.EMPTY);
         }
     }
