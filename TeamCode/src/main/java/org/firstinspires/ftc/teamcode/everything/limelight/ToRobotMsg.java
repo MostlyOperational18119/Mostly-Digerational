@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.everything.limelight;
 
+import android.util.Log;
+
 import java.util.Arrays;
 
 public class ToRobotMsg {
-    byte[] magic = new byte[] { 0x4C, 0x53, 0x52, 0x56, 0x00 };
     public MessageType type;
 
     public byte[] otherData;
@@ -13,6 +14,7 @@ public class ToRobotMsg {
         CurrentData(0x1);
 
         private Byte type;
+        private Byte[] otherData;
         MessageType(int type) {
             this.type = (byte) type;
         }
@@ -27,12 +29,25 @@ public class ToRobotMsg {
     };
 
     ToRobotMsg(byte[] data) {
-        assert magic == Arrays.copyOf(data, 5);
+        assert new String(Arrays.copyOf(data, 4)).equals("LSRV");
+
+        Log.i("ToRobotMsg", Arrays.toString(data));
 
         byte typeByte = data[0x5];
         type = MessageType.values()[typeByte];
 
-//        switch ()
+        switch (type) {
+            case CurrentData:
+                // Please be correct
+                // Length of other data message stuff
+                assert data[0x6] == 9;
+
+                otherData = Arrays.copyOfRange(data, 0x7, 0x10);
+
+                Log.i("ToRobotMsg", String.format("Length: %d", otherData.length));
+
+                assert otherData.length == 9;
+        }
 
     }
 }
