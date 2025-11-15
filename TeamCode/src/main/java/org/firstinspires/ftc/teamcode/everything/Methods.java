@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.everything;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -38,7 +39,8 @@ public abstract class Methods extends LinearOpMode {
     //defines all hardware
     DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
     DcMotorEx outtake;
-    Servo revolver, launcherYaw, daHood, transferServo, limelightServo;
+    Servo revolver, daHood, transferServo, limelightServo;
+    CRServo launcherYaw;
     VoltageSensor voltageSensor;
     Limelight3A limelight;
     RevColorSensorV3 colorSensor;
@@ -76,7 +78,7 @@ public abstract class Methods extends LinearOpMode {
         //liftR = hardwareMap.dcMotor.get("liftR");
         //liftL = hardwareMap.dcMotor.get("liftL");
 
-        launcherYaw = hardwareMap.servo.get("launcherYaw");
+        launcherYaw = hardwareMap.get(CRServo.class, "launcherYaw");
         daHood = hardwareMap.servo.get("daHood");
         daHood.setPosition(0.5);
         revolver = hardwareMap.servo.get("revolver");

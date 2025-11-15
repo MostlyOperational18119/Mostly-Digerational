@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.everything;
 
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Indexer {
@@ -106,33 +108,24 @@ public class Indexer {
         return 0;
     }
 
-    public void setSlots(int index, BallColor state) {
-        slots[index] = state;
-    }
-
     //when beam is broken: check ball color
     public void setIndexerColor() {
-        int blue = methods.colorSensor.blue();
-        int green = methods.colorSensor.green();
+        NormalizedRGBA normalizedRGBA= methods.colorSensor.getNormalizedColors();
+        float blue = normalizedRGBA.blue;
+        float green = normalizedRGBA.green;
         int currentIndex = currentIntakeIndex();
         BallColor ballIn = BallColor.EMPTY;
 
-        if (blue > green) {
-            ballIn = BallColor.PURPLE;
-        } else if (green > blue) {
-            ballIn = BallColor.GREEN;
+        if(methods.colorSensor.getDistance(DistanceUnit.MM) < 50) {
+            if (blue > green) {
+                ballIn = BallColor.PURPLE;
+            } else if (green > blue) {
+                ballIn = BallColor.GREEN;
+            }
         }
 
         if (currentIndex > -1) {
             slots[currentIndex] = ballIn;
-        }
-    }
-
-    public void rotateWithDistanceCheck() {
-        double distance = methods.colorSensor.getDistance(DistanceUnit.MM);
-
-        if (distance <= 45) {
-            rotateToColor(BallColor.EMPTY);
         }
     }
 

@@ -13,19 +13,16 @@ public class MainTeleOp extends Methods {
         teamHateLoveButton();
         initialize();
         waitForStart();
-        launcherYaw.setPosition(0.5);
+        //launcherYaw.setPosition(0.5);
         double launcherYawRotation = 0.5;
         int launchDebounce = 0;
-        int currentIndexIntake = 0;
-        int currentIndexOuttake = 0;
-        double debounceStart = 0;
         float speedDivider = 1.2F;
         double hoodPosition = 0.3;
-        boolean isIntake = true;
         boolean isFar = true;
-        boolean colorDebounce = false;
+        long intakeStartTime;
 
-        long beamBreakStartTime;
+        revolver.setPosition(0.0);
+
 
         LaunchSequence launch = new LaunchSequence(this);
         Indexer indexer = new Indexer(this);
@@ -53,24 +50,11 @@ public class MainTeleOp extends Methods {
             //launch.update();
             indexer.update();
             intakeSequence.update();
+            intakeStartTime = System.currentTimeMillis();
 
             intake.setPower(gamepad2.right_trigger);
-
-//            if (!breakBeamSensor.getState()) {
-//                if (!colorDebounce) {
-//                    colorDebounce = true;
-//                    debounceStart = getRuntime();
-//                    indexer.setIndexerColor();
-//                    indexer.rotateWithDistanceCheck();
-//                }
-//            }
-//            if ((getRuntime() - debounceStart) >= 0.3) {
-//                colorDebounce = false;
-//            }
-
-
             if (indexer.colorInArray(Indexer.BallColor.EMPTY) && !breakBeamSensor.getState() && intakeSequence.currentStateIntake == Intake.State.IDLE) {
-                intakeSequence.start();
+                    intakeSequence.start();
             }
 
 
@@ -99,7 +83,7 @@ public class MainTeleOp extends Methods {
                     }
                 }
 
-                launcherYaw.setPosition(launcherYawRotation);
+                //launcherYaw.setPosition(launcherYawRotation);
 
                 //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
@@ -123,14 +107,14 @@ public class MainTeleOp extends Methods {
                 }
 
                 telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
+                telemetry.addData("is true1", indexer.colorInArray(Indexer.BallColor.EMPTY));
+                telemetry.addData("is true 2", !breakBeamSensor.getState());
+                telemetry.addData("is true 3", intakeSequence.currentStateIntake == Intake.State.IDLE);
                 telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
                 telemetry.addData("revolver position", revolver.getPosition());
                 telemetry.addData("beam break", !breakBeamSensor.getState());
                 telemetry.addData("indexer position", indexer.rotation);
                 telemetry.addData("indexer next pos", indexer.nextRotation);
-//                telemetry.addData("db: ", beamDebounce);
-//                telemetry.addData("last db: ", debounceStart);
-//                telemetry.addData("current time: ", getRuntime());
                 telemetry.addData("red", colorSensor.red());
                 telemetry.addData("green", colorSensor.green());
                 telemetry.addData("blue", colorSensor.blue());
@@ -173,7 +157,6 @@ public class MainTeleOp extends Methods {
                     launchDebounce -= 1;
                 }
 
-//               
 
 //            if (fire) {
 //                launch.startLaunch();
