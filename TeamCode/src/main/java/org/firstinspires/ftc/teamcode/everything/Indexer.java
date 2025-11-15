@@ -131,7 +131,7 @@ public class Indexer {
     public void rotateWithDistanceCheck() {
         double distance = methods.colorSensor.getDistance(DistanceUnit.MM);
 
-        if (distance <= 45) {
+        if (distance <= 60) {
             rotateToColor(BallColor.EMPTY);
         }
     }
