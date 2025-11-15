@@ -138,6 +138,8 @@ public class MainTeleOp extends Methods {
                 telemetry.addData("slot 0", indexer.slots[0]);
                 telemetry.addData("slot 1", indexer.slots[1]);
                 telemetry.addData("slot 2", indexer.slots[2]);
+                telemetry.addData("current color set", Color67);
+                telemetry.addData("current set slot", slot);
 //            telemetry.addData("launch debounce", launchDebounce);
 //            telemetry.addData("velocity", outtake.getVelocity());
 //            telemetry.addData("hood position", hoodPosition);
