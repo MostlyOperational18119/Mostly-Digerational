@@ -129,6 +129,7 @@ public class Indexer {
         }
     }
 
+
     public int currentIntakeIndex() {
         int index = -1;
         switch (rotation) {

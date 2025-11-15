@@ -27,6 +27,7 @@ public class MainTeleOp extends Methods {
         LaunchSequence launch = new LaunchSequence(this);
         Indexer indexer = new Indexer(this);
         Intake intakeSequence = new Intake(this, indexer);
+        Outtake outtake = new Outtake(this, indexer);
 
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
@@ -50,7 +51,8 @@ public class MainTeleOp extends Methods {
             //launch.update();
             indexer.update();
             intakeSequence.update();
-            intakeStartTime = System.currentTimeMillis();
+            outtake.update();
+            outtake.setRotationPosition(0.5);
 
             intake.setPower(gamepad2.right_trigger);
             if (indexer.colorInArray(Indexer.BallColor.EMPTY) && !breakBeamSensor.getState() && intakeSequence.currentStateIntake == Intake.State.IDLE) {
@@ -83,7 +85,7 @@ public class MainTeleOp extends Methods {
                     }
                 }
 
-                //launcherYaw.setPosition(launcherYawRotation);
+                outtake.setRotationPosition(launcherYawRotation);
 
                 //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
@@ -107,9 +109,7 @@ public class MainTeleOp extends Methods {
                 }
 
                 telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
-                telemetry.addData("is true1", indexer.colorInArray(Indexer.BallColor.EMPTY));
-                telemetry.addData("is true 2", !breakBeamSensor.getState());
-                telemetry.addData("is true 3", intakeSequence.currentStateIntake == Intake.State.IDLE);
+                telemetry.addData("outtake power", outtakePower);
                 telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
                 telemetry.addData("revolver position", revolver.getPosition());
                 telemetry.addData("beam break", !breakBeamSensor.getState());
@@ -131,19 +131,19 @@ public class MainTeleOp extends Methods {
 
 
                 //gamepad 2 launcher positions
-                if (isFar) {
-                    targetRPM = (int) (0.575 * maxRPM * 13.1 / voltageSensor.getVoltage());
-                    measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
-                    power = 0.575 + (targetRPM - measuredRPM) * P_FAR;
-                    hoodPosition = 0.3;
-                    outtake.setPower(power);
-                } else {
-                    targetRPM = (int) (0.5 * maxRPM * 12.5 / voltageSensor.getVoltage());
-                    measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
-                    power = 0.5 + (targetRPM - measuredRPM) * P_CLOSE;
-                    outtake.setPower(power);
-                    hoodPosition = 0.7;
-                }
+//                if (isFar) {
+//                    targetRPM = (int) (0.575 * maxRPM * 13.1 / voltageSensor.getVoltage());
+//                    measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
+//                    power = 0.575 + (targetRPM - measuredRPM) * P_FAR;
+//                    hoodPosition = 0.3;
+//                    outtake.setPower(power);
+//                } else {
+//                    targetRPM = (int) (0.5 * maxRPM * 12.5 / voltageSensor.getVoltage());
+//                    measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
+//                    power = 0.5 + (targetRPM - measuredRPM) * P_CLOSE;
+//                    outtake.setPower(power);
+//                    hoodPosition = 0.7;
+//                }
 
                 //gamepad 2 button press to toggle between launch positions
                 if (gamepad2.bWasPressed()) {
