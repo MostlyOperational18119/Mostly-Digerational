@@ -12,9 +12,8 @@ public class Intake {
 
     public State currentStateIntake = State.IDLE;
     private final Indexer indexer;
-    private long startTime;
     private final Methods methods;
-    boolean broken;
+    private long startTime;
     public Intake(Methods methods, Indexer indexer) {
         this.methods = methods;
         this.indexer = indexer;
@@ -29,13 +28,13 @@ public class Intake {
         methods.telemetry.addData("Current Intake State", currentStateIntake);
         switch (currentStateIntake) {
             case SET_COLOR:
-                if (System.currentTimeMillis() - startTime > 300) {
+                if (System.currentTimeMillis() - startTime > 2000) {
                     indexer.setIndexerColor();
                     currentStateIntake = State.ROTATE_TO_EMPTY;
                 }
                 break;
             case ROTATE_TO_EMPTY:
-                if (indexer.colorInArray(Indexer.BallColor.EMPTY) && methods.colorSensor.getDistance(DistanceUnit.MM) < 45) {
+                if (indexer.colorInArray(Indexer.BallColor.EMPTY) && methods.colorSensor.getDistance(DistanceUnit.MM) < 50) {
                     indexer.rotateToColor(Indexer.BallColor.EMPTY);
                     currentStateIntake = State.IDLE;
                 }

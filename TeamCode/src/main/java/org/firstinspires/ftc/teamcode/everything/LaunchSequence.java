@@ -12,7 +12,6 @@ public class LaunchSequence {
     private State currentState = State.IDLE;
     private long startTime;
     private final Methods methods;
-    boolean broken;
     public LaunchSequence(Methods methods) {
         this.methods = methods;
     }
@@ -33,7 +32,10 @@ public class LaunchSequence {
                 }
                 break;
             case LAUNCH:
-                methods.transferServo.setPosition(methods.transferServoUp);
+               // if () {
+                    methods.transferServo.setPosition(methods.transferServoUp);
+                //}
+                currentState = State.IDLE;
                 break;
             case IDLE:
                 break;
