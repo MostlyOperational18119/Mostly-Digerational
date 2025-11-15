@@ -36,6 +36,9 @@ public class TestLimelight extends Methods {
 
         waitForStart();
         Indexer.BallColor[] balls = new Indexer.BallColor[9];
+        int ballGoalColor = -1;
+
+        int chosenGoal = 0;
 
 
         while (opModeIsActive()) {
@@ -74,7 +77,8 @@ public class TestLimelight extends Methods {
                                 case CurrentData:
                                     telemetry.addLine("LimeLight gave us some results :D");
 
-                                    for (int i = 0; i < balls.length; i++) {
+                                    ballGoalColor = message.otherData[0];
+                                    for (int i = 1; i <= balls.length; i++) {
 //                                        telemetry.addData("The number thing: ", message.otherData[i]);
                                         Log.i("TestLimelight", String.format("Number thing: %d", message.otherData[i]));
                                         balls[i] = Indexer.BallColor.values()[message.otherData[i]];
@@ -92,7 +96,7 @@ public class TestLimelight extends Methods {
                         Log.i("TestLimelight", "hello 4 no");
                         telemetry.addLine("No input D:");
 
-                        ToLimelightMsg message = new ToLimelightMsg(ToLimelightMsg.MessageType.GetResult);
+                        ToLimelightMsg message = new ToLimelightMsg((byte) chosenGoal);
 
                         Log.i("TestLimelight", Arrays.toString(message.getData()));
 
@@ -121,7 +125,13 @@ public class TestLimelight extends Methods {
                 }
             }
 
+            telemetry.addLine((ballGoalColor == 0) ? "Blue goal:" : "Red Goal:");
             telemetry.addData("Ball colors:", Arrays.toString(balls));
+
+            if (gamepad1.aWasPressed()) {
+                if (chosenGoal == 0) chosenGoal++;
+                else chosenGoal--;
+            }
 
             telemetry.update();
             sleep(200);
