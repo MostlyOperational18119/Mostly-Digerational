@@ -24,7 +24,7 @@ public class TestLimelight extends Methods {
         boolean connected = true;
 
         try {
-           socket = new Socket("172.29.0.1", 8888);
+           socket = new Socket("172.29.0.1", 8888); // used to be
 
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
@@ -75,7 +75,8 @@ public class TestLimelight extends Methods {
                                     telemetry.addLine("LimeLight gave us some results :D");
 
                                     for (int i = 0; i < balls.length; i++) {
-                                        telemetry.addData("The number thing: ", message.otherData[i]);
+//                                        telemetry.addData("The number thing: ", message.otherData[i]);
+                                        Log.i("TestLimelight", String.format("Number thing: %d", message.otherData[i]));
                                         balls[i] = Indexer.BallColor.values()[message.otherData[i]];
                                     }
                                     break;
@@ -93,21 +94,37 @@ public class TestLimelight extends Methods {
 
                         ToLimelightMsg message = new ToLimelightMsg(ToLimelightMsg.MessageType.GetResult);
 
+                        Log.i("TestLimelight", Arrays.toString(message.getData()));
+
                         out.write(message.getData());
                     }
                 } catch (IOException e) {
+                    connected = false;
+
                     telemetry.addLine(e.getLocalizedMessage());
                 }
             } else {
                 Log.i("TestLimelight", "hello not connected");
                 telemetry.addLine("Not connected");
+
+                telemetry.addLine(error);
+
+                try {
+                    socket = new Socket("172.29.0.1", 8888);
+
+                    in = new DataInputStream(socket.getInputStream());
+                    out = new DataOutputStream(socket.getOutputStream());
+
+                    connected = true;
+                } catch (Exception e) {
+                    error = e.getLocalizedMessage();
+                }
             }
 
-            if (!connected) telemetry.addLine(error);
             telemetry.addData("Ball colors:", Arrays.toString(balls));
 
             telemetry.update();
-            sleep(20);
+            sleep(200);
         }
     }
 }
