@@ -40,13 +40,13 @@ public class ToRobotMsg {
             case CurrentData:
                 // Please be correct
                 // Length of other data message stuff
-                assert data[0x6] == 9;
+                assert data[0x6] == 0xA;
 
-                otherData = Arrays.copyOfRange(data, 0x7, 0x10);
+                otherData = Arrays.copyOfRange(data, 0x7, 0x11);
 
                 Log.i("ToRobotMsg", String.format("Length: %d", otherData.length));
 
-                assert otherData.length == 9;
+                assert otherData.length == 0xA;
         }
 
     }

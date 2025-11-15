@@ -37,6 +37,18 @@ public class ToLimelightMsg {
         data[7] = typeByte;
     }
 
+    ToLimelightMsg(byte color) {
+        IntStream.range(0, magic.length)
+                .forEach((int i) -> {
+                    data[i] = magic[i];
+                });
+
+        data[7] = 0x1; // GetResult
+
+        data[8] = 0x1; // length
+        data[9] = color; // just the data (wow, so complicated)
+    }
+
     public byte[] getData() {
         return data;
     }
