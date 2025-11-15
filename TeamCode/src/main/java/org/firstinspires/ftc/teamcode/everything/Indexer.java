@@ -28,14 +28,17 @@ public class Indexer {
                 case zeroIn:
                     methods.revolver.setPosition(0.0);
                     rotation = nextRotation;
+                    methods.revolverExpectedPosition = 0.0;
                     break;
                 case zeroOut:
                     methods.revolver.setPosition(0.55);
                     rotation = nextRotation;
+                    methods.revolverExpectedPosition = 0.55;
                     break;
                 case oneIn:
                     methods.revolver.setPosition(0.74);
                     rotation = nextRotation;
+                    methods.revolverExpectedPosition = 0.74;
                     break;
                 case oneOut:
                     methods.revolver.setPosition(0.2);
@@ -119,15 +122,12 @@ public class Indexer {
 
         if (blue > green) {
             ballIn = BallColor.PURPLE;
-            methods.Color67 = 'p';
         } else if (green > blue) {
             ballIn = BallColor.GREEN;
-            methods.Color67 = 'g';
         }
 
         if (currentIndex > -1) {
             slots[currentIndex] = ballIn;
-            methods.slot = currentIndex;
         }
     }
 
