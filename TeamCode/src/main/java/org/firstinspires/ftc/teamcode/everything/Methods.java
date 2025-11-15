@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.everything;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -38,7 +39,8 @@ public abstract class Methods extends LinearOpMode {
     //defines all hardware
     DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
     DcMotorEx outtake;
-    Servo revolver, launcherYaw, daHood, transferServo, limelightServo;
+    Servo revolver, daHood, transferServo, limelightServo;
+    CRServo launcherYaw;
     VoltageSensor voltageSensor;
     Limelight3A limelight;
     RevColorSensorV3 colorSensor;
@@ -48,6 +50,7 @@ public abstract class Methods extends LinearOpMode {
     float P_FAR = 0.0F, P_CLOSE = 0.0F;
     double power;
     double transferServoUp = 0.0;
+    double outtakePower = 0.0;
     int maxRPM = 5900, targetRPM, measuredRPM;
 
     boolean fire, transferToggle, cycleLeft, cycleRight, toGreen, toPurple;
@@ -60,8 +63,9 @@ public abstract class Methods extends LinearOpMode {
 
     //initializes all the hardware and the apriltag detection
     public void initialize() {
-        motorFR = hardwareMap.dcMotor.get("motorFR");
+        motorFR = hardwareMap.dcMotor.get("motorFR"); //also contains encoder for outtake
         motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL = hardwareMap.dcMotor.get("motorFL");
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -76,7 +80,7 @@ public abstract class Methods extends LinearOpMode {
         //liftR = hardwareMap.dcMotor.get("liftR");
         //liftL = hardwareMap.dcMotor.get("liftL");
 
-        launcherYaw = hardwareMap.servo.get("launcherYaw");
+        launcherYaw = hardwareMap.get(CRServo.class, "launcherYaw");
         daHood = hardwareMap.servo.get("daHood");
         daHood.setPosition(0.5);
         revolver = hardwareMap.servo.get("revolver");
