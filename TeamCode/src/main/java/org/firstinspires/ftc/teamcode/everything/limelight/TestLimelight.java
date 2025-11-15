@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.everything.limelight;
 
+import android.util.Log;
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.everything.Indexer;
 import org.firstinspires.ftc.teamcode.everything.Methods;
 
@@ -7,21 +11,26 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
 
+@TeleOp(name = "Test LimeLight")
 public class TestLimelight extends Methods {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         DataInputStream in = null;
         DataOutputStream out = null;
         Socket socket;
+        String error = "none?";
         boolean connected = true;
 
         try {
-           socket = new Socket("172.29.0.21", 8888);
+           socket = new Socket("172.29.0.1", 8888);
 
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
         } catch (Exception e) {
+            error = e.getLocalizedMessage();
+
             connected = false;
         }
 
@@ -30,30 +39,56 @@ public class TestLimelight extends Methods {
 
 
         while (opModeIsActive()) {
+            Log.i("TestLimelight", "hello 1");
+
+
             if (connected) {
                 telemetry.addLine("Connected");
 
+                Log.i("TestLimelight", "hello 2");
+
                 try {
+                    Log.i("TestLimelight", "hello 3");
+
                     if (in.available() > 0) {
+                        Log.i("TestLimelight", String.format("hello 3 yes input %d", in.available()));
                         telemetry.addLine("Wow look, input");
 
-                        byte[] data = new byte[256];
+                        byte[] data = new byte[in.available()];
                         in.readFully(data);
 
-                        ToRobotMsg message = new ToRobotMsg(data);
+                        Log.i("TestLimelight", Arrays.toString(Arrays.copyOf(data, 5)));
 
-                        switch (message.type) {
-                            case Connected:
-                                telemetry.addLine("LimeLight says hi");
-                            case CurrentData:
-                                telemetry.addLine("LimeLight gave us some results :D");
+                        if (new String(Arrays.copyOf(data, 5)).equals("Hello")) { // new byte[] { 0x48,0x65,0x6C,0x6C,0x6F }
+                            Log.i("TestLimelight", "LL says hi :D");
+                        } else {
 
-                                for (int i = 0; i < balls.length; i++) {
-                                    balls[i] = Indexer.BallColor.values()[message.otherData[i]];
-                                }
+                            Log.i("TestLimelight", "hello 3 read data");
+
+                            ToRobotMsg message = new ToRobotMsg(data);
+
+                            switch (message.type) {
+                                case Connected:
+                                    telemetry.addLine("LimeLight says hi");
+                                    break;
+                                case CurrentData:
+                                    telemetry.addLine("LimeLight gave us some results :D");
+
+                                    for (int i = 0; i < balls.length; i++) {
+                                        telemetry.addData("The number thing: ", message.otherData[i]);
+                                        balls[i] = Indexer.BallColor.values()[message.otherData[i]];
+                                    }
+                                    break;
+                                default:
+                                    Log.i("TestLimelight", "what");
+                                    telemetry.addLine("Huh?");
+                            }
                         }
 
+                        Log.i("TestLimelight", "hello 3 done loop");
+
                     } else {
+                        Log.i("TestLimelight", "hello 4 no");
                         telemetry.addLine("No input D:");
 
                         ToLimelightMsg message = new ToLimelightMsg(ToLimelightMsg.MessageType.GetResult);
@@ -64,10 +99,12 @@ public class TestLimelight extends Methods {
                     telemetry.addLine(e.getLocalizedMessage());
                 }
             } else {
+                Log.i("TestLimelight", "hello not connected");
                 telemetry.addLine("Not connected");
             }
 
-            telemetry.addData("Ball colors:", balls);
+            if (!connected) telemetry.addLine(error);
+            telemetry.addData("Ball colors:", Arrays.toString(balls));
 
             telemetry.update();
             sleep(20);
