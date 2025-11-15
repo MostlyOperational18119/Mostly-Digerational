@@ -51,8 +51,7 @@ public abstract class Methods extends LinearOpMode {
     int maxRPM = 5900, targetRPM, measuredRPM;
 
     boolean fire, transferToggle, cycleLeft, cycleRight, toGreen, toPurple;
-    int slot = -1;
-    Character Color67 = 'n';
+    double revolverExpectedPosition = -1.0;
 
     //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
     public VisionPortal visionPortal;
