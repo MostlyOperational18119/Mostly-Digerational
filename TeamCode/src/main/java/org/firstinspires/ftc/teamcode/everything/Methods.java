@@ -50,6 +50,7 @@ public abstract class Methods extends LinearOpMode {
     float P_FAR = 0.0F, P_CLOSE = 0.0F;
     double power;
     double transferServoUp = 0.0;
+    double outtakePower = 0.0;
     int maxRPM = 5900, targetRPM, measuredRPM;
 
     boolean fire, transferToggle, cycleLeft, cycleRight, toGreen, toPurple;
@@ -62,8 +63,9 @@ public abstract class Methods extends LinearOpMode {
 
     //initializes all the hardware and the apriltag detection
     public void initialize() {
-        motorFR = hardwareMap.dcMotor.get("motorFR");
+        motorFR = hardwareMap.dcMotor.get("motorFR"); //also contains encoder for outtake
         motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL = hardwareMap.dcMotor.get("motorFL");
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
