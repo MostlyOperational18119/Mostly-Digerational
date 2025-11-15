@@ -119,19 +119,22 @@ public class Indexer {
 
         if (blue > green) {
             ballIn = BallColor.PURPLE;
+            methods.Color67 = 'p';
         } else if (green > blue) {
             ballIn = BallColor.GREEN;
+            methods.Color67 = 'g';
         }
 
         if (currentIndex > -1) {
-            setSlots(currentIndex, ballIn);
+            slots[currentIndex] = ballIn;
+            methods.slot = currentIndex;
         }
     }
 
     public void rotateWithDistanceCheck() {
         double distance = methods.colorSensor.getDistance(DistanceUnit.MM);
 
-        if (distance <= 78) {
+        if (distance <= 45) {
             rotateToColor(BallColor.EMPTY);
         }
     }

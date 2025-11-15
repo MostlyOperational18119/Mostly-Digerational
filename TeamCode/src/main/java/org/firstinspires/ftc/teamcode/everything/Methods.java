@@ -51,6 +51,8 @@ public abstract class Methods extends LinearOpMode {
     int maxRPM = 5900, targetRPM, measuredRPM;
 
     boolean fire, transferToggle, cycleLeft, cycleRight, toGreen, toPurple;
+    int slot = -1;
+    Character Color67 = 'n';
 
     //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
     public VisionPortal visionPortal;
@@ -77,7 +79,7 @@ public abstract class Methods extends LinearOpMode {
 
         launcherYaw = hardwareMap.servo.get("launcherYaw");
         daHood = hardwareMap.servo.get("daHood");
-        daHood.setPosition(0);
+        daHood.setPosition(0.5);
         revolver = hardwareMap.servo.get("revolver");
         transferServo = hardwareMap.servo.get("transferServo");
         limelightServo = hardwareMap.servo.get("limelightServo");

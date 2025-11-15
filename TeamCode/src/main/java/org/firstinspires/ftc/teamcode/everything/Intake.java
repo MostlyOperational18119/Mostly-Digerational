@@ -20,6 +20,7 @@ public class Intake {
     }
 
     public void start() {
+        startTime = System.currentTimeMillis();
         currentState = State.SET_COLOR;
     }
 
@@ -28,13 +29,12 @@ public class Intake {
         switch (currentState) {
             case SET_COLOR:
                 if (System.currentTimeMillis() - startTime > 300) {
-                    startTime = System.currentTimeMillis();
                     indexer.setIndexerColor();
                     currentState = State.ROTATE_TO_EMPTY;
                 }
                 break;
             case ROTATE_TO_EMPTY:
-                if (indexer.colorInArray(Indexer.BallColor.EMPTY) && methods.colorSensor.getDistance(DistanceUnit.INCH) < 1.167) {
+                if (indexer.colorInArray(Indexer.BallColor.EMPTY) && methods.colorSensor.getDistance(DistanceUnit.MM) < 78) {
                     indexer.rotateToColor(Indexer.BallColor.EMPTY);
                     currentState = State.IDLE;
                 }
