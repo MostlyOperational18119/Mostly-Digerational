@@ -123,7 +123,6 @@ public class MainTeleOp extends Methods {
                 }
 
                 telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
-                telemetry.addData("findColorHappened", indexer.findColorHappened);
                 telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
                 telemetry.addData("revolver position", revolver.getPosition());
                 telemetry.addData("beam break", !breakBeamSensor.getState());
@@ -174,11 +173,7 @@ public class MainTeleOp extends Methods {
                     launchDebounce -= 1;
                 }
 
-                if (isIntake) {
-                    setIndexerIntake(currentIndexIntake);
-                } else {
-                    setIndexerOuttake(currentIndexOuttake);
-                }
+//               
 
 //            if (fire) {
 //                launch.startLaunch();

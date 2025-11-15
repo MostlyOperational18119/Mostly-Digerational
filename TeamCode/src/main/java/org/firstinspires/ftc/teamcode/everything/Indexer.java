@@ -5,10 +5,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Indexer {
     public Positions rotation = Positions.zeroIn;
     public Positions nextRotation = Positions.zeroIn;
-    public boolean findColorHappened = false;
-
     public enum Positions {zeroIn, zeroOut, oneIn, oneOut, twoIn, twoOut;}
-    Methods methods;
+    private final Methods methods;
 
     public enum BallColor {
         GREEN,
@@ -102,7 +100,6 @@ public class Indexer {
     public int findColor(BallColor color) {
         for (int i = 0; i<slots.length; i++) {
             if (slots[i] == color) {
-                findColorHappened = true;
                 return i;
             }
         }
