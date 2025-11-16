@@ -3,20 +3,23 @@ package org.firstinspires.ftc.teamcode.everything;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 public class LaunchSequence {
-    private enum State {
+    public enum State {
         PREP_LAUNCH,
         LAUNCH,
         IDLE;
     }
 
-    private State currentState = State.IDLE;
+    public State currentState = State.IDLE;
     private long startTime;
     private final Methods methods;
-    public LaunchSequence(Methods methods) {
+    private final Indexer indexer;
+    public LaunchSequence(Methods methods, Indexer indexer) {
         this.methods = methods;
+        this.indexer = indexer;
     }
 
     public void startLaunch() {
+        startTime = System.currentTimeMillis();
         currentState = State.PREP_LAUNCH;
     }
 
@@ -25,19 +28,38 @@ public class LaunchSequence {
         switch (currentState) {
             case PREP_LAUNCH:
                 //methods.outtake.setPower(1);
-
-                if (System.currentTimeMillis() - startTime > 2000) {
+                if (methods.toGreen) {
+                    indexer.rotateToColor(Indexer.BallColor.GREEN);
                     startTime = System.currentTimeMillis();
                     currentState = State.LAUNCH;
+                    indexer.slots[indexer.currentIntakeIndex()] = Indexer.BallColor.EMPTY;
+                } else if (methods.toPurple) {
+                    indexer.rotateToColor(Indexer.BallColor.PURPLE);
+                    startTime = System.currentTimeMillis();
+                    currentState = State.LAUNCH;
+                    indexer.slots[indexer.currentIntakeIndex()] = Indexer.BallColor.EMPTY;
                 }
+//                else {
+//                   if (System.currentTimeMillis() - startTime > 300) {
+//                       currentState = State.IDLE;
+//                   }
+//                }
+//
+//                if (System.currentTimeMillis() - startTime > 2000) {
+//                    startTime = System.currentTimeMillis();
+//                    currentState = State.IDLE;
+//                }
                 break;
             case LAUNCH:
-               // if () {
+               if (System.currentTimeMillis() - startTime > 150) {
                     methods.transferServo.setPosition(methods.transferServoUp);
-                //}
-                currentState = State.IDLE;
+                }
+                if (System.currentTimeMillis() - startTime > 450) {
+                    currentState = State.IDLE;
+                }
                 break;
             case IDLE:
+                methods.transferServo.setPosition(0.21);
                 break;
         }
     }

@@ -38,7 +38,7 @@ import java.util.List;
 public abstract class Methods extends LinearOpMode {
     //defines all hardware
     DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
-    DcMotorEx outtake;
+    DcMotorEx outtakeFlywheel;
     Servo revolver, daHood, transferServo, limelightServo;
     CRServo launcherYaw;
     VoltageSensor voltageSensor;
@@ -53,7 +53,7 @@ public abstract class Methods extends LinearOpMode {
     double outtakePower = 0.0;
     int maxRPM = 5900, targetRPM, measuredRPM;
 
-    boolean fire, transferToggle, cycleLeft, cycleRight, toGreen, toPurple;
+    boolean fireGreen, firePurple, transferToggle, cycleLeft, cycleRight, toGreen, toPurple;
     double revolverExpectedPosition = -1.0;
 
     //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
@@ -76,7 +76,7 @@ public abstract class Methods extends LinearOpMode {
         motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake = hardwareMap.dcMotor.get("intake");
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        outtake = hardwareMap.get(DcMotorEx.class, "outtake");
+        outtakeFlywheel = hardwareMap.get(DcMotorEx.class, "outtake");
         //liftR = hardwareMap.dcMotor.get("liftR");
         //liftL = hardwareMap.dcMotor.get("liftL");
 
