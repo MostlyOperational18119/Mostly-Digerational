@@ -19,15 +19,15 @@ public class MainTeleOp extends Methods {
         float speedDivider = 1.2F;
         double hoodPosition = 0.3;
         boolean isFar = true;
-        long intakeStartTime;
+        boolean intaking = true;
 
         revolver.setPosition(0.0);
 
 
-        LaunchSequence launch = new LaunchSequence(this);
         Indexer indexer = new Indexer(this);
         Intake intakeSequence = new Intake(this, indexer);
         Outtake outtake = new Outtake(this, indexer);
+        LaunchSequence launch = new LaunchSequence(this, indexer);
 
         while (opModeIsActive()) {
             turn = gamepad1.right_stick_x;
@@ -38,28 +38,54 @@ public class MainTeleOp extends Methods {
             motorBLPower = (forwards - strafe + turn) / speedDivider;
             motorBRPower = (forwards + strafe - turn) / speedDivider;
 
-            fire = gamepad2.aWasPressed();
+            fireGreen = gamepad2.aWasPressed();
+            firePurple = gamepad2.xWasPressed();
             transferToggle = gamepad2.bWasPressed();
             cycleLeft = gamepad2.dpadLeftWasPressed();
             cycleRight = gamepad2.dpadRightWasPressed();
-            toGreen = gamepad2.rightBumperWasPressed();
-            toPurple = gamepad2.leftBumperWasPressed();
+//            toGreen = gamepad2.rightBumperWasPressed();
+//            toPurple = gamepad2.leftBumperWasPressed();
 
             //detectAprilTag();
 
             drive();
-            //launch.update();
+            launch.update();
             indexer.update();
             intakeSequence.update();
             outtake.update();
             outtake.setRotationPosition(0.5);
 
+            //gamepad 2 intake
             intake.setPower(gamepad2.right_trigger);
-            if (indexer.colorInArray(Indexer.BallColor.EMPTY) && !breakBeamSensor.getState() && intakeSequence.currentStateIntake == Intake.State.IDLE) {
-                    intakeSequence.start();
+
+            //switch between intake and outtake
+            if (transferToggle) {
+                if (intaking) {
+                    launch.currentState = LaunchSequence.State.IDLE;
+                } else if (intaking = false) {
+                    intakeSequence.currentStateIntake = Intake.State.IDLE;
+
+                }
+                intaking = !intaking;
+//                transferServo.setPosition(0);
+//                launchDebounce = 50;
             }
 
+            //gamepad 2 indexer go
+            if (indexer.colorInArray(Indexer.BallColor.EMPTY) && !breakBeamSensor.getState() && intakeSequence.currentStateIntake == Intake.State.IDLE && intaking) {
+                intakeSequence.start();
+            }
 
+            //gamepad 2 press launch
+            if (fireGreen) {
+                toGreen = true;
+                toPurple = false;
+                launch.startLaunch();
+            } else if (firePurple) {
+                toPurple = true;
+                toGreen = false;
+                launch.startLaunch();
+            }
 
                 //gamepad 1 speed clutch
                 if (gamepad1.right_trigger >= 0.5) {
@@ -87,6 +113,8 @@ public class MainTeleOp extends Methods {
 
                 outtake.setRotationPosition(launcherYawRotation);
 
+                outtakeFlywheel.setPower(0.6);
+
                 //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
 //                    currentIndexIntake += 1;
@@ -102,16 +130,18 @@ public class MainTeleOp extends Methods {
 //                    isIntake = false;
 //                }
 
-                //gamepad 2 press launch
-                if (fire) {
-                    transferServo.setPosition(0);
-                    launchDebounce = 50;
-                }
 
+
+                telemetry.addData("intaking yes or no", intaking);
+                telemetry.addData("toGreen", toGreen);
+                telemetry.addData("toGreen", toPurple);
+                telemetry.addData("firePurple", firePurple);
+                telemetry.addData("fireGreen", fireGreen);
+                telemetry.addData("launch sequence state", launch.currentState);
                 telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
                 telemetry.addData("outtake power", outtakePower);
                 telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
-                telemetry.addData("revolver position", revolver.getPosition());
+//                telemetry.addData("revolver position", revolver.getPosition());
                 telemetry.addData("beam break", !breakBeamSensor.getState());
                 telemetry.addData("indexer position", indexer.rotation);
                 telemetry.addData("indexer next pos", indexer.nextRotation);
@@ -121,8 +151,8 @@ public class MainTeleOp extends Methods {
                 telemetry.addData("slot 0", indexer.slots[0]);
                 telemetry.addData("slot 1", indexer.slots[1]);
                 telemetry.addData("slot 2", indexer.slots[2]);
-                telemetry.addData("revolver expected position", revolverExpectedPosition);
-                telemetry.addData("findColor(EMPTY) returns", indexer.findColor(Indexer.BallColor.EMPTY));
+//                telemetry.addData("revolver expected position", revolverExpectedPosition);
+//                telemetry.addData("findColor(EMPTY) returns", indexer.findColor(Indexer.BallColor.EMPTY));
 //            telemetry.addData("launch debounce", launchDebounce);
 //            telemetry.addData("velocity", outtake.getVelocity());
 //            telemetry.addData("hood position", hoodPosition);
@@ -146,9 +176,9 @@ public class MainTeleOp extends Methods {
 //                }
 
                 //gamepad 2 button press to toggle between launch positions
-                if (gamepad2.bWasPressed()) {
-                    isFar = !isFar;
-                }
+//                if (gamepad2.bWasPressed()) {
+//                    isFar = !isFar;
+//                }
 
                 //debounce for transfer flicker
                 if (launchDebounce <= 0) {
@@ -156,17 +186,6 @@ public class MainTeleOp extends Methods {
                 } else {
                     launchDebounce -= 1;
                 }
-
-
-//            if (fire) {
-//                launch.startLaunch();
-//            }
-//            if (toGreen) {
-//                indexer.rotateToColor(Indexer.BallColor.GREEN);
-//            }
-//            if (toPurple) {
-//                indexer.rotateToColor(Indexer.BallColor.PURPLE);
-//            }
             }
         }
     }
