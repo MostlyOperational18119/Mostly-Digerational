@@ -2,19 +2,17 @@ package org.firstinspires.ftc.teamcode.everything;
 
 public class Outtake {
     private final Methods methods;
-    private final Indexer indexer;
-
     private int maxClicks =  6000;
     private int targetClicks = 3000;
     private int tolerance = 50;
 
-    public Outtake(Methods methods, Indexer indexer)  {
+    public Outtake(Methods methods)  {
         this.methods = methods;
-        this.indexer = indexer;
     }
 
     public void update() {
         int clicks = methods.motorFR.getCurrentPosition();
+        methods.outtakeEncoder = clicks;
 
         if (Math.abs(targetClicks - clicks) <= tolerance) {
             methods.launcherYaw.setPower(0);

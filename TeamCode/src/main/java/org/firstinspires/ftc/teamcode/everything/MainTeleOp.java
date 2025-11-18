@@ -25,7 +25,7 @@ public class MainTeleOp extends Methods {
 
         Indexer indexer = new Indexer(this);
         Intake intakeSequence = new Intake(this, indexer);
-        Outtake outtake = new Outtake(this, indexer);
+        Outtake outtake = new Outtake(this);
         LaunchSequence launch = new LaunchSequence(this, indexer);
 
         while (opModeIsActive()) {
@@ -132,6 +132,7 @@ public class MainTeleOp extends Methods {
 
 
                 telemetry.addData("intaking yes or no", intaking);
+                telemetry.addData("outtake encoder", outtakeEncoder);
                 telemetry.addData("toGreen", toGreen);
                 telemetry.addData("toGreen", toPurple);
                 telemetry.addData("firePurple", firePurple);

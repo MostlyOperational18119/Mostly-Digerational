@@ -48,6 +48,7 @@ public abstract class Methods extends LinearOpMode {
     Indexer indexer = new Indexer(this);
     float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
     float P_FAR = 0.0F, P_CLOSE = 0.0F;
+    int outtakeEncoder = 0;
     double power;
     double transferServoUp = 0.0;
     double outtakePower = 0.0;
@@ -126,33 +127,33 @@ public abstract class Methods extends LinearOpMode {
 
     }
 
-    public void setIndexerIntake(int index) { //placeholder
-        switch (index) {
-            case 0:
-                revolver.setPosition(0.0);
-                break;
-            case 1:
-                revolver.setPosition(0.74);
-                break;
-            case 2:
-                revolver.setPosition(0.37);
-                break;
-        }
-    }
-
-    public void setIndexerOuttake(int index) {
-        switch (index) {
-            case 0:
-                revolver.setPosition(0.55);
-                break;
-            case 1:
-                revolver.setPosition(0.2);
-                break;
-            case 2:
-                revolver.setPosition(0.92);
-                break;
-        }
-    }
+//    public void setIndexerIntake(int index) { //placeholder
+//        switch (index) {
+//            case 0:
+//                revolver.setPosition(0.0);
+//                break;
+//            case 1:
+//                revolver.setPosition(0.74);
+//                break;
+//            case 2:
+//                revolver.setPosition(0.37);
+//                break;
+//        }
+//    }
+//
+//    public void setIndexerOuttake(int index) {
+//        switch (index) {
+//            case 0:
+//                revolver.setPosition(0.55);
+//                break;
+//            case 1:
+//                revolver.setPosition(0.2);
+//                break;
+//            case 2:
+//                revolver.setPosition(0.92);
+//                break;
+//        }
+//    }
 
 
 

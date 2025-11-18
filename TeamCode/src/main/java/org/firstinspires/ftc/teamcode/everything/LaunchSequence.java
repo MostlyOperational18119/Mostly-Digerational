@@ -44,11 +44,6 @@ public class LaunchSequence {
 //                       currentState = State.IDLE;
 //                   }
 //                }
-//
-//                if (System.currentTimeMillis() - startTime > 2000) {
-//                    startTime = System.currentTimeMillis();
-//                    currentState = State.IDLE;
-//                }
                 break;
             case LAUNCH:
                if (System.currentTimeMillis() - startTime > 150) {
