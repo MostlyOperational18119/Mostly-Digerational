@@ -108,6 +108,12 @@ public class Indexer {
         return 0;
     }
 
+    //for auto: set all of indexer to one color
+    public void oneColor(BallColor color){
+        for (int i = 0; i < 3; i++) {
+            slots[i] = color;
+        }
+    }
     //when beam is broken: check ball color
     public void setIndexerColor() {
         NormalizedRGBA normalizedRGBA= methods.colorSensor.getNormalizedColors();
