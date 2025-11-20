@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.everything;
 
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class LaunchSequence {
     public enum State {
         PREP_LAUNCH,
@@ -27,34 +29,40 @@ public class LaunchSequence {
         methods.telemetry.addData("Current Launch State", currentState);
         switch (currentState) {
             case PREP_LAUNCH:
-                //methods.outtake.setPower(1);
+                methods.launchIdle = false;
                 if (methods.toGreen) {
-                    indexer.rotateToColor(Indexer.BallColor.GREEN);
+                    methods.telemetry.addLine("green");
+                    methods.telemetry.update();
+                    int launchIndex = indexer.rotateToColorAndGetIndex(Indexer.BallColor.GREEN);
                     startTime = System.currentTimeMillis();
                     currentState = State.LAUNCH;
-                    indexer.slots[indexer.currentIntakeIndex()] = Indexer.BallColor.EMPTY;
+                    if (launchIndex >= 0 && launchIndex < indexer.slots.length) {
+                        indexer.slots[launchIndex] = Indexer.BallColor.EMPTY;
+                    }
                 } else if (methods.toPurple) {
-                    indexer.rotateToColor(Indexer.BallColor.PURPLE);
+                    int launchIndex = indexer.rotateToColorAndGetIndex(Indexer.BallColor.PURPLE);
                     startTime = System.currentTimeMillis();
                     currentState = State.LAUNCH;
-                    indexer.slots[indexer.currentIntakeIndex()] = Indexer.BallColor.EMPTY;
+                    if (launchIndex >= 0 && launchIndex < indexer.slots.length) {
+                        indexer.slots[launchIndex] = Indexer.BallColor.EMPTY;
+                    }
                 }
-//                else {
-//                   if (System.currentTimeMillis() - startTime > 300) {
-//                       currentState = State.IDLE;
-//                   }
-//                }
                 break;
             case LAUNCH:
-               if (System.currentTimeMillis() - startTime > 150) {
+                methods.launchIdle = false;
+               if (System.currentTimeMillis() - startTime > 350) {
                     methods.transferServo.setPosition(methods.transferServoUp);
                 }
-                if (System.currentTimeMillis() - startTime > 450) {
+               if (System.currentTimeMillis() - startTime > 500) {
+                   methods.transferServo.setPosition(0.27);
+               }
+                if (System.currentTimeMillis() - startTime > 650) {
                     currentState = State.IDLE;
                 }
                 break;
             case IDLE:
-                methods.transferServo.setPosition(0.21);
+                methods.launchIdle = true;
+                methods.transferServo.setPosition(0.27);
                 break;
         }
     }

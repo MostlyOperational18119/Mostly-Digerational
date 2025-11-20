@@ -50,11 +50,12 @@ public abstract class Methods extends LinearOpMode {
     float P_FAR = 0.0F, P_CLOSE = 0.0F;
     int outtakeEncoder = 0;
     double power;
-    double transferServoUp = 0.0;
+    double transferServoUp = 0.09;
     double outtakePower = 0.0;
     int maxRPM = 5900, targetRPM, measuredRPM;
 
     boolean fireGreen, firePurple, transferToggle, cycleLeft, cycleRight, toGreen, toPurple;
+    boolean launchIdle = false;
     double revolverExpectedPosition = -1.0;
 
     //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
