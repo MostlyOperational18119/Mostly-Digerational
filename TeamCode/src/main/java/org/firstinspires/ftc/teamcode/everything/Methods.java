@@ -12,26 +12,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-//--SERVO 6V THING--\\
-//0 out hood
-//1 limelight rotation
-//2 rotation for ball holder
-//3 intake ramp
-//4 outtake flicker
-//5 outtake rotation
-
-//--EXPANSION--\\
-//0 intake
-//1 outtake
-//2 silly saarang
 
 import java.util.List;
 

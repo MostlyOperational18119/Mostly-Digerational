@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.everything;
 
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 public class LaunchSequence {
     public enum State {
         PREP_LAUNCH,

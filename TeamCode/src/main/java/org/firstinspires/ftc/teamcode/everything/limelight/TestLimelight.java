@@ -77,12 +77,8 @@ public class TestLimelight extends Methods {
                                 case CurrentData:
                                     telemetry.addLine("LimeLight gave us some results :D");
 
-                                    ballGoalColor = message.otherData[0];
-                                    for (int i = 1; i <= balls.length; i++) {
-//                                        telemetry.addData("The number thing: ", message.otherData[i]);
-                                        Log.i("TestLimelight", String.format("Number thing: %d", message.otherData[i]));
-                                        balls[i] = Indexer.BallColor.values()[message.otherData[i]];
-                                    }
+//                                    ballGoalColor = message.otherData[0];
+                                    balls = (Indexer.BallColor[]) message.results.get(ToRobotMsg.ResultType.BallLine);
                                     break;
                                 default:
                                     Log.i("TestLimelight", "what");

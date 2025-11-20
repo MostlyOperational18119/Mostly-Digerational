@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.everything;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.opencv.ml.EM;
 
 public class Intake {
     public enum State {
