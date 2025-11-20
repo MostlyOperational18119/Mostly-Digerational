@@ -151,4 +151,54 @@ public class Indexer {
         }
         return index;
     }
+
+    public int currentLaunchIndex() {
+        int index = -1;
+        switch (rotation) {
+            case zeroOut:
+                index = 0;
+                break;
+            case oneOut:
+                index = 1;
+                break;
+            case twoOut:
+                index = 2;
+                break;
+        }
+        return index;
+    }
+
+    public int rotateToColorAndGetIndex(BallColor color) {
+        int index;
+        if (!colorInArray(color)) {
+            return -1;
+        }
+        index = findColor(color);
+        if (color != BallColor.EMPTY) {
+            switch (index) {
+                case 0:
+                    nextRotation = Positions.zeroOut;
+                    break;
+                case 1:
+                    nextRotation = Positions.oneOut;
+                    break;
+                case 2:
+                    nextRotation = Positions.twoOut;
+                    break;
+            }
+        } else {
+            switch (index) {
+                case 0:
+                    nextRotation = Positions.zeroIn;
+                    break;
+                case 1:
+                    nextRotation = Positions.oneIn;
+                    break;
+                case 2:
+                    nextRotation = Positions.twoIn;
+                    break;
+            }
+        }
+        return index; // Return the index that was found
+    }
 }
