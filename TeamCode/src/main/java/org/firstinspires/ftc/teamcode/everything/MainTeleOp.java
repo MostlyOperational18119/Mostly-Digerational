@@ -38,6 +38,7 @@ public class MainTeleOp extends Methods {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
+            double outPower = 0;
             motorFRPower = (forwards - strafe - turn) / speedDivider;
             motorFLPower = (forwards + strafe + turn) / speedDivider;
             motorBLPower = (forwards - strafe + turn) / speedDivider;
@@ -96,15 +97,18 @@ public class MainTeleOp extends Methods {
             if (gamepad1.aWasPressed()) {
 
                 if (!aAlreadyPressed) {
-                    daHood.setPosition(0.25);
+                    daHood.setPosition(0.15); //max 0
+                    outPower = 0.6;
                 }
                 else {
-                    daHood.setPosition(0.65);
-
+                    daHood.setPosition(0.28); //max 0.88
+                    outPower = 0.45;
                 }
                 aAlreadyPressed = !aAlreadyPressed;
 
             }
+
+            outtakeFlywheel.setPower(outPower*voltageMultiplier);
 
                 //gamepad 1 speed clutch
                 if (gamepad1.right_trigger >= 0.5) {
@@ -131,12 +135,10 @@ public class MainTeleOp extends Methods {
                 if (aimRight) {
                     launcherYawRotation = 0.81;
                 } else if (aimLeft) {
-                    launcherYawRotation = 0.19;
+                    launcherYawRotation = 0.15;
                 }
 
                 outtake.setRotationPosition(launcherYawRotation);
-
-                outtakeFlywheel.setPower(0.6*voltageMultiplier);
 
                 //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
