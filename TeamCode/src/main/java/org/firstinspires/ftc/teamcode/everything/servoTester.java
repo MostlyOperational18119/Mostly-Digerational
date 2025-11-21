@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.everything;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "servo tester")
@@ -7,7 +8,8 @@ public class servoTester extends Methods {
     @Override
     public void runOpMode(){
         double servoPosition = 0;
-        Servo testServo = hardwareMap.get(Servo.class, "transferServo");
+        //CRServo testServo = hardwareMap.get(CRServo.class, "daHood");
+        Servo testServo = hardwareMap.servo.get("daHood");
 
         waitForStart();
 
@@ -18,6 +20,7 @@ public class servoTester extends Methods {
                 servoPosition -= 0.01;
             }
 
+            //testServo.setPower(servoPosition);
             testServo.setPosition(servoPosition);
 
             telemetry.addData("servo position", servoPosition);

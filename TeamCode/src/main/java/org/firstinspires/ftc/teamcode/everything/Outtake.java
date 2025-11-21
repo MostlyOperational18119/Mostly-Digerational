@@ -17,7 +17,7 @@ public class Outtake {
         if (Math.abs(targetClicks - clicks) <= tolerance) {
             methods.launcherYaw.setPower(0);
         } else {
-            methods.outtakePower = -(double) (targetClicks - clicks)/3000;
+            methods.outtakePower = -(double) (targetClicks - clicks)/(maxClicks/2);
             methods.launcherYaw.setPower(methods.outtakePower);
         }
     }
