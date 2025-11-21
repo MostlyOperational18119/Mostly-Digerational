@@ -55,21 +55,25 @@ public class ToRobotMsg {
                 // Length of other data message stuff
 //                assert data[0x6] == 0xA;
 
+                if (this.results == null) this.results = new HashMap<>();
                 this.results.clear();
 
                 byte resultType = data[0x7];
 
-                int i = 0x8;
+                int resultsPos = 0x8;
 
                 // BallLine
                 if ((resultType & 0x1) != 0x0) {
                     Indexer.BallColor[] ballColors = new Indexer.BallColor[9];
 
-                    int start = i;
-                    for (; i < (start + 0x9); i++) {
-                        if (i >= 0 && i < 3) ballColors[i - start] = Indexer.BallColor.values()[data[i]];
-                        else ballColors[i - start] = Indexer.BallColor.EMPTY;
+                    int start = resultsPos;
+                    for (; resultsPos < (start + 0x9); resultsPos++) {
+                        if (resultsPos >= 0 && resultsPos < 3) ballColors[resultsPos - start] = Indexer.BallColor.values()[data[resultsPos]];
+                        else ballColors[resultsPos - start] = Indexer.BallColor.EMPTY;
                     }
+
+                    if (ballColors != null) Log.i("ToRobotMsg", Arrays.toString(ballColors));
+                    else Log.i("ToRobotMsg", "Ball colors are null. Huh?");
 
                     this.results.put(ResultType.BallLine, ballColors);
                 }
