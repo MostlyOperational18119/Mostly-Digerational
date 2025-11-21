@@ -51,6 +51,7 @@ public abstract class Methods extends LinearOpMode {
         motorFR = hardwareMap.dcMotor.get("motorFR"); //also contains encoder for outtake
         motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorFL = hardwareMap.dcMotor.get("motorFL");
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
