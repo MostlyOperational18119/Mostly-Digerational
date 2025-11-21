@@ -11,6 +11,8 @@ public class LaunchSequence {
         IDLE;
     }
 
+    int launchIndex = -1;
+
     public State currentState = State.IDLE;
     private long startTime;
     private final Methods methods;
@@ -26,37 +28,34 @@ public class LaunchSequence {
     }
 
     public void update() {
-        methods.telemetry.addData("Current Launch State", currentState);
+        methods.telemetry.addData("current index", launchIndex);
+        methods.telemetry.update();
+        //methods.telemetry.addData("Current Launch State", currentState);
         switch (currentState) {
             case PREP_LAUNCH:
                 methods.launchIdle = false;
                 if (methods.toGreen) {
-                    methods.telemetry.addLine("green");
-                    methods.telemetry.update();
-                    int launchIndex = indexer.rotateToColorAndGetIndex(Indexer.BallColor.GREEN);
+                    launchIndex = indexer.rotateToColorAndGetIndex(Indexer.BallColor.GREEN);
                     startTime = System.currentTimeMillis();
                     currentState = State.LAUNCH;
-                    if (launchIndex >= 0 && launchIndex < indexer.slots.length) {
-                        indexer.slots[launchIndex] = Indexer.BallColor.EMPTY;
-                    }
                 } else if (methods.toPurple) {
-                    int launchIndex = indexer.rotateToColorAndGetIndex(Indexer.BallColor.PURPLE);
+                    launchIndex = indexer.rotateToColorAndGetIndex(Indexer.BallColor.PURPLE);
                     startTime = System.currentTimeMillis();
                     currentState = State.LAUNCH;
-                    if (launchIndex >= 0 && launchIndex < indexer.slots.length) {
-                        indexer.slots[launchIndex] = Indexer.BallColor.EMPTY;
-                    }
                 }
                 break;
             case LAUNCH:
                 methods.launchIdle = false;
-               if (System.currentTimeMillis() - startTime > 350) {
+               if (System.currentTimeMillis() - startTime > 1200) {
                     methods.transferServo.setPosition(methods.transferServoUp);
                 }
-               if (System.currentTimeMillis() - startTime > 500) {
+               if (System.currentTimeMillis() - startTime > 1350) {
                    methods.transferServo.setPosition(0.27);
+                   if (launchIndex >= 0 && launchIndex < indexer.slots.length) {
+                       indexer.slots[launchIndex] = Indexer.BallColor.EMPTY;
+                   }
                }
-                if (System.currentTimeMillis() - startTime > 650) {
+                if (System.currentTimeMillis() - startTime > 1650) {
                     currentState = State.IDLE;
                 }
                 break;

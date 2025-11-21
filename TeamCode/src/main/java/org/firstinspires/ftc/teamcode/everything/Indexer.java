@@ -114,6 +114,13 @@ public class Indexer {
             slots[i] = color;
         }
     }
+
+    public void badColorWorkaround() {
+        slots[0] = BallColor.GREEN;
+        slots[1] = BallColor.PURPLE;
+        slots[2] = BallColor.GREEN;
+    };
+
     //when beam is broken: check ball color
     public void setIndexerColor() {
         NormalizedRGBA normalizedRGBA= methods.colorSensor.getNormalizedColors();
