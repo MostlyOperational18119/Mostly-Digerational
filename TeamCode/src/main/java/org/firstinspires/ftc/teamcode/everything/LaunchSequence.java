@@ -11,6 +11,8 @@ public class LaunchSequence {
         IDLE;
     }
 
+    boolean transferServoReset = false;
+
     int launchIndex = -1;
 
     public State currentState = State.IDLE;
@@ -48,9 +50,13 @@ public class LaunchSequence {
                 methods.launchIdle = false;
                if (System.currentTimeMillis() - startTime > 1200) {
                     methods.transferServo.setPosition(methods.transferServoUp);
+                    transferServoReset = false;
                 }
                if (System.currentTimeMillis() - startTime > 1350) {
-                   methods.transferServo.setPosition(0.27);
+                   if (!transferServoReset) {
+                       transferServoReset = true;
+                       methods.transferServo.setPosition(0.27);
+                   }
                    if (launchIndex >= 0 && launchIndex < indexer.slots.length) {
                        indexer.slots[launchIndex] = Indexer.BallColor.EMPTY;
                    }

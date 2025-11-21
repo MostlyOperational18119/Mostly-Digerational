@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.everything;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
 
 //flicker down 0.21
 //up 0
@@ -15,8 +16,10 @@ public class MainTeleOp extends Methods {
         waitForStart();
         //launcherYaw.setPosition(0.5);
         double launcherYawRotation = 0.5;
+        double voltageMultiplier = 1;
         int launchDebounce = 0;
         float speedDivider = 1.2F;
+        boolean aAlreadyPressed = false;
         double hoodPosition = 0.3;
         boolean isFar = true;
         boolean intaking = true;
@@ -30,6 +33,8 @@ public class MainTeleOp extends Methods {
         LaunchSequence launch = new LaunchSequence(this, indexer);
 
         while (opModeIsActive()) {
+            voltageMultiplier = 12.57/voltageSensor.getVoltage();
+
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
@@ -41,8 +46,8 @@ public class MainTeleOp extends Methods {
             fireGreen = gamepad2.aWasPressed();
             firePurple = gamepad2.xWasPressed();
             transferToggle = gamepad2.bWasPressed();
-            cycleLeft = gamepad2.dpadLeftWasPressed();
-            cycleRight = gamepad2.dpadRightWasPressed();
+            aimLeft = gamepad2.dpadLeftWasPressed();
+            aimRight = gamepad2.dpadRightWasPressed();
 //            toGreen = gamepad2.rightBumperWasPressed();
 //            toPurple = gamepad2.leftBumperWasPressed();
 
@@ -53,7 +58,6 @@ public class MainTeleOp extends Methods {
             indexer.update();
             intakeSequence.update();
             outtake.update();
-            outtake.setRotationPosition(0.5);
 
             //gamepad 2 intake
             intake.setPower(gamepad2.right_trigger);
@@ -62,7 +66,8 @@ public class MainTeleOp extends Methods {
             if (transferToggle) {
                 if (intaking) {
                     launch.currentState = LaunchSequence.State.IDLE;
-                } else if (intaking = false) {
+                } else {
+                    indexer.rotateToColor(Indexer.BallColor.EMPTY);
                     intakeSequence.currentStateIntake = Intake.State.IDLE;
 
                 }
@@ -87,6 +92,20 @@ public class MainTeleOp extends Methods {
                 launch.startLaunch();
             }
 
+            //gamepad 1 swap far and close
+            if (gamepad1.aWasPressed()) {
+
+                if (!aAlreadyPressed) {
+                    daHood.setPosition(0.25);
+                }
+                else {
+                    daHood.setPosition(0.65);
+
+                }
+                aAlreadyPressed = !aAlreadyPressed;
+
+            }
+
                 //gamepad 1 speed clutch
                 if (gamepad1.right_trigger >= 0.5) {
                     speedDivider = 2F;
@@ -95,8 +114,6 @@ public class MainTeleOp extends Methods {
                 } else {
                     speedDivider = 1.2F;
                 }
-
-                daHood.setPosition(hoodPosition);
 
                 //gamepad 2 outtake YAW
                 if (gamepad2.left_bumper) {
@@ -111,9 +128,15 @@ public class MainTeleOp extends Methods {
                     }
                 }
 
+                if (aimRight) {
+                    launcherYawRotation = 0.81;
+                } else if (aimLeft) {
+                    launcherYawRotation = 0.19;
+                }
+
                 outtake.setRotationPosition(launcherYawRotation);
 
-                outtakeFlywheel.setPower(0.6);
+                outtakeFlywheel.setPower(0.6*voltageMultiplier);
 
                 //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
@@ -133,6 +156,8 @@ public class MainTeleOp extends Methods {
 
 
                 telemetry.addData("intaking yes or no", intaking);
+                telemetry.addData("A was pressed" , aAlreadyPressed);
+                telemetry.addData("Hood position" , daHood.getPosition());
                 telemetry.addData("outtake encoder", outtakeEncoder);
                 telemetry.addData("toGreen", toGreen);
                 telemetry.addData("toGreen", toPurple);
@@ -182,11 +207,6 @@ public class MainTeleOp extends Methods {
 //                }
 
                 //debounce for transfer flicker
-                if (launchDebounce <= 0) {
-                    transferServo.setPosition(0.21);
-                } else {
-                    launchDebounce -= 1;
-                }
             }
         }
     }
