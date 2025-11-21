@@ -39,11 +39,13 @@ public class TestLimelight extends Methods {
         int ballGoalColor = -1;
 
         int chosenGoal = 0;
+        boolean shouldUpdate = true;
 
 
         while (opModeIsActive()) {
             Log.i("TestLimelight", "hello 1");
 
+            shouldUpdate = true;
 
             if (connected) {
                 telemetry.addLine("Connected");
@@ -92,6 +94,8 @@ public class TestLimelight extends Methods {
                         Log.i("TestLimelight", "hello 4 no");
                         telemetry.addLine("No input D:");
 
+                        shouldUpdate = false;
+
                         ToLimelightMsg message = new ToLimelightMsg((byte) chosenGoal);
 
                         Log.i("TestLimelight", Arrays.toString(message.getData()));
@@ -129,7 +133,8 @@ public class TestLimelight extends Methods {
                 else chosenGoal--;
             }
 
-            telemetry.update();
+            if (shouldUpdate) telemetry.update();
+            else telemetry.clearAll();
             sleep(200);
         }
     }
