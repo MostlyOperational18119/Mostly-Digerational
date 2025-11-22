@@ -9,12 +9,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "BFA")
-public class BlueFrontAuto extends Methods {
+public class BlueFrontAuto6 extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
     Pose launch = new Pose(60.000, 84.000, Math.toRadians(140));
     Pose park = new Pose(36, 134.376, Math.toRadians(90));
+    Pose prep = new Pose(41, 84, Math.toRadians(0));
+    Pose intake1 = new Pose(34, 84, Math.toRadians(0));
+    Pose intake2 = new Pose(29, 84, Math.toRadians(0));
+    Pose intake3 = new Pose(15, 84, Math.toRadians(0));
     Follower follower;
-    PathChain startToLaunch, launchToPark;
+    PathChain startToLaunch, launchToPark, launchToPrep, prepToIntake1, intake1ToIntake2, intake2ToIntake3, intake3ToLaunch;
 
     int state = -1;
     int launchCount = 0;
@@ -22,6 +26,7 @@ public class BlueFrontAuto extends Methods {
     int LAUNCH_DELAY_MS = 2000; // Adjust this value for more/less delay between launches
 
     Indexer indexer = new Indexer(this);
+    Intake intakeSequence = new Intake(this, indexer);
     Outtake outtake = new Outtake(this);
     LaunchSequence launchState = new LaunchSequence(this, indexer);
 
@@ -40,6 +45,31 @@ public class BlueFrontAuto extends Methods {
         launchToPark = follower.pathBuilder()
                 .addPath(new BezierLine(launch, park))
                 .setLinearHeadingInterpolation(launch.getHeading(), park.getHeading())
+                .build();
+
+        launchToPrep = follower.pathBuilder()
+                .addPath(new BezierLine(launch, prep))
+                .setLinearHeadingInterpolation(launch.getHeading(), prep.getHeading())
+                .build();
+
+        prepToIntake1 = follower.pathBuilder()
+                .addPath(new BezierLine(prep, intake1))
+                .setLinearHeadingInterpolation(prep.getHeading(), intake1.getHeading())
+                .build();
+
+        intake1ToIntake2 = follower.pathBuilder()
+                .addPath(new BezierLine(intake1, intake2))
+                .setLinearHeadingInterpolation(intake1.getHeading(), intake2.getHeading())
+                .build();
+
+        intake2ToIntake3 = follower.pathBuilder()
+                .addPath(new BezierLine(intake2, intake3))
+                .setLinearHeadingInterpolation(intake2.getHeading(), intake3.getHeading())
+                .build();
+
+        intake3ToLaunch = follower.pathBuilder()
+                .addPath(new BezierLine(intake3, launch))
+                .setLinearHeadingInterpolation(intake3.getHeading(), launch.getHeading())
                 .build();
 
         waitForStart();
@@ -92,6 +122,22 @@ public class BlueFrontAuto extends Methods {
                         }
                         break;
                     case 2:
+                        follower.followPath(launchToPrep, 1, true);
+                        intake.setPower(1);
+                        intakeSequence.start();
+                        state = 3;
+                        break;
+                    case 3:
+                        follower.followPath(intake1ToIntake2);
+                        intake.setPower(1);
+                        intakeSequence.start();
+                        state = 4;
+                        break;
+                    case 4:
+                        follower.followPath(intake2ToIntake3);
+                    case 5:
+                        follower.followPath(intake3ToLaunch);
+                    case 6:
                         follower.followPath(launchToPark, 1, true);
                         intake.setPower(0);
                         outtakeFlywheel.setPower(0);

@@ -27,7 +27,7 @@ public class Intake {
         methods.telemetry.addData("Current Intake State", currentStateIntake);
         switch (currentStateIntake) {
             case SET_COLOR:
-                if (System.currentTimeMillis() - startTime > 1500) {
+                if (System.currentTimeMillis() - startTime > 800) {
                     indexer.setIndexerColor();
                     currentStateIntake = State.ROTATE_TO_EMPTY;
                 }
