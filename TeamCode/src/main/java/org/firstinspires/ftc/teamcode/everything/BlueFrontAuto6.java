@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "BFA")
+@Autonomous(name = "BFA6")
 public class BlueFrontAuto6 extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
     Pose launch = new Pose(60.000, 84.000, Math.toRadians(140));

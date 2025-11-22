@@ -10,9 +10,9 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "RFA")
 public class RedFrontAuto extends Methods{
-    Pose start = new Pose(-32.614, 134.376, Math.toRadians(90));
-    Pose launch = new Pose(-60.000, 84.000, Math.toRadians(50));
-    Pose park = new Pose(-36, 134.376, Math.toRadians(90));
+    Pose startRed = new Pose(111.386, 134.376, Math.toRadians(90));
+    Pose launch = new Pose(88.000, 94.000, Math.toRadians(50));
+    Pose park = new Pose(100, 134.376, Math.toRadians(90));
     Follower follower;
     PathChain startToLaunch, launchToPark;
 
@@ -30,11 +30,11 @@ public class RedFrontAuto extends Methods{
         initialize();
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(start);
+        follower.setStartingPose(startRed);
 
         startToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(start, launch))
-                .setLinearHeadingInterpolation(start.getHeading(), launch.getHeading())
+                .addPath(new BezierLine(startRed, launch))
+                .setLinearHeadingInterpolation(startRed.getHeading(), launch.getHeading())
                 .build();
 
         launchToPark = follower.pathBuilder()

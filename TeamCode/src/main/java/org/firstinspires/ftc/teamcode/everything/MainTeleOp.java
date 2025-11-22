@@ -50,6 +50,7 @@ public class MainTeleOp extends Methods {
             transferToggle = gamepad2.bWasPressed();
             aimLeft = gamepad2.dpadLeftWasPressed();
             aimRight = gamepad2.dpadRightWasPressed();
+            intakeYes = gamepad1.right_bumper;
 //            toGreen = gamepad2.rightBumperWasPressed();
 //            toPurple = gamepad2.leftBumperWasPressed();
 
@@ -62,7 +63,10 @@ public class MainTeleOp extends Methods {
             outtake.update();
 
             //gamepad 2 intake
-            intake.setPower(gamepad2.right_trigger);
+            if (intakeYes)
+                intake.setPower(1);
+            else
+                intake.setPower(0);
 
             //switch between intake and outtake
             if (transferToggle) {
@@ -102,7 +106,7 @@ public class MainTeleOp extends Methods {
                     outPower = 0.6;
                 }
                 else {
-                    daHood.setPosition(0.28); //max 0.88
+                    daHood.setPosition(0.7); //max 0.88
                     outPower = 0.45;
                 }
                 aAlreadyPressed = !aAlreadyPressed;

@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 @Autonomous(name = "BFA")
 public class BlueFrontAuto extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
-    Pose launch = new Pose(60.000, 84.000, Math.toRadians(140));
-    Pose park = new Pose(36, 134.376, Math.toRadians(90));
+    Pose launch = new Pose(60.000, 84.000, Math.toRadians(138));
+    Pose park = new Pose(36, 120, Math.toRadians(90));
     Follower follower;
     PathChain startToLaunch, launchToPark;
 

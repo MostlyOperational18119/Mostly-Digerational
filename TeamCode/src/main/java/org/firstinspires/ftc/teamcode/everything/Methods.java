@@ -37,7 +37,7 @@ public abstract class Methods extends LinearOpMode {
     double outtakePower = 0.0;
     int maxRPM = 5900, targetRPM, measuredRPM;
 
-    boolean fireGreen, firePurple, transferToggle, aimLeft, aimRight, toGreen, toPurple;
+    boolean fireGreen, firePurple, transferToggle, aimLeft, aimRight, toGreen, toPurple, intakeYes;
     boolean launchIdle = false;
     double revolverExpectedPosition = -1.0;
 
