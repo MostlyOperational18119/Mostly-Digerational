@@ -14,6 +14,7 @@ public class MainTeleOp extends Methods {
         teamHateLoveButton();
         initialize();
         waitForStart();
+        double outPower = 0.6;
         //launcherYaw.setPosition(0.5);
         double launcherYawRotation = 0.5;
         double voltageMultiplier = 1;
@@ -38,7 +39,7 @@ public class MainTeleOp extends Methods {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
-            double outPower = 0;
+
             motorFRPower = (forwards - strafe - turn) / speedDivider;
             motorFLPower = (forwards + strafe + turn) / speedDivider;
             motorBLPower = (forwards - strafe + turn) / speedDivider;
@@ -135,7 +136,7 @@ public class MainTeleOp extends Methods {
                 if (aimRight) {
                     launcherYawRotation = 0.81;
                 } else if (aimLeft) {
-                    launcherYawRotation = 0.15;
+                    launcherYawRotation = 0.2;
                 }
 
                 outtake.setRotationPosition(launcherYawRotation);
