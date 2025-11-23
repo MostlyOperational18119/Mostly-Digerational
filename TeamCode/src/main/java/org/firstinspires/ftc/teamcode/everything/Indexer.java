@@ -114,7 +114,14 @@ public class Indexer {
             slots[i] = color;
         }
     }
-
+    public void redoColors(){
+        methods.revolver.setPosition(0.0);
+        setIndexerColor();
+        methods.revolver.setPosition(0.74);
+        setIndexerColor();
+        methods.revolver.setPosition(0.37);
+        setIndexerColor();
+    }
     public void badColorWorkaround() {
         slots[0] = BallColor.GREEN;
         slots[1] = BallColor.PURPLE;
