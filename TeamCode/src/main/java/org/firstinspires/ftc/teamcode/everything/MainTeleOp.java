@@ -15,14 +15,10 @@ public class MainTeleOp extends Methods {
         initialize();
         waitForStart();
         double outPower = 0.6;
-        //launcherYaw.setPosition(0.5);
         double launcherYawRotation = 0.5;
         double voltageMultiplier = 1;
-        int launchDebounce = 0;
         float speedDivider = 1.2F;
         boolean aAlreadyPressed = false;
-        double hoodPosition = 0.3;
-        boolean isFar = true;
         boolean intaking = true;
 
         revolver.setPosition(0.0);
@@ -39,6 +35,7 @@ public class MainTeleOp extends Methods {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
+            intakeYes = gamepad1.right_bumper;
 
             motorFRPower = (forwards - strafe - turn) / speedDivider;
             motorFLPower = (forwards + strafe + turn) / speedDivider;
@@ -50,19 +47,15 @@ public class MainTeleOp extends Methods {
             transferToggle = gamepad2.bWasPressed();
             aimLeft = gamepad2.dpadLeftWasPressed();
             aimRight = gamepad2.dpadRightWasPressed();
-            intakeYes = gamepad1.right_bumper;
-//            toGreen = gamepad2.rightBumperWasPressed();
-//            toPurple = gamepad2.leftBumperWasPressed();
 
             //detectAprilTag();
-
             drive();
             launch.update();
             indexer.update();
             intakeSequence.update();
             outtake.update();
 
-            //gamepad 2 intake
+            //gamepad 1 intake
             if (intakeYes)
                 intake.setPower(1);
             else
@@ -78,8 +71,6 @@ public class MainTeleOp extends Methods {
 
                 }
                 intaking = !intaking;
-//                transferServo.setPosition(0);
-//                launchDebounce = 50;
             }
 
             //gamepad 2 indexer go
@@ -160,14 +151,11 @@ public class MainTeleOp extends Methods {
 //                    isIntake = false;
 //                }
 
-
-
                 telemetry.addData("intaking yes or no", intaking);
-                telemetry.addData("A was pressed" , aAlreadyPressed);
                 telemetry.addData("Hood position" , daHood.getPosition());
                 telemetry.addData("outtake encoder", outtakeEncoder);
                 telemetry.addData("toGreen", toGreen);
-                telemetry.addData("toGreen", toPurple);
+                telemetry.addData("toPurple", toPurple);
                 telemetry.addData("firePurple", firePurple);
                 telemetry.addData("fireGreen", fireGreen);
                 telemetry.addData("launch sequence state", launch.currentState);
@@ -188,8 +176,6 @@ public class MainTeleOp extends Methods {
 //                telemetry.addData("findColor(EMPTY) returns", indexer.findColor(Indexer.BallColor.EMPTY));
 //            telemetry.addData("launch debounce", launchDebounce);
 //            telemetry.addData("velocity", outtake.getVelocity());
-//            telemetry.addData("hood position", hoodPosition);
-//            telemetry.addData("is far", isFar);
                 telemetry.update();
 
 
@@ -213,7 +199,6 @@ public class MainTeleOp extends Methods {
 //                    isFar = !isFar;
 //                }
 
-                //debounce for transfer flicker
             }
         }
     }

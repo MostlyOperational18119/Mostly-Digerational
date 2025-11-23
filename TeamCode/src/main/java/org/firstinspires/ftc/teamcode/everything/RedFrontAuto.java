@@ -48,8 +48,9 @@ public class RedFrontAuto extends Methods{
         intake.setPower(0.2);
 
         //set all of indexer array to one color
-        //indexer.oneColor(Indexer.BallColor.GREEN);
-        indexer.badColorWorkaround();
+        //indexer.oneColor(BallColor.PURPLE);
+        //indexer.badColorWorkaround();
+        indexer.redoColors();
         outtakeFlywheel.setPower(0.50);
 
         while (opModeIsActive()) {

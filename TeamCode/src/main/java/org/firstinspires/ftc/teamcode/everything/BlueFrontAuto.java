@@ -48,8 +48,10 @@ public class BlueFrontAuto extends Methods {
         intake.setPower(0.2);
 
         //set all of indexer array to one color
-        //indexer.oneColor(Indexer.BallColor.GREEN);
-        indexer.badColorWorkaround();
+        //indexer.oneColor(BallColor.PURPLE);
+        //indexer.badColorWorkaround();
+        //look at balls inside
+        indexer.redoColors();
         outtakeFlywheel.setPower(0.5);
 
         while (opModeIsActive()) {
