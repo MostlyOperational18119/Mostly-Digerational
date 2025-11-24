@@ -64,12 +64,15 @@ public class ToRobotMsg {
                 if ((resultType & 0x1) != 0x0) {
                     // pretend this doesn't exist for my sake :D
                     resultsPos++;
+                    resultsPos++;
                     Indexer.BallColor[] ballColors = new Indexer.BallColor[9];
 
 
                     int start = resultsPos;
                     for (; resultsPos < (start + 0x9); resultsPos++) {
-                        int num = data[resultsPos] & 0xFF;
+                        int num = data[resultsPos]; // & 0xFF;
+
+                        Log.i("ToRobotMsg", String.format("%d, %d", resultsPos, num));
 
                         if (num >= 0 && num < 3) ballColors[resultsPos - start] = Indexer.BallColor.values()[num];
                         else ballColors[resultsPos - start] = Indexer.BallColor.EMPTY;
@@ -100,7 +103,7 @@ public class ToRobotMsg {
                     int posOrig = resultsPos;
 
                     while (resultsPos < (posOrig + aprilTagResultLength)) {
-                        tagResults.add(new AprilTagResult(Arrays.copyOfRange(data, resultsPos, resultsPos+112)));
+//                        tagResults.add(new AprilTagResult(Arrays.copyOfRange(data, resultsPos, resultsPos+112)));
 
                         resultsPos += AprilTagResult.APRIL_TAG_SIZE;
                     }

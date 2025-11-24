@@ -62,7 +62,7 @@ public class TestLimelight extends Methods {
                         byte[] data = new byte[in.available()];
                         in.readFully(data);
 
-                        Log.i("TestLimelight", Arrays.toString(Arrays.copyOf(data, 5)));
+//                        Log.i("TestLimelight", Arrays.toString(Arrays.copyOf(data, 5)));
 
                         if (new String(Arrays.copyOf(data, 5)).equals("Hello")) { // new byte[] { 0x48,0x65,0x6C,0x6C,0x6F }
                             Log.i("TestLimelight", "LL says hi :D");
