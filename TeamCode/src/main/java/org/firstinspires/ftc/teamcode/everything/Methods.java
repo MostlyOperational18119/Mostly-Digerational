@@ -37,7 +37,7 @@ public abstract class Methods extends LinearOpMode {
     double outtakePower = 0.0;
     int maxRPM = 5900, targetRPM, measuredRPM;
 
-    boolean fireGreen, firePurple, transferToggle, aimLeft, aimRight, toGreen, toPurple;
+    boolean fireGreen, firePurple, transferToggle, aimLeft, aimRight, toGreen, toPurple, intakeYes;
     boolean launchIdle = false;
     double revolverExpectedPosition = -1.0;
 
@@ -68,7 +68,6 @@ public abstract class Methods extends LinearOpMode {
 
         launcherYaw = hardwareMap.get(CRServo.class, "launcherYaw");
         daHood = hardwareMap.servo.get("daHood");
-        daHood.setPosition(0.5);
         revolver = hardwareMap.servo.get("revolver");
         transferServo = hardwareMap.servo.get("transferServo");
         limelightServo = hardwareMap.servo.get("limelightServo");
