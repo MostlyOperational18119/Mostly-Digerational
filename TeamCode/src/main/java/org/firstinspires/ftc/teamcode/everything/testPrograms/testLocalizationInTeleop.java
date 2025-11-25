@@ -33,7 +33,7 @@ public class testLocalizationInTeleop extends OpMode {
 
         //curve?
         pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(56,9))))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(56,10))))
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(90), 0.8))
                 .build();
     }
