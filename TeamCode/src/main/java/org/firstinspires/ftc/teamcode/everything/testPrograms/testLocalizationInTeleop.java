@@ -16,13 +16,12 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import java.util.function.Supplier;
 
 @TeleOp(group = "Teleop Test", name = "Localization Test With Auto Position")
-public class copyLocalizationInTeleop extends OpMode {
+public class testLocalizationInTeleop extends OpMode {
     private Follower follower;
     public static Pose startingPose;
-    private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
-    private boolean slowMode = false;
+    private boolean slowMode, automatedDrive = false;
 
     @Override
     public void init() {
@@ -68,8 +67,11 @@ public class copyLocalizationInTeleop extends OpMode {
         }
 
         if(gamepad1.aWasPressed()) {
-            follower.followPath(pathChain.get());
-            automatedDrive = true;
+            automatedDrive = !automatedDrive;
+            
+            if(automatedDrive) {
+                follower.followPath(pathChain.get());
+            }
         }
 
         telemetryM.debug("position", follower.getPose());
