@@ -21,7 +21,8 @@ public class testLocalizationInTeleop extends OpMode {
     public static Pose startingPose;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
-    private boolean slowMode, automatedDrive = false;
+    private boolean slowMode = false;
+    private boolean automatedDrive;
 
     @Override
     public void init() {
@@ -32,8 +33,8 @@ public class testLocalizationInTeleop extends OpMode {
 
         //curve?
         pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(0,0))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(56,9))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(90), 0.8))
                 .build();
     }
 
@@ -67,11 +68,13 @@ public class testLocalizationInTeleop extends OpMode {
         }
 
         if(gamepad1.aWasPressed()) {
-            automatedDrive = !automatedDrive;
+            follower.followPath(pathChain.get());
+            automatedDrive = true;
+        }
 
-            if(automatedDrive) {
-                follower.followPath(pathChain.get());
-            }
+        if(gamepad1.bWasPressed() && automatedDrive || !follower.isBusy()) {
+            follower.startTeleOpDrive();
+            automatedDrive = false;
         }
 
         telemetryM.debug("position", follower.getPose());
