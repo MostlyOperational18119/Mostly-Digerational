@@ -68,7 +68,6 @@ public abstract class Methods extends LinearOpMode {
 
         launcherYaw = hardwareMap.get(CRServo.class, "launcherYaw");
         daHood = hardwareMap.servo.get("daHood");
-        daHood.setPosition(0.5);
         revolver = hardwareMap.servo.get("revolver");
         transferServo = hardwareMap.servo.get("transferServo");
         limelightServo = hardwareMap.servo.get("limelightServo");
