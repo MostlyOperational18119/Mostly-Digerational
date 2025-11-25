@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.everything;
+package org.firstinspires.ftc.teamcode.everything.auto;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -6,6 +6,10 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.everything.teleop.Indexer;
+import org.firstinspires.ftc.teamcode.everything.teleop.LaunchSequence;
+import org.firstinspires.ftc.teamcode.everything.Methods;
+import org.firstinspires.ftc.teamcode.everything.teleop.Outtake;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "BFA")
@@ -50,8 +54,7 @@ public class BlueFrontAuto extends Methods {
         //set all of indexer array to one color
         //indexer.oneColor(BallColor.PURPLE);
         //indexer.badColorWorkaround();
-        //look at balls inside
-        indexer.redoColors();
+
         outtakeFlywheel.setPower(0.5);
 
         while (opModeIsActive()) {
@@ -66,6 +69,8 @@ public class BlueFrontAuto extends Methods {
                         if (System.currentTimeMillis() - launchDelayTimer > 3000) {
                             state = 0;
                         }
+                        //look at balls inside
+                        indexer.redoColors();
                         break;
                     case 0:
                         follower.followPath(startToLaunch, 1, true);

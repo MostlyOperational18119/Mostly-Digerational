@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.everything.teleop.Indexer;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -20,26 +21,26 @@ import java.util.List;
 
 public abstract class Methods extends LinearOpMode {
     //defines all hardware
-    DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
-    DcMotorEx outtakeFlywheel;
-    Servo revolver, daHood, transferServo, limelightServo;
-    CRServo launcherYaw;
-    VoltageSensor voltageSensor;
-    Limelight3A limelight;
-    RevColorSensorV3 colorSensor;
-    DigitalChannel breakBeamSensor;
+    public DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
+    public DcMotorEx outtakeFlywheel;
+    public Servo revolver, daHood, transferServo, limelightServo;
+    public CRServo launcherYaw;
+    public VoltageSensor voltageSensor;
+    public Limelight3A limelight;
+    public RevColorSensorV3 colorSensor;
+    public DigitalChannel breakBeamSensor;
     Indexer indexer = new Indexer(this);
-    float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
-    float P_FAR = 0.0F, P_CLOSE = 0.0F;
-    int outtakeEncoder = 0;
-    double power;
-    double transferServoUp = 0.09;
-    double outtakePower = 0.0;
-    int maxRPM = 5900, targetRPM, measuredRPM;
+    public float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
+    public float P_FAR = 0.0F, P_CLOSE = 0.0F;
+    public int outtakeEncoder = 0;
+    public double power;
+    public double transferServoUp = 0.09;
+    public double outtakePower = 0.0;
+    public int maxRPM = 5900, targetRPM, measuredRPM;
 
-    boolean fireGreen, firePurple, transferToggle, aimLeft, aimRight, toGreen, toPurple, intakeYes;
-    boolean launchIdle = false;
-    double revolverExpectedPosition = -1.0;
+    public boolean fireGreen, firePurple, transferToggle, aimLeft, aimRight, toGreen, toPurple, intakeYes;
+    public boolean launchIdle = false;
+    public double revolverExpectedPosition = -1.0;
 
     //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
     public VisionPortal visionPortal;

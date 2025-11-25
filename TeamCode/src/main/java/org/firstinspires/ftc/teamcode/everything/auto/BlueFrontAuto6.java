@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.everything;
+package org.firstinspires.ftc.teamcode.everything.auto;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -6,6 +6,11 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.everything.teleop.Indexer;
+import org.firstinspires.ftc.teamcode.everything.teleop.Intake;
+import org.firstinspires.ftc.teamcode.everything.teleop.LaunchSequence;
+import org.firstinspires.ftc.teamcode.everything.Methods;
+import org.firstinspires.ftc.teamcode.everything.teleop.Outtake;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "BFA6")

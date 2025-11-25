@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.everything;
+package org.firstinspires.ftc.teamcode.everything.teleop;
 
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.everything.Methods;
 
 public class Indexer {
     public Positions rotation = Positions.zeroIn;
@@ -114,14 +115,28 @@ public class Indexer {
             slots[i] = color;
         }
     }
+
+    //auto: move indexer to intake positions and assign color to array
     public void redoColors(){
-        methods.revolver.setPosition(0.0);
-        setIndexerColor();
-        methods.revolver.setPosition(0.74);
-        setIndexerColor();
-        methods.revolver.setPosition(0.37);
-        setIndexerColor();
+        for (int i = 0; i < 3; i++) {
+            switch (i) {
+                case 0:
+                    nextRotation = Positions.zeroIn;
+                    setIndexerColor();
+                    break;
+                case 1:
+                    nextRotation = Positions.oneIn;
+                    setIndexerColor();
+                    break;
+                case 2:
+                    nextRotation = Positions.twoIn;
+                    setIndexerColor();
+                    break;
+            }
+        }
     }
+
+    //auto: set the indexer array to GPG (should probably get changed to having 2 purps)
     public void badColorWorkaround() {
         slots[0] = BallColor.GREEN;
         slots[1] = BallColor.PURPLE;
