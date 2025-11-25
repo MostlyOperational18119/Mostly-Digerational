@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "BFA")
+@Autonomous(name = "BFA6")
 public class BlueFrontAuto6 extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
     Pose launch = new Pose(60.000, 84.000, Math.toRadians(140));
@@ -128,16 +128,44 @@ public class BlueFrontAuto6 extends Methods {
                         state = 3;
                         break;
                     case 3:
-                        follower.followPath(intake1ToIntake2);
-                        intake.setPower(1);
+                        follower.followPath(prepToIntake1, 1, true);
                         intakeSequence.start();
                         state = 4;
                         break;
                     case 4:
-                        follower.followPath(intake2ToIntake3);
+                        follower.followPath(intake1ToIntake2);
+                        intakeSequence.start();
+                        state = 5;
+                        break;
                     case 5:
-                        follower.followPath(intake3ToLaunch);
+                        follower.followPath(intake2ToIntake3);
+                        state = 6;
                     case 6:
+                        follower.followPath(intake3ToLaunch);
+                        state = 7;
+                    case 7:
+                        if (launchIdle && launchState.currentState == LaunchSequence.State.IDLE) {
+                            // Check if enough time has passed since the last launch
+                            if (System.currentTimeMillis() - launchDelayTimer > LAUNCH_DELAY_MS) {
+                                if (launchCount < 3) {
+                                    if (launchCount == 1) {
+                                        toGreen = false;
+                                        toPurple = true;
+                                    } else {
+                                        toGreen = true;
+                                        toPurple = false;
+                                    }
+                                    launchState.startLaunch();
+                                    launchCount++;
+                                    launchDelayTimer = System.currentTimeMillis(); // Reset timer after starting launch
+                                } else {
+                                    state = 8;
+                                    launchCount = 0; // Reset for next time
+                                }
+                            }
+                        }
+                        break;
+                    case 8:
                         follower.followPath(launchToPark, 1, true);
                         intake.setPower(0);
                         outtakeFlywheel.setPower(0);
