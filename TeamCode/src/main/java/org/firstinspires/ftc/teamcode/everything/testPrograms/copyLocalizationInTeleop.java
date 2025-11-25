@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.everything.test;
+package org.firstinspires.ftc.teamcode.everything.testPrograms;
 
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;

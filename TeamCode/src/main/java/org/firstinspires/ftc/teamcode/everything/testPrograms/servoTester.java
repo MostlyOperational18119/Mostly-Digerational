@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.everything.test;
+package org.firstinspires.ftc.teamcode.everything.testPrograms;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
