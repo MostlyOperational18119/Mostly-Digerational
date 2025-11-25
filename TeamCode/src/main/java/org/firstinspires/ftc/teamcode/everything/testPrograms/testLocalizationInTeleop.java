@@ -50,14 +50,14 @@ public class testLocalizationInTeleop extends OpMode {
         if(!automatedDrive) {
             if (!slowMode) follower.setTeleOpDrive(
                     -gamepad1.left_stick_y,
-                    -gamepad1.left_stick_x,
-                    -gamepad1.right_stick_x,
+                    gamepad1.left_stick_x,
+                    gamepad1.right_stick_x,
                     true
             );
             else follower.setTeleOpDrive(
                     -gamepad1.left_stick_y * 0.5,
-                    -gamepad1.left_stick_x * 0.5,
-                    -gamepad1.right_stick_x * 0.5,
+                    gamepad1.left_stick_x * 0.5,
+                    gamepad1.right_stick_x * 0.5,
                     true
             );
         }
@@ -68,7 +68,7 @@ public class testLocalizationInTeleop extends OpMode {
 
         if(gamepad1.aWasPressed()) {
             automatedDrive = !automatedDrive;
-            
+
             if(automatedDrive) {
                 follower.followPath(pathChain.get());
             }
