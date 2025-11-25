@@ -33,8 +33,8 @@ public class copyLocalizationInTeleop extends OpMode {
 
         //curve?
         pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(0,0))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(56,9))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(90), 0.8))
                 .build();
     }
 
@@ -51,14 +51,14 @@ public class copyLocalizationInTeleop extends OpMode {
         if(!automatedDrive) {
             if (!slowMode) follower.setTeleOpDrive(
                     -gamepad1.left_stick_y,
-                    -gamepad1.left_stick_x,
-                    -gamepad1.right_stick_x,
+                    gamepad1.left_stick_x,
+                    gamepad1.right_stick_x,
                     true
             );
             else follower.setTeleOpDrive(
                     -gamepad1.left_stick_y * 0.5,
-                    -gamepad1.left_stick_x * 0.5,
-                    -gamepad1.right_stick_x * 0.5,
+                    gamepad1.left_stick_x * 0.5,
+                    gamepad1.right_stick_x * 0.5,
                     true
             );
         }
@@ -70,6 +70,11 @@ public class copyLocalizationInTeleop extends OpMode {
         if(gamepad1.aWasPressed()) {
             follower.followPath(pathChain.get());
             automatedDrive = true;
+        }
+
+        if(gamepad1.bWasPressed() && automatedDrive || !follower.isBusy()) {
+            follower.startTeleOpDrive();
+            automatedDrive = false;
         }
 
         telemetryM.debug("position", follower.getPose());
