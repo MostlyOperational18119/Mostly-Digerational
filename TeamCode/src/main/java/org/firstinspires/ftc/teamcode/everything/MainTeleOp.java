@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.everything;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
@@ -23,11 +24,12 @@ public class MainTeleOp extends Methods {
 
         revolver.setPosition(0.0);
 
-
         Indexer indexer = new Indexer(this);
         Intake intakeSequence = new Intake(this, indexer);
         Outtake outtake = new Outtake(this);
         LaunchSequence launch = new LaunchSequence(this, indexer);
+
+        ElapsedTime aimBotTimer = new ElapsedTime();
 
         while (opModeIsActive()) {
             voltageMultiplier = 12.57/voltageSensor.getVoltage();
@@ -87,6 +89,11 @@ public class MainTeleOp extends Methods {
                 toPurple = true;
                 toGreen = false;
                 launch.startLaunch();
+            }
+
+            if (aimBotTimer.milliseconds() >= 500) {
+                outtake.setRotationPosition(nicksLittleHelper());
+                aimBotTimer.reset();
             }
 
             //gamepad 1 swap far and close
