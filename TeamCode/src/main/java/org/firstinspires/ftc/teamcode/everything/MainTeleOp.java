@@ -3,6 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
+import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
 
 //flicker down 0.21
 //up 0
@@ -20,6 +21,8 @@ public class MainTeleOp extends Methods {
         float speedDivider = 1.2F;
         boolean aAlreadyPressed = false;
         boolean intaking = true;
+        boolean canLimelight = true;
+        BetterLimelight limelight = null;
 
         revolver.setPosition(0.0);
 
@@ -28,6 +31,11 @@ public class MainTeleOp extends Methods {
         Intake intakeSequence = new Intake(this, indexer);
         Outtake outtake = new Outtake(this);
         LaunchSequence launch = new LaunchSequence(this, indexer);
+        try {
+            limelight = new BetterLimelight();
+        } catch (Exception e) {
+            canLimelight = false;
+        }
 
         while (opModeIsActive()) {
             voltageMultiplier = 12.57/voltageSensor.getVoltage();
@@ -48,6 +56,20 @@ public class MainTeleOp extends Methods {
             aimLeft = gamepad2.dpadLeftWasPressed();
             aimRight = gamepad2.dpadRightWasPressed();
 
+            if (canLimelight) {
+                // If we failed, we probably need to reconnect :P
+                canLimelight = limelight.update();
+            } else {
+                try {
+                    if (limelight == null) {
+                        limelight = new BetterLimelight();
+                    } else {
+                        limelight.connect();
+                    }
+                } catch (Exception e) {
+                    canLimelight = false;
+                }
+            }
             //detectAprilTag();
             drive();
             launch.update();

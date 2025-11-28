@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.everything;
 
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -25,7 +24,6 @@ public abstract class Methods extends LinearOpMode {
     Servo revolver, daHood, transferServo, limelightServo;
     CRServo launcherYaw;
     VoltageSensor voltageSensor;
-    Limelight3A limelight;
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
     Indexer indexer = new Indexer(this);
