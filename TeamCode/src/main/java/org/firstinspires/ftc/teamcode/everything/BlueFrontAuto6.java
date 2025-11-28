@@ -32,8 +32,8 @@ public class BlueFrontAuto6 extends Methods {
 
     @Override
     public void runOpMode() {
+        isBlue = true;
         initialize();
-
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
 

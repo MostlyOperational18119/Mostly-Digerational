@@ -27,6 +27,7 @@ public class BlueFrontAuto extends Methods {
 
     @Override
     public void runOpMode() {
+        isBlue = true;
         initialize();
 
         follower = Constants.createFollower(hardwareMap);

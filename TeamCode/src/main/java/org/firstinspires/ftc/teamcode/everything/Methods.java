@@ -43,6 +43,11 @@ public abstract class Methods extends LinearOpMode {
     public VisionPortal visionPortal;
     public AprilTagProcessor aprilTag;
     List<AprilTagDetection> currentApriltagDetections;
+    boolean isBlue;
+    double robotX = 0;
+    double robotY = 0;
+    double goalX;
+    double goalY = 144;
 
     //initializes all the hardware and the apriltag detection
     public void initialize() {
@@ -75,6 +80,8 @@ public abstract class Methods extends LinearOpMode {
         breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beamSensor");
         breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
+
+        if (isBlue) {goalX = 0;} else {goalX = 144;}
 
 
 //        aprilTag = new AprilTagProcessor.Builder()
@@ -145,6 +152,14 @@ public abstract class Methods extends LinearOpMode {
             telemetry.addData("ID: ", detection.id);
 
         }
+    }
+
+    public double nicksLittleHelper() {
+        double targetAngle;
+        double targetPos;
+        targetAngle = Math.atan((robotY-goalY)/(robotX-goalX));
+        targetPos = targetAngle*51.724137931;
+        return targetPos;
     }
 
     public void teamHateLoveButton() {
