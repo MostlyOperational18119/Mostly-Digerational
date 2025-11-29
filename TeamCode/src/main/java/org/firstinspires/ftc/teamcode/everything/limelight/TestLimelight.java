@@ -33,7 +33,7 @@ public class TestLimelight extends Methods {
         Servo testServo = hardwareMap.servo.get("limelightServo");
 
         try {
-           socket = new Socket("172.29.0.1", 8888); // used to be
+            socket = new Socket("172.29.0.1", 8888); // used to be
 
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());

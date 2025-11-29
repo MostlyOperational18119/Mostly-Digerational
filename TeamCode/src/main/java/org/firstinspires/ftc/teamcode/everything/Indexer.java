@@ -5,22 +5,14 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Indexer {
+    private final Methods methods;
     public Positions rotation = Positions.zeroIn;
     public Positions nextRotation = Positions.zeroIn;
-    public enum Positions {zeroIn, zeroOut, oneIn, oneOut, twoIn, twoOut;}
-    private final Methods methods;
-
-    public enum BallColor {
-        GREEN,
-        EMPTY,
-        PURPLE;
-    }
+    public BallColor[] slots = {BallColor.EMPTY, BallColor.EMPTY, BallColor.EMPTY};
 
     public Indexer(Methods methods) {
         this.methods = methods;
     }
-
-    public BallColor[] slots = {BallColor.EMPTY, BallColor.EMPTY, BallColor.EMPTY};
 
     public void update() {
         if (rotation != nextRotation) {
@@ -100,7 +92,7 @@ public class Indexer {
     }
 
     public int findColor(BallColor color) {
-        for (int i = 0; i<slots.length; i++) {
+        for (int i = 0; i < slots.length; i++) {
             if (slots[i] == color) {
                 return i;
             }
@@ -109,12 +101,13 @@ public class Indexer {
     }
 
     //for auto: set all of indexer to one color
-    public void oneColor(BallColor color){
+    public void oneColor(BallColor color) {
         for (int i = 0; i < 3; i++) {
             slots[i] = color;
         }
     }
-    public void redoColors(){
+
+    public void redoColors() {
         methods.revolver.setPosition(0.0);
         setIndexerColor();
         methods.revolver.setPosition(0.74);
@@ -122,21 +115,22 @@ public class Indexer {
         methods.revolver.setPosition(0.37);
         setIndexerColor();
     }
+
     public void badColorWorkaround() {
         slots[0] = BallColor.GREEN;
         slots[1] = BallColor.PURPLE;
         slots[2] = BallColor.GREEN;
-    };
+    }
 
     //when beam is broken: check ball color
     public void setIndexerColor() {
-        NormalizedRGBA normalizedRGBA= methods.colorSensor.getNormalizedColors();
+        NormalizedRGBA normalizedRGBA = methods.colorSensor.getNormalizedColors();
         float blue = normalizedRGBA.blue;
         float green = normalizedRGBA.green;
         int currentIndex = currentIntakeIndex();
         BallColor ballIn = BallColor.EMPTY;
 
-        if(methods.colorSensor.getDistance(DistanceUnit.MM) < 50) {
+        if (methods.colorSensor.getDistance(DistanceUnit.MM) < 50) {
             if (blue > green) {
                 ballIn = BallColor.PURPLE;
             } else if (green > blue) {
@@ -148,7 +142,6 @@ public class Indexer {
             slots[currentIndex] = ballIn;
         }
     }
-
 
     public int currentIntakeIndex() {
         int index = -1;
@@ -165,6 +158,8 @@ public class Indexer {
         }
         return index;
     }
+
+    ;
 
     public int currentLaunchIndex() {
         int index = -1;
@@ -214,5 +209,13 @@ public class Indexer {
             }
         }
         return index; // Return the index that was found
+    }
+
+    public enum Positions {zeroIn, zeroOut, oneIn, oneOut, twoIn, twoOut;}
+
+    public enum BallColor {
+        GREEN,
+        EMPTY,
+        PURPLE;
     }
 }

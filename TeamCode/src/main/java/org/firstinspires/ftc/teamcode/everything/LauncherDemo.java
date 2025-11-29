@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 public class LauncherDemo extends Methods {
 
     double speed = 8, hoodPos = 0.3;
+
     @Override
     public void runOpMode() {
         VoltageSensor voltageSensor;
@@ -30,11 +31,11 @@ public class LauncherDemo extends Methods {
         waitForStart();
         while (opModeIsActive()) {
             targetRPM = constant * distance;
-            measuredRPM = (flywheel.getVelocity()/28) * 60;
-            constant = 23.716/12.7 * voltageSensor.getVoltage();
+            measuredRPM = (flywheel.getVelocity() / 28) * 60;
+            constant = 23.716 / 12.7 * voltageSensor.getVoltage();
             //measuredAngularAcceleration = measuredRPM/60;
 
-            power = targetRPM/maxRPM + P * (targetRPM - measuredRPM)/maxRPM + D;
+            power = targetRPM / maxRPM + P * (targetRPM - measuredRPM) / maxRPM + D;
 
             if (gamepad1.dpadUpWasPressed()) {
                 constant += 0.1;

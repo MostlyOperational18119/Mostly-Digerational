@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.everything;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -41,7 +42,7 @@ public class MainTeleOp extends Methods {
         ElapsedTime aimBotTimer = new ElapsedTime();
 
         while (opModeIsActive()) {
-            voltageMultiplier = 12.57/voltageSensor.getVoltage();
+            voltageMultiplier = 12.57 / voltageSensor.getVoltage();
 
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -125,8 +126,7 @@ public class MainTeleOp extends Methods {
                 if (!aAlreadyPressed) {
                     daHood.setPosition(0.15); //max 0
                     outPower = 0.6;
-                }
-                else {
+                } else {
                     daHood.setPosition(0.7); //max 0.88
                     outPower = 0.45;
                 }
@@ -134,39 +134,39 @@ public class MainTeleOp extends Methods {
 
             }
 
-            outtakeFlywheel.setPower(outPower*voltageMultiplier);
+            outtakeFlywheel.setPower(outPower * voltageMultiplier);
 
-                //gamepad 1 speed clutch
-                if (gamepad1.right_trigger >= 0.5) {
-                    speedDivider = 2F;
-                } else if (gamepad1.left_trigger >= 0.5) {
-                    speedDivider = 1F;
-                } else {
-                    speedDivider = 1.2F;
+            //gamepad 1 speed clutch
+            if (gamepad1.right_trigger >= 0.5) {
+                speedDivider = 2F;
+            } else if (gamepad1.left_trigger >= 0.5) {
+                speedDivider = 1F;
+            } else {
+                speedDivider = 1.2F;
+            }
+
+            //gamepad 2 outtake YAW
+            if (gamepad2.left_bumper) {
+                if (launcherYawRotation > 0) {
+                    launcherYawRotation -= 0.03;
                 }
+            }
 
-                //gamepad 2 outtake YAW
-                if (gamepad2.left_bumper) {
-                    if (launcherYawRotation > 0) {
-                        launcherYawRotation -= 0.03;
-                    }
+            if (gamepad2.right_bumper) {
+                if (launcherYawRotation < 1) {
+                    launcherYawRotation += 0.03;
                 }
+            }
 
-                if (gamepad2.right_bumper) {
-                    if (launcherYawRotation < 1) {
-                        launcherYawRotation += 0.03;
-                    }
-                }
+            if (aimRight) {
+                launcherYawRotation = 0.81;
+            } else if (aimLeft) {
+                launcherYawRotation = 0.2;
+            }
 
-                if (aimRight) {
-                    launcherYawRotation = 0.81;
-                } else if (aimLeft) {
-                    launcherYawRotation = 0.2;
-                }
+            outtake.setRotationPosition(launcherYawRotation);
 
-                outtake.setRotationPosition(launcherYawRotation);
-
-                //gamepad 2 manual cycle (intake/outtake)
+            //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
 //                    currentIndexIntake += 1;
 //                    if (currentIndexIntake > 3) {
@@ -181,36 +181,37 @@ public class MainTeleOp extends Methods {
 //                    isIntake = false;
 //                }
 
-                if (canLimelight) telemetry.addData("Ball colors", Arrays.toString(limelight.getBalls()));
-                telemetry.addData("intaking yes or no", intaking);
-                telemetry.addData("Hood position" , daHood.getPosition());
-                telemetry.addData("outtake encoder", outtakeEncoder);
-                telemetry.addData("toGreen", toGreen);
-                telemetry.addData("toPurple", toPurple);
-                telemetry.addData("firePurple", firePurple);
-                telemetry.addData("fireGreen", fireGreen);
-                telemetry.addData("launch sequence state", launch.currentState);
-                telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
-                telemetry.addData("outtake power", outtakePower);
-                telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
+            if (canLimelight)
+                telemetry.addData("Ball colors", Arrays.toString(limelight.getBalls()));
+            telemetry.addData("intaking yes or no", intaking);
+            telemetry.addData("Hood position", daHood.getPosition());
+            telemetry.addData("outtake encoder", outtakeEncoder);
+            telemetry.addData("toGreen", toGreen);
+            telemetry.addData("toPurple", toPurple);
+            telemetry.addData("firePurple", firePurple);
+            telemetry.addData("fireGreen", fireGreen);
+            telemetry.addData("launch sequence state", launch.currentState);
+            telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
+            telemetry.addData("outtake power", outtakePower);
+            telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
 //                telemetry.addData("revolver position", revolver.getPosition());
-                telemetry.addData("beam break", !breakBeamSensor.getState());
-                telemetry.addData("indexer position", indexer.rotation);
-                telemetry.addData("indexer next pos", indexer.nextRotation);
-                telemetry.addData("red", colorSensor.red());
-                telemetry.addData("green", colorSensor.green());
-                telemetry.addData("blue", colorSensor.blue());
-                telemetry.addData("slot 0", indexer.slots[0]);
-                telemetry.addData("slot 1", indexer.slots[1]);
-                telemetry.addData("slot 2", indexer.slots[2]);
+            telemetry.addData("beam break", !breakBeamSensor.getState());
+            telemetry.addData("indexer position", indexer.rotation);
+            telemetry.addData("indexer next pos", indexer.nextRotation);
+            telemetry.addData("red", colorSensor.red());
+            telemetry.addData("green", colorSensor.green());
+            telemetry.addData("blue", colorSensor.blue());
+            telemetry.addData("slot 0", indexer.slots[0]);
+            telemetry.addData("slot 1", indexer.slots[1]);
+            telemetry.addData("slot 2", indexer.slots[2]);
 //                telemetry.addData("revolver expected position", revolverExpectedPosition);
 //                telemetry.addData("findColor(EMPTY) returns", indexer.findColor(Indexer.BallColor.EMPTY));
 //            telemetry.addData("launch debounce", launchDebounce);
 //            telemetry.addData("velocity", outtake.getVelocity());
-                telemetry.update();
+            telemetry.update();
 
 
-                //gamepad 2 launcher positions
+            //gamepad 2 launcher positions
 //                if (isFar) {
 //                    targetRPM = (int) (0.575 * maxRPM * 13.1 / voltageSensor.getVoltage());
 //                    measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
@@ -225,11 +226,11 @@ public class MainTeleOp extends Methods {
 //                    hoodPosition = 0.7;
 //                }
 
-                //gamepad 2 button press to toggle between launch positions
+            //gamepad 2 button press to toggle between launch positions
 //                if (gamepad2.bWasPressed()) {
 //                    isFar = !isFar;
 //                }
 
-            }
         }
     }
+}

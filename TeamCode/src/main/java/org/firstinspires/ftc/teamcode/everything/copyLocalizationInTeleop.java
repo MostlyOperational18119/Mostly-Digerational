@@ -17,8 +17,8 @@ import java.util.function.Supplier;
 
 @TeleOp(group = "Teleop Test", name = "Localization Test With Auto Position")
 public class copyLocalizationInTeleop extends OpMode {
-    private Follower follower;
     public static Pose startingPose;
+    private Follower follower;
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
@@ -33,7 +33,7 @@ public class copyLocalizationInTeleop extends OpMode {
 
         //curve?
         pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(follower::getPose, new Pose(56,9))))
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(56, 9))))
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(90), 0.8))
                 .build();
     }
@@ -44,11 +44,11 @@ public class copyLocalizationInTeleop extends OpMode {
     }
 
     @Override
-    public void loop(){
+    public void loop() {
         follower.update();
         telemetryM.update();
 
-        if(!automatedDrive) {
+        if (!automatedDrive) {
             if (!slowMode) follower.setTeleOpDrive(
                     -gamepad1.left_stick_y,
                     gamepad1.left_stick_x,
@@ -63,16 +63,16 @@ public class copyLocalizationInTeleop extends OpMode {
             );
         }
 
-        if(gamepad1.rightBumperWasPressed()) {
+        if (gamepad1.rightBumperWasPressed()) {
             slowMode = !slowMode;
         }
 
-        if(gamepad1.aWasPressed()) {
+        if (gamepad1.aWasPressed()) {
             follower.followPath(pathChain.get());
             automatedDrive = true;
         }
 
-        if(gamepad1.bWasPressed() && automatedDrive || !follower.isBusy()) {
+        if (gamepad1.bWasPressed() && automatedDrive || !follower.isBusy()) {
             follower.startTeleOpDrive();
             automatedDrive = false;
         }

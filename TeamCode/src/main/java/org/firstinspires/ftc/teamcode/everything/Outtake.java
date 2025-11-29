@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.everything;
 
 public class Outtake {
     private final Methods methods;
-    private int maxClicks =  6000;
+    private int maxClicks = 6000;
     private int targetClicks = 3000;
     private int tolerance = 50;
 
-    public Outtake(Methods methods)  {
+    public Outtake(Methods methods) {
         this.methods = methods;
     }
 
@@ -17,7 +17,7 @@ public class Outtake {
         if (Math.abs(targetClicks - clicks) <= tolerance) {
             methods.launcherYaw.setPower(0);
         } else {
-            methods.outtakePower = -(double) (targetClicks - clicks)/(maxClicks/2);
+            methods.outtakePower = -(double) (targetClicks - clicks) / (maxClicks / 2);
             methods.launcherYaw.setPower(methods.outtakePower);
         }
     }

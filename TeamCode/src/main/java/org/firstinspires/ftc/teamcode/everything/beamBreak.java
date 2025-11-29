@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 @TeleOp(name = "break beam test")
 public class beamBreak extends Methods {
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
         DigitalChannel beamBreak = hardwareMap.get(DigitalChannel.class, "beamSensor");
         beamBreak.setMode(DigitalChannel.Mode.INPUT);
 
