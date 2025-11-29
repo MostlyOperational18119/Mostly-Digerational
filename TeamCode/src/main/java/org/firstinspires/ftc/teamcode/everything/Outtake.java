@@ -26,4 +26,9 @@ public class Outtake {
         target = Math.max(0, Math.min(1, target));
         targetClicks = (int) (maxClicks * target);
     }
+
+    public void setTarget(double target) {
+        target = Math.max(0, Math.min(6000, target));
+        targetClicks = (int) target;
+    }
 }

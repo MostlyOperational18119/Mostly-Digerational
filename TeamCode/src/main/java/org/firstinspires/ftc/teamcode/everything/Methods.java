@@ -46,6 +46,7 @@ public abstract class Methods extends LinearOpMode {
     boolean isBlue;
     double robotX = 0;
     double robotY = 0;
+    double robotOrientation = 0;
     double goalX;
     double goalY = 144;
 
@@ -77,8 +78,8 @@ public abstract class Methods extends LinearOpMode {
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
 
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beamSensor");
-        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
+       // breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beamSensor");
+        //breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
         if (isBlue) {goalX = 0;} else {goalX = 144;}
@@ -155,12 +156,23 @@ public abstract class Methods extends LinearOpMode {
     }
 
     public double nicksLittleHelper() {
-        double targetAngle;
-        double targetPos;
-        targetAngle = Math.atan((robotY-goalY)/(robotX-goalX));
-        targetPos = targetAngle*51.724137931;
-        return targetPos;
+        double dx = goalX - robotX;
+        double dy = goalY - robotY;
+
+        // Correct: accounts for all quadrants
+        double absoluteAngleToGoal = Math.atan2(dy, dx);
+
+        // Angle robot needs to turn
+        double relativeAngle = absoluteAngleToGoal - robotOrientation;
+
+        // Normalize to (-pi, pi)
+        relativeAngle = Math.atan2(Math.sin(relativeAngle), Math.cos(relativeAngle));
+        relativeAngle = Math.toDegrees(relativeAngle);
+
+        // Convert to motor ticks (example factor)
+        return (relativeAngle * 51.724137931) + 3000;
     }
+
 
     public void teamHateLoveButton() {
         if (Math.random() >= 0.5) {
