@@ -154,11 +154,11 @@ public abstract class Methods extends LinearOpMode {
         }
     }
 
-    public double nicksLittleHelper() {
+    public int nicksLittleHelper() {
         double targetAngle;
-        double targetPos;
-        targetAngle = Math.atan((robotY-goalY)/(robotX-goalX));
-        targetPos = targetAngle*51.724137931;
+        int targetPos;
+        targetAngle = Math.max(-58 ,Math.min(58, Math.atan((robotY-goalY)/(robotX-goalX))));
+        targetPos = (int) (targetAngle*51.724137931);
         return targetPos;
     }
 
