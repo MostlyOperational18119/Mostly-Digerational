@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.everything.limelight;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.everything.Indexer;
 import org.firstinspires.ftc.teamcode.everything.Methods;
@@ -15,13 +16,21 @@ import java.util.Arrays;
 
 @TeleOp(name = "Test LimeLight")
 public class TestLimelight extends Methods {
+    double RED_GOAL_LL_SERVO_POS = 0.81;
+    double BLUE_GOAL_LL_SERVO_POS = 0.28;
+
     @Override
     public void runOpMode() {
+        // Limelight stuff
         DataInputStream in = null;
         DataOutputStream out = null;
         Socket socket;
         String error = "none?";
         boolean connected = true;
+
+        // Servo stuff
+        double servoPosition = 0.0;
+        Servo testServo = hardwareMap.servo.get("limelightServo");
 
         try {
            socket = new Socket("172.29.0.1", 8888); // used to be
@@ -124,6 +133,24 @@ public class TestLimelight extends Methods {
                     error = e.getLocalizedMessage();
                 }
             }
+
+            if (gamepad1.dpadUpWasPressed()) {
+                servoPosition += 0.01;
+            } else if (gamepad1.dpadDownWasPressed()) {
+                servoPosition -= 0.01;
+            }
+
+            if (gamepad1.xWasPressed()) {
+                servoPosition = BLUE_GOAL_LL_SERVO_POS;
+            } else if (gamepad1.yWasPressed()) {
+                servoPosition = RED_GOAL_LL_SERVO_POS;
+            }
+
+            //testServo.setPower(servoPosition);
+            testServo.setPosition(servoPosition);
+
+            telemetry.addData("servo position", servoPosition);
+
 
             telemetry.addLine((ballGoalColor == 0) ? "Blue goal:" : "Red Goal:");
             telemetry.addData("Ball colors:", Arrays.toString(balls));
