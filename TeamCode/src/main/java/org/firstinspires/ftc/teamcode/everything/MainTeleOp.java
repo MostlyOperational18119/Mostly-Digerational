@@ -32,6 +32,8 @@ public class MainTeleOp extends Methods {
 
         revolver.setPosition(0.0);
 
+        isBlue = true;
+
         Follower follower;
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
@@ -49,8 +51,10 @@ public class MainTeleOp extends Methods {
         ElapsedTime aimBotTimer = new ElapsedTime();
 
         while (opModeIsActive()) {
+            follower.update();
             robotX = follower.getPose().getX();
             robotY = follower.getPose().getY();
+            robotOrientation = follower.getHeading();
             voltageMultiplier = 12.57/voltageSensor.getVoltage();
 
             turn = gamepad1.right_stick_x;
@@ -109,7 +113,8 @@ public class MainTeleOp extends Methods {
             }
 
             //gamepad 2 indexer go
-            if (indexer.colorInArray(Indexer.BallColor.EMPTY) && !breakBeamSensor.getState() && intakeSequence.currentStateIntake == Intake.State.IDLE && intaking) {
+            //!breakBeamSensor.getState() &&
+            if (indexer.colorInArray(Indexer.BallColor.EMPTY) && intakeSequence.currentStateIntake == Intake.State.IDLE && intaking) {
                 intakeSequence.start();
             }
 
@@ -125,11 +130,9 @@ public class MainTeleOp extends Methods {
             }
 
             if (aimBotTimer.milliseconds() >= 500) {
-                //outtake.setRotationPosition(nicksLittleHelper());
+                outtake.setTarget(nicksLittleHelper());
                 aimBotTimer.reset();
             }
-
-            telemetry.addData("is saarang retarded?", nicksLittleHelper());
 
             //gamepad 1 swap far and close
             if (gamepad1.aWasPressed()) {
@@ -176,7 +179,7 @@ public class MainTeleOp extends Methods {
                     launcherYawRotation = 0.2;
                 }
 
-                outtake.setRotationPosition(launcherYawRotation);
+                //outtake.setRotationPosition(launcherYawRotation);
 
                 //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
@@ -193,27 +196,15 @@ public class MainTeleOp extends Methods {
 //                    isIntake = false;
 //                }
 
-                telemetry.addData("intaking yes or no", intaking);
+                telemetry.addData("is saarang retarded?", nicksLittleHelper());
+                telemetry.addData("robot x", robotX);
+                telemetry.addData("robot y", robotY);
+                telemetry.addData("robot orientation", robotOrientation);
                 telemetry.addData("Hood position" , daHood.getPosition());
                 telemetry.addData("outtake encoder", outtakeEncoder);
-                telemetry.addData("toGreen", toGreen);
-                telemetry.addData("toPurple", toPurple);
-                telemetry.addData("firePurple", firePurple);
-                telemetry.addData("fireGreen", fireGreen);
                 telemetry.addData("launch sequence state", launch.currentState);
                 telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
-                telemetry.addData("outtake power", outtakePower);
-                telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
 //                telemetry.addData("revolver position", revolver.getPosition());
-                telemetry.addData("beam break", !breakBeamSensor.getState());
-                telemetry.addData("indexer position", indexer.rotation);
-                telemetry.addData("indexer next pos", indexer.nextRotation);
-                telemetry.addData("red", colorSensor.red());
-                telemetry.addData("green", colorSensor.green());
-                telemetry.addData("blue", colorSensor.blue());
-                telemetry.addData("slot 0", indexer.slots[0]);
-                telemetry.addData("slot 1", indexer.slots[1]);
-                telemetry.addData("slot 2", indexer.slots[2]);
 //                telemetry.addData("revolver expected position", revolverExpectedPosition);
 //                telemetry.addData("findColor(EMPTY) returns", indexer.findColor(Indexer.BallColor.EMPTY));
 //            telemetry.addData("launch debounce", launchDebounce);
