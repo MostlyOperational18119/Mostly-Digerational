@@ -77,4 +77,8 @@ public class BetterLimelight {
         in = new DataInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
     }
+
+    public Indexer.BallColor[] getBalls() {
+        return balls;
+    }
 }

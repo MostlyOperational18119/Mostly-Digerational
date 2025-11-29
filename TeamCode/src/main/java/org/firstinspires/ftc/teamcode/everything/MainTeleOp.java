@@ -5,9 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
 import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+import java.util.Arrays;
 
 //flicker down 0.21
 //up 0
@@ -196,10 +197,8 @@ public class MainTeleOp extends Methods {
 //                    isIntake = false;
 //                }
 
-                telemetry.addData("is saarang retarded?", nicksLittleHelper());
-                telemetry.addData("robot x", robotX);
-                telemetry.addData("robot y", robotY);
-                telemetry.addData("robot orientation", robotOrientation);
+                if (canLimelight) telemetry.addData("Ball colors", Arrays.toString(limelight.getBalls()));
+                telemetry.addData("intaking yes or no", intaking);
                 telemetry.addData("Hood position" , daHood.getPosition());
                 telemetry.addData("outtake encoder", outtakeEncoder);
                 telemetry.addData("launch sequence state", launch.currentState);
