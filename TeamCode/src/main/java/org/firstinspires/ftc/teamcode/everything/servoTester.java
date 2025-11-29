@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "servo tester")
-public class servoTester extends Methods {
+public class ServoTester extends Methods {
     @Override
     public void runOpMode() {
         double servoPosition = 0;
