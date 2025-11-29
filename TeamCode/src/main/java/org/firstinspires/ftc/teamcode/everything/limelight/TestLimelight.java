@@ -133,6 +133,8 @@ public class TestLimelight extends Methods {
                 else chosenGoal--;
             }
 
+            telemetry.addData("Chosen goal:", chosenGoal);
+
             if (shouldUpdate) telemetry.update();
             else telemetry.clearAll();
             sleep(200);
