@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.everything;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
 import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 //flicker down 0.21
 //up 0
@@ -25,7 +28,13 @@ public class MainTeleOp extends Methods {
         boolean canLimelight = true;
         BetterLimelight limelight = null;
 
+        Pose start = new Pose(72, 72, Math.toRadians(90)); //?
+
         revolver.setPosition(0.0);
+
+        Follower follower;
+        follower = Constants.createFollower(hardwareMap);
+        follower.setStartingPose(start);
 
         Indexer indexer = new Indexer(this);
         Intake intakeSequence = new Intake(this, indexer);
@@ -40,6 +49,8 @@ public class MainTeleOp extends Methods {
         ElapsedTime aimBotTimer = new ElapsedTime();
 
         while (opModeIsActive()) {
+            robotX = follower.getPose().getX();
+            robotY = follower.getPose().getY();
             voltageMultiplier = 12.57/voltageSensor.getVoltage();
 
             turn = gamepad1.right_stick_x;
@@ -114,9 +125,11 @@ public class MainTeleOp extends Methods {
             }
 
             if (aimBotTimer.milliseconds() >= 500) {
-                outtake.setRotationPosition(nicksLittleHelper());
+                //outtake.setRotationPosition(nicksLittleHelper());
                 aimBotTimer.reset();
             }
+
+            telemetry.addData("is saarang retarded?", nicksLittleHelper());
 
             //gamepad 1 swap far and close
             if (gamepad1.aWasPressed()) {
