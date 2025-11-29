@@ -113,36 +113,6 @@ public abstract class Methods extends LinearOpMode {
 
     }
 
-//    public void setIndexerIntake(int index) { //placeholder
-//        switch (index) {
-//            case 0:
-//                revolver.setPosition(0.0);
-//                break;
-//            case 1:
-//                revolver.setPosition(0.74);
-//                break;
-//            case 2:
-//                revolver.setPosition(0.37);
-//                break;
-//        }
-//    }
-//
-//    public void setIndexerOuttake(int index) {
-//        switch (index) {
-//            case 0:
-//                revolver.setPosition(0.55);
-//                break;
-//            case 1:
-//                revolver.setPosition(0.2);
-//                break;
-//            case 2:
-//                revolver.setPosition(0.92);
-//                break;
-//        }
-//    }
-
-
-
     public void detectAprilTag() {
         currentApriltagDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentApriltagDetections) {

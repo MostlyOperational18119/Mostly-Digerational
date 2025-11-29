@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+//ho ho ho 34 constants to tune again when dumb build takes the robot apart!
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(23)
