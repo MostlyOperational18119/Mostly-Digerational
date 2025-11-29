@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import java.util.function.Supplier;
 
 @TeleOp(group = "Teleop Test", name = "Localization Test With Auto Position")
-public class copyLocalizationInTeleop extends OpMode {
+public class CopyLocalizationInTeleop extends OpMode {
     public static Pose startingPose;
     private Follower follower;
     private boolean automatedDrive;
