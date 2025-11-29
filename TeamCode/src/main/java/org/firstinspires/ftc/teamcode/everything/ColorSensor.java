@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.everything;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "color sensor")
-public class colorSensor extends Methods {
+public class ColorSensor extends Methods {
     @Override
     public void runOpMode() {
         initialize();
