@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.everything.Methods;
 @TeleOp(name = "BigBot")
 public class BigBot extends Methods {
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
         float turn, strafe, forwards;
         int launchAngle = 0;
         DcMotor motorFL = hardwareMap.get(DcMotor.class, "motorFL");
@@ -33,13 +33,13 @@ public class BigBot extends Methods {
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
             forwards = -gamepad1.left_stick_y;
-            if(gamepad1.bWasPressed()){
+            if (gamepad1.bWasPressed()) {
                 littleArm.setPosition(0.12);
             } else if (gamepad1.aWasPressed()) {
                 littleArm.setPosition(0.07);
             }
 
-            if(gamepad1.dpad_down) {
+            if (gamepad1.dpad_down) {
                 launchAngle -= 5;
             } else if (gamepad1.dpad_up) {
                 launchAngle += 5;

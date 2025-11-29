@@ -10,35 +10,7 @@ import java.util.HashMap;
 
 public class ToRobotMsg {
     public MessageType type;
-
-    public enum ResultType {
-        None,
-        BallLine,
-        Basalt,
-        PnP,
-        AprilTag
-    }
-
     public HashMap<ResultType, Object> results;
-
-    public enum MessageType {
-        Connected(0x0),
-        CurrentData(0x1);
-
-        private Byte type;
-        private Byte[] otherData;
-        MessageType(int type) {
-            this.type = (byte) type;
-        }
-
-        MessageType(byte type) {
-            this.type = type;
-        }
-
-        public byte getTypeByte() {
-            return type;
-        }
-    }
 
     ToRobotMsg(byte[] data) {
         assert new String(Arrays.copyOf(data, 4)).equals("LSRV");
@@ -74,7 +46,8 @@ public class ToRobotMsg {
 
                         Log.i("ToRobotMsg", String.format("%d, %d", resultsPos, num));
 
-                        if (num >= 0 && num < 3) ballColors[resultsPos - start] = Indexer.BallColor.values()[num];
+                        if (num >= 0 && num < 3)
+                            ballColors[resultsPos - start] = Indexer.BallColor.values()[num];
                         else ballColors[resultsPos - start] = Indexer.BallColor.EMPTY;
                     }
 
@@ -112,5 +85,33 @@ public class ToRobotMsg {
                 }
         }
 
+    }
+
+    public enum ResultType {
+        None,
+        BallLine,
+        Basalt,
+        PnP,
+        AprilTag
+    }
+
+    public enum MessageType {
+        Connected(0x0),
+        CurrentData(0x1);
+
+        private Byte type;
+        private Byte[] otherData;
+
+        MessageType(int type) {
+            this.type = (byte) type;
+        }
+
+        MessageType(byte type) {
+            this.type = type;
+        }
+
+        public byte getTypeByte() {
+            return type;
+        }
     }
 }

@@ -44,7 +44,7 @@ public class AprilTagResult {
 
         pos += 16;
 
-        cornerPoints = new double[][] {
+        cornerPoints = new double[][]{
                 {
                         doubleFromBytesRange(src, pos),
                         doubleFromBytesRange(src, pos + 8),
@@ -58,7 +58,7 @@ public class AprilTagResult {
         pos += 32;
 
         // homography matrix stub
-        homographyMatrix = new double[][] {
+        homographyMatrix = new double[][]{
                 {
                         doubleFromBytesRange(src, pos),
                         doubleFromBytesRange(src, pos + 8),
@@ -79,7 +79,7 @@ public class AprilTagResult {
         pos += 72;
 
         // If not, we fucked up (too short or long, oops D:)
-        assert (pos+1) == APRIL_TAG_SIZE;
+        assert (pos + 1) == APRIL_TAG_SIZE;
 
     }
 
@@ -90,7 +90,7 @@ public class AprilTagResult {
     }
 
     static int intFromBytesRange(byte[] src, int start) {
-        return intFromBytes(Arrays.copyOfRange(src, start, start+4));
+        return intFromBytes(Arrays.copyOfRange(src, start, start + 4));
     }
 
     static float floatFromBytes(byte[] src) {
@@ -99,7 +99,7 @@ public class AprilTagResult {
     }
 
     static float floatFromBytesRange(byte[] src, int start) {
-        return floatFromBytes(Arrays.copyOfRange(src, start, start+4));
+        return floatFromBytes(Arrays.copyOfRange(src, start, start + 4));
     }
 
     static double doubleFromBytes(byte[] src) {
@@ -108,7 +108,7 @@ public class AprilTagResult {
     }
 
     static double doubleFromBytesRange(byte[] src, int start) {
-        return doubleFromBytes(Arrays.copyOfRange(src, start, start+8));
+        return doubleFromBytes(Arrays.copyOfRange(src, start, start + 8));
     }
 }
 

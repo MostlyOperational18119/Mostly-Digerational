@@ -3,15 +3,9 @@ package org.firstinspires.ftc.teamcode.everything;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Intake {
-    public enum State {
-        SET_COLOR,
-        ROTATE_TO_EMPTY,
-        IDLE;
-    }
-
-    public State currentStateIntake = State.IDLE;
     private final Indexer indexer;
     private final Methods methods;
+    public State currentStateIntake = State.IDLE;
     private long startTime;
     public Intake(Methods methods, Indexer indexer) {
         this.methods = methods;
@@ -42,5 +36,11 @@ public class Intake {
             case IDLE:
                 break;
         }
+    }
+
+    public enum State {
+        SET_COLOR,
+        ROTATE_TO_EMPTY,
+        IDLE;
     }
 }

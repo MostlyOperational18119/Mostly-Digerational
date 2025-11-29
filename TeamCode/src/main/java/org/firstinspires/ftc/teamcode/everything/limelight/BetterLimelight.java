@@ -66,11 +66,11 @@ public class BetterLimelight {
             return true;
         } catch (IOException e) {
             Log.e("BetterLimelight", e.getLocalizedMessage());
-            
+
             return false;
         }
     }
-    
+
     public void connect() throws IOException {
         socket = new Socket("172.29.0.1", 8888);
 
