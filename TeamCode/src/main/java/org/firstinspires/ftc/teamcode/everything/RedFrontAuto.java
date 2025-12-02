@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "RFA")
-public class RedFrontAuto extends Methods{
+public class RedFrontAuto extends Methods {
     Pose startRed = new Pose(111.386, 134.376, Math.toRadians(90));
     Pose launch = new Pose(88.000, 94.000, Math.toRadians(50));
     Pose park = new Pose(100, 134.376, Math.toRadians(90));

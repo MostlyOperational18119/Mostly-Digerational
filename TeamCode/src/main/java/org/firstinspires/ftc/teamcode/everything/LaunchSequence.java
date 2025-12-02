@@ -1,24 +1,12 @@
 package org.firstinspires.ftc.teamcode.everything;
 
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 public class LaunchSequence {
-    public enum State {
-        PREP_LAUNCH,
-        LAUNCH,
-        IDLE;
-    }
-
-    boolean transferServoReset = false;
-
-    int launchIndex = -1;
-
-    public State currentState = State.IDLE;
-    private long startTime;
     private final Methods methods;
     private final Indexer indexer;
+    public State currentState = State.IDLE;
+    boolean transferServoReset = false;
+    int launchIndex = -1;
+    private long startTime;
     public LaunchSequence(Methods methods, Indexer indexer) {
         this.methods = methods;
         this.indexer = indexer;
@@ -48,19 +36,19 @@ public class LaunchSequence {
                 break;
             case LAUNCH:
                 methods.launchIdle = false;
-               if (System.currentTimeMillis() - startTime > 1000) {
+                if (System.currentTimeMillis() - startTime > 1000) {
                     methods.transferServo.setPosition(methods.transferServoUp);
                     transferServoReset = false;
                 }
-               if (System.currentTimeMillis() - startTime > 1050) {
-                   if (!transferServoReset) {
-                       transferServoReset = true;
-                       methods.transferServo.setPosition(0.27);
-                   }
-                   if (launchIndex >= 0 && launchIndex < indexer.slots.length) {
-                       indexer.slots[launchIndex] = Indexer.BallColor.EMPTY;
-                   }
-               }
+                if (System.currentTimeMillis() - startTime > 1050) {
+                    if (!transferServoReset) {
+                        transferServoReset = true;
+                        methods.transferServo.setPosition(0.27);
+                    }
+                    if (launchIndex >= 0 && launchIndex < indexer.slots.length) {
+                        indexer.slots[launchIndex] = Indexer.BallColor.EMPTY;
+                    }
+                }
                 if (System.currentTimeMillis() - startTime > 1450) {
                     currentState = State.IDLE;
                 }
@@ -70,5 +58,11 @@ public class LaunchSequence {
                 methods.transferServo.setPosition(0.27);
                 break;
         }
+    }
+
+    public enum State {
+        PREP_LAUNCH,
+        LAUNCH,
+        IDLE;
     }
 }

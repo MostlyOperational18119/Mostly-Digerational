@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.everything;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
 import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+import java.util.Arrays;
 
 //flicker down 0.21
 //up 0
@@ -25,7 +29,15 @@ public class MainTeleOp extends Methods {
         boolean canLimelight = true;
         BetterLimelight limelight = null;
 
+        Pose start = new Pose(72, 72, Math.toRadians(90)); //?
+
         revolver.setPosition(0.0);
+
+        isBlue = true;
+
+        Follower follower;
+        follower = Constants.createFollower(hardwareMap);
+        follower.setStartingPose(start);
 
         Indexer indexer = new Indexer(this);
         Intake intakeSequence = new Intake(this, indexer);
@@ -40,6 +52,10 @@ public class MainTeleOp extends Methods {
         ElapsedTime aimBotTimer = new ElapsedTime();
 
         while (opModeIsActive()) {
+            follower.update();
+            robotX = follower.getPose().getX();
+            robotY = follower.getPose().getY();
+            robotOrientation = follower.getHeading();
             voltageMultiplier = 12.57/voltageSensor.getVoltage();
 
             turn = gamepad1.right_stick_x;
@@ -98,7 +114,8 @@ public class MainTeleOp extends Methods {
             }
 
             //gamepad 2 indexer go
-            if (indexer.colorInArray(Indexer.BallColor.EMPTY) && !breakBeamSensor.getState() && intakeSequence.currentStateIntake == Intake.State.IDLE && intaking) {
+            //!breakBeamSensor.getState() &&
+            if (indexer.colorInArray(Indexer.BallColor.EMPTY) && intakeSequence.currentStateIntake == Intake.State.IDLE && intaking) {
                 intakeSequence.start();
             }
 
@@ -114,7 +131,7 @@ public class MainTeleOp extends Methods {
             }
 
             if (aimBotTimer.milliseconds() >= 500) {
-                outtake.setRotationPosition(nicksLittleHelper());
+                outtake.setTarget(nicksLittleHelper());
                 aimBotTimer.reset();
             }
 
@@ -124,8 +141,7 @@ public class MainTeleOp extends Methods {
                 if (!aAlreadyPressed) {
                     daHood.setPosition(0.15); //max 0
                     outPower = 0.6;
-                }
-                else {
+                } else {
                     daHood.setPosition(0.7); //max 0.88
                     outPower = 0.45;
                 }
@@ -133,37 +149,39 @@ public class MainTeleOp extends Methods {
 
             }
 
-            outtakeFlywheel.setPower(outPower*voltageMultiplier);
+            outtakeFlywheel.setPower(outPower * voltageMultiplier);
 
-                //gamepad 1 speed clutch
-                if (gamepad1.right_trigger >= 0.5) {
-                    speedDivider = 2F;
-                } else if (gamepad1.left_trigger >= 0.5) {
-                    speedDivider = 1F;
-                } else {
-                    speedDivider = 1.2F;
+            //gamepad 1 speed clutch
+            if (gamepad1.right_trigger >= 0.5) {
+                speedDivider = 2F;
+            } else if (gamepad1.left_trigger >= 0.5) {
+                speedDivider = 1F;
+            } else {
+                speedDivider = 1.2F;
+            }
+
+            //gamepad 2 outtake YAW
+            if (gamepad2.left_bumper) {
+                if (launcherYawRotation > 0) {
+                    launcherYawRotation -= 0.03;
                 }
+            }
 
-                //gamepad 2 outtake YAW
-                if (gamepad2.left_bumper) {
-                    if (launcherYawRotation > 0) {
-                        launcherYawRotation -= 0.03;
-                    }
+            if (gamepad2.right_bumper) {
+                if (launcherYawRotation < 1) {
+                    launcherYawRotation += 0.03;
                 }
+            }
 
-                if (gamepad2.right_bumper) {
-                    if (launcherYawRotation < 1) {
-                        launcherYawRotation += 0.03;
-                    }
-                }
+            if (aimRight) {
+                launcherYawRotation = 0.81;
+            } else if (aimLeft) {
+                launcherYawRotation = 0.2;
+            }
 
-                if (aimRight) {
-                    launcherYawRotation = 0.81;
-                } else if (aimLeft) {
-                    launcherYawRotation = 0.2;
-                }
+            outtake.setRotationPosition(launcherYawRotation);
 
-                outtake.setRotationPosition(launcherYawRotation);
+                //outtake.setRotationPosition(launcherYawRotation);
 
                 //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
@@ -180,35 +198,23 @@ public class MainTeleOp extends Methods {
 //                    isIntake = false;
 //                }
 
-                telemetry.addData("intaking yes or no", intaking);
+                telemetry.addData("is saarang retarded?", nicksLittleHelper());
+                telemetry.addData("robot x", robotX);
+                telemetry.addData("robot y", robotY);
+                telemetry.addData("robot orientation", robotOrientation);
                 telemetry.addData("Hood position" , daHood.getPosition());
                 telemetry.addData("outtake encoder", outtakeEncoder);
-                telemetry.addData("toGreen", toGreen);
-                telemetry.addData("toPurple", toPurple);
-                telemetry.addData("firePurple", firePurple);
-                telemetry.addData("fireGreen", fireGreen);
                 telemetry.addData("launch sequence state", launch.currentState);
                 telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
-                telemetry.addData("outtake power", outtakePower);
-                telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
 //                telemetry.addData("revolver position", revolver.getPosition());
-                telemetry.addData("beam break", !breakBeamSensor.getState());
-                telemetry.addData("indexer position", indexer.rotation);
-                telemetry.addData("indexer next pos", indexer.nextRotation);
-                telemetry.addData("red", colorSensor.red());
-                telemetry.addData("green", colorSensor.green());
-                telemetry.addData("blue", colorSensor.blue());
-                telemetry.addData("slot 0", indexer.slots[0]);
-                telemetry.addData("slot 1", indexer.slots[1]);
-                telemetry.addData("slot 2", indexer.slots[2]);
 //                telemetry.addData("revolver expected position", revolverExpectedPosition);
 //                telemetry.addData("findColor(EMPTY) returns", indexer.findColor(Indexer.BallColor.EMPTY));
 //            telemetry.addData("launch debounce", launchDebounce);
 //            telemetry.addData("velocity", outtake.getVelocity());
-                telemetry.update();
+            telemetry.update();
 
 
-                //gamepad 2 launcher positions
+            //gamepad 2 launcher positions
 //                if (isFar) {
 //                    targetRPM = (int) (0.575 * maxRPM * 13.1 / voltageSensor.getVoltage());
 //                    measuredRPM = (int) (outtake.getVelocity() / 28 * 60);
@@ -223,11 +229,11 @@ public class MainTeleOp extends Methods {
 //                    hoodPosition = 0.7;
 //                }
 
-                //gamepad 2 button press to toggle between launch positions
+            //gamepad 2 button press to toggle between launch positions
 //                if (gamepad2.bWasPressed()) {
 //                    isFar = !isFar;
 //                }
 
-            }
         }
     }
+}

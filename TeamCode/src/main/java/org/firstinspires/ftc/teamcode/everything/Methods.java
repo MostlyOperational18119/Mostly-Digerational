@@ -11,12 +11,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-import java.util.List;
-
 public abstract class Methods extends LinearOpMode {
     //defines all hardware
     DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
@@ -26,7 +20,6 @@ public abstract class Methods extends LinearOpMode {
     VoltageSensor voltageSensor;
     RevColorSensorV3 colorSensor;
     DigitalChannel breakBeamSensor;
-    Indexer indexer = new Indexer(this);
     float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
     float P_FAR = 0.0F, P_CLOSE = 0.0F;
     int outtakeEncoder = 0;
@@ -39,13 +32,10 @@ public abstract class Methods extends LinearOpMode {
     boolean launchIdle = false;
     double revolverExpectedPosition = -1.0;
 
-    //apriltag detection stuff (ALEX ADD COMMENTS PLEASE)
-    public VisionPortal visionPortal;
-    public AprilTagProcessor aprilTag;
-    List<AprilTagDetection> currentApriltagDetections;
     boolean isBlue;
     double robotX = 0;
     double robotY = 0;
+    double robotOrientation = 0;
     double goalX;
     double goalY = 144;
 
@@ -77,11 +67,15 @@ public abstract class Methods extends LinearOpMode {
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
 
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beamSensor");
-        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
+       // breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beamSensor");
+        //breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
-        if (isBlue) {goalX = 0;} else {goalX = 144;}
+        if (isBlue) {
+            goalX = 0;
+        } else {
+            goalX = 144;
+        }
 
 
 //        aprilTag = new AprilTagProcessor.Builder()
@@ -144,23 +138,24 @@ public abstract class Methods extends LinearOpMode {
 //        }
 //    }
 
+    public double nicksLittleHelper() {
+        double dx = goalX - robotX;
+        double dy = goalY - robotY;
 
+        // Correct: accounts for all quadrants
+        double absoluteAngleToGoal = Math.atan2(dy, dx);
 
-    public void detectAprilTag() {
-        currentApriltagDetections = aprilTag.getDetections();
-        for (AprilTagDetection detection : currentApriltagDetections) {
-            telemetry.addData("ID: ", detection.id);
+        // Angle robot needs to turn
+        double relativeAngle = absoluteAngleToGoal - robotOrientation;
 
-        }
+        // Normalize to (-pi, pi)
+        relativeAngle = Math.atan2(Math.sin(relativeAngle), Math.cos(relativeAngle));
+        relativeAngle = Math.toDegrees(relativeAngle);
+
+        // Convert to motor ticks (example factor)
+        return (relativeAngle * 51.724137931) + 3000;
     }
 
-    public int nicksLittleHelper() {
-        double targetAngle;
-        int targetPos;
-        targetAngle = Math.max(-58 ,Math.min(58, Math.atan((robotY-goalY)/(robotX-goalX))));
-        targetPos = (int) (targetAngle*51.724137931);
-        return targetPos;
-    }
 
     public void teamHateLoveButton() {
         if (Math.random() >= 0.5) {
