@@ -79,7 +79,7 @@ public class BlueFrontAuto9 extends Methods {
 
         intake2ToLaunch = follower
                 .pathBuilder()
-                //.addPath(new BezierCurve(intake2, /*new Pose(33.149, 61.260),*/ launch))
+                //.addPath(new BezierCurve(intake2, /*new Pose(33, 61),*/ launch))
                 .addPath(new BezierLine(intake2, launch))
                 .setLinearHeadingInterpolation(intake2.getHeading(), launch.getHeading())
                 .build();
