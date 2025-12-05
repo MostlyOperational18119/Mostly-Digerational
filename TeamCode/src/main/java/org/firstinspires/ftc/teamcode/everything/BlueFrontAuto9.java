@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.everything;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
@@ -8,17 +9,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "BFA6")
-public class BlueFrontAuto6 extends Methods {
+@Autonomous(name = "BFA9")
+public class BlueFrontAuto9 extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
-    Pose launch = new Pose(60.000, 84.000, Math.toRadians(140));
-    Pose park = new Pose(36, 134.376, Math.toRadians(90));
-    Pose prep = new Pose(41, 84, Math.toRadians(0));
-    Pose intake1 = new Pose(34, 84, Math.toRadians(0));
-    Pose intake2 = new Pose(29, 84, Math.toRadians(0));
-    Pose intake3 = new Pose(15, 84, Math.toRadians(0));
+    Pose launch = new Pose(60, 84, Math.toRadians(140));
+    Pose prep1 = new Pose(45, 84, Math.toRadians(0));
+    Pose intake1 = new Pose(16, 84, Math.toRadians(0));
+    Pose prep2 = new Pose(45, 60, Math.toRadians(0));
+    Pose intake2 = new Pose(16, 60, Math.toRadians(0));
+    Pose park = new Pose(16, 100, Math.toRadians(180));
     Follower follower;
-    PathChain startToLaunch, launchToPark, launchToPrep, prepToIntake1, intake1ToIntake2, intake2ToIntake3, intake3ToLaunch;
+    PathChain startToLaunch, launchToPrep1, prep1ToIntake1, intake1ToLaunch, launchToPrep2, prep2ToIntake2, intake2ToLaunch, launchToPark;
 
     int state = -1;
     int launchCount = 0;
@@ -36,40 +37,52 @@ public class BlueFrontAuto6 extends Methods {
         initialize();
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
+        startToLaunch = follower
+            .pathBuilder()
+            .addPath(new BezierLine(start, launch))
+            .setLinearHeadingInterpolation(start.getHeading(), launch.getHeading())
+            .build();
 
-        startToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(start, launch))
-                .setLinearHeadingInterpolation(start.getHeading(), launch.getHeading())
+        launchToPrep1 = follower
+                .pathBuilder()
+                .addPath(new BezierLine(launch, prep1))
+                .setLinearHeadingInterpolation(launch.getHeading(), prep1.getHeading())
                 .build();
 
-        launchToPark = follower.pathBuilder()
+        prep1ToIntake1 = follower
+                .pathBuilder()
+                .addPath(new BezierLine(prep1, intake1))
+                .setLinearHeadingInterpolation(prep1.getHeading(), intake1.getHeading())
+                .build();
+
+        intake1ToLaunch = follower
+                .pathBuilder()
+                .addPath(new BezierLine(intake1, launch))
+                .setLinearHeadingInterpolation(intake1.getHeading(), launch.getHeading())
+                .build();
+
+        launchToPrep2 = follower
+                .pathBuilder()
+                .addPath(new BezierCurve(launch, /*new Pose(63.381, 58.343),*/ prep2))
+                .setLinearHeadingInterpolation(launch.getHeading(), prep2.getHeading())
+                .build();
+
+        prep2ToIntake2 = follower
+                .pathBuilder()
+                .addPath(new BezierLine(prep2, intake2))
+                .setLinearHeadingInterpolation(prep2.getHeading(), intake2.getHeading())
+                .build();
+
+        intake2ToLaunch = follower
+                .pathBuilder()
+                .addPath(new BezierCurve(intake2, /*new Pose(33.149, 61.260),*/ launch))
+                .setLinearHeadingInterpolation(intake2.getHeading(), launch.getHeading())
+                .build();
+
+        launchToPark = follower
+                .pathBuilder()
                 .addPath(new BezierLine(launch, park))
                 .setLinearHeadingInterpolation(launch.getHeading(), park.getHeading())
-                .build();
-
-        launchToPrep = follower.pathBuilder()
-                .addPath(new BezierLine(launch, prep))
-                .setLinearHeadingInterpolation(launch.getHeading(), prep.getHeading())
-                .build();
-
-        prepToIntake1 = follower.pathBuilder()
-                .addPath(new BezierLine(prep, intake1))
-                .setLinearHeadingInterpolation(prep.getHeading(), intake1.getHeading())
-                .build();
-
-        intake1ToIntake2 = follower.pathBuilder()
-                .addPath(new BezierLine(intake1, intake2))
-                .setLinearHeadingInterpolation(intake1.getHeading(), intake2.getHeading())
-                .build();
-
-        intake2ToIntake3 = follower.pathBuilder()
-                .addPath(new BezierLine(intake2, intake3))
-                .setLinearHeadingInterpolation(intake2.getHeading(), intake3.getHeading())
-                .build();
-
-        intake3ToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(intake3, launch))
-                .setLinearHeadingInterpolation(intake3.getHeading(), launch.getHeading())
                 .build();
 
         waitForStart();
@@ -79,9 +92,9 @@ public class BlueFrontAuto6 extends Methods {
 
         //set all of indexer array to one color
         //indexer.oneColor(BallColor.PURPLE);
-        //indexer.badColorWorkaround();
-        indexer.redoColors();
-        outtakeFlywheel.setPower(0.5);
+        indexer.badColorWorkaround();
+        //indexer.redoColors();
+        outtakeFlywheel.setVelocity(1100);
 
         while (opModeIsActive()) {
             follower.update();
@@ -106,11 +119,11 @@ public class BlueFrontAuto6 extends Methods {
                             if (System.currentTimeMillis() - launchDelayTimer > LAUNCH_DELAY_MS) {
                                 if (launchCount < 3) {
                                     if (launchCount == 1) {
-                                        toGreen = false;
-                                        toPurple = true;
-                                    } else {
                                         toGreen = true;
                                         toPurple = false;
+                                    } else {
+                                        toGreen = false;
+                                        toPurple = true;
                                     }
                                     launchState.startLaunch();
                                     launchCount++;
@@ -123,53 +136,79 @@ public class BlueFrontAuto6 extends Methods {
                         }
                         break;
                     case 2:
-                        follower.followPath(launchToPrep, 1, true);
+                        follower.followPath(launchToPrep1, 1, true);
                         intake.setPower(1);
                         intakeSequence.start();
                         state = 3;
                         break;
                     case 3:
-                        follower.followPath(prepToIntake1, 1, true);
+                        follower.followPath(prep1ToIntake1, 0.3, true);
                         intakeSequence.start();
                         state = 4;
                         break;
                     case 4:
-                        follower.followPath(intake1ToIntake2);
+                        follower.followPath(intake1ToLaunch, 1, true);
+                        intake.setPower(0.2);
                         intakeSequence.start();
                         state = 5;
                         break;
                     case 5:
-                        follower.followPath(intake2ToIntake3);
-                        state = 6;
-                    case 6:
-                        follower.followPath(intake3ToLaunch);
-                        state = 7;
-                    case 7:
                         if (launchIdle && launchState.currentState == LaunchSequence.State.IDLE) {
                             // Check if enough time has passed since the last launch
                             if (System.currentTimeMillis() - launchDelayTimer > LAUNCH_DELAY_MS) {
                                 if (launchCount < 3) {
                                     if (launchCount == 1) {
-                                        toGreen = false;
-                                        toPurple = true;
-                                    } else {
                                         toGreen = true;
                                         toPurple = false;
+                                    } else {
+                                        toGreen = false;
+                                        toPurple = true;
                                     }
                                     launchState.startLaunch();
                                     launchCount++;
                                     launchDelayTimer = System.currentTimeMillis(); // Reset timer after starting launch
                                 } else {
-                                    state = 8;
+                                    state = 6;
                                     launchCount = 0; // Reset for next time
                                 }
                             }
                         }
-                        break;
+                    case 6:
+                        follower.followPath(launchToPrep2, 1, true);
+                        intake.setPower(1);
+                        state = 7;
+                    case 7:
+                        follower.followPath(prep2ToIntake2, 0.3, true);
+                        state = 8;
                     case 8:
+                        follower.followPath(intake2ToLaunch, 1, true);
+                        intake.setPower(0.2);
+                        state = 9;
+                        break;
+                    case 9:
+                        if (launchIdle && launchState.currentState == LaunchSequence.State.IDLE) {
+                            // Check if enough time has passed since the last launch
+                            if (System.currentTimeMillis() - launchDelayTimer > LAUNCH_DELAY_MS) {
+                                if (launchCount < 3) {
+                                    if (launchCount == 1) {
+                                        toGreen = true;
+                                        toPurple = false;
+                                    } else {
+                                        toGreen = false;
+                                        toPurple = true;
+                                    }
+                                    launchState.startLaunch();
+                                    launchCount++;
+                                    launchDelayTimer = System.currentTimeMillis(); // Reset timer after starting launch
+                                } else {
+                                    state = 10;
+                                    launchCount = 0; // Reset for next time
+                                }
+                            }
+                        }
+                    case 10:
                         follower.followPath(launchToPark, 1, true);
-                        intake.setPower(0);
-                        outtakeFlywheel.setPower(0);
+                        outtakeFlywheel.setVelocity(0);
                         outtake.setRotationPosition(0);
                         state = -67;
                         break;
