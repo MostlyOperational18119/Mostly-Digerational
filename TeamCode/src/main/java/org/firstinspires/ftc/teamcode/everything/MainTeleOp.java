@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.everything;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-
-import java.util.Arrays;
 
 //flicker down 0.21
 //up 0
@@ -29,11 +27,13 @@ public class MainTeleOp extends Methods {
         boolean canLimelight = true;
         BetterLimelight limelight = null;
 
-        Pose start = new Pose(72, 72, Math.toRadians(90)); //?
+        Pose start = StaticMatchData.endPosition;
+        isRed = StaticMatchData.isRed;
+
+        // Fallback
+        if (start == null) start = new Pose(72, 72, Math.toRadians(90));
 
         revolver.setPosition(0.0);
-
-        isRed = true;
 
         Follower follower;
         follower = Constants.createFollower(hardwareMap);
@@ -56,7 +56,7 @@ public class MainTeleOp extends Methods {
             robotX = follower.getPose().getX();
             robotY = follower.getPose().getY();
             robotOrientation = follower.getHeading();
-            voltageMultiplier = 12.57/voltageSensor.getVoltage();
+            voltageMultiplier = 12.57 / voltageSensor.getVoltage();
 
             turn = gamepad1.right_stick_x;
             strafe = gamepad1.left_stick_x;
@@ -180,9 +180,9 @@ public class MainTeleOp extends Methods {
 
             //outtake.setRotationPosition(launcherYawRotation);
 
-                //outtake.setRotationPosition(launcherYawRotation);
+            //outtake.setRotationPosition(launcherYawRotation);
 
-                //gamepad 2 manual cycle (intake/outtake)
+            //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
 //                    currentIndexIntake += 1;
 //                    if (currentIndexIntake > 3) {
@@ -197,14 +197,14 @@ public class MainTeleOp extends Methods {
 //                    isIntake = false;
 //                }
 
-                telemetry.addData("is saarang retarded?", nicksLittleHelper());
-                telemetry.addData("robot x", robotX);
-                telemetry.addData("robot y", robotY);
-                telemetry.addData("robot orientation", robotOrientation);
-                telemetry.addData("Hood position" , daHood.getPosition());
-                telemetry.addData("outtake encoder", outtakeEncoder);
-                telemetry.addData("launch sequence state", launch.currentState);
-                telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
+            telemetry.addData("is saarang retarded?", nicksLittleHelper());
+            telemetry.addData("robot x", robotX);
+            telemetry.addData("robot y", robotY);
+            telemetry.addData("robot orientation", robotOrientation);
+            telemetry.addData("Hood position", daHood.getPosition());
+            telemetry.addData("outtake encoder", outtakeEncoder);
+            telemetry.addData("launch sequence state", launch.currentState);
+            telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
 //                telemetry.addData("revolver position", revolver.getPosition());
 //                telemetry.addData("revolver expected position", revolverExpectedPosition);
 //                telemetry.addData("findColor(EMPTY) returns", indexer.findColor(Indexer.BallColor.EMPTY));

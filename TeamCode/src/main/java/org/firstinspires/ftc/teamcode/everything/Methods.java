@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.everything;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -12,6 +13,10 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.Range;
 
 public abstract class Methods extends LinearOpMode {
+    // 0 is green, 1 is purple
+    public static final int[] TAG_21_PATTERN = {0, 1, 1};
+    public static final int[] TAG_22_PATTERN = {1, 0, 1};
+    public static final int[] TAG_23_PATTERN = {1, 1, 0};
     //defines all hardware
     DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
     DcMotorEx outtakeFlywheel;
@@ -27,22 +32,15 @@ public abstract class Methods extends LinearOpMode {
     double transferServoUp = 0.09;
     double outtakePower = 0.0;
     int maxRPM = 5900, targetRPM, measuredRPM;
-
     boolean fireGreen, firePurple, transferToggle, aimLeft, aimRight, toGreen, toPurple, intakeYes;
     boolean launchIdle = false;
     double revolverExpectedPosition = -1.0;
-
     boolean isRed;
     double robotX = 0;
     double robotY = 0;
     double robotOrientation = 0;
     double goalX;
     double goalY = 144;
-
-    // 0 is green, 1 is purple
-    public static final int[] TAG_21_PATTERN = {0, 1, 1};
-    public static final int[] TAG_22_PATTERN = {1, 0, 1};
-    public static final int[] TAG_23_PATTERN = {1, 1, 0};
 
     //initializes all the hardware and the apriltag detection
     public void initialize() {
@@ -73,7 +71,7 @@ public abstract class Methods extends LinearOpMode {
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
 
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-       breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beamSensor");
+        breakBeamSensor = hardwareMap.get(DigitalChannel.class, "beamSensor");
         breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
@@ -116,6 +114,25 @@ public abstract class Methods extends LinearOpMode {
 
     }
 
+    public double nicksLittleHelper() {
+        double dx = goalX - robotX;
+        double dy = goalY - robotY;
+
+        // Correct: accounts for all quadrants
+        double absoluteAngleToGoal = Math.atan2(dy, dx);
+
+        // Angle robot needs to turn
+        double relativeAngle = absoluteAngleToGoal - robotOrientation;
+
+        // Normalize to (-pi, pi)
+        relativeAngle = Math.atan2(Math.sin(relativeAngle), Math.cos(relativeAngle));
+        relativeAngle = Math.toDegrees(relativeAngle);
+        relativeAngle = -relativeAngle;
+
+        // Convert to motor ticks (example factor)
+        return (relativeAngle * 51.724137931) + 3000;
+    }
+
 //    public void setIndexerIntake(int index) { //placeholder
 //        switch (index) {
 //            case 0:
@@ -144,32 +161,17 @@ public abstract class Methods extends LinearOpMode {
 //        }
 //    }
 
-    public double nicksLittleHelper() {
-        double dx = goalX - robotX;
-        double dy = goalY - robotY;
-
-        // Correct: accounts for all quadrants
-        double absoluteAngleToGoal = Math.atan2(dy, dx);
-
-        // Angle robot needs to turn
-        double relativeAngle = absoluteAngleToGoal - robotOrientation;
-
-        // Normalize to (-pi, pi)
-        relativeAngle = Math.atan2(Math.sin(relativeAngle), Math.cos(relativeAngle));
-        relativeAngle = Math.toDegrees(relativeAngle);
-        relativeAngle = -relativeAngle;
-
-        // Convert to motor ticks (example factor)
-        return (relativeAngle * 51.724137931) + 3000;
-    }
-
-
     public void teamHateLoveButton() {
         if (Math.random() >= 0.5) {
             telemetry.addLine("fuck you saarang");
         } else {
             telemetry.addLine("kiss me saarang");
         }
+    }
+
+    static class StaticMatchData {
+        public static boolean isRed;
+        public static Pose endPosition;
     }
 }
 
