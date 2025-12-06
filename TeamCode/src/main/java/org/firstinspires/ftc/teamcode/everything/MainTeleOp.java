@@ -32,7 +32,7 @@ public class MainTeleOp extends Methods {
 
         revolver.setPosition(0.0);
 
-        isBlue = true;
+        isRed = true;
 
         Follower follower;
         follower = Constants.createFollower(hardwareMap);
@@ -109,8 +109,7 @@ public class MainTeleOp extends Methods {
             }
 
             //gamepad 2 indexer go
-            //!breakBeamSensor.getState() &&
-            if (indexer.colorInArray(Indexer.BallColor.EMPTY) && intakeSequence.currentStateIntake == Intake.State.IDLE && intaking) {
+            if (indexer.colorInArray(Indexer.BallColor.EMPTY) && !breakBeamSensor.getState() && intakeSequence.currentStateIntake == Intake.State.IDLE && intaking) {
                 intakeSequence.start();
             }
 
@@ -174,7 +173,7 @@ public class MainTeleOp extends Methods {
                 launcherYawRotation = 0.2;
             }
 
-            outtake.setRotationPosition(launcherYawRotation);
+            //outtake.setRotationPosition(launcherYawRotation);
 
             //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
