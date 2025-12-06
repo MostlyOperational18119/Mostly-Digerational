@@ -32,7 +32,7 @@ public abstract class Methods extends LinearOpMode {
     boolean launchIdle = false;
     double revolverExpectedPosition = -1.0;
 
-    boolean isBlue;
+    boolean isRed;
     double robotX = 0;
     double robotY = 0;
     double robotOrientation = 0;
@@ -67,11 +67,11 @@ public abstract class Methods extends LinearOpMode {
         voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
 
 //        limelight = hardwareMap.get(Limelight3A.class, "limelight");
-       // breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beamSensor");
-        //breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
+       breakBeamSensor= hardwareMap.get(DigitalChannel.class, "beamSensor");
+        breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
-        if (isBlue) {
+        if (isRed) {
             goalX = 0;
         } else {
             goalX = 144;
@@ -151,6 +151,7 @@ public abstract class Methods extends LinearOpMode {
         // Normalize to (-pi, pi)
         relativeAngle = Math.atan2(Math.sin(relativeAngle), Math.cos(relativeAngle));
         relativeAngle = Math.toDegrees(relativeAngle);
+        relativeAngle = -relativeAngle;
 
         // Convert to motor ticks (example factor)
         return (relativeAngle * 51.724137931) + 3000;
