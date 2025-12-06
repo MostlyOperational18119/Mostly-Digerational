@@ -132,7 +132,8 @@ public class BlueFrontAuto9 extends Methods {
         //indexer.oneColor(BallColor.PURPLE);
         indexer.badColorWorkaround();
         //indexer.redoColors();
-        outtakeFlywheel.setVelocity(outtakeVelocity);
+        //outtakeFlywheel.setVelocity(outtakeVelocity);
+        outtakeFlywheel.setPower(0.5);
 
         while (opModeIsActive()) {
             telemetry.addData("current state", intakeSequence.currentStateIntake);
@@ -175,7 +176,7 @@ public class BlueFrontAuto9 extends Methods {
                         state = 3;
                         break;
                     case 3:
-                        follower.followPath(prep1ToIntake1, 0.3, false);
+                        follower.followPath(prep1ToIntake1, 0.225, false);
                         state = 4;
                         break;
                     case 4:
