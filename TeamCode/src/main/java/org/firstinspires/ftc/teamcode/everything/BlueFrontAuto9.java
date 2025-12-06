@@ -135,6 +135,10 @@ public class BlueFrontAuto9 extends Methods {
         //outtakeFlywheel.setVelocity(outtakeVelocity);
         outtakeFlywheel.setPower(0.5);
 
+        // Absolutely need these variables for teleop, no matter what happens
+        StaticMatchData.isRed = false;
+        StaticMatchData.endPosition = follower.getPose();
+
         while (opModeIsActive()) {
             telemetry.addData("current state", intakeSequence.currentStateIntake);
             telemetry.addData("slot 0", indexer.slots[0]);
@@ -215,6 +219,10 @@ public class BlueFrontAuto9 extends Methods {
                         follower.followPath(launchToPark, 1, true);
                         outtakeFlywheel.setVelocity(0);
                         outtake.setRotationPosition(0);
+                        state = -66;
+                        break;
+                    case -66:
+                        StaticMatchData.endPosition = follower.getPose();
                         state = -67;
                         break;
                 }

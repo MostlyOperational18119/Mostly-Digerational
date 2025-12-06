@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.everything;
 
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-
-import java.util.Arrays;
 
 //flicker down 0.21
 //up 0
@@ -28,11 +27,13 @@ public class MainTeleOp extends Methods {
         boolean canLimelight = true;
         BetterLimelight limelight = null;
 
-        Pose start = new Pose(72, 72, Math.toRadians(90)); //?
+        Pose start = StaticMatchData.endPosition;
+        isRed = StaticMatchData.isRed;
+
+        // Fallback
+        if (start == null) start = new Pose(72, 72, Math.toRadians(90));
 
         revolver.setPosition(0.0);
-
-        isRed = true;
 
         Follower follower;
         follower = Constants.createFollower(hardwareMap);
@@ -51,6 +52,10 @@ public class MainTeleOp extends Methods {
         ElapsedTime aimBotTimer = new ElapsedTime();
 
         while (opModeIsActive()) {
+            follower.update();
+            robotX = follower.getPose().getX();
+            robotY = follower.getPose().getY();
+            robotOrientation = follower.getHeading();
             voltageMultiplier = 12.57 / voltageSensor.getVoltage();
 
             turn = gamepad1.right_stick_x;
@@ -175,6 +180,8 @@ public class MainTeleOp extends Methods {
 
             //outtake.setRotationPosition(launcherYawRotation);
 
+            //outtake.setRotationPosition(launcherYawRotation);
+
             //gamepad 2 manual cycle (intake/outtake)
 //                if (cycleLeft) {
 //                    currentIndexIntake += 1;
@@ -190,19 +197,14 @@ public class MainTeleOp extends Methods {
 //                    isIntake = false;
 //                }
 
-            if (canLimelight)
-                telemetry.addData("Ball colors", Arrays.toString(limelight.getBalls()));
-            telemetry.addData("intaking yes or no", intaking);
+            telemetry.addData("is saarang retarded?", nicksLittleHelper());
+            telemetry.addData("robot x", robotX);
+            telemetry.addData("robot y", robotY);
+            telemetry.addData("robot orientation", robotOrientation);
             telemetry.addData("Hood position", daHood.getPosition());
             telemetry.addData("outtake encoder", outtakeEncoder);
-            telemetry.addData("toGreen", toGreen);
-            telemetry.addData("toPurple", toPurple);
-            telemetry.addData("firePurple", firePurple);
-            telemetry.addData("fireGreen", fireGreen);
             telemetry.addData("launch sequence state", launch.currentState);
             telemetry.addData("intake sequence state", intakeSequence.currentStateIntake);
-            telemetry.addData("outtake power", outtakePower);
-            telemetry.addData("distance color sensor", colorSensor.getDistance(DistanceUnit.MM));
 //                telemetry.addData("revolver position", revolver.getPosition());
             telemetry.addData("beam break", !breakBeamSensor.getState());
             telemetry.addData("indexer position", indexer.rotation);
