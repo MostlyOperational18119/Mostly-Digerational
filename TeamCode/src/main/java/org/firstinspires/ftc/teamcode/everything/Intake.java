@@ -43,7 +43,7 @@ public class Intake {
         methods.telemetry.addData("Current Intake State", currentStateIntake);
         switch (currentStateIntake) {
             case SET_COLOR:
-                if (System.currentTimeMillis() - startTime > 800) {
+                if (System.currentTimeMillis() - startTime > 500) {
                     idleSwap = true;
                     if (indexer.setIndexerColor()) {
                         startTime = System.currentTimeMillis();
@@ -56,9 +56,11 @@ public class Intake {
                 if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
                     if (idleSwap) {
                         indexer.rotateToColor(Indexer.BallColor.EMPTY);
+                        idleSwap = false;
+                        startTime = System.currentTimeMillis(); // Reset timer when rotation starts
                     }
-                    idleSwap = false;
-                    if (System.currentTimeMillis() - startTime > 250) {
+                    // Wait longer to ensure physical rotation completes
+                    if (!idleSwap && System.currentTimeMillis() - startTime > 500) { // Increase delay
                         startTime = System.currentTimeMillis();
                         currentStateIntake = State.SET_COLOR;
                     }

@@ -61,6 +61,7 @@ public abstract class Methods extends LinearOpMode {
         intake = hardwareMap.dcMotor.get("intake");
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         outtakeFlywheel = hardwareMap.get(DcMotorEx.class, "outtake");
+        outtakeFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //liftR = hardwareMap.dcMotor.get("liftR");
         //liftL = hardwareMap.dcMotor.get("liftL");
 

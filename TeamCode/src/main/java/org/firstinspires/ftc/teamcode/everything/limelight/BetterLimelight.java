@@ -82,6 +82,8 @@ public class BetterLimelight {
     }
 
     public Optional<Object> getResult(ToRobotMsg.ResultType type) {
+        if (results == null || !results.containsKey(type)) return Optional.empty();
+
         return Optional.ofNullable(results.get(type));
     }
 }
