@@ -1,13 +1,18 @@
 package org.firstinspires.ftc.teamcode.everything;
 
 import com.pedropathing.follower.Follower;
-//import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.everything.limelight.AprilTagResult;
+import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
+import org.firstinspires.ftc.teamcode.everything.limelight.ToRobotMsg;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 @Autonomous(name = "BFA9")
 public class BlueFrontAuto9 extends Methods {
@@ -28,14 +33,39 @@ public class BlueFrontAuto9 extends Methods {
     long delayTimer = 0;
     int launchDelay = 2000; // Adjust this value for more/less delay between launches
     int initialDelay = 3000;
+    boolean canLimelight = true;
+    int tagID = -1;
 
     Indexer indexer = new Indexer(this);
     Intake intakeSequence = new Intake(this, indexer);
     Outtake outtake = new Outtake(this);
     LaunchSequence launchState = new LaunchSequence(this, indexer);
+    BetterLimelight limelight;
+    ArrayList<AprilTagResult> tagResults;
+
+
+    public boolean getTags() {
+        if (canLimelight) {
+            Optional<Object> res = limelight.getResult(ToRobotMsg.ResultType.AprilTag);
+
+            if (res.isPresent()) {
+                tagResults = (ArrayList<AprilTagResult>) res.get();
+
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     @Override
     public void runOpMode() {
+        try {
+            limelight = new BetterLimelight();
+        } catch (Exception e) {
+            canLimelight = false;
+        }
+
         isRed = false;
         initialize();
         follower = Constants.createFollower(hardwareMap);
@@ -89,6 +119,8 @@ public class BlueFrontAuto9 extends Methods {
                 .addPath(new BezierLine(launch, park))
                 .setLinearHeadingInterpolation(launch.getHeading(), park.getHeading())
                 .build();
+
+        updateID();
 
         waitForStart();
 
@@ -173,18 +205,37 @@ public class BlueFrontAuto9 extends Methods {
         }
     }
 
+    public boolean getColor() {
+        switch (tagID) {
+            case 21:
+                return TAG_21_PATTERN[(launchCount +1) % 3 - 1] == 0;
+            case 22:
+                return TAG_22_PATTERN[(launchCount +1) % 3 - 1] == 0;
+            case 23:
+                return TAG_23_PATTERN[(launchCount +1) % 3 - 1] == 0;
+            default:
+                return launchCount == 1;
+        }
+    }
+
+    public void updateID() {
+        if (getTags()) {
+            tagID = -1;
+
+            for (AprilTagResult tagResult : tagResults) {
+                if (tagResult.tagID >= 21 && tagResult.tagID <= 23) tagID = tagResult.tagID;
+            }
+        }
+    }
+
     public void susLaunch() {
         if (launchIdle && launchState.currentState == LaunchSequence.State.IDLE) {
             // Check if enough time has passed since the last launch
             if (System.currentTimeMillis() - delayTimer > launchDelay) {
                 if (launchCount < 3) {
-                    if (launchCount == 1) {
-                        toGreen = true;
-                        toPurple = false;
-                    } else {
-                        toGreen = false;
-                        toPurple = true;
-                    }
+                    toGreen = getColor();
+                    toPurple = !toGreen;
+
                     launchState.startLaunch();
                     launchCount++;
                     delayTimer = System.currentTimeMillis(); // Reset timer after starting launch
