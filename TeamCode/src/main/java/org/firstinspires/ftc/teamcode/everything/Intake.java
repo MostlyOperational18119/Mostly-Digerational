@@ -38,6 +38,29 @@ public class Intake {
         }
     }
 
+    public void updateAuto() {
+        methods.telemetry.addData("Current Intake State", currentStateIntake);
+        switch (currentStateIntake) {
+            case SET_COLOR:
+                if (System.currentTimeMillis() - startTime > 800) {
+                    indexer.setIndexerColor();
+                    currentStateIntake = State.ROTATE_TO_EMPTY;
+                }
+                break;
+            case ROTATE_TO_EMPTY:
+                if (indexer.colorInArray(Indexer.BallColor.EMPTY) && methods.colorSensor.getDistance(DistanceUnit.MM) < 50) {
+                    indexer.rotateToColor(Indexer.BallColor.EMPTY);
+                    currentStateIntake = State.SET_COLOR;
+                    startTime = System.currentTimeMillis();
+                }
+                if (System.currentTimeMillis() - startTime > 500)
+                    currentStateIntake = State.IDLE;
+                break;
+            case IDLE:
+                break;
+        }
+    }
+
     public enum State {
         SET_COLOR,
         ROTATE_TO_EMPTY,

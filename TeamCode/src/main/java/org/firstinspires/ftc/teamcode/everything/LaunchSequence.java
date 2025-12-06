@@ -40,22 +40,22 @@ public class LaunchSequence {
                     methods.transferServo.setPosition(methods.transferServoUp);
                     transferServoReset = false;
                 }
-                if (System.currentTimeMillis() - startTime > 1050) {
+                if (System.currentTimeMillis() - startTime > 1150) {
                     if (!transferServoReset) {
                         transferServoReset = true;
-                        methods.transferServo.setPosition(0.27);
+                        methods.transferServo.setPosition(0.34);
                     }
                     if (launchIndex >= 0 && launchIndex < indexer.slots.length) {
                         indexer.slots[launchIndex] = Indexer.BallColor.EMPTY;
                     }
                 }
-                if (System.currentTimeMillis() - startTime > 1450) {
+                if (System.currentTimeMillis() - startTime > 1550) {
                     currentState = State.IDLE;
                 }
                 break;
             case IDLE:
                 methods.launchIdle = true;
-                methods.transferServo.setPosition(0.27);
+                methods.transferServo.setPosition(0.34);
                 break;
         }
     }

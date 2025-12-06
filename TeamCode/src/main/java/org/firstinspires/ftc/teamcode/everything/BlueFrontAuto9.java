@@ -36,7 +36,7 @@ public class BlueFrontAuto9 extends Methods {
 
     @Override
     public void runOpMode() {
-        isBlue = true;
+        isRed = false;
         initialize();
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
@@ -102,6 +102,7 @@ public class BlueFrontAuto9 extends Methods {
         outtakeFlywheel.setVelocity(outtakeVelocity);
 
         while (opModeIsActive()) {
+            intakeSequence.updateAuto();
             follower.update();
             launchState.update();
             indexer.update();
@@ -124,18 +125,17 @@ public class BlueFrontAuto9 extends Methods {
                     case 2:
                         follower.followPath(launchToPrep1, 1, true);
                         intake.setPower(intakeActivePower);
+                        indexer.rotateToColor(Indexer.BallColor.EMPTY);
                         intakeSequence.start();
                         state = 3;
                         break;
                     case 3:
-                        follower.followPath(prep1ToIntake1, 0.3, true);
-                        intakeSequence.start();
+                        follower.followPath(prep1ToIntake1, 0.15, false);
                         state = 4;
                         break;
                     case 4:
                         follower.followPath(intake1ToLaunch, 1, true);
                         intake.setPower(intakeIdlePower);
-                        intakeSequence.start();
                         state = 6;
                         break;
                     case 5:
@@ -144,10 +144,12 @@ public class BlueFrontAuto9 extends Methods {
                     case 6:
                         follower.followPath(launchToPrep2, 1, true);
                         intake.setPower(intakeActivePower);
+                        indexer.rotateToColor(Indexer.BallColor.EMPTY);
+                        intakeSequence.start();
                         state = 7;
                         break;
                     case 7:
-                        follower.followPath(prep2ToIntake2, 0.3, true);
+                        follower.followPath(prep2ToIntake2, 0.15, true);
                         state = 8;
                         break;
                     case 8:
