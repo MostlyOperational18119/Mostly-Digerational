@@ -129,7 +129,7 @@ public class BlueFrontAuto9 extends Methods {
 
         //set all of indexer array to one color
         //indexer.oneColor(BallColor.PURPLE);
-        //indexer.badColorWorkaround();
+        indexer.badColorWorkaround();
         //indexer.redoColors();
         outtakeFlywheel.setVelocity(outtakeVelocity);
 
@@ -153,10 +153,13 @@ public class BlueFrontAuto9 extends Methods {
                         break;
                     case 0:
                         follower.followPath(startToLaunch, 1, true);
-                        state = 2;
+                        state = 1;
                         break;
                     case 1:
                         susLaunch();
+                        if (launchState.currentState == LaunchSequence.State.IDLE) {
+                            state = 2;
+                        }
                         break;
                     case 2:
                         follower.followPath(launchToPrep1, 1, true);
@@ -169,7 +172,7 @@ public class BlueFrontAuto9 extends Methods {
                         state = 3;
                         break;
                     case 3:
-                        follower.followPath(prep1ToIntake1, 0.1, false);
+                        follower.followPath(prep1ToIntake1, 0.15, false);
                         state = 4;
                         break;
                     case 4:
@@ -193,7 +196,7 @@ public class BlueFrontAuto9 extends Methods {
                         state = 7;
                         break;
                     case 7:
-                        follower.followPath(prep2ToIntake2, 0.1, true);
+                        follower.followPath(prep2ToIntake2, 0.15, true);
                         state = 8;
                         break;
                     case 8:
@@ -244,18 +247,22 @@ public class BlueFrontAuto9 extends Methods {
     }
 
     public void susLaunch() {
-        if (launchIdle && launchState.currentState == LaunchSequence.State.IDLE) {
+        if (launchState.currentState == LaunchSequence.State.IDLE) {
             // Check if enough time has passed since the last launch
             if (System.currentTimeMillis() - delayTimer > launchDelay) {
                 if (launchCount < 3) {
-                    toGreen = getColor();
-                    toPurple = !toGreen;
-
+                    if (launchCount == 1) {
+                        toGreen = false;
+                        toPurple = true;
+                    } else {
+                        toGreen = true;
+                        toPurple = false;
+                    }
                     launchState.startLaunch();
                     launchCount++;
                     delayTimer = System.currentTimeMillis(); // Reset timer after starting launch
                 } else {
-                    state++;
+                    state = 2;
                     launchCount = 0; // Reset for next time
                 }
             }
