@@ -5,6 +5,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -53,9 +54,12 @@ public class BlueFrontAuto extends Methods {
         indexer.badColorWorkaround();
         //look at balls inside
         //indexer.redoColors();
-        outtakeFlywheel.setPower(0.5);
+        //outtakeFlywheel.setPower(0.5);
+        outtakeFlywheel.setVelocity(1100);
 
         while (opModeIsActive()) {
+            telemetry.addData("velocity coefficients", outtakeFlywheel.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+            telemetry.update();
             follower.update();
             launchState.update();
             indexer.update();

@@ -213,6 +213,20 @@ public class Indexer {
         return index; // Return the index that was found
     }
 
+    public void rotateToSlotOuttake(int slot) {
+        switch (slot) {
+            case 0:
+                nextRotation = Positions.zeroOut;
+                break;
+            case 1:
+                nextRotation = Positions.oneOut;
+                break;
+            case 2:
+                nextRotation = Positions.twoOut;
+                break;
+        }
+    }
+
     public enum Positions {zeroIn, zeroOut, oneIn, oneOut, twoIn, twoOut;}
 
     public enum BallColor {

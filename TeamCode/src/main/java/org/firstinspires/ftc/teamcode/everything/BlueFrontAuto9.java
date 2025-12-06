@@ -6,6 +6,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.everything.limelight.AprilTagResult;
 import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
@@ -19,21 +20,21 @@ import java.util.Optional;
 public class BlueFrontAuto9 extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
     Pose launch = new Pose(60, 84, Math.toRadians(133));
-    Pose prep1 = new Pose(47, 87, Math.toRadians(0));
-    Pose intake1 = new Pose(23, 87, Math.toRadians(0));
+    Pose prep1 = new Pose(50, 87, Math.toRadians(0));
+    Pose intake1 = new Pose(20, 87, Math.toRadians(0));
     Pose prep2 = new Pose(47, 60, Math.toRadians(0));
     Pose intake2 = new Pose(17, 60, Math.toRadians(0));
     Pose park = new Pose(17, 100, Math.toRadians(180));
     Follower follower;
     PathChain startToLaunch, launchToPrep1, prep1ToIntake1, intake1ToLaunch, launchToPrep2, prep2ToIntake2, intake2ToLaunch, launchToPark;
-    int outtakeVelocity = 1000;
+    int outtakeVelocity = 1100;
     double intakeIdlePower = 0.2;
     double intakeActivePower = 1.0;
     int state = -1;
     int launchCount = 0;
     long delayTimer = 0;
     int launchDelay = 2000; // Adjust this value for more/less delay between launches
-    int initialDelay = 1000;
+    int initialDelay = 1500;
     boolean intakeHasStarted = false;
     boolean canLimelight = true;
     int tagID = -1;
@@ -123,6 +124,8 @@ public class BlueFrontAuto9 extends Methods {
 
         updateID();
 
+        daHood.setPosition(0.8);
+
         waitForStart();
 
         delayTimer = System.currentTimeMillis();
@@ -132,22 +135,25 @@ public class BlueFrontAuto9 extends Methods {
         //indexer.oneColor(BallColor.PURPLE);
         indexer.badColorWorkaround();
         //indexer.redoColors();
-        //outtakeFlywheel.setVelocity(outtakeVelocity);
-        outtakeFlywheel.setPower(0.5);
+        outtakeFlywheel.setVelocity(outtakeVelocity);
 
         // Absolutely need these variables for teleop, no matter what happens
         StaticMatchData.isRed = false;
         StaticMatchData.endPosition = follower.getPose();
 
         while (opModeIsActive()) {
-            telemetry.addData("current state", intakeSequence.currentStateIntake);
+            //outtakeFlywheel.setPower(0.5);// * (13.3 / voltageSensor.getVoltage()));
+            telemetry.addData("current position", indexer.rotation);
             telemetry.addData("slot 0", indexer.slots[0]);
             telemetry.addData("slot 1", indexer.slots[1]);
             telemetry.addData("slot 2", indexer.slots[2]);
             telemetry.addData("velocity", outtakeFlywheel.getVelocity());
+            telemetry.addData("launch state", launchState.currentState);
+            telemetry.addData("velocity coefficients", outtakeFlywheel.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+            telemetry.update();
             intakeSequence.updateAuto();
             follower.update();
-            launchState.update();
+            launchState.updateAuto();
             indexer.update();
             outtake.update();
 
@@ -161,10 +167,8 @@ public class BlueFrontAuto9 extends Methods {
                         break;
                     case 0:
                         follower.followPath(startToLaunch, 1, true);
-
-                        if (System.currentTimeMillis() - delayTimer > 2000) {
-                            state = 1;
-                        }
+                        state = 1;
+                        delayTimer = System.currentTimeMillis();
                         break;
                     case 1:
                         susLaunch();
@@ -172,36 +176,39 @@ public class BlueFrontAuto9 extends Methods {
                     case 2:
                         follower.followPath(launchToPrep1, 1, true);
                         intake.setPower(intakeActivePower);
-                        indexer.rotateToColor(Indexer.BallColor.EMPTY);
                         if (!intakeHasStarted) {
+                            indexer.nextRotation = Indexer.Positions.zeroIn;
+                            indexer.slots[0] = Indexer.BallColor.EMPTY;
+                            indexer.slots[1] = Indexer.BallColor.EMPTY;
+                            indexer.slots[2] = Indexer.BallColor.EMPTY;
                             intakeSequence.start();
                             intakeHasStarted = true;
                         }
                         state = 3;
                         break;
                     case 3:
-                        follower.followPath(prep1ToIntake1, 0.225, false);
+                        follower.followPath(prep1ToIntake1, 0.15, false);
                         state = 4;
                         break;
                     case 4:
                         follower.followPath(intake1ToLaunch, 1, true);
                         intake.setPower(intakeIdlePower);
                         intakeHasStarted = false;
-                        state = 6;
+                        state = 5;
                         break;
                     case 5:
                         susLaunch();
                         break;
                     case 6:
-                        follower.followPath(launchToPrep2, 1, true);
-                        intake.setPower(intakeActivePower);
-                        indexer.rotateToColor(Indexer.BallColor.EMPTY);
-                        if (!intakeHasStarted) {
-                            intakeSequence.start();
-                            intakeHasStarted = true;
-                        }
-                        intakeSequence.start();
-                        state = 7;
+                        follower.followPath(launchToPark, 1, true);
+//                        intake.setPower(intakeActivePower);
+//                        indexer.rotateToColor(Indexer.BallColor.EMPTY);
+//                        if (!intakeHasStarted) {
+//                            intakeSequence.start();
+//                            intakeHasStarted = true;
+//                        }
+//                        intakeSequence.start();
+                        state = -67;
                         break;
                     case 7:
                         follower.followPath(prep2ToIntake2, 0.15, true);
@@ -227,9 +234,7 @@ public class BlueFrontAuto9 extends Methods {
                         break;
                 }
             }
-            telemetry.addData("launch state", launchState.currentState);
-            telemetry.addData("velocity coefficients", outtakeFlywheel.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
-            telemetry.update();
+
         }
     }
 
