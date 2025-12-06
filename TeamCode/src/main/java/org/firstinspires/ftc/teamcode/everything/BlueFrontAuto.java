@@ -71,9 +71,10 @@ public class BlueFrontAuto extends Methods {
                     case 0:
                         follower.followPath(startToLaunch, 1, true);
                         state = 1;
+                        launchDelayTimer = System.currentTimeMillis();
                         break;
                     case 1:
-                        if (launchIdle && launchState.currentState == LaunchSequence.State.IDLE) {
+                        if (launchState.currentState == LaunchSequence.State.IDLE) {
                             // Check if enough time has passed since the last launch
                             if (System.currentTimeMillis() - launchDelayTimer > LAUNCH_DELAY_MS) {
                                 if (launchCount < 3) {

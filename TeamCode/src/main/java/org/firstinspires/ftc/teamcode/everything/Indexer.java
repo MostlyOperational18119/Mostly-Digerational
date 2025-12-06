@@ -123,7 +123,7 @@ public class Indexer {
     }
 
     //when beam is broken: check ball color
-    public void setIndexerColor() {
+    public boolean setIndexerColor() {
         NormalizedRGBA normalizedRGBA = methods.colorSensor.getNormalizedColors();
         float blue = normalizedRGBA.blue;
         float green = normalizedRGBA.green;
@@ -140,7 +140,9 @@ public class Indexer {
 
         if (currentIndex > -1) {
             slots[currentIndex] = ballIn;
+            return true;
         }
+        return false;
     }
 
     public int currentIntakeIndex() {

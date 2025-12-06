@@ -28,7 +28,7 @@ public class BlueFrontAuto9 extends Methods {
     long delayTimer = 0;
     int launchDelay = 2000; // Adjust this value for more/less delay between launches
     int initialDelay = 3000;
-
+    boolean intakeHasStarted = false;
     Indexer indexer = new Indexer(this);
     Intake intakeSequence = new Intake(this, indexer);
     Outtake outtake = new Outtake(this);
@@ -97,11 +97,15 @@ public class BlueFrontAuto9 extends Methods {
 
         //set all of indexer array to one color
         //indexer.oneColor(BallColor.PURPLE);
-        indexer.badColorWorkaround();
+        //indexer.badColorWorkaround();
         //indexer.redoColors();
         outtakeFlywheel.setVelocity(outtakeVelocity);
 
         while (opModeIsActive()) {
+            telemetry.addData("current state", intakeSequence.currentStateIntake);
+            telemetry.addData("slot 0", indexer.slots[0]);
+            telemetry.addData("slot 1", indexer.slots[1]);
+            telemetry.addData("slot 2", indexer.slots[2]);
             intakeSequence.updateAuto();
             follower.update();
             launchState.update();
@@ -126,16 +130,20 @@ public class BlueFrontAuto9 extends Methods {
                         follower.followPath(launchToPrep1, 1, true);
                         intake.setPower(intakeActivePower);
                         indexer.rotateToColor(Indexer.BallColor.EMPTY);
-                        intakeSequence.start();
+                        if (!intakeHasStarted) {
+                            intakeSequence.start();
+                            intakeHasStarted = true;
+                        }
                         state = 3;
                         break;
                     case 3:
-                        follower.followPath(prep1ToIntake1, 0.15, false);
+                        follower.followPath(prep1ToIntake1, 0.1, false);
                         state = 4;
                         break;
                     case 4:
                         follower.followPath(intake1ToLaunch, 1, true);
                         intake.setPower(intakeIdlePower);
+                        intakeHasStarted = false;
                         state = 6;
                         break;
                     case 5:
@@ -145,11 +153,15 @@ public class BlueFrontAuto9 extends Methods {
                         follower.followPath(launchToPrep2, 1, true);
                         intake.setPower(intakeActivePower);
                         indexer.rotateToColor(Indexer.BallColor.EMPTY);
+                        if (!intakeHasStarted) {
+                            intakeSequence.start();
+                            intakeHasStarted = true;
+                        }
                         intakeSequence.start();
                         state = 7;
                         break;
                     case 7:
-                        follower.followPath(prep2ToIntake2, 0.15, true);
+                        follower.followPath(prep2ToIntake2, 0.1, true);
                         state = 8;
                         break;
                     case 8:
