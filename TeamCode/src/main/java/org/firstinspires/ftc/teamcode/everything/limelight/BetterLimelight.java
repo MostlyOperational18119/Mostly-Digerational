@@ -9,13 +9,16 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Optional;
 
 public class BetterLimelight {
     DataInputStream in = null;
     DataOutputStream out = null;
     Socket socket;
     int chosenGoal = 0;
-    Indexer.BallColor[] balls = new Indexer.BallColor[9];
+//    Indexer.BallColor[] balls = new Indexer.BallColor[9];
+    public HashMap<ToRobotMsg.ResultType, Object> results;
 
     public BetterLimelight() throws IOException {
         connect();
@@ -45,7 +48,7 @@ public class BetterLimelight {
                         case CurrentData:
 
 //                                    ballGoalColor = message.otherData[0];
-                            balls = (Indexer.BallColor[]) message.results.get(ToRobotMsg.ResultType.BallLine);
+                            results = message.results;
                             break;
                         default:
                             Log.i("BetterLimelight", "what");
@@ -78,7 +81,7 @@ public class BetterLimelight {
         out = new DataOutputStream(socket.getOutputStream());
     }
 
-    public Indexer.BallColor[] getBalls() {
-        return balls;
+    public Optional<Object> getResult(ToRobotMsg.ResultType type) {
+        return Optional.ofNullable(results.get(type));
     }
 }
