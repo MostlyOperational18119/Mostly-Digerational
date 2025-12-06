@@ -39,9 +39,10 @@ public abstract class Methods extends LinearOpMode {
     double goalX;
     double goalY = 144;
 
-    public static final int[] TAG_21_PATTERN = {};
-    public static final int[] TAG_22_PATTERN = {};
-    public static final int[] TAG_23_PATTERN = {};
+    // 0 is green, 1 is purple
+    public static final int[] TAG_21_PATTERN = {0, 1, 1};
+    public static final int[] TAG_22_PATTERN = {1, 0, 1};
+    public static final int[] TAG_23_PATTERN = {1, 1, 0};
 
     //initializes all the hardware and the apriltag detection
     public void initialize() {

@@ -50,7 +50,6 @@ public class BlueFrontAuto9 extends Methods {
 
             if (res.isPresent()) {
                 tagResults = (ArrayList<AprilTagResult>) res.get();
-
                 return true;
             }
         }
@@ -206,13 +205,16 @@ public class BlueFrontAuto9 extends Methods {
     }
 
     public boolean getColor() {
+        int i = (launchCount +1) % 3 - 1;
+        if (i < 0) i = 2;
+
         switch (tagID) {
             case 21:
-                return TAG_21_PATTERN[(launchCount +1) % 3 - 1] == 0;
+                return TAG_21_PATTERN[i] == 0;
             case 22:
-                return TAG_22_PATTERN[(launchCount +1) % 3 - 1] == 0;
+                return TAG_22_PATTERN[i] == 0;
             case 23:
-                return TAG_23_PATTERN[(launchCount +1) % 3 - 1] == 0;
+                return TAG_23_PATTERN[i] == 0;
             default:
                 return launchCount == 1;
         }
