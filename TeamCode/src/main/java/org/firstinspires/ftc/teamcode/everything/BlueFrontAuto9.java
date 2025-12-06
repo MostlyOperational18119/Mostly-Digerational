@@ -5,6 +5,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.everything.limelight.AprilTagResult;
 import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
@@ -17,22 +18,22 @@ import java.util.Optional;
 @Autonomous(name = "BFA9")
 public class BlueFrontAuto9 extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
-    Pose launch = new Pose(60, 84, Math.toRadians(140));
-    Pose prep1 = new Pose(47, 84, Math.toRadians(0));
-    Pose intake1 = new Pose(17, 84, Math.toRadians(0));
+    Pose launch = new Pose(60, 84, Math.toRadians(133));
+    Pose prep1 = new Pose(47, 87, Math.toRadians(0));
+    Pose intake1 = new Pose(23, 87, Math.toRadians(0));
     Pose prep2 = new Pose(47, 60, Math.toRadians(0));
     Pose intake2 = new Pose(17, 60, Math.toRadians(0));
     Pose park = new Pose(17, 100, Math.toRadians(180));
     Follower follower;
     PathChain startToLaunch, launchToPrep1, prep1ToIntake1, intake1ToLaunch, launchToPrep2, prep2ToIntake2, intake2ToLaunch, launchToPark;
-    int outtakeVelocity = 1100;
+    int outtakeVelocity = 1000;
     double intakeIdlePower = 0.2;
     double intakeActivePower = 1.0;
     int state = -1;
     int launchCount = 0;
     long delayTimer = 0;
     int launchDelay = 2000; // Adjust this value for more/less delay between launches
-    int initialDelay = 3000;
+    int initialDelay = 1000;
     boolean intakeHasStarted = false;
     boolean canLimelight = true;
     int tagID = -1;
@@ -46,7 +47,7 @@ public class BlueFrontAuto9 extends Methods {
 
 
     public boolean getTags() {
-        if (canLimelight) {
+        if (canLimelight && limelight != null) {
             Optional<Object> res = limelight.getResult(ToRobotMsg.ResultType.AprilTag);
 
             if (res.isPresent()) {
@@ -138,6 +139,7 @@ public class BlueFrontAuto9 extends Methods {
             telemetry.addData("slot 0", indexer.slots[0]);
             telemetry.addData("slot 1", indexer.slots[1]);
             telemetry.addData("slot 2", indexer.slots[2]);
+            telemetry.addData("velocity", outtakeFlywheel.getVelocity());
             intakeSequence.updateAuto();
             follower.update();
             launchState.update();
@@ -148,18 +150,19 @@ public class BlueFrontAuto9 extends Methods {
                 switch (state) {
                     case -1:
                         if (System.currentTimeMillis() - delayTimer > initialDelay) {
+                            delayTimer = System.currentTimeMillis();
                             state = 0;
                         }
                         break;
                     case 0:
                         follower.followPath(startToLaunch, 1, true);
-                        state = 1;
+
+                        if (System.currentTimeMillis() - delayTimer > 2000) {
+                            state = 1;
+                        }
                         break;
                     case 1:
                         susLaunch();
-                        if (launchState.currentState == LaunchSequence.State.IDLE) {
-                            state = 2;
-                        }
                         break;
                     case 2:
                         follower.followPath(launchToPrep1, 1, true);
@@ -172,7 +175,7 @@ public class BlueFrontAuto9 extends Methods {
                         state = 3;
                         break;
                     case 3:
-                        follower.followPath(prep1ToIntake1, 0.15, false);
+                        follower.followPath(prep1ToIntake1, 0.3, false);
                         state = 4;
                         break;
                     case 4:
@@ -216,6 +219,7 @@ public class BlueFrontAuto9 extends Methods {
                 }
             }
             telemetry.addData("launch state", launchState.currentState);
+            telemetry.addData("velocity coefficients", outtakeFlywheel.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
             telemetry.update();
         }
     }
@@ -262,7 +266,7 @@ public class BlueFrontAuto9 extends Methods {
                     launchCount++;
                     delayTimer = System.currentTimeMillis(); // Reset timer after starting launch
                 } else {
-                    state = 2;
+                    state++;
                     launchCount = 0; // Reset for next time
                 }
             }
