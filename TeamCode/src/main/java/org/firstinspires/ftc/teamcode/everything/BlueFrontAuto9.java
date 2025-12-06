@@ -19,12 +19,12 @@ import java.util.Optional;
 @Autonomous(name = "BFA9")
 public class BlueFrontAuto9 extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
-    Pose launch = new Pose(60, 84, Math.toRadians(133));
+    Pose launch = new Pose(60, 84, Math.toRadians(131));
     Pose prep1 = new Pose(50, 87, Math.toRadians(0));
-    Pose intake1 = new Pose(20, 87, Math.toRadians(0));
+    Pose intake1 = new Pose(26, 87, Math.toRadians(0));
     Pose prep2 = new Pose(47, 60, Math.toRadians(0));
     Pose intake2 = new Pose(17, 60, Math.toRadians(0));
-    Pose park = new Pose(17, 100, Math.toRadians(180));
+    Pose park = new Pose(20, 100, Math.toRadians(180));
     Follower follower;
     PathChain startToLaunch, launchToPrep1, prep1ToIntake1, intake1ToLaunch, launchToPrep2, prep2ToIntake2, intake2ToLaunch, launchToPark;
     int outtakeVelocity = 1100;
@@ -34,7 +34,7 @@ public class BlueFrontAuto9 extends Methods {
     int launchCount = 0;
     long delayTimer = 0;
     int launchDelay = 2000; // Adjust this value for more/less delay between launches
-    int initialDelay = 1500;
+    int initialDelay = 2500;
     boolean intakeHasStarted = false;
     boolean canLimelight = true;
     int tagID = -1;
@@ -136,8 +136,10 @@ public class BlueFrontAuto9 extends Methods {
         indexer.badColorWorkaround();
         //indexer.redoColors();
         outtakeFlywheel.setVelocity(outtakeVelocity);
+        outtakeFlywheel.setVelocityPIDFCoefficients(11, 3, 2, 2);
 
         // Absolutely need these variables for teleop, no matter what happens
+
         StaticMatchData.isRed = false;
         StaticMatchData.endPosition = follower.getPose();
 
@@ -171,7 +173,9 @@ public class BlueFrontAuto9 extends Methods {
                         delayTimer = System.currentTimeMillis();
                         break;
                     case 1:
-                        susLaunch();
+                        if (outtakeFlywheel.getVelocity() >= 1100/* || System.currentTimeMillis() - delayTimer > 3000*/) {
+                            susLaunch();
+                        }
                         break;
                     case 2:
                         follower.followPath(launchToPrep1, 1, true);
@@ -200,7 +204,7 @@ public class BlueFrontAuto9 extends Methods {
                         susLaunch();
                         break;
                     case 6:
-                        follower.followPath(launchToPark, 1, true);
+                        follower.followPath(launchToPark, 0.9, true);
 //                        intake.setPower(intakeActivePower);
 //                        indexer.rotateToColor(Indexer.BallColor.EMPTY);
 //                        if (!intakeHasStarted) {
@@ -223,7 +227,7 @@ public class BlueFrontAuto9 extends Methods {
                         susLaunch();
                         break;
                     case 10:
-                        follower.followPath(launchToPark, 1, true);
+                        follower.followPath(launchToPark, 0.9, true);
                         outtakeFlywheel.setVelocity(0);
                         outtake.setRotationPosition(0);
                         state = -66;
