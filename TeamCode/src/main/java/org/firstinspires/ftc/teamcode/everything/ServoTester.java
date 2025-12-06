@@ -9,7 +9,7 @@ public class ServoTester extends Methods {
     public void runOpMode() {
         double servoPosition = 0;
         //CRServo testServo = hardwareMap.get(CRServo.class, "daHood");
-        Servo testServo = hardwareMap.servo.get("daHood");
+        Servo testServo = hardwareMap.servo.get("transferServo");
 
         waitForStart();
 
