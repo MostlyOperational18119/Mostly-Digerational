@@ -79,7 +79,7 @@ public class LaunchSequence {
                 break;
             case LAUNCH:
                 methods.launchIdle = false;
-                if (System.currentTimeMillis() - startTime > 1000) {
+                if (System.currentTimeMillis() - startTime > 1000 && methods.outtakeFlywheel.getVelocity() >= 1100) {
                     methods.transferServo.setPosition(methods.transferServoUp);
                     transferServoReset = false;
                 }
