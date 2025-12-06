@@ -7,6 +7,7 @@ public class Intake {
     private final Methods methods;
     public State currentStateIntake = State.IDLE;
     private long startTime;
+    boolean idleSwap = true;
     public Intake(Methods methods, Indexer indexer) {
         this.methods = methods;
         this.indexer = indexer;
@@ -43,18 +44,27 @@ public class Intake {
         switch (currentStateIntake) {
             case SET_COLOR:
                 if (System.currentTimeMillis() - startTime > 800) {
-                    indexer.setIndexerColor();
-                    currentStateIntake = State.ROTATE_TO_EMPTY;
+                    idleSwap = true;
+                    if (indexer.setIndexerColor()) {
+                        startTime = System.currentTimeMillis();
+                        currentStateIntake = State.ROTATE_TO_EMPTY;
+                    }
                 }
                 break;
             case ROTATE_TO_EMPTY:
-                if (indexer.colorInArray(Indexer.BallColor.EMPTY) && methods.colorSensor.getDistance(DistanceUnit.MM) < 50) {
-                    indexer.rotateToColor(Indexer.BallColor.EMPTY);
-                    currentStateIntake = State.SET_COLOR;
-                    startTime = System.currentTimeMillis();
-                }
-                if (System.currentTimeMillis() - startTime > 500)
+                //&& methods.colorSensor.getDistance(DistanceUnit.MM) < 50
+                if (indexer.colorInArray(Indexer.BallColor.EMPTY)) {
+                    if (idleSwap) {
+                        indexer.rotateToColor(Indexer.BallColor.EMPTY);
+                    }
+                    idleSwap = false;
+                    if (System.currentTimeMillis() - startTime > 250) {
+                        startTime = System.currentTimeMillis();
+                        currentStateIntake = State.SET_COLOR;
+                    }
+                } else if (idleSwap) {
                     currentStateIntake = State.IDLE;
+                }
                 break;
             case IDLE:
                 break;
