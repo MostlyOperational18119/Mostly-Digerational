@@ -43,7 +43,7 @@ public class Intake {
         methods.telemetry.addData("Current Intake State", currentStateIntake);
         switch (currentStateIntake) {
             case SET_COLOR:
-                if (System.currentTimeMillis() - startTime > 500) {
+                if (System.currentTimeMillis() - startTime > 650) {
                     idleSwap = true;
                     if (indexer.setIndexerColor()) {
                         startTime = System.currentTimeMillis();
