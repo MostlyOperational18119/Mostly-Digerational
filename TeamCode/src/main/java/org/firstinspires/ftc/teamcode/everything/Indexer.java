@@ -119,7 +119,7 @@ public class Indexer {
     public void badColorWorkaround() {
         slots[0] = BallColor.GREEN;
         slots[1] = BallColor.PURPLE;
-        slots[2] = BallColor.GREEN;
+        slots[2] = BallColor.PURPLE;
     }
 
     //when beam is broken: check ball color

@@ -12,15 +12,15 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 @Autonomous(name = "BFA")
 public class BlueFrontAuto extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
-    Pose launch = new Pose(60.000, 84.000, Math.toRadians(133));
-    Pose park = new Pose(36, 120, Math.toRadians(90));
+    Pose launch = new Pose(60.000, 84.000, Math.toRadians(135));
+    Pose park = new Pose(36, 134, Math.toRadians(90));
     Follower follower;
     PathChain startToLaunch, launchToPark;
 
     int state = -1;
     int launchCount = 0;
     long launchDelayTimer = 0;
-    int LAUNCH_DELAY_MS = 3000; // Adjust this value for more/less delay between launches
+    int LAUNCH_DELAY_MS = 2500; // Adjust this value for more/less delay between launches
 
     Indexer indexer = new Indexer(this);
     Outtake outtake = new Outtake(this);
@@ -54,7 +54,7 @@ public class BlueFrontAuto extends Methods {
         indexer.badColorWorkaround();
         //look at balls inside
         //indexer.redoColors();
-        //outtakeFlywheel.setPower(0.5);
+
         outtakeFlywheel.setVelocity(1100);
 
         while (opModeIsActive()) {
@@ -83,11 +83,11 @@ public class BlueFrontAuto extends Methods {
                             if (System.currentTimeMillis() - launchDelayTimer > LAUNCH_DELAY_MS) {
                                 if (launchCount < 3) {
                                     if (launchCount == 1) {
-                                        toGreen = false;
-                                        toPurple = true;
-                                    } else {
                                         toGreen = true;
                                         toPurple = false;
+                                    } else {
+                                        toGreen = false;
+                                        toPurple = true;
                                     }
                                     launchState.startLaunch();
                                     launchCount++;

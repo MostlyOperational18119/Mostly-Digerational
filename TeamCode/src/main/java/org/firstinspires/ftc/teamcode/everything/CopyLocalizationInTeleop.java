@@ -10,6 +10,8 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -19,7 +21,7 @@ import java.util.function.Supplier;
 public class CopyLocalizationInTeleop extends OpMode {
     public static Pose startingPose;
     private Follower follower;
-    private boolean automatedDrive;
+    private boolean automatedDrive = false;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
     private boolean slowMode = false;
@@ -30,6 +32,17 @@ public class CopyLocalizationInTeleop extends OpMode {
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
+
+        DcMotor motorFR = hardwareMap.dcMotor.get("motorFR"); //also contains encoder for outtake
+        motorFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        DcMotor motorFL = hardwareMap.dcMotor.get("motorFL");
+        motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        DcMotor motorBR = hardwareMap.dcMotor.get("motorBR");
+        motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        DcMotor motorBL = hardwareMap.dcMotor.get("motorBL");
+        motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //curve?
         pathChain = () -> follower.pathBuilder()
@@ -46,7 +59,6 @@ public class CopyLocalizationInTeleop extends OpMode {
     @Override
     public void loop() {
         follower.update();
-        telemetryM.update();
 
         if (!automatedDrive) {
             if (!slowMode) follower.setTeleOpDrive(
@@ -72,13 +84,20 @@ public class CopyLocalizationInTeleop extends OpMode {
             automatedDrive = true;
         }
 
-        if (gamepad1.bWasPressed() && automatedDrive || !follower.isBusy()) {
+        if (gamepad1.bWasPressed() && automatedDrive) {
             follower.startTeleOpDrive();
             automatedDrive = false;
         }
 
-        telemetryM.debug("position", follower.getPose());
-        telemetryM.debug("velocity", follower.getVelocity());
-        telemetryM.debug("automatedDrive", automatedDrive);
+        if (automatedDrive && !follower.isBusy()) {
+            follower.startTeleOpDrive();
+            automatedDrive = false;
+        }
+
+        telemetryM.addData("position", follower.getPose());
+        telemetryM.addData("velocity", follower.getVelocity());
+        telemetryM.addData("automatedDrive", automatedDrive);
+        telemetryM.addData("startingPose", follower.getPose());
+        telemetryM.update();
     }
 }
