@@ -212,7 +212,7 @@ public class BlueFrontAuto9 extends Methods {
 //                            intakeHasStarted = true;
 //                        }
 //                        intakeSequence.start();
-                        state = -67;
+                        state = -66;
                         break;
                     case 7:
                         follower.followPath(prep2ToIntake2, 0.15, true);
