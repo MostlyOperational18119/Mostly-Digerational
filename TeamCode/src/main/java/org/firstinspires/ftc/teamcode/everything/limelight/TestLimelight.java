@@ -5,7 +5,7 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.everything.Indexer;
+import org.firstinspires.ftc.teamcode.everything.teleop.Indexer;
 import org.firstinspires.ftc.teamcode.everything.Methods;
 
 import java.io.DataInputStream;

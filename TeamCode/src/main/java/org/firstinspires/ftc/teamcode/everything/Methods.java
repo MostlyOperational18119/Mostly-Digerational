@@ -18,32 +18,32 @@ public abstract class Methods extends LinearOpMode {
     public static final int[] TAG_22_PATTERN = {1, 0, 1};
     public static final int[] TAG_23_PATTERN = {1, 1, 0};
     //defines all hardware
-    DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
-    DcMotorEx outtakeFlywheel;
-    Servo revolver, daHood, transferServo, limelightServo;
-    CRServo launcherYaw;
-    VoltageSensor voltageSensor;
-    RevColorSensorV3 colorSensor;
-    DigitalChannel breakBeamSensor;
-    float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
+    public DcMotor motorFR, motorFL, motorBR, motorBL, intake, liftR, liftL;
+    public DcMotorEx outtakeFlywheel;
+    public Servo revolver, daHood, transferServo, limelightServo;
+    public CRServo launcherYaw;
+    public VoltageSensor voltageSensor;
+    public RevColorSensorV3 colorSensor;
+    public DigitalChannel breakBeamSensor;
+    public float turn, strafe, forwards, motorFRPower, motorBRPower, motorFLPower, motorBLPower; //driver controls
     float P_FAR = 0.0F, P_CLOSE = 0.0F;
-    int outtakeEncoder = 0;
+    public int outtakeEncoder = 0;
     double power;
-    double transferServoUp = 0.09;
-    double outtakePower = 0.0;
-    int outVelo = 1500;
+    public double transferServoUp = 0.09;
+    public double outtakePower = 0.0;
+    public int outVelo = 1500;
     int maxRPM = 5900, targetRPM, measuredRPM;
-    boolean fireGreen, firePurple, transferToggle, failSafeLaunch, /*aimLeft, aimRight,*/ toGreen, toPurple, intakeYes;
-    boolean launchIdle = false;
-    double revolverExpectedPosition = -1.0;
+    public boolean fireGreen, firePurple, transferToggle, failSafeLaunch, /*aimLeft, aimRight,*/ toGreen, toPurple, intakeYes;
+    public boolean launchIdle = false;
+    public double revolverExpectedPosition = -1.0;
 
-    double aimingOffset = 0.0;
-    boolean isRed;
-    double robotX = 0;
-    double robotY = 0;
-    double robotOrientation = 0;
-    double goalX;
-    double goalY = 144;
+    public double aimingOffset = 0.0;
+    public boolean isRed;
+    public double robotX = 0;
+    public double robotY = 0;
+    public double robotOrientation = 0;
+    public double goalX;
+    public double goalY = 144;
 
     //initializes all the hardware and the apriltag detection
     public void initialize() {
@@ -178,7 +178,7 @@ public abstract class Methods extends LinearOpMode {
         }
     }
 
-    static class StaticMatchData {
+    protected static class StaticMatchData {
         public static boolean isRed;
         public static Pose endPosition;
     }
