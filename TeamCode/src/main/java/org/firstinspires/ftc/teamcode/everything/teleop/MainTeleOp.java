@@ -251,5 +251,7 @@ public class MainTeleOp extends Methods {
 //                }
 
         }
+
+        StaticMatchData.endPosition = null;
     }
 }

@@ -261,5 +261,7 @@ public class OnePlayerTeleop extends Methods {
 //                }
 
         }
+
+        StaticMatchData.endPosition = null;
     }
 }
