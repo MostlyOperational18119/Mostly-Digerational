@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.everything.limelight;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.teamcode.everything.Indexer;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
