@@ -7,16 +7,16 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.everything.Methods;
 import org.firstinspires.ftc.teamcode.everything.teleop.Indexer;
 import org.firstinspires.ftc.teamcode.everything.teleop.LaunchSequence;
-import org.firstinspires.ftc.teamcode.everything.Methods;
 import org.firstinspires.ftc.teamcode.everything.teleop.Outtake;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "BBA3")
-public class BlueBackAuto extends Methods {
-    Pose start = new Pose(59, 9, Math.toRadians(90));
-    Pose park = new Pose(37, 9, Math.toRadians(90));
+public class RedBackAuto extends Methods {
+    Pose start = new Pose(85, 9, Math.toRadians(90));
+    Pose park = new Pose(107, 9, Math.toRadians(90));
     Follower follower;
     PathChain startToPark;
     int state = 0;
@@ -30,12 +30,12 @@ public class BlueBackAuto extends Methods {
     LaunchSequence launchState = new LaunchSequence(this, indexer);
     @Override
     public void runOpMode() {
-        StaticMatchData.isRed = false;
+        StaticMatchData.isRed = true;
         initialize();
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        outtake.setRotationPosition(0.26);
+        outtake.setRotationPosition(0.57);
         daHood.setPosition(0.15);
 
         startToPark = follower.pathBuilder()
