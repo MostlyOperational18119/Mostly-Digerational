@@ -19,6 +19,7 @@ public class MainTeleOp extends Methods {
         initialize();
         waitForStart();
         double outPower = 0.6;
+        int outVelo = 2000;
         double launcherYawRotation = 0.5;
         double voltageMultiplier = 1;
         float speedDivider = 1.2F;
@@ -71,8 +72,8 @@ public class MainTeleOp extends Methods {
             fireGreen = gamepad2.aWasPressed();
             firePurple = gamepad2.xWasPressed();
             transferToggle = gamepad2.bWasPressed();
-            aimLeft = gamepad2.dpadLeftWasPressed();
-            aimRight = gamepad2.dpadRightWasPressed();
+//            aimLeft = gamepad2.dpadLeftWasPressed();
+//            aimRight = gamepad2.dpadRightWasPressed();
 
             if (canLimelight) {
                 // If we failed, we probably need to reconnect :P
@@ -90,7 +91,11 @@ public class MainTeleOp extends Methods {
             }
             //detectAprilTag();
             drive();
-            launch.update();
+            if (launch.failSafeMode) {
+                launch.updateFailSafeMode();
+            } else {
+                launch.update();
+            }
             indexer.update();
             intakeSequence.update();
             outtake.update();
@@ -129,7 +134,7 @@ public class MainTeleOp extends Methods {
                 launch.startLaunch();
             }
 
-            if (aimBotTimer.milliseconds() >= 500) {
+            if (aimBotTimer.milliseconds() >= 250) {
                 outtake.setTarget(nicksLittleHelper());
                 aimBotTimer.reset();
             }
@@ -139,16 +144,18 @@ public class MainTeleOp extends Methods {
 
                 if (!aAlreadyPressed) {
                     daHood.setPosition(0.15); //max 0
-                    outPower = 0.6;
+                    //outPower = 0.6;
+                    outVelo = 2000;
                 } else {
                     daHood.setPosition(0.7); //max 0.88
-                    outPower = 0.45;
+                    //outPower = 0.45;
+                    outVelo = 1200;
                 }
                 aAlreadyPressed = !aAlreadyPressed;
 
             }
 
-            outtakeFlywheel.setPower(outPower * voltageMultiplier);
+            outtakeFlywheel.setVelocity(outVelo);
 
             //gamepad 1 speed clutch
             if (gamepad1.right_trigger >= 0.5) {
@@ -160,23 +167,23 @@ public class MainTeleOp extends Methods {
             }
 
             //gamepad 2 outtake YAW
-            if (gamepad2.left_bumper) {
-                if (launcherYawRotation > 0) {
-                    launcherYawRotation -= 0.03;
-                }
-            }
+//            if (gamepad2.left_bumper) {
+//                if (launcherYawRotation > 0) {
+//                    launcherYawRotation -= 0.03;
+//                }
+//            }
+//
+//            if (gamepad2.right_bumper) {
+//                if (launcherYawRotation < 1) {
+//                    launcherYawRotation += 0.03;
+//                }
+//            }
 
-            if (gamepad2.right_bumper) {
-                if (launcherYawRotation < 1) {
-                    launcherYawRotation += 0.03;
-                }
-            }
-
-            if (aimRight) {
-                launcherYawRotation = 0.81;
-            } else if (aimLeft) {
-                launcherYawRotation = 0.2;
-            }
+//            if (aimRight) {
+//                launcherYawRotation = 0.81;
+//            } else if (aimLeft) {
+//                launcherYawRotation = 0.2;
+//            }
 
             //outtake.setRotationPosition(launcherYawRotation);
 

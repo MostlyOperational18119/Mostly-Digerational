@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "BFA")
+@Autonomous(name = "BFA3")
 public class BlueFrontAuto extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
     Pose launch = new Pose(60.000, 84.000, Math.toRadians(135));

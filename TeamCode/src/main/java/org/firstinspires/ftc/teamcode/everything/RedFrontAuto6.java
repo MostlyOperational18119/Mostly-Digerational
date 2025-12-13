@@ -6,7 +6,6 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.everything.limelight.AprilTagResult;
 import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
@@ -16,8 +15,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@Autonomous(name = "RFA9")
-public class RedFrontAuto9 extends Methods {
+@Autonomous(name = "RFA6")
+public class RedFrontAuto6 extends Methods {
     Pose start = new Pose(111.386, 134.376, Math.toRadians(90));
     Pose launch = new Pose(84, 84, Math.toRadians(50));
     Pose prep1 = new Pose(94, 87, Math.toRadians(180));
@@ -68,7 +67,7 @@ public class RedFrontAuto9 extends Methods {
             canLimelight = false;
         }
 
-        isRed = false;
+//        isRed = true;
         initialize();
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
@@ -212,7 +211,7 @@ public class RedFrontAuto9 extends Methods {
 //                            intakeHasStarted = true;
 //                        }
 //                        intakeSequence.start();
-                        state = -67;
+                        state = -66;
                         break;
                     case 7:
                         follower.followPath(prep2ToIntake2, 0.15, true);
@@ -229,11 +228,11 @@ public class RedFrontAuto9 extends Methods {
                     case 10:
                         follower.followPath(launchToPark, 0.9, true);
                         outtakeFlywheel.setVelocity(0);
-                        outtake.setRotationPosition(0);
                         state = -66;
                         break;
                     case -66:
                         StaticMatchData.endPosition = follower.getPose();
+                        outtake.setTarget(0);
                         state = -67;
                         break;
                 }
@@ -241,7 +240,6 @@ public class RedFrontAuto9 extends Methods {
 
         }
     }
-
     public boolean getColor() {
         int i = (launchCount +1) % 3 - 1;
         if (i < 0) i = 2;
