@@ -69,7 +69,7 @@ public abstract class Methods extends LinearOpMode {
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         outtakeFlywheel = hardwareMap.get(DcMotorEx.class, "outtake");
         outtakeFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        outtakeFlywheel.setVelocityPIDFCoefficients(11, 3, 2, 2);
+        outtakeFlywheel.setVelocityPIDFCoefficients(11, 3, 5, 2);
         //liftR = hardwareMap.dcMotor.get("liftR");
         //liftL = hardwareMap.dcMotor.get("liftL");
 
