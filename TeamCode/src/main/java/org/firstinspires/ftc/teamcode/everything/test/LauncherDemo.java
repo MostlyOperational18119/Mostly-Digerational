@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.everything;
+package org.firstinspires.ftc.teamcode.everything.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+
+import org.firstinspires.ftc.teamcode.everything.Methods;
 
 @TeleOp(name = "Launcher Demo")
 public class LauncherDemo extends Methods {

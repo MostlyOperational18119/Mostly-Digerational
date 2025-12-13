@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.everything;
+package org.firstinspires.ftc.teamcode.everything.auto;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -7,36 +7,45 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.everything.teleop.Indexer;
+import org.firstinspires.ftc.teamcode.everything.teleop.LaunchSequence;
+import org.firstinspires.ftc.teamcode.everything.Methods;
+import org.firstinspires.ftc.teamcode.everything.teleop.Outtake;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "BBA3")
-public class BlueBackAuto extends Methods {
-    Pose start = new Pose(59, 9, Math.toRadians(90));
-    Pose park = new Pose(37, 9, Math.toRadians(90));
+@Autonomous(name = "BFA3")
+public class BlueFrontAuto extends Methods {
+    Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
+    Pose launch = new Pose(60.000, 84.000, Math.toRadians(135));
+    Pose park = new Pose(36, 134, Math.toRadians(90));
     Follower follower;
-    PathChain startToPark;
-    int state = 0;
+    PathChain startToLaunch, launchToPark;
+
+    int state = -1;
     int launchCount = 0;
     long launchDelayTimer = 0;
-    int LAUNCH_DELAY_MS = 2500;
+    int LAUNCH_DELAY_MS = 2500; // Adjust this value for more/less delay between launches
 
-    //0.16, 0.57 for outtake
     Indexer indexer = new Indexer(this);
     Outtake outtake = new Outtake(this);
     LaunchSequence launchState = new LaunchSequence(this, indexer);
+
     @Override
     public void runOpMode() {
-        StaticMatchData.isRed = false;
+        isRed = false;
         initialize();
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        outtake.setRotationPosition(0.21);
-        daHood.setPosition(0.15);
 
-        startToPark = follower.pathBuilder()
-                .addPath(new BezierLine(start, park))
-                .setLinearHeadingInterpolation(start.getHeading(), park.getHeading())
+        startToLaunch = follower.pathBuilder()
+                .addPath(new BezierLine(start, launch))
+                .setLinearHeadingInterpolation(start.getHeading(), launch.getHeading())
+                .build();
+
+        launchToPark = follower.pathBuilder()
+                .addPath(new BezierLine(launch, park))
+                .setLinearHeadingInterpolation(launch.getHeading(), park.getHeading())
                 .build();
 
         waitForStart();
@@ -49,15 +58,8 @@ public class BlueBackAuto extends Methods {
         indexer.badColorWorkaround();
         //look at balls inside
         //indexer.redoColors();
-        outVelo = 1300;
-        outtakeFlywheel.setVelocity(outVelo);
 
-        // Absolutely need these variables for teleop, no matter what happens
-
-        StaticMatchData.isRed = false;
-        StaticMatchData.endPosition = follower.getPose();
-
-        launchDelayTimer = System.currentTimeMillis();
+        outtakeFlywheel.setVelocity(1100);
 
         while (opModeIsActive()) {
             telemetry.addData("velocity coefficients", outtakeFlywheel.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
@@ -65,14 +67,21 @@ public class BlueBackAuto extends Methods {
             follower.update();
             launchState.update();
             indexer.update();
-            robotX = follower.getPose().getX();
-            robotY = follower.getPose().getY();
-            //outtake.setTarget(nicksLittleHelper());
             outtake.update();
 
             if (!follower.isBusy()) {
                 switch (state) {
+                    case -1:
+                        if (System.currentTimeMillis() - launchDelayTimer > 3000) {
+                            state = 0;
+                        }
+                        break;
                     case 0:
+                        follower.followPath(startToLaunch, 1, true);
+                        state = 1;
+                        launchDelayTimer = System.currentTimeMillis();
+                        break;
+                    case 1:
                         if (launchState.currentState == LaunchSequence.State.IDLE) {
                             // Check if enough time has passed since the last launch
                             if (System.currentTimeMillis() - launchDelayTimer > LAUNCH_DELAY_MS) {
@@ -94,11 +103,11 @@ public class BlueBackAuto extends Methods {
                             }
                         }
                         break;
-                    case 1:
-                        follower.followPath(startToPark, 1, true);
+                    case 2:
+                        follower.followPath(launchToPark, 1, true);
                         intake.setPower(0);
-                        outtake.setTarget(0);
-                        StaticMatchData.endPosition = follower.getPose();
+                        outtakeFlywheel.setPower(0);
+                        outtake.setRotationPosition(0);
                         state = -67;
                         break;
                 }
