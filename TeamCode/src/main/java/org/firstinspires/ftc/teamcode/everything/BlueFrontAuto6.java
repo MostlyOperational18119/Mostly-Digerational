@@ -6,7 +6,6 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.everything.limelight.AprilTagResult;
 import org.firstinspires.ftc.teamcode.everything.limelight.BetterLimelight;
@@ -16,8 +15,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@Autonomous(name = "BFA9")
-public class BlueFrontAuto9 extends Methods {
+@Autonomous(name = "BFA6")
+public class BlueFrontAuto6 extends Methods {
     Pose start = new Pose(32.614, 134.376, Math.toRadians(90));
     Pose launch = new Pose(60, 84, Math.toRadians(131));
     Pose prep1 = new Pose(50, 87, Math.toRadians(0));
@@ -68,7 +67,7 @@ public class BlueFrontAuto9 extends Methods {
             canLimelight = false;
         }
 
-        isRed = false;
+//        isRed = false;
         initialize();
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
@@ -136,7 +135,6 @@ public class BlueFrontAuto9 extends Methods {
         indexer.badColorWorkaround();
         //indexer.redoColors();
         outtakeFlywheel.setVelocity(outtakeVelocity);
-        outtakeFlywheel.setVelocityPIDFCoefficients(11, 3, 2, 2);
 
         // Absolutely need these variables for teleop, no matter what happens
 
@@ -152,6 +150,7 @@ public class BlueFrontAuto9 extends Methods {
             telemetry.addData("velocity", outtakeFlywheel.getVelocity());
             telemetry.addData("launch state", launchState.currentState);
             telemetry.addData("velocity coefficients", outtakeFlywheel.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+            telemetry.addData("isRed", StaticMatchData.isRed);
             telemetry.update();
             intakeSequence.updateAuto();
             follower.update();
@@ -229,11 +228,11 @@ public class BlueFrontAuto9 extends Methods {
                     case 10:
                         follower.followPath(launchToPark, 0.9, true);
                         outtakeFlywheel.setVelocity(0);
-                        outtake.setRotationPosition(0);
                         state = -66;
                         break;
                     case -66:
                         StaticMatchData.endPosition = follower.getPose();
+                        outtake.setTarget(0);
                         state = -67;
                         break;
                 }

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 //flicker down 0.21
 //up 0
 
-@TeleOp(name = "TeleOp")
+@TeleOp(name = "One Player Tele")
 public class OnePlayerTeleop extends Methods {
     @Override
     public void runOpMode() {
@@ -71,8 +71,17 @@ public class OnePlayerTeleop extends Methods {
             fireGreen = gamepad1.aWasPressed();
             firePurple = gamepad1.xWasPressed();
             transferToggle = gamepad1.bWasPressed();
-            aimLeft = gamepad1.dpadLeftWasPressed();
-            aimRight = gamepad1.dpadRightWasPressed();
+            //aimLeft = gamepad1.dpadLeftWasPressed();
+            //aimRight = gamepad1.dpadRightWasPressed();
+            failSafeLaunch = gamepad1.yWasPressed();
+
+            if(gamepad1.dpadLeftWasPressed()) {
+                aimingOffset += 2.5;
+            }
+
+            if(gamepad1.dpadRightWasPressed()) {
+                aimingOffset -= 2.5;
+            }
 
             if (canLimelight) {
                 // If we failed, we probably need to reconnect :P
@@ -90,16 +99,21 @@ public class OnePlayerTeleop extends Methods {
             }
             //detectAprilTag();
             drive();
-            launch.update();
+            if (launch.failSafeMode) {
+                launch.updateFailSafeMode();
+            } else {
+                launch.update();
+            }
             indexer.update();
             intakeSequence.update();
             outtake.update();
 
             //gamepad 1 intake
-            if (intakeYes)
+            if (intakeYes) {
                 intake.setPower(1);
-            else
+            } else {
                 intake.setPower(0);
+            }
 
             //switch between intake and outtake
             if (transferToggle) {
@@ -120,12 +134,17 @@ public class OnePlayerTeleop extends Methods {
 
             //gamepad 2 press launch
             if (fireGreen) {
+                launch.failSafeMode = false;
                 toGreen = true;
                 toPurple = false;
                 launch.startLaunch();
             } else if (firePurple) {
+                launch.failSafeMode = false;
                 toPurple = true;
                 toGreen = false;
+                launch.startLaunch();
+            } else if (failSafeLaunch) {
+                launch.failSafeMode = true;
                 launch.startLaunch();
             }
 
@@ -135,20 +154,22 @@ public class OnePlayerTeleop extends Methods {
             }
 
             //gamepad 1 swap far and close
-            if (gamepad1.aWasPressed()) {
+            if (gamepad1.leftBumperWasPressed()) {
 
                 if (!aAlreadyPressed) {
                     daHood.setPosition(0.15); //max 0
-                    outPower = 0.6;
+                    //outPower = 0.6;
+                    outVelo = 1500;
                 } else {
                     daHood.setPosition(0.7); //max 0.88
-                    outPower = 0.45;
+                    //outPower = 0.45;
+                    outVelo = 1200;
                 }
                 aAlreadyPressed = !aAlreadyPressed;
 
             }
 
-            outtakeFlywheel.setPower(outPower * voltageMultiplier);
+            outtakeFlywheel.setVelocity(outVelo);
 
             //gamepad 1 speed clutch
             if (gamepad1.right_trigger >= 0.5) {
@@ -160,23 +181,23 @@ public class OnePlayerTeleop extends Methods {
             }
 
             //gamepad 2 outtake YAW
-            if (gamepad1.left_bumper) {
-                if (launcherYawRotation > 0) {
-                    launcherYawRotation -= 0.03;
-                }
-            }
+//            if (gamepad1.left_bumper) {
+//                if (launcherYawRotation > 0) {
+//                    launcherYawRotation -= 0.03;
+//                }
+//            }
+//
+//            if (gamepad1.right_bumper) {
+//                if (launcherYawRotation < 1) {
+//                    launcherYawRotation += 0.03;
+//                }
+//            }
 
-            if (gamepad1.right_bumper) {
-                if (launcherYawRotation < 1) {
-                    launcherYawRotation += 0.03;
-                }
-            }
-
-            if (aimRight) {
-                launcherYawRotation = 0.81;
-            } else if (aimLeft) {
-                launcherYawRotation = 0.2;
-            }
+//            if (aimRight) {
+//                launcherYawRotation = 0.81;
+//            } else if (aimLeft) {
+//                launcherYawRotation = 0.2;
+//            }
 
             //outtake.setRotationPosition(launcherYawRotation);
 
@@ -210,6 +231,11 @@ public class OnePlayerTeleop extends Methods {
 //                telemetry.addData("findColor(EMPTY) returns", indexer.findColor(Indexer.BallColor.EMPTY));
 //            telemetry.addData("launch debounce", launchDebounce);
 //            telemetry.addData("velocity", outtake.getVelocity());
+            telemetry.addData("auto end pos", StaticMatchData.endPosition);
+            telemetry.addData("isRed", StaticMatchData.isRed);
+            telemetry.addData("slot0", indexer.slots[0]);
+            telemetry.addData("slot1", indexer.slots[1]);
+            telemetry.addData("slot2", indexer.slots[2]);
             telemetry.update();
 
 

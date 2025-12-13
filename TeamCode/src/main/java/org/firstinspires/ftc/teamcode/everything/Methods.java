@@ -31,10 +31,13 @@ public abstract class Methods extends LinearOpMode {
     double power;
     double transferServoUp = 0.09;
     double outtakePower = 0.0;
+    int outVelo = 1500;
     int maxRPM = 5900, targetRPM, measuredRPM;
-    boolean fireGreen, firePurple, transferToggle, aimLeft, aimRight, toGreen, toPurple, intakeYes;
+    boolean fireGreen, firePurple, transferToggle, failSafeLaunch, /*aimLeft, aimRight,*/ toGreen, toPurple, intakeYes;
     boolean launchIdle = false;
     double revolverExpectedPosition = -1.0;
+
+    double aimingOffset = 0.0;
     boolean isRed;
     double robotX = 0;
     double robotY = 0;
@@ -51,15 +54,22 @@ public abstract class Methods extends LinearOpMode {
         motorFL = hardwareMap.dcMotor.get("motorFL");
         motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBR = hardwareMap.dcMotor.get("motorBR");
         motorBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorBL = hardwareMap.dcMotor.get("motorBL");
         motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intake = hardwareMap.dcMotor.get("intake");
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         outtakeFlywheel = hardwareMap.get(DcMotorEx.class, "outtake");
         outtakeFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        outtakeFlywheel.setVelocityPIDFCoefficients(11, 3, 2, 2);
         //liftR = hardwareMap.dcMotor.get("liftR");
         //liftL = hardwareMap.dcMotor.get("liftL");
 
@@ -75,12 +85,11 @@ public abstract class Methods extends LinearOpMode {
         breakBeamSensor.setMode(DigitalChannel.Mode.INPUT);
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
 
-        if (isRed) {
-            goalX = 0;
+        if (StaticMatchData.isRed) {
+            goalX = 134;
         } else {
-            goalX = 144;
+            goalX = 0;
         }
-
 
 //        aprilTag = new AprilTagProcessor.Builder()
 //                .setDrawAxes(true)
@@ -122,7 +131,7 @@ public abstract class Methods extends LinearOpMode {
         double absoluteAngleToGoal = Math.atan2(dy, dx);
 
         // Angle robot needs to turn
-        double relativeAngle = absoluteAngleToGoal - robotOrientation;
+        double relativeAngle = absoluteAngleToGoal - robotOrientation + aimingOffset;
 
         // Normalize to (-pi, pi)
         relativeAngle = Math.atan2(Math.sin(relativeAngle), Math.cos(relativeAngle));
