@@ -1,46 +1,46 @@
-package org.firstinspires.ftc.teamcode.everything;
+package org.firstinspires.ftc.teamcode.everything.auto;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.everything.teleop.Indexer;
+import org.firstinspires.ftc.teamcode.everything.teleop.LaunchSequence;
+import org.firstinspires.ftc.teamcode.everything.Methods;
+import org.firstinspires.ftc.teamcode.everything.teleop.Outtake;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "RFA3")
-public class RedFrontAuto extends Methods {
-    Pose startRed = new Pose(111.386, 134.376, Math.toRadians(90));
-    Pose launch = new Pose(88.000, 94.000, Math.toRadians(50));
-    Pose park = new Pose(100, 134.376, Math.toRadians(90));
+@Autonomous(name = "BBA3")
+public class BlueBackAuto extends Methods {
+    Pose start = new Pose(59, 9, Math.toRadians(90));
+    Pose park = new Pose(37, 9, Math.toRadians(90));
     Follower follower;
-    PathChain startToLaunch, launchToPark;
-
-    int state = -1;
+    PathChain startToPark;
+    int state = 0;
     int launchCount = 0;
     long launchDelayTimer = 0;
-    int LAUNCH_DELAY_MS = 2000; // Adjust this value for more/less delay between launches
+    int LAUNCH_DELAY_MS = 2500;
 
+    //0.16, 0.57 for outtake
     Indexer indexer = new Indexer(this);
     Outtake outtake = new Outtake(this);
     LaunchSequence launchState = new LaunchSequence(this, indexer);
-
     @Override
     public void runOpMode() {
-        isRed = true;
+        StaticMatchData.isRed = false;
         initialize();
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startRed);
+        follower.setStartingPose(start);
+        outtake.setRotationPosition(0.21);
+        daHood.setPosition(0.15);
 
-        startToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(startRed, launch))
-                .setLinearHeadingInterpolation(startRed.getHeading(), launch.getHeading())
-                .build();
-
-        launchToPark = follower.pathBuilder()
-                .addPath(new BezierLine(launch, park))
-                .setLinearHeadingInterpolation(launch.getHeading(), park.getHeading())
+        startToPark = follower.pathBuilder()
+                .addPath(new BezierLine(start, park))
+                .setLinearHeadingInterpolation(start.getHeading(), park.getHeading())
                 .build();
 
         waitForStart();
@@ -50,38 +50,43 @@ public class RedFrontAuto extends Methods {
 
         //set all of indexer array to one color
         //indexer.oneColor(BallColor.PURPLE);
-        //indexer.badColorWorkaround();
-        indexer.redoColors();
-        outtakeFlywheel.setPower(0.50);
+        indexer.badColorWorkaround();
+        //look at balls inside
+        //indexer.redoColors();
+        outVelo = 1300;
+        outtakeFlywheel.setVelocity(outVelo);
+
+        // Absolutely need these variables for teleop, no matter what happens
+
+        StaticMatchData.isRed = false;
+        StaticMatchData.endPosition = follower.getPose();
+
+        launchDelayTimer = System.currentTimeMillis();
 
         while (opModeIsActive()) {
+            telemetry.addData("velocity coefficients", outtakeFlywheel.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+            telemetry.update();
             follower.update();
             launchState.update();
             indexer.update();
+            robotX = follower.getPose().getX();
+            robotY = follower.getPose().getY();
+            //outtake.setTarget(nicksLittleHelper());
             outtake.update();
 
             if (!follower.isBusy()) {
                 switch (state) {
-                    case -1:
-                        if (System.currentTimeMillis() - launchDelayTimer > 3000) {
-                            state = 0;
-                        }
-                        break;
                     case 0:
-                        follower.followPath(startToLaunch, 1, true);
-                        state = 1;
-                        break;
-                    case 1:
-                        if (launchIdle && launchState.currentState == LaunchSequence.State.IDLE) {
+                        if (launchState.currentState == LaunchSequence.State.IDLE) {
                             // Check if enough time has passed since the last launch
                             if (System.currentTimeMillis() - launchDelayTimer > LAUNCH_DELAY_MS) {
                                 if (launchCount < 3) {
                                     if (launchCount == 1) {
-                                        toGreen = false;
-                                        toPurple = true;
-                                    } else {
                                         toGreen = true;
                                         toPurple = false;
+                                    } else {
+                                        toGreen = false;
+                                        toPurple = true;
                                     }
                                     launchState.startLaunch();
                                     launchCount++;
@@ -93,11 +98,11 @@ public class RedFrontAuto extends Methods {
                             }
                         }
                         break;
-                    case 2:
-                        follower.followPath(launchToPark, 1, true);
+                    case 1:
+                        follower.followPath(startToPark, 1, true);
                         intake.setPower(0);
-                        outtakeFlywheel.setPower(0);
-                        outtake.setRotationPosition(0);
+                        outtake.setTarget(0);
+                        StaticMatchData.endPosition = follower.getPose();
                         state = -67;
                         break;
                 }

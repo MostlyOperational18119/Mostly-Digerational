@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.everything;
+package org.firstinspires.ftc.teamcode.everything.teleop;
+
+import org.firstinspires.ftc.teamcode.everything.Methods;
 
 public class LaunchSequence {
     private final Methods methods;

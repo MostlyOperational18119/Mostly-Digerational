@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.everything;
+package org.firstinspires.ftc.teamcode.everything.teleop;
 
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.everything.Methods;
 
 public class Indexer {
     private final Methods methods;
