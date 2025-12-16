@@ -11,7 +11,7 @@ public class competitionOpMode extends LinearOpMode {
 
         waitForStart();
 
-        Drivetrain.init();
+        Drivetrain.init(hardwareMap);
 
         while (opModeIsActive()) {
 
