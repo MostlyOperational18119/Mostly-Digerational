@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
@@ -12,7 +13,7 @@ public class Drivetrain {
 
     static private float frPower, flPower, blPower, brPower;
 
-    public void init (HardwareMap hwMap) {
+    public static void init (HardwareMap hwMap) {
         frontLeft = hwMap.get(DcMotor.class, "front_left");
         frontRight = hwMap.get(DcMotor.class, "front_Right");
         backLeft = hwMap.get(DcMotor.class, "back_left");
