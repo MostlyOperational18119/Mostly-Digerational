@@ -20,7 +20,7 @@ public class Drivetrain {
         backRight = hwMap.get(DcMotor.class, "back_right");
     }
 
-    static public void drive(double fl, double fr, double bl, double br) {
+    static public void drive(float fl, float fr, float bl, float br) {
 
 //        frPower = (float) Range.clip(frPower, -1.0, 1.0);
 //        flPower = (float) Range.clip(flPower, -1.0, 1.0);
