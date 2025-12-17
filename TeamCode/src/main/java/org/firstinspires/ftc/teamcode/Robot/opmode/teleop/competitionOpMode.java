@@ -26,7 +26,7 @@ public class competitionOpMode extends LinearOpMode {
             double frontRightPower = (y - x - rx) / denominator;
             double backRightPower = (y + x - rx) / denominator;
 
-            Drivetrain.drive();
+            Drivetrain.drive(frontLeftPower, frontRightPower, backLeftPower, backRightPower);
 
 
         }

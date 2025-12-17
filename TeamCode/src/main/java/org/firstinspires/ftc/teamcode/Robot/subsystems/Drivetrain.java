@@ -20,19 +20,17 @@ public class Drivetrain {
         backRight = hwMap.get(DcMotor.class, "back_right");
     }
 
-    static public void drive() {
+    static public void drive(double fl, double fr, double bl, double br) {
 
-        frPower = (float) Range.clip(frPower, -1.0, 1.0);
-        flPower = (float) Range.clip(flPower, -1.0, 1.0);
-        brPower = (float) Range.clip(brPower, -1.0, 1.0);
-        blPower = (float) Range.clip(blPower, -1.0, 1.0);
+//        frPower = (float) Range.clip(frPower, -1.0, 1.0);
+//        flPower = (float) Range.clip(flPower, -1.0, 1.0);
+//        brPower = (float) Range.clip(brPower, -1.0, 1.0);
+//        blPower = (float) Range.clip(blPower, -1.0, 1.0);
 
-        frontLeft.setPower(flPower);
-        frontRight.setPower(frPower);
-        backLeft.setPower(blPower);
-        backRight.setPower(brPower);
-
-
+        frontLeft.setPower(Range.clip(fl, -1, 1));
+        frontRight.setPower(Range.clip(fr, -1, 1));
+        backLeft.setPower(Range.clip(bl, -1, 1));
+        backRight.setPower(Range.clip(br, -1, 1));
 
 
 
