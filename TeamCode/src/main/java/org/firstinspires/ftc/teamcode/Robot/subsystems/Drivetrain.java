@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
@@ -11,9 +12,13 @@ public class Drivetrain {
 
     public static void init (HardwareMap hwMap) {
         frontLeft = hwMap.get(DcMotor.class, "front_left");
+        frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         frontRight = hwMap.get(DcMotor.class, "front_Right");
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft = hwMap.get(DcMotor.class, "back_left");
+        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight = hwMap.get(DcMotor.class, "back_right");
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     static public void drive(float ly, float lx, float rx) {
