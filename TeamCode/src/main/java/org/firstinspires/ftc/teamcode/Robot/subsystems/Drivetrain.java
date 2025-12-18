@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.teamcode.Robot.Robot;
 
 public class Drivetrain {
 
@@ -25,20 +22,18 @@ public class Drivetrain {
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    static public void drive(float y, float x, float rx) {
+    static public void drive(float ly, float lx, float rx) {
 
-            float denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            float fl = (y + x + rx) / denominator;
-            float bl = (y - x + rx) / denominator;
-            float fr = (y - x - rx) / denominator;
-            float br = (y + x - rx) / denominator;
+        float denominator = Math.max(Math.abs(ly) + Math.abs(lx) + Math.abs(rx), 1);
+        float fl = (ly + lx + rx) / denominator;
+        float bl = (ly - lx + rx) / denominator;
+        float fr = (ly - lx - rx) / denominator;
+        float br = (ly + lx - rx) / denominator;
 
         frontLeft.setPower(Range.clip(fl, -1, 1));
         frontRight.setPower(Range.clip(fr, -1, 1));
         backLeft.setPower(Range.clip(bl, -1, 1));
         backRight.setPower(Range.clip(br, -1, 1));
-
-
 
     }
 
