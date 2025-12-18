@@ -6,8 +6,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Outtake {
 
-    public DcMotorEx outtakeMotor1, outtakeMotor2;
-    public Servo hood, clutch, rotate1, rotate2;
+    static private DcMotorEx outtakeMotor1, outtakeMotor2;
+    private Servo hood, clutch, rotate1, rotate2;
+
+    private final double BACK_HOOD = .75;
+    private final double FRONT_HOOD = .25;
+
 
     public void init (HardwareMap hwMap) {
         outtakeMotor2 = hwMap.get(DcMotorEx.class, "outtake_motor_2");
@@ -16,6 +20,10 @@ public class Outtake {
         rotate2 = hwMap.get(Servo.class, "rotate2");
         clutch = hwMap.get(Servo.class, "clutch");
         hood = hwMap.get(Servo.class, "hood");
+    }
+
+    public void autoAim () {
+        
     }
 
 }

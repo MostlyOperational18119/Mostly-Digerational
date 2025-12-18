@@ -5,8 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 public class Drivetrain {
-
-   static private DcMotor frontLeft, frontRight, backLeft, backRight;
+    static private DcMotor frontLeft, frontRight, backLeft, backRight;
 
     static private float frPower, flPower, blPower, brPower;
 

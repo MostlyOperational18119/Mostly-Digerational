@@ -6,14 +6,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Intake {
 
 
-    public DcMotorEx intake;
-    float power;
+    static private DcMotorEx intake;
+    private final float POWER = 1;
 
     public void init (HardwareMap hwMap) {
         intake = hwMap.get(DcMotorEx.class, "intake_motor");
     }
 
     public void intake () {
-        intake.setPower(power);
+        intake.setPower(POWER);
     }
 }
