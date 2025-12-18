@@ -9,17 +9,19 @@ public class Drivetrain {
 
    static private DcMotor frontLeft, frontRight, backLeft, backRight;
 
-    static private float frPower, flPower, blPower, brPower;
-
     public static void init (HardwareMap hwMap) {
         frontLeft = hwMap.get(DcMotor.class, "front_left");
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight = hwMap.get(DcMotor.class, "front_Right");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft = hwMap.get(DcMotor.class, "back_left");
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight = hwMap.get(DcMotor.class, "back_right");
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     static public void drive(float ly, float lx, float rx) {
