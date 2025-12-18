@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
-
+@TeleOp(name="drivetrain testing")
 public class competitionOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -16,11 +17,11 @@ public class competitionOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             //drivetrain controller input variable declarations
-            float ly = -gamepad1.left_stick_y; // y stick is reversed
-            float lx = gamepad1.left_stick_x;
+            float y = gamepad1.left_stick_y; // y stick is not reversed
+            float x = -gamepad1.left_stick_x;
             float rx = gamepad1.right_stick_x;
             
-            Drivetrain.drive(ly, lx, rx);
+            Drivetrain.drive(y, x, rx);
 
 
         }
