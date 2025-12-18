@@ -16,11 +16,11 @@ public class competitionOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             //drivetrain controller input variable declarations
-            float y = -gamepad1.left_stick_y; // y stick is reversed
-            float x = gamepad1.left_stick_x;
+            float ly = -gamepad1.left_stick_y; // y stick is reversed
+            float lx = gamepad1.left_stick_x;
             float rx = gamepad1.right_stick_x;
             
-            Drivetrain.drive(y, x, rx);
+            Drivetrain.drive(ly, lx, rx);
 
 
         }
