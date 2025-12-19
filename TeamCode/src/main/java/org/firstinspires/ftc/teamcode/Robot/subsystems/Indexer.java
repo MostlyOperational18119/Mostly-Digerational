@@ -6,9 +6,11 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 public class Indexer {
 
-    public ColorRangeSensor slot1Sensor, slot2Sensor, slot3Sensor;
+    public static ColorRangeSensor slot1Sensor;
+    public static ColorRangeSensor slot2Sensor;
+    public static ColorRangeSensor slot3Sensor;
 
-    public void init (HardwareMap hwMap) {
+    public static void init (HardwareMap hwMap) {
         slot1Sensor = hwMap.get(ColorRangeSensor.class, "slot_1_sensor");
         slot2Sensor = hwMap.get(ColorRangeSensor.class, "slot_2_sensor");
         slot3Sensor = hwMap.get(ColorRangeSensor.class, "slot_3_sensor");
