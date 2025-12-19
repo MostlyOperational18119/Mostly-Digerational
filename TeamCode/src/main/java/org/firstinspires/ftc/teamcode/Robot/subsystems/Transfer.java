@@ -6,11 +6,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Transfer {
 
 
-    public static Servo slot1;
-    public static Servo slot2;
-    public static Servo slot3;
+    public Servo slot1, slot2, slot3;
 
-    public static void init(HardwareMap hwMap) {
+    public void init (HardwareMap hwMap) {
 
         slot1 = hwMap.get(Servo.class, "slot_1_servo");
         slot2 = hwMap.get(Servo.class, "slot_2_servo");
