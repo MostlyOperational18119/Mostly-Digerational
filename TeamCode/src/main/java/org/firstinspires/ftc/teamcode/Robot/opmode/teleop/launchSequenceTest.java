@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Transfer;
 
+@TeleOp(name="launchSequenceTest")
 public class launchSequenceTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
