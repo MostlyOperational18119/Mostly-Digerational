@@ -15,8 +15,11 @@ public class Transfer {
     public Servo slot0, slot1, slot2;
 
 
+    public static Servo slot1;
+    public static Servo slot2;
+    public static Servo slot3;
 
-    public void init (HardwareMap hwMap) {
+    public static void init(HardwareMap hwMap) {
 
         slot0 = hwMap.get(Servo.class, "slot_1_servo");
         slot1 = hwMap.get(Servo.class, "slot_2_servo");
