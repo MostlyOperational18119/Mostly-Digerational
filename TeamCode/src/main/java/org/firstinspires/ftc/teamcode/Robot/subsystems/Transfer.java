@@ -41,42 +41,46 @@ public class Transfer {
             //check if the first slot matches what we want to shoot
             if (index[0] == ideal[i]) {
                 slot0.setPosition(UP_POS);
-                timer(startTime, FLICK);
+                do {
+                    currentTime = System.currentTimeMillis();
+                } while (currentTime-startTime < WAIT);
                 slot0.setPosition(DOWN_POS);
 
                 index[0] = 0;
-                timer(startTime, WAIT);
+                do {
+                    currentTime = System.currentTimeMillis();
+                } while (currentTime-startTime < WAIT);
 
             //check if the second slot matches what we want to shoot
             } else if (index[1] == ideal[i]) {
                 slot1.setPosition(UP_POS);
-                timer(startTime, FLICK);
+                do {
+                    currentTime = System.currentTimeMillis();
+                } while (currentTime-startTime < FLICK);
                 slot1.setPosition(DOWN_POS);
 
                 index[1] = 0;
-                timer(startTime, WAIT);
+                do {
+                    currentTime = System.currentTimeMillis();
+                } while (currentTime-startTime < WAIT);
 
             //check if the third slot matches what we want to shoot
             } else if (index[2] == ideal[i]) {
                 slot2.setPosition(UP_POS);
-                timer(startTime, FLICK);
+                do {
+                    currentTime = System.currentTimeMillis();
+                } while (currentTime-startTime < FLICK);
                 slot2.setPosition(DOWN_POS);
 
                 index[2] = 0;
-                timer(startTime, WAIT);
+                do {
+                    currentTime = System.currentTimeMillis();
+                } while (currentTime-startTime < WAIT);
             }
 
 
             //wait until flicker is down before launching
         }
 
-    }
-
-    private void timer (long startTime, long target) {
-        long currentTime, delta;
-        do {
-            currentTime = System.currentTimeMillis();
-            delta = currentTime-startTime;
-        } while (delta < target);
     }
 }
