@@ -18,7 +18,11 @@ public class Outtake {
         rotateServo = hwMap.get(Servo.class, "rotate");
         clutch = hwMap.get(Servo.class, "clutch");
         hood = hwMap.get(Servo.class, "hood");
+
+        //initialize to start positions (placeholders)
         clutch.setPosition(CLUTCH_OUT);
+        hood.setPosition(0);
+        rotateServo.setPosition(0);
     }
 
     public void autoAimBlue (double x, double y, boolean launch) {
@@ -31,6 +35,7 @@ public class Outtake {
         } else {
             pos = target*(2048/360) + OFFSET;
         }
+
         dist = Math.sqrt(Math.pow(x, 2) + Math.pow(144-y, 2));
 
         speed  = dist/SPEED_DIV;
@@ -53,7 +58,7 @@ public class Outtake {
         speed  = dist/SPEED_DIV;
 
         rotate.setTargetPosition((int)pos);
-    }
+
 
     public void run (double speed) {
         double rpm1, rpm2;
