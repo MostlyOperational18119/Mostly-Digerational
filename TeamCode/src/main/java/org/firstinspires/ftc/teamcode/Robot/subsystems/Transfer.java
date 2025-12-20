@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
-import com.qualcomm.hardware.ams.AMSColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Transfer {
 
@@ -23,20 +20,39 @@ public class Transfer {
 
     public static State currentState;
 
-    public static void init (HardwareMap hwMap) {
-
-        slot0 = hwMap.get(Servo.class, "slot_1_servo");
-        slot1 = hwMap.get(Servo.class, "slot_2_servo");
-        slot2 = hwMap.get(Servo.class, "slot_3_servo");
-
-        currentState = State.IDLE;
-    }
-
     public static void startLaunch () {
         if ((System.currentTimeMillis() - startTime) < WAIT) {
             currentState = State.IDLE;
         }
     }
+    
+    public static void testSlot0Green() {
+        slot0.setPosition(1);
+    }
+    public static void testSlot0Purple() {
+        slot0.setPosition(0.5);
+    }
+    public static void saarang() {
+        slot0.setPosition(0);
+    }
+    public static double getServoPosition() {
+        return slot0.getPosition();
+    }
+
+    public static void init (HardwareMap hwMap) {
+
+        slot0 = hwMap.get(Servo.class, "slot0servo");
+        slot1 = hwMap.get(Servo.class, "slot1servo");
+        slot2 = hwMap.get(Servo.class, "slot2servo");
+
+        currentState = State.IDLE;
+
+        //initialize to start position
+        slot0.setPosition(0);
+        slot1.setPosition(0);
+        slot2.setPosition(0);
+    }
+
     public static void update (int[] index, int[] idealChamber, int chamberNum) {
         int upServo = -1;
 

@@ -7,13 +7,13 @@ public class Intake {
 
 
     static private DcMotorEx intake;
-    private final float POWER = 1;
 
     public void init (HardwareMap hwMap) {
         intake = hwMap.get(DcMotorEx.class, "intake_motor");
     }
 
     public void intake () {
+        float POWER = 1;
         intake.setPower(POWER);
     }
 }

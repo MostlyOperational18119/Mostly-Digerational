@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
@@ -9,12 +10,16 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 public class Indexer {
 
-    private NormalizedColorSensor slot0Sensor, slot1Sensor, slot2Sensor;
+    private static RevColorSensorV3 slot0Sensor, slot1Sensor, slot2Sensor;
 
-    public void init (HardwareMap hwMap) {
-        slot0Sensor = hwMap.get(NormalizedColorSensor.class, "slot_0_sensor");
-        slot1Sensor = hwMap.get(NormalizedColorSensor.class, "slot_1_sensor");
-        slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot_2_sensor");
+    public static void init (HardwareMap hwMap) {
+        slot0Sensor = hwMap.get(RevColorSensorV3.class, "slot0sensor");
+        slot1Sensor = hwMap.get(RevColorSensorV3.class, "slot1sensor");
+        slot2Sensor = hwMap.get(RevColorSensorV3.class, "slot2sensor");
+    }
+
+    public static NormalizedRGBA colorSensorTest() {
+        return slot0Sensor.getNormalizedColors();
     }
 
     public int[] slotColors () {
@@ -34,23 +39,23 @@ public class Indexer {
 
 
         //0 slot
-        if (149 >= hue0 && hue0 >= 90) {
+        if (180 >= hue0 && hue0 >= 150) {
             index [0] = 2;
-        } else if (300 >= hue0 && hue0 >= 270) {
+        } else if (240 >= hue0 && hue0 >= 225) {
             index[0] = 1;
         }
 
         //1 slot
-        if (149 >= hue1 && hue1 >= 90) {
+        if (180 >= hue1 && hue1 >= 150) {
             index [1] = 2;
-        } else if (300 >= hue1 && hue1 >= 270) {
+        } else if (240 >= hue1 && hue1 >= 225) {
             index[1] = 1;
         }
 
         //2 slot
-        if (149 >= hue2 && hue2 >= 90) {
+        if (180 >= hue2 && hue2 >= 150) {
             index [2] = 2;
-        } else if (300 >= hue2 && hue2 >= 270) {
+        } else if (240 >= hue2 && hue2 >= 225) {
             index[2] = 1;
         }
 
