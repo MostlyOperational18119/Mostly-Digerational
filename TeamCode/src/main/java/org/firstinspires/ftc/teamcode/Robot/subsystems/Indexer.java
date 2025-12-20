@@ -9,15 +9,15 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 public class Indexer {
 
-    private NormalizedColorSensor slot0Sensor, slot1Sensor, slot2Sensor;
+    private static NormalizedColorSensor slot0Sensor, slot1Sensor, slot2Sensor;
 
-    public void init (HardwareMap hwMap) {
+    public static void init (HardwareMap hwMap) {
         slot0Sensor = hwMap.get(NormalizedColorSensor.class, "slot_0_sensor");
         slot1Sensor = hwMap.get(NormalizedColorSensor.class, "slot_1_sensor");
         slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot_2_sensor");
     }
 
-    public int[] slotColors () {
+    public static int[] slotColors() {
 
         //green = 2, purple = 1, empty = 0;
         double hue0, hue1, hue2;

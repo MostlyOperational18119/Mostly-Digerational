@@ -12,11 +12,11 @@ public class Transfer {
     private static final long FLICK = 100;
     private static final double UP_POS = 1;
     private static final double DOWN_POS = 0;
-    public Servo slot0, slot1, slot2;
+    public static Servo slot0, slot1, slot2;
 
 
 
-    public void init (HardwareMap hwMap) {
+    public static void init (HardwareMap hwMap) {
 
         slot0 = hwMap.get(Servo.class, "slot_1_servo");
         slot1 = hwMap.get(Servo.class, "slot_2_servo");
@@ -24,7 +24,7 @@ public class Transfer {
 
     }
 
-    public void launch (int[] index, int[] idealChamber, int chamberNum) {
+    public static void launch (int[] index, int[] idealChamber, int chamberNum) {
         //declare ideal array
         int[] ideal = new int[3];
 
