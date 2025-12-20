@@ -53,7 +53,7 @@ public class Transfer {
         slot2.setPosition(0);
     }
 
-    public static void update (int[] index, int[] idealChamber, int chamberNum) {
+    public static void update (int[] slots, int[] idealChamber, int chamberNum) {
         int upServo = -1;
 
         switch(currentState) {
@@ -61,17 +61,15 @@ public class Transfer {
 
                 startTime = System.currentTimeMillis();
 
-                if (launchServo(ideal, index, idealChamber, chamberNum) == 0) {
+                if (launchServo(ideal, slots, idealChamber, chamberNum) == 0) {
                     slot0.setPosition(UP_POS_0);
                     upServo = 0;
-                } else if (launchServo(ideal, index, idealChamber, chamberNum) == 1) {
+                } else if (launchServo(ideal, slots, idealChamber, chamberNum) == 1) {
                     slot1.setPosition(UP_POS_1);
                     upServo = 1;
-                } else if (launchServo(ideal, index, idealChamber, chamberNum) == 2) {
+                } else if (launchServo(ideal, slots, idealChamber, chamberNum) == 2) {
                     slot2.setPosition(UP_POS_2);
                     upServo = 2;
-                } else {
-
                 }
 
                 launchNum++;
@@ -113,4 +111,5 @@ public class Transfer {
     public static void chamberCheck (int[] idealChamber, int chamberNum) {
         System.arraycopy(idealChamber, chamberNum, ideal, 0,  3);
     }
+
 }
