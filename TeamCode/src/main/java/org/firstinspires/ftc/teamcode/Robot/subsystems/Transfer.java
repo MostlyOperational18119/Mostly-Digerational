@@ -30,8 +30,8 @@ public class Transfer {
         currentState = State.IDLE;
     }
 
-    public void startLaunch (currentState) {
-        
+    public void startLaunch (currentState ) {
+
     }
     public void update (int[] index, int[] idealChamber, int chamberNum) {
         int upServo = -1;
