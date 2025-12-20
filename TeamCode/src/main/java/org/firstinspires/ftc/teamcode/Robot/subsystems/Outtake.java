@@ -46,20 +46,20 @@ public class Outtake {
     public void autoAimRed (double x, double y, boolean launch) {
         double target, dist, pos;
 
-        target = Math.atan((144-y)/144-x);
+        target = Math.atan((144 - y) / 144 - x);
 
         if (launch) {
-            pos = target*(2048/360) + OFFSET + CHAMBER_OFFSET;
+            pos = target * (2048 / 360) + OFFSET + CHAMBER_OFFSET;
         } else {
-            pos = target*(2048/360) + OFFSET;
+            pos = target * (2048 / 360) + OFFSET;
         }
-        dist = Math.sqrt(Math.pow(144-x, 2) + Math.pow(144-y, 2));
+        dist = Math.sqrt(Math.pow(144 - x, 2) + Math.pow(144 - y, 2));
 
-        speed  = dist/SPEED_DIV;
+        speed = dist / SPEED_DIV;
 
-        rotate.setTargetPosition((int)pos);
+        rotate.setTargetPosition((int) pos);
 
-
+    }
     public void run (double speed) {
         double rpm1, rpm2;
 
