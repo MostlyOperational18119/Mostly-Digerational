@@ -10,18 +10,20 @@ public class Transfer {
 
     private static final long WAIT = 300, FLICK = 100;
     private static final double UP_POS_0 = 0,DOWN_POS_0 = 0, UP_POS_1 = 0,DOWN_POS_1 = 0, UP_POS_2 = 0,DOWN_POS_2 = 0;
-    public Servo slot0, slot1, slot2;
-    int launchNum = 0;
-    int[] ideal = new int[3];
+    public static Servo slot0, slot1, slot2;
+    static int launchNum = 0;
+    static int[] ideal = new int[3];
+    static long startTime;
 
-    public enum State {
+
+    public static enum State {
         LAUNCH,
         IDLE
     }
 
-    public State currentState;
+    public static State currentState;
 
-    public void init (HardwareMap hwMap) {
+    public static void init (HardwareMap hwMap) {
 
         slot0 = hwMap.get(Servo.class, "slot_1_servo");
         slot1 = hwMap.get(Servo.class, "slot_2_servo");
@@ -30,18 +32,18 @@ public class Transfer {
         currentState = State.IDLE;
     }
 
-    public void startLaunch (currentState ) {
-
+    public static void startLaunch () {
+        if ((System.currentTimeMillis() - startTime) < WAIT) {
+            currentState = State.IDLE;
+        }
     }
-    public void update (int[] index, int[] idealChamber, int chamberNum) {
+    public static void update (int[] index, int[] idealChamber, int chamberNum) {
         int upServo = -1;
-        long startTime;
+
         switch(currentState) {
             case LAUNCH:
 
-                if ((System.currentTimeMillis() - startTime) < WAIT) {
-                    currentState = State.IDLE;
-                }
+                startTime = System.currentTimeMillis();
 
                 if (launchServo(ideal, index, idealChamber, chamberNum) == 0) {
                     slot0.setPosition(UP_POS_0);
@@ -52,8 +54,10 @@ public class Transfer {
                 } else if (launchServo(ideal, index, idealChamber, chamberNum) == 2) {
                     slot2.setPosition(UP_POS_2);
                     upServo = 2;
+                } else {
+
                 }
-                startTime = System.currentTimeMillis();
+
                 launchNum++;
                 currentState = State.IDLE;
                 break;
@@ -75,7 +79,7 @@ public class Transfer {
 
 
 
-    private int launchServo (int[] ideal, int[] index, int[] idealChamber, int chamberNum) {
+    private static int launchServo (int[] ideal, int[] index, int[] idealChamber, int chamberNum) {
 
         if (index[0] == ideal[launchNum]) {
             index[0] = 0;
@@ -90,7 +94,7 @@ public class Transfer {
         return -1;
     }
 
-    public void chamberCheck (int[] idealChamber, int chamberNum) {
+    public static void chamberCheck (int[] idealChamber, int chamberNum) {
         System.arraycopy(idealChamber, chamberNum, ideal, 0,  3);
     }
 }
