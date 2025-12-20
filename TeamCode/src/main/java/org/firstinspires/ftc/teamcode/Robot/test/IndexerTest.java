@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Transfer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 
 @TeleOp(name="indexer/transfer")
-public class Tester extends LinearOpMode {
+public class IndexerTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();

@@ -70,8 +70,6 @@ public class Transfer {
                 } else if (launchServo(ideal, index, idealChamber, chamberNum) == 2) {
                     slot2.setPosition(UP_POS_2);
                     upServo = 2;
-                } else {
-
                 }
 
                 launchNum++;
@@ -92,8 +90,6 @@ public class Transfer {
         }
 
     }
-
-
 
     private static int launchServo (int[] ideal, int[] index, int[] idealChamber, int chamberNum) {
 
