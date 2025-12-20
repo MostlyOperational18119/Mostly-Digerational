@@ -21,23 +21,20 @@ public class Transfer {
     public static State currentState;
 
     public static void startLaunch () {
-        if ((System.currentTimeMillis() - startTime) < WAIT) {
-            currentState = State.IDLE;
+        if ((System.currentTimeMillis() - startTime) > WAIT) {
+            currentState = State.LAUNCH;
         }
     }
-    
-    public static void testSlot0Green() {
-        slot0.setPosition(1);
-    }
-    public static void testSlot0Purple() {
-        slot0.setPosition(0.5);
-    }
-    public static void saarang() {
-        slot0.setPosition(0);
-    }
-    public static double getServoPosition() {
+    public static double slot0Position() {
         return slot0.getPosition();
     }
+    public static double slot1Position() {
+        return slot1.getPosition();
+    }
+    public static double slot2Position() {
+        return slot2.getPosition();
+    }
+
 
     public static void init (HardwareMap hwMap) {
 

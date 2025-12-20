@@ -16,7 +16,6 @@ public class Indexer {
         slot1Sensor = hwMap.get(NormalizedColorSensor.class, "slot_1_sensor");
         slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot_2_sensor");
     }
-
     public int numOfBalls () {
         int[] slots = new int[3];
         slots = slotColors();
@@ -29,6 +28,18 @@ public class Indexer {
             }
         }
         return numOfBalls;
+    }
+    public static double slot0Values() {
+        NormalizedRGBA slot0Colors = slot0Sensor.getNormalizedColors();
+        return JavaUtil.colorToHue(slot0Colors.toColor());
+    }
+    public static double slot1Values() {
+        NormalizedRGBA slot1Colors = slot1Sensor.getNormalizedColors();
+        return JavaUtil.colorToHue(slot1Colors.toColor());
+    }
+    public static double slot2Values() {
+        NormalizedRGBA slot2Colors = slot2Sensor.getNormalizedColors();
+        return JavaUtil.colorToHue(slot2Colors.toColor());
     }
 
     public static int[] slotColors () {

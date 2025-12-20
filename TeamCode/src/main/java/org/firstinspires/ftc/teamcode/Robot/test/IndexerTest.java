@@ -17,20 +17,20 @@ public class IndexerTest extends LinearOpMode {
         Transfer.init(hardwareMap);
 
         while (opModeIsActive()) {
-            NormalizedRGBA colorSensor0 = Indexer.colorSensorTest();
-            double hue0 = JavaUtil.colorToHue(colorSensor0.toColor());
-
-            if (180 >= hue0 && hue0 >= 150) {
-                Transfer.testSlot0Green();
-            } else if (240 >= hue0 && hue0 >= 225) {
-                Transfer.testSlot0Purple();
-            } else {
-                Transfer.saarang();
-            }
-            telemetry.addData("colorSensor0 hue", hue0);
-            telemetry.addData("colorSensor0 NormalizedRGBA", colorSensor0);
-            telemetry.addData("servo position", Transfer.getServoPosition());
-            telemetry.update();
+////            double colorSensor0 = Indexer.slot0Values();
+////            double hue0 = JavaUtil.colorToHue(colorSensor0.toColor());
+//
+////            if (180 >= hue0 && hue0 >= 150) {
+////                Transfer.testSlot0Green();
+////            } else if (240 >= hue0 && hue0 >= 225) {
+////                Transfer.testSlot0Purple();
+////            } else {
+////                Transfer.saarang();
+////            }
+//            telemetry.addData("colorSensor0 hue", hue0);
+//            telemetry.addData("colorSensor0 NormalizedRGBA", colorSensor0);
+//            telemetry.addData("servo position", Transfer.slot0Position());
+//            telemetry.update();
 
         }
     }
