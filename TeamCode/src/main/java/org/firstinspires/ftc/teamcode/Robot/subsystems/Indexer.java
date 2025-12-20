@@ -2,40 +2,60 @@ package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+
+import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 public class Indexer {
 
-    public ColorRangeSensor slot1Sensor, slot2Sensor, slot3Sensor;
+    private NormalizedColorSensor slot0Sensor, slot1Sensor, slot2Sensor;
 
     public void init (HardwareMap hwMap) {
-        slot1Sensor = hwMap.get(ColorRangeSensor.class, "slot_1_sensor");
-        slot2Sensor = hwMap.get(ColorRangeSensor.class, "slot_2_sensor");
-        slot3Sensor = hwMap.get(ColorRangeSensor.class, "slot_3_sensor");
+        slot0Sensor = hwMap.get(NormalizedColorSensor.class, "slot_0_sensor");
+        slot1Sensor = hwMap.get(NormalizedColorSensor.class, "slot_1_sensor");
+        slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot_2_sensor");
     }
 
-//    public int[] slotColors () {
-//        NormalizedRGBA slot1Colors = slot1Sensor.getNormalizedColors();
-//        NormalizedRGBA slot2Colors = slot2Sensor.getNormalizedColors();
-//        NormalizedRGBA slot3Colors = slot3Sensor.getNormalizedColors();
-//
-//        float red1, green1, blue1, red2, green2, blue2, red3, green3, blue3;
-//
-//        red1 = slot1Colors.red / slot1Colors.alpha;
-//        blue1 = slot1Colors.blue / slot1Colors.alpha;
-//        green1 = slot1Colors.green / slot1Colors.alpha;
-//
-//        red2 = slot2Colors.red / slot2Colors.alpha;
-//        blue2 = slot2Colors.blue / slot2Colors.alpha;
-//        green2 = slot2Colors.green / slot2Colors.alpha;
-//
-//        red3 = slot3Colors.red / slot3Colors.alpha;
-//        blue3 = slot3Colors.blue / slot3Colors.alpha;
-//        green3 = slot3Colors.green / slot3Colors.alpha;
-//
-//
-//    }
+    public int[] slotColors () {
 
+        //green = 2, purple = 1, empty = 0;
+        double hue0, hue1, hue2;
+
+        NormalizedRGBA slot0Colors = slot0Sensor.getNormalizedColors();
+        hue0 = JavaUtil.colorToHue(slot0Colors.toColor());
+        NormalizedRGBA slot1Colors = slot1Sensor.getNormalizedColors();
+        hue1 = JavaUtil.colorToHue(slot1Colors.toColor());
+        NormalizedRGBA slot2Colors = slot2Sensor.getNormalizedColors();
+        hue2 = JavaUtil.colorToHue(slot2Colors.toColor());
+
+
+        int[]  index = new int[3];
+
+
+        //0 slot
+        if (149 >= hue0 && hue0 >= 90) {
+            index [0] = 2;
+        } else if (300 >= hue0 && hue0 >= 270) {
+            index[0] = 1;
+        }
+
+        //1 slot
+        if (149 >= hue1 && hue1 >= 90) {
+            index [1] = 2;
+        } else if (300 >= hue1 && hue1 >= 270) {
+            index[1] = 1;
+        }
+
+        //2 slot
+        if (149 >= hue2 && hue2 >= 90) {
+            index [2] = 2;
+        } else if (300 >= hue2 && hue2 >= 270) {
+            index[2] = 1;
+        }
+
+        return index;
+    }
 
 
 }
