@@ -17,7 +17,7 @@ public class Indexer {
         slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot_2_sensor");
     }
     public int numOfBalls () {
-        int[] slots = new int[3];
+        int[] slots;
         slots = slotColors();
 
         int numOfBalls = 0;
