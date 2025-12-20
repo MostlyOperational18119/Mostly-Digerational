@@ -104,7 +104,8 @@ public class Transfer {
     }
 
     public static void chamberCheck (int[] idealChamber, int chamberNum) {
-        System.arraycopy(idealChamber, chamberNum, ideal, 0,  3);
+        for (int i = 0; i < 3; i++) {
+            ideal[i] = idealChamber[i+chamberNum];
+        }
     }
-
 }
