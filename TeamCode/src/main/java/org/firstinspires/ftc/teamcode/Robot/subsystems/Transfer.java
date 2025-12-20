@@ -91,8 +91,6 @@ public class Transfer {
 
     }
 
-
-
     private static int launchServo (int[] ideal, int[] index, int[] idealChamber, int chamberNum) {
 
         if (index[0] == ideal[launchNum]) {

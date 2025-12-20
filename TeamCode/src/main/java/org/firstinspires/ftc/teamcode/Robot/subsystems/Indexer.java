@@ -31,7 +31,7 @@ public class Indexer {
         return numOfBalls;
     }
 
-    public int[] slotColors () {
+    public static int[] slotColors () {
 
         //green = 2, purple = 1, empty = 0;
         double hue0, hue1, hue2;
