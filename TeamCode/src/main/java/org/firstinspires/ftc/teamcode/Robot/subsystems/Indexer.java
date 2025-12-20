@@ -9,14 +9,12 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 public class Indexer {
 
-    public static ColorRangeSensor slot1Sensor;
-    public static ColorRangeSensor slot2Sensor;
-    public static ColorRangeSensor slot3Sensor;
+    private NormalizedColorSensor slot0Sensor, slot1Sensor, slot2Sensor;
 
-    public static void init (HardwareMap hwMap) {
-        slot1Sensor = hwMap.get(ColorRangeSensor.class, "slot_1_sensor");
-        slot2Sensor = hwMap.get(ColorRangeSensor.class, "slot_2_sensor");
-        slot3Sensor = hwMap.get(ColorRangeSensor.class, "slot_3_sensor");
+    public void init (HardwareMap hwMap) {
+        slot0Sensor = hwMap.get(NormalizedColorSensor.class, "slot_0_sensor");
+        slot1Sensor = hwMap.get(NormalizedColorSensor.class, "slot_1_sensor");
+        slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot_2_sensor");
     }
 
     public int[] slotColors () {
