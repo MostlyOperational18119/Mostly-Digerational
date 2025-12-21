@@ -38,9 +38,9 @@ public class Transfer {
 
     public static void init (HardwareMap hwMap) {
 
-        slot0 = hwMap.get(Servo.class, "slot0servo");
-        slot1 = hwMap.get(Servo.class, "slot1servo");
-        slot2 = hwMap.get(Servo.class, "slot2servo");
+        slot0 = hwMap.get(Servo.class, "slot0Servo");
+        slot1 = hwMap.get(Servo.class, "slot1Servo");
+        slot2 = hwMap.get(Servo.class, "slot2Servo");
 
         currentState = State.IDLE;
 
@@ -57,9 +57,6 @@ public class Transfer {
             case LAUNCH:
 
                 startTime = System.currentTimeMillis();
-
-
-
 
                 if (launchServo(ideal, slots) == 0) {
                     slot0.setPosition(UP_POS_0);
@@ -110,7 +107,6 @@ public class Transfer {
         }
         return -1;
     }
-
 
     public static void chamberCheck (int[] idealChamber, int chamberNum) {
         if (chamberNum > 6) {
