@@ -87,7 +87,7 @@ public class Transfer {
                     slot2.setPosition(DOWN_POS_2);
                 }
 
-                for (int i = 0; i < slots.length; i++) {
+                for (int i = 0; i < slots.length - 1; i++) {
                     if (slots[i] == 0) {
                         emptySlotNum++;
                     }
@@ -103,7 +103,6 @@ public class Transfer {
     }
 
     private static int launchServo (int[] ideal, int[] slots) {
-
         for (int i = 0; i < slots.length; i++) {
             if (slots[i] == ideal[launchNum]) {
                 return i;

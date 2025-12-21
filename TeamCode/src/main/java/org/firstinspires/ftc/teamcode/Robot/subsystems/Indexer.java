@@ -12,9 +12,9 @@ public class Indexer {
     private static NormalizedColorSensor slot0Sensor, slot1Sensor, slot2Sensor;
 
     public static void init (HardwareMap hwMap) {
-        slot0Sensor = hwMap.get(NormalizedColorSensor.class, "slot_0_sensor");
-        slot1Sensor = hwMap.get(NormalizedColorSensor.class, "slot_1_sensor");
-        slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot_2_sensor");
+        slot0Sensor = hwMap.get(NormalizedColorSensor.class, "slot0sensor");
+        slot1Sensor = hwMap.get(NormalizedColorSensor.class, "slot1sensor");
+        slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot2sensor");
     }
     public int numOfBalls () {
         int[] slots;
