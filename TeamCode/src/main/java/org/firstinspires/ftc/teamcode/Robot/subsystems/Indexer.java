@@ -129,6 +129,14 @@ public class Indexer {
 
     public static int nextBall(int[] slots, int chamberNum, int[] pattern) {
         int patternIndex = chamberNum % 3;
-        return slots[pattern[patternIndex]];
+        int desiredColor = pattern[patternIndex];
+
+        for (int i = 0; i < slots.length; i++) {
+            if (slots[i] == desiredColor) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }
