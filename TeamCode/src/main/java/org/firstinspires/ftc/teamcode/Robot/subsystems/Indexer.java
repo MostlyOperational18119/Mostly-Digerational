@@ -4,43 +4,47 @@ import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 public class Indexer {
-
+    public static Servo slot0, slot1, slot2;
+    public static double UP_POS_0 = 0, DOWN_POS_0 = 0, UP_POS_1 = 0, DOWN_POS_1 = 0, UP_POS_2 = 0, DOWN_POS_2 = 0;
+    public enum States {
+        LAUNCH,
+        IDLE
+    }
+    public static int[] pattern = new int[] {1, 2, 2}; // change to new int[3];
+    public static States currentState;
+    static int currentBall; //ball being launched (0, 1, or 2)
     private static NormalizedColorSensor slot0Sensor, slot1Sensor, slot2Sensor;
 
     public static void init (HardwareMap hwMap) {
-        slot0Sensor = hwMap.get(NormalizedColorSensor.class, "slot0sensor");
-        slot1Sensor = hwMap.get(NormalizedColorSensor.class, "slot1sensor");
-        slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot2sensor");
+        slot0Sensor = hwMap.get(NormalizedColorSensor.class, "slot0Sensor");
+        slot1Sensor = hwMap.get(NormalizedColorSensor.class, "slot1Sensor");
+        slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot2Sensor");
+        slot0 = hwMap.get(Servo.class, "slot0Servo");
+        slot1 = hwMap.get(Servo.class, "slot1Servo");
+        slot2 = hwMap.get(Servo.class, "slot2Servo");
+        //initialize to start position
+        slot0.setPosition(DOWN_POS_0);
+        slot1.setPosition(DOWN_POS_1);
+        slot2.setPosition(DOWN_POS_2);
     }
-    public static int numOfBalls () {
-        int[] slots;
-        slots = slotColors();
-
-        int numOfBalls = 0;
-
-        for (int i = 0; i < 3; i++) {
-            if (slots[i] == 0) {
-                numOfBalls++;
-            }
-        }
-        return numOfBalls;
-    }
-    public static double slot0Values() {
-        NormalizedRGBA slot0Colors = slot0Sensor.getNormalizedColors();
-        return JavaUtil.colorToHue(slot0Colors.toColor());
-    }
-    public static double slot1Values() {
-        NormalizedRGBA slot1Colors = slot1Sensor.getNormalizedColors();
-        return JavaUtil.colorToHue(slot1Colors.toColor());
-    }
-    public static double slot2Values() {
-        NormalizedRGBA slot2Colors = slot2Sensor.getNormalizedColors();
-        return JavaUtil.colorToHue(slot2Colors.toColor());
-    }
+//    public static int numEmptySlots () {
+//        int[] slots;
+//        slots = slotColors();
+//
+//        int numOfBalls = 0;
+//
+//        for (int i = 0; i < 3; i++) {
+//            if (slots[i] == 0) {
+//                numOfBalls++;
+//            }
+//        }
+//        return numOfBalls;
+//    }
 
     public static int[] slotColors () {
 
@@ -80,5 +84,48 @@ public class Indexer {
         return index;
     }
 
+    //Transfer Part Duex import
+    public static void startLaunch () {
+        currentState = States.LAUNCH;
+    }
 
+    public static void update (int[] slots) {
+        switch(currentState) {
+            case LAUNCH:
+                switch (currentBall) {
+                    case 0:
+                        slot0.setPosition(UP_POS_0);
+                        break;
+                    case 1:
+                        slot1.setPosition(UP_POS_1);
+                        break;
+                    case 2:
+                        slot2.setPosition(UP_POS_2);
+                        break;
+                    default:
+                        break;
+                }
+                currentState = States.IDLE;
+            case IDLE:
+                switch (currentBall) {
+                    case 0:
+                        slot0.setPosition(DOWN_POS_0);
+                        break;
+                    case 1:
+                        slot1.setPosition(DOWN_POS_1);
+                        break;
+                    case 2:
+                        slot2.setPosition(DOWN_POS_2);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+        }
+    }
+
+    public static int nextBall(int[] slots, int chamberNum) {
+        
+        return 0;
+    }
 }

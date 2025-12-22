@@ -14,7 +14,7 @@ public class IndexerTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         waitForStart();
         Indexer.init(hardwareMap);
-        Transfer.init(hardwareMap);
+        //Transfer.init(hardwareMap);
 
         while (opModeIsActive()) {
 ////            double colorSensor0 = Indexer.slot0Values();
