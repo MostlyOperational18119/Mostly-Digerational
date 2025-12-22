@@ -7,12 +7,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Outtake {
 
     static private DcMotorEx outtakeMotor1, outtakeMotor2, rotate;
-    private Servo hood, clutch, rotateServo;
-    private final double CLUTCH_IN = .75, CLUTCH_OUT = .75, BACK_HOOD = .75,FRONT_HOOD = .25, SPEED_DIV = 5;
-    private final int CHAMBER_OFFSET = 200, OFFSET = 200;
+    static private Servo hood, clutch, rotateServo;
+    static private final double CLUTCH_IN = .75, CLUTCH_OUT = .75, BACK_HOOD = .75,FRONT_HOOD = .25, SPEED_DIV = 5;
+    static private final int CHAMBER_OFFSET = 200, OFFSET = 200;
     private static double speed;
 
-    public void init (HardwareMap hwMap) {
+    public static void init (HardwareMap hwMap) {
         outtakeMotor2 = hwMap.get(DcMotorEx.class, "outtakemotor2");
         outtakeMotor1 = hwMap.get(DcMotorEx.class, "outtakemotor1");
         rotateServo = hwMap.get(Servo.class, "rotate");
