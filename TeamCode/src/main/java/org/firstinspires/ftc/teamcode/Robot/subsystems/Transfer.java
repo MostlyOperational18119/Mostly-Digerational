@@ -10,9 +10,7 @@ public class Transfer {
     public static Servo slot0, slot1, slot2;
     static long startTime;
     static int[] ideal;
-
     static int launchNum = 0;
-
     public static enum State {
         LAUNCH,
         IDLE
