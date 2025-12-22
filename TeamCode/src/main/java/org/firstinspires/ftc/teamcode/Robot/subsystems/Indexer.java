@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
-import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -27,6 +26,7 @@ public class Indexer {
         slot0 = hwMap.get(Servo.class, "slot0Servo");
         slot1 = hwMap.get(Servo.class, "slot1Servo");
         slot2 = hwMap.get(Servo.class, "slot2Servo");
+
         //initialize to start position
         slot0.setPosition(DOWN_POS_0);
         slot1.setPosition(DOWN_POS_1);
@@ -92,18 +92,21 @@ public class Indexer {
     public static void update (int[] slots) {
         switch(currentState) {
             case LAUNCH:
-                switch (currentBall) {
-                    case 0:
-                        slot0.setPosition(UP_POS_0);
-                        break;
-                    case 1:
-                        slot1.setPosition(UP_POS_1);
-                        break;
-                    case 2:
-                        slot2.setPosition(UP_POS_2);
-                        break;
-                    default:
-                        break;
+                currentBall = nextBall(slots, 6, pattern); //placeholder chamberNum
+                if (currentBall != -1) {
+                    switch (currentBall) {
+                        case 0:
+                            slot0.setPosition(UP_POS_0);
+                            break;
+                        case 1:
+                            slot1.setPosition(UP_POS_1);
+                            break;
+                        case 2:
+                            slot2.setPosition(UP_POS_2);
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 currentState = States.IDLE;
             case IDLE:
@@ -124,8 +127,8 @@ public class Indexer {
         }
     }
 
-    public static int nextBall(int[] slots, int chamberNum) {
-        
-        return 0;
+    public static int nextBall(int[] slots, int chamberNum, int[] pattern) {
+        int patternIndex = chamberNum % 3;
+        return slots[pattern[patternIndex]];
     }
 }
