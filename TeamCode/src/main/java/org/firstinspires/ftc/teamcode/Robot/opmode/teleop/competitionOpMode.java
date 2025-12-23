@@ -18,6 +18,9 @@ public class competitionOpMode extends LinearOpMode {
 
         Intake.init(hardwareMap);
         Drivetrain.init(hardwareMap);
+        Lift.init(hardwareMap);
+        Outtake.init(hardwareMap);
+        Indexer.init(hardwareMap);
 
         boolean intake = gamepad1.rightBumperWasPressed();
 
@@ -28,14 +31,13 @@ public class competitionOpMode extends LinearOpMode {
             float x = -gamepad1.left_stick_x;
             float rx = gamepad1.right_stick_x;
             
-            Drivetrain.drive(ly, lx, rx);
+            Drivetrain.drive(y, x, rx);
+            Intake.switchIntake(intake);
 
-            if (intake) {
-                Intake.intakeGo();
-            } else {
-                Intake.intakeIdle();
-            }
+            telemetry.addData("is intake running", intake);
+            telemetry.addData("intake power", Intake.intakeTelemetry());
 
+            telemetry.update();
         }
 
     }
