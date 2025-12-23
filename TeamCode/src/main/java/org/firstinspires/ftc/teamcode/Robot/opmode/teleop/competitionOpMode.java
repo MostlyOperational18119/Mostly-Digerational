@@ -1,13 +1,18 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.teleop;
 
+import android.widget.AdapterView;
+
+import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
+
+import org.firstinspires.ftc.teamcode.Robot.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.Robot.subsystems.Lift;
-import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 
 @TeleOp(name="drivetrain testing")
 public class competitionOpMode extends LinearOpMode {
@@ -16,13 +21,17 @@ public class competitionOpMode extends LinearOpMode {
 
         waitForStart();
 
-        Intake.init(hardwareMap);
-        Drivetrain.init(hardwareMap);
-        Lift.init(hardwareMap);
-        Outtake.init(hardwareMap);
-        Indexer.init(hardwareMap);
+        //placeholders
+        boolean color = false;
 
-        boolean intake = gamepad1.rightBumperWasPressed();
+        Drivetrain.init(hardwareMap);
+        Outtake.init(hardwareMap);
+
+        Pose currentPose;
+
+        Follower follower;
+        follower =  Constants.createFollower(hardwareMap);
+
 
         while (opModeIsActive()) {
 
@@ -30,15 +39,34 @@ public class competitionOpMode extends LinearOpMode {
             float y = gamepad1.left_stick_y; // y stick is not reversed
             float x = -gamepad1.left_stick_x;
             float rx = gamepad1.right_stick_x;
+            boolean A = gamepad1.aWasPressed();
+
+            int launch = -1;
+            if (A) {
+                launch *= -1;
+            }
+
             
             Drivetrain.drive(y, x, rx);
-            Intake.switchIntake(intake);
+            Outtake.run();
 
-            telemetry.addData("is intake running", intake);
-            telemetry.addData("intake power", Intake.intakeTelemetry());
+            if (launch > 0) {
+                if (color) {
+                    Outtake.autoAimBlue(currentPose.getX(), currentPose.getY(), true);
+                } else {
+                    Outtake.autoAimRed(currentPose.getX(), currentPose.getY(), true);
+                }
+            } else {
+                if (color) {
+                    Outtake.autoAimBlue(currentPose.getX(), currentPose.getY(), false);
+                } else {
+                    Outtake.autoAimRed(currentPose.getX(), currentPose.getY(), false);
+                }
+            }
 
-            telemetry.update();
+
+
+
         }
-
     }
 }
