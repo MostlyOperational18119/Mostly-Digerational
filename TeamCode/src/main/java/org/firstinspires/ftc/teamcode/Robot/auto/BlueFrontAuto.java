@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Robot.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 
 @Autonomous(name = "BFA3")
 public class BlueFrontAuto extends LinearOpMode {
@@ -89,7 +90,7 @@ public class BlueFrontAuto extends LinearOpMode {
                         break;
                     case 2:
                         follower.followPath(launchToPark, 1, true);
-//                        intake.setPower(0);
+                        Intake.intakeStop();
 //                        outtakeFlywheel.setPower(0);
 //                        outtake.setRotationPosition(0);
                         state = -67;

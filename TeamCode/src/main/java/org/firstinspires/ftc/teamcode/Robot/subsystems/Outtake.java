@@ -25,7 +25,7 @@ public class Outtake {
         rotateServo.setPosition(0);
     }
 
-    public void autoAimBlue (double x, double y, boolean launch) {
+    public static void autoAimBlue (double x, double y, boolean launch) {
         double target, dist, pos;
 
         target = Math.atan((144-y)/x);
@@ -43,7 +43,7 @@ public class Outtake {
         rotate.setTargetPosition((int)pos);
     }
 
-    public void autoAimRed (double x, double y, boolean launch) {
+    public static void autoAimRed (double x, double y, boolean launch) {
         double target, dist, pos;
 
         target = Math.atan((144 - y) / 144 - x);
@@ -60,7 +60,7 @@ public class Outtake {
         rotate.setTargetPosition((int) pos);
 
     }
-    public void run (double speed) {
+    public static void run (double speed) {
         double rpm1, rpm2;
 
         outtakeMotor1.setVelocity(speed);
