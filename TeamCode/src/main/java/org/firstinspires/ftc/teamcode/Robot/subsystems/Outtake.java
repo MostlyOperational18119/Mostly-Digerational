@@ -23,6 +23,9 @@ public class Outtake {
         clutch.setPosition(CLUTCH_OUT);
         hood.setPosition(0);
         rotateServo.setPosition(0);
+
+        outtakeMotor1.setVelocityPIDFCoefficients(11, 3, 2, 2);
+        outtakeMotor2.setVelocityPIDFCoefficients(11, 3, 2, 2);
     }
 
     public static void autoAimBlue (double x, double y, boolean launch) {
