@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Outtake {
 
-    static private DcMotorEx outtakeMotor1, outtakeMotor2, rotate;
-    static private Servo hood, clutch, rotateServo;
-    static private final double CLUTCH_IN = .75, CLUTCH_OUT = .75, BACK_HOOD = .75,FRONT_HOOD = .25, SPEED_DIV = 5;
-    static private final int CHAMBER_OFFSET = 200, OFFSET = 200;
+    private static DcMotorEx outtakeMotor1, outtakeMotor2, rotate;
+    private static Servo hood, clutch, rotateServo;
+    private static final double CLUTCH_IN = .75, CLUTCH_OUT = .75, BACK_HOOD = .75,FRONT_HOOD = .25, SPEED_DIV = 5;
+    private static final int CHAMBER_OFFSET = 200, OFFSET = 200;
     private static double speed;
 
     public static void init (HardwareMap hwMap) {
@@ -21,12 +21,13 @@ public class Outtake {
 
         //initialize to start positions (placeholders)
         clutch.setPosition(CLUTCH_OUT);
-        hood.setPosition(0);
+        hood.setPosition(FRONT_HOOD);
         rotateServo.setPosition(0);
 
         outtakeMotor1.setVelocityPIDFCoefficients(11, 3, 2, 2);
         outtakeMotor2.setVelocityPIDFCoefficients(11, 3, 2, 2);
     }
+
 
     public static void autoAimBlue (double x, double y, boolean launch) {
         double target, dist, pos;
@@ -63,7 +64,7 @@ public class Outtake {
         rotate.setTargetPosition((int) pos);
 
     }
-    public static void run (double speed) {
+    public static void run () {
         double rpm1, rpm2;
 
         outtakeMotor1.setVelocity(speed);
