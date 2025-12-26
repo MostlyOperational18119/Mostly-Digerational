@@ -8,7 +8,7 @@ public class Outtake {
 
     private static DcMotorEx outtakeMotor1, outtakeMotor2, rotate;
     private static Servo hood, clutch, rotateServo;
-    private static final double CLUTCH_IN = .75, CLUTCH_OUT = .75, BACK_HOOD = .75,FRONT_HOOD = .25, SPEED_DIV = 5;
+    private static final double CLUTCH_IN = .48, CLUTCH_OUT = .53, BACK_HOOD = .75,FRONT_HOOD = .25, SPEED_DIV = 5;
     private static final int CHAMBER_OFFSET = 200, OFFSET = 200;
     private static double speed;
 
