@@ -8,9 +8,9 @@ public class Outtake {
 
     private static DcMotorEx outtakeMotor1, outtakeMotor2, rotate;
     private static Servo hood, clutch, rotateServo;
-    private static final double CLUTCH_IN = .48, CLUTCH_OUT = .53, BACK_HOOD = .75,FRONT_HOOD = .25, SPEED_DIV = 5;
+    private static final double STAGE_1 = .48, STAGE_2 = .53, BACK_HOOD = .75,FRONT_HOOD = .25, SPEED_DIV = 5;
     private static final int CHAMBER_OFFSET = 200, OFFSET = 200;
-    private static double speed;
+    private static double speed = .75*2800;
 
     public static void init (HardwareMap hwMap) {
         outtakeMotor2 = hwMap.get(DcMotorEx.class, "outtakemotor2");
@@ -20,7 +20,7 @@ public class Outtake {
         hood = hwMap.get(Servo.class, "hood");
 
         //initialize to start positions (placeholders)
-        clutch.setPosition(CLUTCH_OUT);
+        clutch.setPosition(STAGE_1);
         hood.setPosition(FRONT_HOOD);
         rotateServo.setPosition(0);
 
@@ -74,9 +74,9 @@ public class Outtake {
         rpm2 = outtakeMotor2.getVelocity()/28*60;
 
         if (rpm1 >= 3000 || rpm2 >= 3000) {
-            clutch.setPosition(CLUTCH_IN);
+            clutch.setPosition(STAGE_2);
         } else {
-            clutch.setPosition(CLUTCH_OUT);
+            clutch.setPosition(STAGE_1);
         }
 
     }
