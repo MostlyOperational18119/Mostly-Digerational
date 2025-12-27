@@ -20,12 +20,12 @@ public class Indexer {
     private static NormalizedColorSensor slot0Sensor, slot1Sensor, slot2Sensor;
 
     public static void init (HardwareMap hwMap) {
-        slot0Sensor = hwMap.get(NormalizedColorSensor.class, "slot0Sensor");
-        slot1Sensor = hwMap.get(NormalizedColorSensor.class, "slot1Sensor");
-        slot2Sensor = hwMap.get(NormalizedColorSensor.class, "slot2Sensor");
-        slot0 = hwMap.get(Servo.class, "slot0Servo");
-        slot1 = hwMap.get(Servo.class, "slot1Servo");
-        slot2 = hwMap.get(Servo.class, "slot2Servo");
+        slot0Sensor = hwMap.get(NormalizedColorSensor.class, "index0");
+        slot1Sensor = hwMap.get(NormalizedColorSensor.class, "index1");
+        slot2Sensor = hwMap.get(NormalizedColorSensor.class, "index2");
+        slot0 = hwMap.get(Servo.class, "transfer0");
+        slot1 = hwMap.get(Servo.class, "transfer1");
+        slot2 = hwMap.get(Servo.class, "transfer2");
 
         //initialize to start position
         slot0.setPosition(DOWN_POS_0);

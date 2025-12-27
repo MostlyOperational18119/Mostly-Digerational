@@ -9,8 +9,8 @@ public class Intake {
 
     
     public static void init (HardwareMap hwMap) {
-        intakeFront = hwMap.get(DcMotorEx.class, "inFront");
-        intakeRear = hwMap.get(DcMotorEx.class, "inRear");
+        intakeFront = hwMap.get(DcMotorEx.class, "frontIntake");
+        intakeRear = hwMap.get(DcMotorEx.class, "backIntake");
     }
     public static void switchIntake(boolean intake) { //switches between idle and intaking (teleop)
         if (intake) {
