@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Outtake {
 
@@ -127,6 +131,11 @@ public class Outtake {
         speed = Math.sqrt((2*height*386.089)/(Math.pow(Math.sin(hoodAngle),2)));
 
         hoodPos = 0.76 - (0.56 / 17) * (64 - hoodAngle);
+
+        telemetry.addData("Hood Angle:", hoodAngle);
+        telemetry.addData("Hood Pos:", hoodPos);
+        telemetry.addData("speed:", speed);
+        telemetry.addData("Outtake Position:", pos);
     }
 
     public static double acot(double x) {

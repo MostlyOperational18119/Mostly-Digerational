@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
-@TeleOp(name="indexer/transfer")
+@TeleOp(name="Autoaim test")
 public class AutoAimTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
