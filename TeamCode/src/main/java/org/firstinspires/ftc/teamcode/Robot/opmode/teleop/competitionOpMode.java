@@ -12,6 +12,7 @@ import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.Robot.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
@@ -24,10 +25,12 @@ public class competitionOpMode extends LinearOpMode {
 
         //placeholders
         boolean red = false;
+        int launch = 1;
 
         Drivetrain.init(hardwareMap);
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
+        Indexer.init(hardwareMap);
 
         Pose currentPose;
 
@@ -44,8 +47,8 @@ public class competitionOpMode extends LinearOpMode {
             boolean X = gamepad1.xWasPressed();
             boolean A = gamepad1.aWasPressed();
             float lt = gamepad1.left_trigger;
+            float rt = gamepad1.right_trigger;
 
-            int launch = -1;
             if (X) {
                 launch *= -1;
             }
@@ -53,6 +56,10 @@ public class competitionOpMode extends LinearOpMode {
             
             Drivetrain.drive(y, x, rx);
 //          Outtake.outtakeUpdate(currentPose.getX(), currentPose.getY(), launch);
+
+            if (A) {
+                Indexer.update(Indexer.slotColors());
+            }
 
 
             if (lt > .5) {
