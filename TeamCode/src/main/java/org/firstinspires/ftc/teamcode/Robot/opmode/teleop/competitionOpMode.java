@@ -48,21 +48,21 @@ public class competitionOpMode extends LinearOpMode {
 
             
             Drivetrain.drive(y, x, rx);
-            Outtake.run();
-
-            if (launch > 0) {
-                if (color) {
-                    Outtake.autoAimBlue(currentPose.getX(), currentPose.getY(), true);
-                } else {
-                    Outtake.autoAimRed(currentPose.getX(), currentPose.getY(), true);
-                }
-            } else {
-                if (color) {
-                    Outtake.autoAimBlue(currentPose.getX(), currentPose.getY(), false);
-                } else {
-                    Outtake.autoAimRed(currentPose.getX(), currentPose.getY(), false);
-                }
-            }
+//            Outtake.run();
+//
+//            if (launch > 0) {
+//                if (color) {
+//                    Outtake.autoAimBlue(currentPose.getX(), currentPose.getY(), true);
+//                } else {
+//                    Outtake.autoAimRed(currentPose.getX(), currentPose.getY(), true);
+//                }
+//            } else {
+//                if (color) {
+//                    Outtake.autoAimBlue(currentPose.getX(), currentPose.getY(), false);
+//                } else {
+//                    Outtake.autoAimRed(currentPose.getX(), currentPose.getY(), false);
+//                }
+//            }
 
 
 
