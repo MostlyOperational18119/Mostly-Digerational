@@ -57,7 +57,10 @@ public class AutoAimTest extends LinearOpMode {
                 }
             }
 
+            telemetry.addData("Height:", height);
             Outtake.autoAimHoodPlusVelo(x, y, height);
+
+            telemetry.update();
         }
     }
 
