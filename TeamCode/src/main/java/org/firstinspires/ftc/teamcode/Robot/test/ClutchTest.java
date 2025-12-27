@@ -14,8 +14,7 @@ public class ClutchTest extends LinearOpMode {
         Outtake.init(hardwareMap);
 
         while (opModeIsActive()) {
-            float trigger = gamepad1.right_trigger;
-            if (trigger > .5) {
+            if (gamepad1.right_trigger > .5) {
                 Outtake.run();
             }
         }
