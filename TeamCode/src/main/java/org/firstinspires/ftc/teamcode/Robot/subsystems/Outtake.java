@@ -9,7 +9,7 @@ public class Outtake {
 
     private static DcMotorEx outtakeMotor1, outtakeMotor2;
     private static Servo hood, rotateServo;
-    private static final double SPEED_CONST = 5;
+    private static final double SPEED_CONST = 5, HOOD_UP = .76, HOOD_DOWN = .25;
     private static final int CHAMBER_POS = 96, OFFSET = 200;
     private static double speed = 2800;
 
@@ -101,7 +101,11 @@ public class Outtake {
 
         dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-
+        if (dist < 96) {
+            hood.setPosition(HOOD_UP);
+        } else {
+            hood.setPosition(HOOD_DOWN);
+        }
 
         speed = Math.sqrt(dist) * SPEED_CONST;
 
