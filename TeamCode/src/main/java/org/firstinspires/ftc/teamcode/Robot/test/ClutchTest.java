@@ -13,7 +13,7 @@ public class ClutchTest extends LinearOpMode {
         waitForStart();
         Outtake.init(hardwareMap);
         //Outtake.startOuttake();
-        Outtake.setMotorPower();
+//        Outtake.setMotorPower();
 
         while (opModeIsActive()) {
 //            if (gamepad1.right_trigger > .5) {
