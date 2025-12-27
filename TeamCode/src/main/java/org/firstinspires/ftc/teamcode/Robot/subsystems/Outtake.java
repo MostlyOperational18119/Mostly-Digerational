@@ -9,8 +9,8 @@ public class Outtake {
 
     private static DcMotorEx outtakeMotor1, outtakeMotor2;
     private static Servo hood, rotateServo;
-    private static final double SPEED_CONST = 5, HOOD_UP = .76, HOOD_DOWN = .25;
-    private static final int CHAMBER_POS = 96, OFFSET = 200;
+    private static final double SPEED_CONST_CLOSE = 231.2, SPEED_CONST_FAR = 204, FAR_HOOD = .20, CLOSE_HOOD = .76;
+    private static final int CHAMBER_POS = 96, OFFSET = 200, HEIGHT = 44;
     private static double speed = 2800;
 
     public static States currentState;
@@ -102,13 +102,41 @@ public class Outtake {
         dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
         if (dist < 96) {
-            hood.setPosition(HOOD_UP);
+            hood.setPosition(CLOSE_HOOD);
+            speed = Math.sqrt(dist) * SPEED_CONST_CLOSE;
         } else {
-            hood.setPosition(HOOD_DOWN);
+            hood.setPosition(FAR_HOOD);
+            speed = Math.sqrt(dist) * SPEED_CONST_FAR;
         }
 
-        speed = Math.sqrt(dist) * SPEED_CONST;
 
         rotateServo.setPosition((int) pos);
+    }
+
+    public static void autoAimHoodPlusVelo (double x, double y, int height) {
+        double target, dist, pos, hoodPos, hoodAngle;
+
+        target = Math.atan((y) / x);
+
+        pos = target * (2048 / 360) + OFFSET;
+
+        dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+
+        hoodAngle = acot(dist/(4*height));
+
+        speed = Math.sqrt((2*height*386.089)/(Math.pow(Math.sin(hoodAngle),2)));
+
+        hoodPos = 0.76 - (0.56 / 17) * (64 - hoodAngle);
+    }
+
+    public static double acot(double x) {
+        if (x == 0.0) {
+            return Math.PI / 2.0;
+        } else if (x > 0.0) {
+            return Math.atan(1.0 / x);
+        } else {
+            // For x < 0, add PI to atan(1/x) to get the correct range (0, PI)
+            return Math.PI + Math.atan(1.0 / x);
+        }
     }
 }
