@@ -28,7 +28,7 @@ public class competitionOpMode extends LinearOpMode {
         int launch = 1;
 
         Drivetrain.init(hardwareMap);
-        Outtake.init(hardwareMap);
+        //Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
 
