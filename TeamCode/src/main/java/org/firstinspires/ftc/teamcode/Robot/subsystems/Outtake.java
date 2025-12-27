@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -20,16 +21,17 @@ public class Outtake {
     public static Outtake.ClutchStates currentState;
 
     public static void init(HardwareMap hwMap) {
-        outtakeMotor2 = hwMap.get(DcMotorEx.class, "outtakemotor2");
-        outtakeMotor1 = hwMap.get(DcMotorEx.class, "outtakemotor1");
-        rotateServo = hwMap.get(Servo.class, "rotate");
+        outtakeMotor2 = hwMap.get(DcMotorEx.class, "outtakeMotor2");
+        outtakeMotor1 = hwMap.get(DcMotorEx.class, "outtakeMotor1");
+        outtakeMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
+        //rotateServo = hwMap.get(Servo.class, "rotate");
         clutch = hwMap.get(Servo.class, "clutch");
-        hood = hwMap.get(Servo.class, "hood");
+        //hood = hwMap.get(Servo.class, "hood");
 
         //initialize to start positions (placeholders)
         clutch.setPosition(STAGE_1);
-        hood.setPosition(FRONT_HOOD);
-        rotateServo.setPosition(0);
+        //hood.setPosition(FRONT_HOOD);
+        //rotateServo.setPosition(0);
 
         outtakeMotor1.setVelocityPIDFCoefficients(11, 3, 2, 2);
         outtakeMotor2.setVelocityPIDFCoefficients(11, 3, 2, 2);
@@ -39,6 +41,20 @@ public class Outtake {
         currentState = ClutchStates.STAGE_ONE;
     }
 
+    public static void offOuttake() { //clutch test program
+        outtakeMotor2.setVelocity(0);
+        outtakeMotor1.setVelocity(0);
+    }
+    public static double testTelemetryMotor1() { //clutch test program
+        return outtakeMotor1.getVelocity();
+    }
+    public static double testTelemetryMotor2() { //test program
+        return outtakeMotor2.getVelocity();
+    }
+    public static void setMotorPower(){
+        outtakeMotor2.setPower(1);
+        outtakeMotor1.setPower(1);
+    }
     public static void clutchUpdate() {
         double rpm1, rpm2;
 
