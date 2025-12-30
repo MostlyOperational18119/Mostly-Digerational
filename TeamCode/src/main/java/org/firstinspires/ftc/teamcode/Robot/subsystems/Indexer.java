@@ -85,6 +85,25 @@ public class Indexer {
         }
     }
 
+    public static String slot1Test () {
+        if (getColor(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 2) {
+            return "green";
+        } else if (getColor(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) ==1 ) {
+            return "purple";
+        } else {
+            return "empty";
+        }
+    }
+
+    public static String slot2Test () {
+        if (getColor(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 2) {
+            return "green";
+        } else if (getColor(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) ==1 ) {
+            return "purple";
+        } else {
+            return "empty";
+        }
+    }
     private static int getColor (double red, double green, double blue) {
         if (green/blue > 1.3 && green/blue < 1.5) {
             return 2;
