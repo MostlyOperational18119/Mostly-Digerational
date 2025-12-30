@@ -47,6 +47,34 @@ public class Indexer {
         updateSlot2();
     }
 
+    public static double slotColor0Red () {
+        return slot0Sensor.red();
+    }
+    public static double slotColor0Green () {
+        return slot0Sensor.green();
+    }
+    public static double slotColor0Blue () {
+        return slot0Sensor.blue();
+    }
+    public static double slotColor1Red () {
+        return slot1Sensor.red();
+    }
+    public static double slotColor1Green () {
+        return slot1Sensor.green();
+    }
+    public static double slotColor1Blue () {
+        return slot1Sensor.blue();
+    }
+    public static double slotColor2Red () {
+        return slot2Sensor.red();
+    }
+    public static double slotColor2Green () {
+        return slot2Sensor.green();
+    }
+    public static double slotColor2Blue () {
+        return slot2Sensor.blue();
+    }
+
     public static int[] slotColors() {
 
         //green = 2, purple = 1, empty = 0;
