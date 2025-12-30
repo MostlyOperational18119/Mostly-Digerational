@@ -9,25 +9,23 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 public class IndexerTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        waitForStart();
-        Indexer.init(hardwareMap);
-        //Transfer.init(hardwareMap);
 
+        Indexer.init(hardwareMap);
+        Indexer.startLaunch();
+
+        waitForStart();
         while (opModeIsActive()) {
-////            double colorSensor0 = Indexer.slot0Values();
-////            double hue0 = JavaUtil.colorToHue(colorSensor0.toColor());
-//
-////            if (180 >= hue0 && hue0 >= 150) {
-////                Transfer.testSlot0Green();
-////            } else if (240 >= hue0 && hue0 >= 225) {
-////                Transfer.testSlot0Purple();
-////            } else {
-////                Transfer.saarang();
-////            }
-//            telemetry.addData("colorSensor0 hue", hue0);
-//            telemetry.addData("colorSensor0 NormalizedRGBA", colorSensor0);
-//            telemetry.addData("servo position", Transfer.slot0Position());
-//            telemetry.update();
+
+            Indexer.update(Indexer.slotColors());
+
+            telemetry.addData("current index state", Indexer.currentState);
+            telemetry.addData("colorSensor0 color", Indexer.slotColors()[0]);
+            telemetry.addData("colorSensor1 color", Indexer.slotColors()[1]);
+            telemetry.addData("colorSensor2 color", Indexer.slotColors()[2]);
+            telemetry.addData("slot0 position", Indexer.slot0.getPosition());
+            telemetry.addData("slot1 position", Indexer.slot1.getPosition());
+            telemetry.addData("slot2 position", Indexer.slot2.getPosition());
+            telemetry.update();
 
         }
     }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -9,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 public class Indexer {
     public static Servo slot0, slot1, slot2;
-    public static double UP_POS_0 = 0, DOWN_POS_0 = 0, UP_POS_1 = 0, DOWN_POS_1 = 0, UP_POS_2 = 0, DOWN_POS_2 = 0;
+    public static double UP_POS_0 = 0.12, DOWN_POS_0 = 0.5, UP_POS_1 = 0.12, DOWN_POS_1 = 0.5, UP_POS_2 = 0.88, DOWN_POS_2 = 0.5;
     public enum States {
         LAUNCH,
         IDLE
@@ -17,12 +18,12 @@ public class Indexer {
     public static int[] pattern = new int[] {1, 2, 2}; // change to new int[3];
     public static States currentState;
     static int currentBall; //ball being launched (0, 1, or 2)
-    private static NormalizedColorSensor slot0Sensor, slot1Sensor, slot2Sensor;
+    private static RevColorSensorV3 slot0Sensor, slot1Sensor, slot2Sensor;
 
     public static void init (HardwareMap hwMap) {
-        slot0Sensor = hwMap.get(NormalizedColorSensor.class, "index0");
-        slot1Sensor = hwMap.get(NormalizedColorSensor.class, "index1");
-        slot2Sensor = hwMap.get(NormalizedColorSensor.class, "index2");
+        slot0Sensor = hwMap.get(RevColorSensorV3.class, "index0");
+        slot1Sensor = hwMap.get(RevColorSensorV3.class, "index1");
+        slot2Sensor = hwMap.get(RevColorSensorV3.class, "index2");
         slot0 = hwMap.get(Servo.class, "transfer0");
         slot1 = hwMap.get(Servo.class, "transfer1");
         slot2 = hwMap.get(Servo.class, "transfer2");
@@ -48,27 +49,27 @@ public class Indexer {
         int[]  slots = new int[3];
 
         //0 slot
-        if (149 >= hue0 && hue0 >= 90) {
+        if (180 >= hue0 && hue0 >= 150) {
             slots[0] = 2;
-        } else if (300 >= hue0 && hue0 >= 270) {
+        } else if (300 >= hue0 && hue0 >= 240) {
             slots[0] = 1;
         } else {
             slots[0] = 0;
         }
 
         //1 slot
-        if (149 >= hue1 && hue1 >= 90) {
+        if (180 >= hue1 && hue1 >= 150) {
             slots[1] = 2;
-        } else if (300 >= hue1 && hue1 >= 270) {
+        } else if (300 >= hue1 && hue1 >= 240) {
             slots[1] = 1;
         } else {
             slots[1] = 0;
         }
 
         //2 slot
-        if (149 >= hue2 && hue2 >= 90) {
+        if (180 >= hue1 && hue1 >= 150) {
             slots[2] = 2;
-        } else if (300 >= hue2 && hue2 >= 270) {
+        } else if (300 >= hue1 && hue1 >= 240) {
             slots[2] = 1;
         } else {
             slots[2] = 0;
