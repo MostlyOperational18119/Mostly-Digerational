@@ -97,15 +97,15 @@ public class Indexer {
     }
 
 
-    public static int[] slotColors() {
-        int[] slots = new int[3];
-
-        int
-
-
-
-        return slots;
-    }
+//    public static int[] slotColors() {
+//        int[] slots = new int[3];
+//
+//        int
+//
+//
+//
+//        return slots;
+//    }
 
 
 
