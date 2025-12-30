@@ -76,9 +76,9 @@ public class Indexer {
     }
 
     public static String slot0Test () {
-        if (getColor(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 2) {
+        if (getColorSlot0(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 2) {
             return "green";
-        } else if (getColor(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) ==1 ) {
+        } else if (getColorSlot0(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) ==1 ) {
             return "purple";
         } else {
             return "empty";
@@ -86,9 +86,9 @@ public class Indexer {
     }
 
     public static String slot1Test () {
-        if (getColor(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 2) {
+        if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 2) {
             return "green";
-        } else if (getColor(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) ==1 ) {
+        } else if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) ==1 ) {
             return "purple";
         } else {
             return "empty";
@@ -96,15 +96,35 @@ public class Indexer {
     }
 
     public static String slot2Test () {
-        if (getColor(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 2) {
+        if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 2) {
             return "green";
-        } else if (getColor(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) ==1 ) {
+        } else if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) ==1 ) {
             return "purple";
         } else {
             return "empty";
         }
     }
-    private static int getColor (double red, double green, double blue) {
+    private static int getColorSlot0 (double red, double green, double blue) {
+        if (green/blue > 1.3 && green/blue < 1.5) {
+            return 2;
+        } else if (red/green > .9 && red/green < 1.2 && red > 85) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    private static int getColorSlot1 (double red, double green, double blue) {
+        if (green/blue > 1.25 && green/blue < 1.5) {
+            return 2;
+        } else if (red/green > .9 && red/green < 1.2 && red > 85) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    private static int getColorSlot2 (double red, double green, double blue) {
         if (green/blue > 1.3 && green/blue < 1.5) {
             return 2;
         } else if (red/green > .9 && red/green < 1.2 && red > 85) {
