@@ -63,6 +63,9 @@ public class competitionOpMode extends LinearOpMode {
 
             if (launch > 0) {
                 Indexer.update(true);
+                Indexer.updateSlot1();
+                Indexer.updateSlot1();
+                Indexer.updateSlot2();
             }
 
             if ((rt > 0.5) && (launch > 0)) {
