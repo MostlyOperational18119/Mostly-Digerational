@@ -16,16 +16,17 @@ public class IndexerTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
+            telemetry.addData("Slot 0 Red: ", Indexer.slotColor0Red());
+            telemetry.addData("Slot 0 Green: ", Indexer.slotColor0Green());
+            telemetry.addData("Slot 0 Blue: ", Indexer.slotColor0Blue());
 
+            telemetry.addData("Slot 1 Red: ", Indexer.slotColor1Red());
+            telemetry.addData("Slot 1 Green: ", Indexer.slotColor1Green());
+            telemetry.addData("Slot 1 Blue: ", Indexer.slotColor1Blue());
 
-//            telemetry.addData("current index state", Indexer.currentState);
-            telemetry.addData("colorSensor0 color", Indexer.slotColors()[0]);
-            telemetry.addData("colorSensor1 color", Indexer.slotColors()[1]);
-            telemetry.addData("colorSensor2 color", Indexer.slotColors()[2]);
-            telemetry.addData("slot0 position", Indexer.slot0.getPosition());
-            telemetry.addData("slot1 position", Indexer.slot1.getPosition());
-            telemetry.addData("slot2 position", Indexer.slot2.getPosition());
-            telemetry.update();
+            telemetry.addData("Slot 2 Red: ", Indexer.slotColor2Red());
+            telemetry.addData("Slot 2 Green: ", Indexer.slotColor2Green());
+            telemetry.addData("Slot 2 Blue: ", Indexer.slotColor2Blue());
         }
     }
 
