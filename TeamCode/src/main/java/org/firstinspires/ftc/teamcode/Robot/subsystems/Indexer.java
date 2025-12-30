@@ -59,9 +59,9 @@ public class Indexer {
         NormalizedRGBA slot2Colors = slot2Sensor.getNormalizedColors();
         hue2 = JavaUtil.colorToHue(slot2Colors.toColor());
 
-        Log.i("Indexer", String.format("Hue 0: %d", hue0));
-        Log.i("Indexer", String.format("Hue 1: %d", hue1));
-        Log.i("Indexer", String.format("Hue 2: %d", hue2));
+//        Log.i("Indexer", String.format("Hue 0: %d", hue0));
+//        Log.i("Indexer", String.format("Hue 1: %d", hue1));
+//        Log.i("Indexer", String.format("Hue 2: %d", hue2));
 
         int[] slots = new int[3];
 
