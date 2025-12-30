@@ -26,6 +26,10 @@ public class competitionOpMode extends LinearOpMode {
         //placeholders
         boolean red = false;
         int launch = 1;
+        long startTime = 0;
+        final long WAIT = 300;
+
+
 
         Drivetrain.init(hardwareMap);
         //Outtake.init(hardwareMap);
@@ -57,8 +61,15 @@ public class competitionOpMode extends LinearOpMode {
             Drivetrain.drive(y, x, rx);
 //          Outtake.outtakeUpdate(currentPose.getX(), currentPose.getY(), launch);
 
-            if (A) {
-                Indexer.update(Indexer.slotColors());
+            if (launch > 0) {
+                Indexer.update(true);
+            }
+
+            if ((rt > 0.5) && (launch > 0)) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime-startTime > WAIT) {
+                    startTime = Indexer.startLaunch(4);
+                }
             }
 
 
@@ -67,7 +78,6 @@ public class competitionOpMode extends LinearOpMode {
             } else {
                 Intake.intakeStop();
             }
-
         }
     }
 }

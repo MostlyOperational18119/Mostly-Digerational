@@ -96,6 +96,34 @@ public class Indexer {
                 break;
         }
     }
+    public static void updateSlot2 () {
+        switch (currentState2) {
+            case LAUNCH:
+                slot2.setPosition(UP_POS_2);
+                break;
+            case IDLE:
+                slot2.setPosition(DOWN_POS_2);
+                break;
+            case EMPTY:
+                slot2.setPosition(MID_POS_2);
+                break;
+        }
+    }
+
+    public static void updateSlot1 () {
+        switch (currentState1) {
+            case LAUNCH:
+                slot1.setPosition(UP_POS_1);
+                break;
+            case IDLE:
+                slot1.setPosition(DOWN_POS_1);
+                break;
+            case EMPTY:
+                slot1.setPosition(MID_POS_1);
+                break;
+        }
+    }
+
 
     //Transfer Part Duex import
     public static void startLaunch0() {
@@ -108,7 +136,7 @@ public class Indexer {
         currentState2 = States.LAUNCH;
     }
 
-    public static void update(int chamberNum, boolean launch) {
+    public static long startLaunch(int chamberNum) {
         int[] slots = slotColors();
         long startTime = System.currentTimeMillis();
         if (slots[0] == nextBall(slots, chamberNum, pattern)) {
@@ -117,6 +145,29 @@ public class Indexer {
             currentState1 = States.LAUNCH;
         } else if (slots[2] == nextBall(slots, chamberNum, pattern)) {
             currentState2 = States.LAUNCH;
+        }
+        return startTime;
+    }
+
+    public static void update (boolean launch){
+        int[] slots = slotColors();
+        if (currentState0 == States.LAUNCH) {
+            if (launch == true) {
+                currentState0 = States.EMPTY;
+            }
+            currentState0 = States.IDLE;
+        }
+        if (currentState1 == States.LAUNCH) {
+            if (launch == true) {
+                currentState1 = States.EMPTY;
+            }
+            currentState1 = States.IDLE;
+        }
+        if (currentState2 == States.LAUNCH) {
+            if (launch == true) {
+                currentState2 = States.EMPTY;
+            }
+            currentState2 = States.IDLE;
         }
     }
 
