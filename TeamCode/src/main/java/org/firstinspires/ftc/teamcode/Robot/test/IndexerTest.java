@@ -11,14 +11,14 @@ public class IndexerTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         Indexer.init(hardwareMap);
-        Indexer.startLaunch();
+//        Indexer.startLaunch();
 
         waitForStart();
         while (opModeIsActive()) {
 
 
 
-            telemetry.addData("current index state", Indexer.currentState);
+//            telemetry.addData("current index state", Indexer.currentState);
             telemetry.addData("colorSensor0 color", Indexer.slotColors()[0]);
             telemetry.addData("colorSensor1 color", Indexer.slotColors()[1]);
             telemetry.addData("colorSensor2 color", Indexer.slotColors()[2]);
