@@ -13,16 +13,7 @@ public class LaunchSequenceTest extends LinearOpMode {
         Indexer.init(hardwareMap);
 
         while (opModeIsActive()) {
-            Indexer.startLaunch();
-            Indexer.update(Indexer.slotColors());
 
-            telemetry.addData("index", Indexer.slotColors()[0]);
-            telemetry.addData("index", Indexer.slotColors()[1]);
-            telemetry.addData("index", Indexer.slotColors()[2]);
-//            telemetry.addData("slot 0 position", Transfer.slot0Position());
-//            telemetry.addData("slot 1 position", Transfer.slot1Position());
-//            telemetry.addData("slot 2 position", Transfer.slot2Position());
-            telemetry.update();
         }
     }
 }
