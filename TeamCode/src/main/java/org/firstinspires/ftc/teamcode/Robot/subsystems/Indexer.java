@@ -105,7 +105,7 @@ public class Indexer {
         }
     }
     private static int getColorSlot0 (double red, double green, double blue) {
-        if (green/blue > 1.3 && green/blue < 1.5) {
+        if (green/blue > 1.3 && green/blue < 1.6 && green > 90) {
             return 2;
         } else if (red/green > .9 && red/green < 1.2 && red > 85) {
             return 1;
@@ -115,9 +115,9 @@ public class Indexer {
     }
 
     private static int getColorSlot1 (double red, double green, double blue) {
-        if (green/blue > 1.25 && green/blue < 1.5) {
+        if (green/blue > 1.3 && green/blue < 1.6 && green > 65) {
             return 2;
-        } else if (red/green > .9 && red/green < 1.2 && red > 85) {
+        } else if (red/green > .9 && red/green < 1.2 && blue > 45) {
             return 1;
         } else {
             return 0;
@@ -125,9 +125,9 @@ public class Indexer {
     }
 
     private static int getColorSlot2 (double red, double green, double blue) {
-        if (green/blue > 1.3 && green/blue < 1.5) {
+        if (green/blue > 1.3 && green/blue < 1.6) {
             return 2;
-        } else if (red/green > .9 && red/green < 1.2 && red > 85) {
+        } else if (red/green > .9 && red/green < 1.2 && red > 100) {
             return 1;
         } else {
             return 0;
