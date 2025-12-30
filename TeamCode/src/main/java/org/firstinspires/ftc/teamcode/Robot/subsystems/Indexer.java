@@ -85,7 +85,7 @@ public class Indexer {
         }
     }
 
-    public static String slot1Test () {
+    public static String slot1Test() {
         if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 2) {
             return "green";
         } else if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) ==1 ) {
@@ -95,7 +95,7 @@ public class Indexer {
         }
     }
 
-    public static String slot2Test () {
+    public static String slot2Test() {
         if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 2) {
             return "green";
         } else if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) ==1 ) {
@@ -135,67 +135,69 @@ public class Indexer {
     }
 
 
-//    public static int[] slotColors() {
-//        int[] slots = new int[3];
-//
-//        int
-//
-//
-//
-//        return slots;
-//    }
-
-
-
-
-
     public static int[] slotColors() {
-
-        //green = 2, purple = 1, empty = 0;
-        double hue0, hue1, hue2;
-
-        NormalizedRGBA slot0Colors = slot0Sensor.getNormalizedColors();
-        hue0 = JavaUtil.colorToHue(slot0Colors.toColor());
-        NormalizedRGBA slot1Colors = slot1Sensor.getNormalizedColors();
-        hue1 = JavaUtil.colorToHue(slot1Colors.toColor());
-        NormalizedRGBA slot2Colors = slot2Sensor.getNormalizedColors();
-        hue2 = JavaUtil.colorToHue(slot2Colors.toColor());
-
-//        Log.i("Indexer", String.format("Hue 0: %d", hue0));
-//        Log.i("Indexer", String.format("Hue 1: %d", hue1));
-//        Log.i("Indexer", String.format("Hue 2: %d", hue2));
-
         int[] slots = new int[3];
 
-        //0 slot
-        if (180 >= hue0 && hue0 >= 150) {
-            slots[0] = 2;
-        } else if (300 >= hue0 && hue0 >= 240) {
-            slots[0] = 1;
-        } else {
-            slots[0] = 0;
-        }
+        slots[0] = getColorSlot0(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue());
+        slots[1] = getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue());
+        slots[2] = getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue());
 
-        //1 slot
-        if (180 >= hue1 && hue1 >= 150) {
-            slots[1] = 2;
-        } else if (300 >= hue1 && hue1 >= 240) {
-            slots[1] = 1;
-        } else {
-            slots[1] = 0;
-        }
 
-        //2 slot
-        if (180 >= hue2 && hue2 >= 150) {
-            slots[2] = 2;
-        } else if (300 >= hue2 && hue2 >= 240) {
-            slots[2] = 1;
-        } else {
-            slots[2] = 0;
-        }
 
         return slots;
     }
+
+
+
+
+
+//    public static int[] slotColors() {
+//
+//        //green = 2, purple = 1, empty = 0;
+//        double hue0, hue1, hue2;
+//
+//        NormalizedRGBA slot0Colors = slot0Sensor.getNormalizedColors();
+//        hue0 = JavaUtil.colorToHue(slot0Colors.toColor());
+//        NormalizedRGBA slot1Colors = slot1Sensor.getNormalizedColors();
+//        hue1 = JavaUtil.colorToHue(slot1Colors.toColor());
+//        NormalizedRGBA slot2Colors = slot2Sensor.getNormalizedColors();
+//        hue2 = JavaUtil.colorToHue(slot2Colors.toColor());
+//
+////        Log.i("Indexer", String.format("Hue 0: %d", hue0));
+////        Log.i("Indexer", String.format("Hue 1: %d", hue1));
+////        Log.i("Indexer", String.format("Hue 2: %d", hue2));
+//
+//        int[] slots = new int[3];
+//
+//        //0 slot
+//        if (180 >= hue0 && hue0 >= 150) {
+//            slots[0] = 2;
+//        } else if (300 >= hue0 && hue0 >= 240) {
+//            slots[0] = 1;
+//        } else {
+//            slots[0] = 0;
+//        }
+//
+//        //1 slot
+//        if (180 >= hue1 && hue1 >= 150) {
+//            slots[1] = 2;
+//        } else if (300 >= hue1 && hue1 >= 240) {
+//            slots[1] = 1;
+//        } else {
+//            slots[1] = 0;
+//        }
+//
+//        //2 slot
+//        if (180 >= hue2 && hue2 >= 150) {
+//            slots[2] = 2;
+//        } else if (300 >= hue2 && hue2 >= 240) {
+//            slots[2] = 1;
+//        } else {
+//            slots[2] = 0;
+//        }
+//
+//        return slots;
+//    }
 
     public static void updateSlot0 () {
         switch (currentState0) {
