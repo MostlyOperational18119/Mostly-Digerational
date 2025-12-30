@@ -72,7 +72,8 @@ public class Limelight {
         }
     }
 
-    public void connect() throws IOException {
+    // Doesn't need to be public, probably just going to cause problems
+    private void connect() throws IOException {
         socket = new Socket("172.29.0.1", 8888);
 
         in = new DataInputStream(socket.getInputStream());
@@ -83,5 +84,28 @@ public class Limelight {
         if (results == null || !results.containsKey(type)) return Optional.empty();
 
         return Optional.ofNullable(results.get(type));
+    }
+
+    public Optional<Integer> getBallCount() {
+        if (results == null || !results.containsKey(ToRobotMsg.ResultType.BallLine)) return Optional.empty();
+
+        return Optional.ofNullable((Integer) results.get(ToRobotMsg.ResultType.BallLine));
+    }
+
+    public Optional<Integer[]> getPattern() {
+        if (results != null && results.containsKey(ToRobotMsg.ResultType.BallLine)) {
+            AprilTagResult result = (AprilTagResult) results.get(ToRobotMsg.ResultType.AprilTag);
+
+            switch (result.tagID) {
+                case 21:
+                    return Optional.of(new Integer[]{0, 1, 1});
+                case 22:
+                    return Optional.of(new Integer[]{1, 0, 1});
+                case 23:
+                    return Optional.of(new Integer[]{1, 1, 0});
+            }
+        }
+
+        return Optional.empty();
     }
 }
