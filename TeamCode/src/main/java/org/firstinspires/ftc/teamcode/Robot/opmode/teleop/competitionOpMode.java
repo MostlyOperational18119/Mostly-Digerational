@@ -32,8 +32,8 @@ public class competitionOpMode extends LinearOpMode {
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
 
-        Pose currentPose;
 
+        Pose currentPose;
         Follower follower;
         follower =  Constants.createFollower(hardwareMap);
 
@@ -68,12 +68,6 @@ public class competitionOpMode extends LinearOpMode {
                 Intake.intakeStop();
             }
 
-
-
-            telemetry.addData("is intake running", intake);
-            telemetry.addData("intake power", Intake.intakeTelemetry());
-
-            telemetry.update();
         }
     }
 }

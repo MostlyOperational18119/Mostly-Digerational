@@ -26,7 +26,7 @@ public class Outtake {
         AIM_GOAL_RED
     }
 
-    public static void outtakeUpdate (double x, double y, int launch, boolean red) {
+    public static void outtakeUpdate(double x, double y, int launch, boolean red) {
 
         if (red) {
             if (launch > 0) {
@@ -44,16 +44,16 @@ public class Outtake {
 
         switch (currentState) {
             case AIM_GOAL_BLUE:
-                autoAim(144-x, y);
+                autoAim(144 - x, y);
                 break;
             case AIM_CHAMBER_BLUE:
-                autoAim(CHAMBER_POS-x,y);
+                autoAim(CHAMBER_POS - x, y);
                 break;
             case AIM_GOAL_RED:
-                autoAim(144-x, 144-y);
+                autoAim(144 - x, 144 - y);
                 break;
             case AIM_CHAMBER_RED:
-                autoAim(CHAMBER_POS-x,144-y);
+                autoAim(CHAMBER_POS - x, 144 - y);
                 break;
         }
     }
@@ -77,9 +77,11 @@ public class Outtake {
     public static void startOuttake(boolean red, boolean launch) {
 
     }
+
     public static double testTelemetryMotor1() { //clutch test program
         return outtakeMotor1.getVelocity();
     }
+
     public static double testTelemetryMotor2() { //test program
         return outtakeMotor2.getVelocity();
     }
@@ -96,7 +98,7 @@ public class Outtake {
     }
 
 
-    private static void autoAim (double x, double y) {
+    private static void autoAim(double x, double y) {
         double target, dist, pos;
 
         target = Math.atan((y) / x);
@@ -117,7 +119,7 @@ public class Outtake {
         rotateServo.setPosition((int) pos);
     }
 
-    public static void autoAimHoodPlusVelo (double x, double y, int height) {
+    public static void autoAimHoodPlusVelo(double x, double y, int height) {
         double target, dist, pos, hoodPos, hoodAngle;
 
         target = Math.atan((y) / x);
@@ -126,9 +128,9 @@ public class Outtake {
 
         dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-        hoodAngle = acot(dist/(4*height));
+        hoodAngle = acot(dist / (4 * height));
 
-        speed = Math.sqrt((2*height*386.089)/(Math.pow(Math.sin(hoodAngle),2)));
+        speed = Math.sqrt((2 * height * 386.089) / (Math.pow(Math.sin(hoodAngle), 2)));
 
         hoodPos = 0.76 - (0.56 / 17) * (64 - hoodAngle);
 
@@ -138,7 +140,7 @@ public class Outtake {
         telemetry.addData("Outtake Position:", pos);
     }
 
-    public static double acot(double x) {
+    private static double acot(double x) {
         if (x == 0.0) {
             return Math.PI / 2.0;
         } else if (x > 0.0) {

@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 
 public class Indexer {
     public static Servo slot0, slot1, slot2;
-    public static double UP_POS_0 = 0.12, DOWN_POS_0 = 0.5, UP_POS_1 = 0.12, DOWN_POS_1 = 0.5, UP_POS_2 = 0.88, DOWN_POS_2 = 0.5;
+    public static double UP_POS_0 = 0.12, DOWN_POS_0 = 0.48, UP_POS_1 = 0.12, DOWN_POS_1 = 0.48, UP_POS_2 = 0.88, DOWN_POS_2 = 0.47;
     public enum States {
         LAUNCH,
         IDLE
@@ -86,6 +86,7 @@ public class Indexer {
     public static void update (int[] slots) {
         switch(currentState) {
             case LAUNCH:
+
                 currentBall = nextBall(slots, 6, pattern); //placeholder chamberNum
                 if (currentBall != -1) {
                     switch (currentBall) {
@@ -102,6 +103,8 @@ public class Indexer {
                             break;
                     }
                 }
+
+
                 currentState = States.IDLE;
             case IDLE:
                 switch (currentBall) {
