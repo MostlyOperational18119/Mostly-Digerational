@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.teleop;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.widget.AdapterView;
 
 import com.pedropathing.follower.Follower;
@@ -86,6 +88,14 @@ public class competitionOpMode extends LinearOpMode {
             } else {
                 Intake.intakeStop();
             }
+
+            int[] slots = Indexer.slotColors();
+
+            telemetry.addData("launch", launch);
+            telemetry.addData("slot0", slots[0]);
+            telemetry.addData("slot1", slots[1]);
+            telemetry.addData("slot2", slots[2]);
+            telemetry.update();
         }
     }
 }

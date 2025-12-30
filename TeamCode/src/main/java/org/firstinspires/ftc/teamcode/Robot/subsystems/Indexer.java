@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
+import android.util.Log;
+
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
@@ -34,9 +38,13 @@ public class Indexer {
         slot2 = hwMap.get(Servo.class, "transfer2");
 
         //initialize to start position
-        slot0.setPosition(DOWN_POS_0);
-        slot1.setPosition(DOWN_POS_1);
-        slot2.setPosition(DOWN_POS_2);
+        currentState0 = States.IDLE;
+        currentState1 = States.IDLE;
+        currentState2 = States.IDLE;
+
+        updateSlot0();
+        updateSlot1();
+        updateSlot2();
     }
 
     public static int[] slotColors() {
@@ -50,6 +58,10 @@ public class Indexer {
         hue1 = JavaUtil.colorToHue(slot1Colors.toColor());
         NormalizedRGBA slot2Colors = slot2Sensor.getNormalizedColors();
         hue2 = JavaUtil.colorToHue(slot2Colors.toColor());
+
+        Log.i("Indexer", String.format("Hue 0: %d", hue0));
+        Log.i("Indexer", String.format("Hue 1: %d", hue1));
+        Log.i("Indexer", String.format("Hue 2: %d", hue2));
 
         int[] slots = new int[3];
 
@@ -72,9 +84,9 @@ public class Indexer {
         }
 
         //2 slot
-        if (180 >= hue1 && hue1 >= 150) {
+        if (180 >= hue2 && hue2 >= 150) {
             slots[2] = 2;
-        } else if (300 >= hue1 && hue1 >= 240) {
+        } else if (300 >= hue2 && hue2 >= 240) {
             slots[2] = 1;
         } else {
             slots[2] = 0;
@@ -126,15 +138,6 @@ public class Indexer {
 
 
     //Transfer Part Duex import
-    public static void startLaunch0() {
-        currentState0 = States.LAUNCH;
-    }
-    public static void startLaunch1() {
-        currentState1 = States.LAUNCH;
-    }
-    public static void startLaunch2() {
-        currentState2 = States.LAUNCH;
-    }
 
     public static long startLaunch(int chamberNum) {
         int[] slots = slotColors();
