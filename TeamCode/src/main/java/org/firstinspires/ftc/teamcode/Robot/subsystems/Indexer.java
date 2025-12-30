@@ -83,7 +83,6 @@ public class Indexer {
         } else {
             return "empty";
         }
-
     }
 
     private static int getColor (double red, double green, double blue) {

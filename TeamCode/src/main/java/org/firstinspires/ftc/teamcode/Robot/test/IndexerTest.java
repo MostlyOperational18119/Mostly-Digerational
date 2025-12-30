@@ -16,6 +16,9 @@ public class IndexerTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
+            telemetry.addData("slot0red: ", Indexer.slotColor0Red());
+            telemetry.addData("slot0green: ", Indexer.slotColor0Green());
+            telemetry.addData("slot0blue: ", Indexer.slotColor0Blue());
             telemetry.addData("Slot0: ", Indexer.slot0Test());
             telemetry.update();
         }
