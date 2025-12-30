@@ -88,7 +88,7 @@ public class Indexer {
     private static int getColor (double red, double green, double blue) {
         if (green/blue > 1.3 && green/blue < 1.5) {
             return 2;
-        } else if (red/green > .9 && red/green < 1.2 && red > 100) {
+        } else if (red/green > .9 && red/green < 1.2 && red > 85) {
             return 1;
         } else {
             return 0;
