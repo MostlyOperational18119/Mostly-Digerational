@@ -17,7 +17,7 @@ public class IndexerTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             telemetry.addData("Slot0: ", Indexer.slot0Test());
+            telemetry.update();
         }
     }
-
 }
