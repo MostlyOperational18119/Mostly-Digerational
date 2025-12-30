@@ -65,7 +65,7 @@ public class competitionOpMode extends LinearOpMode {
             if (lt > .5) {
                 Intake.intakeGo();
             } else {
-                Intake.intakeIdle();
+                Intake.intakeStop();
             }
 
 
