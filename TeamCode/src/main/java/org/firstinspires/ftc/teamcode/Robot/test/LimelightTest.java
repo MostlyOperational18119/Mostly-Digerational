@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot.test;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -18,6 +20,7 @@ public class LimelightTest extends LinearOpMode {
         try {
             limelight = new Limelight();
         } catch (IOException e) {
+            Log.e("LimelightTest", String.format("Error getting limelight: %s", e.getLocalizedMessage()));
             throw new RuntimeException(e);
         }
 
