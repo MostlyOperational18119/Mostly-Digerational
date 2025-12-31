@@ -23,8 +23,6 @@ public class competitionOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        waitForStart();
-
         //placeholders
         boolean red = false;
         int launch = -1;
@@ -43,6 +41,7 @@ public class competitionOpMode extends LinearOpMode {
         Follower follower;
         follower =  Constants.createFollower(hardwareMap);
 
+        waitForStart();
 
         while (opModeIsActive()) {
 
@@ -52,8 +51,7 @@ public class competitionOpMode extends LinearOpMode {
             float rx = gamepad1.right_stick_x;
             boolean X = gamepad1.xWasPressed();
             boolean A = gamepad1.aWasPressed();
-            float lt = gamepad1.left_trigger;
-            float rt = gamepad1.right_trigger;
+            boolean intake = gamepad1.right_trigger > 0.5;
 
             if (X) {
                 launch *= -1;
@@ -76,12 +74,8 @@ public class competitionOpMode extends LinearOpMode {
                 }
             }
 
-
-            if (lt > .5) {
-                Intake.intakeGo();
-            } else {
-                Intake.intakeStop();
-            }
+            //intake balls
+            Intake.switchIntake(intake);
 
             int[] slots = Indexer.slotColors();
 
