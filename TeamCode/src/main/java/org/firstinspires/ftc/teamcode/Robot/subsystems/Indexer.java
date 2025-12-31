@@ -276,6 +276,10 @@ public class Indexer {
             }
             currentState2 = States.IDLE;
         }
+
+        updateSlot0();
+        updateSlot1();
+        updateSlot2();
     }
 
     public static int nextBall(int chamberNum, int[] pattern) {

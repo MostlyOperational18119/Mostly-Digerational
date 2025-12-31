@@ -27,19 +27,19 @@ public class competitionOpMode extends LinearOpMode {
 
         //placeholders
         boolean red = false;
-        int launch = 1;
+        int launch = -1;
         long startTime = 0;
         final long WAIT = 300;
 
 
 
         Drivetrain.init(hardwareMap);
-        //Outtake.init(hardwareMap);
+        Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
 
-
-        Pose currentPose;
+        final Pose startPose = new Pose(0, 0, 0);
+        Pose currentPose = startPose;
         Follower follower;
         follower =  Constants.createFollower(hardwareMap);
 
@@ -61,21 +61,15 @@ public class competitionOpMode extends LinearOpMode {
 
             
             Drivetrain.drive(y, x, rx);
-//          Outtake.outtakeUpdate(currentPose.getX(), currentPose.getY(), launch);
+            Outtake.outtakeUpdate(currentPose.getX(), currentPose.getY(), launch, red);
 
             if (launch > 0) {
                 Indexer.update(true);
-                Indexer.updateSlot0();
-                Indexer.updateSlot1();
-                Indexer.updateSlot2();
             } else {
                 Indexer.update(false);
-                Indexer.updateSlot0();
-                Indexer.updateSlot1();
-                Indexer.updateSlot2();
             }
 
-            if ((rt > 0.5) && (launch > 0)) {
+            if ((A) && (launch > 0)) {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime-startTime > WAIT) {
                     startTime = Indexer.startLaunch(4);
