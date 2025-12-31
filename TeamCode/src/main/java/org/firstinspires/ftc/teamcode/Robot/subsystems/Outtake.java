@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,12 +13,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Outtake {
 
     private static DcMotorEx outtakeMotor1, outtakeMotor2;
+    private static DcMotorEx rotateEncoder;
     private static Servo hood, rotateServo;
     private static final double SPEED_CONST_CLOSE = 231.2, SPEED_CONST_FAR = 204, FAR_HOOD = .20, CLOSE_HOOD = .76;
     private static final int CHAMBER_POS = 96, OFFSET = 200, HEIGHT = 44;
     private static double speed = 2800;
 
-    public static States currentState;
+    public static States currentState = States.AIM_CHAMBER_BLUE;
 
     public enum States {
         AIM_CHAMBER_BLUE,
@@ -44,16 +46,16 @@ public class Outtake {
 
         switch (currentState) {
             case AIM_GOAL_BLUE:
-                autoAim(144 - x, y);
+                autoAimHoodPlusVelo(144 - x, y);
                 break;
             case AIM_CHAMBER_BLUE:
-                autoAim(CHAMBER_POS - x, y);
+                autoAimHoodPlusVelo(CHAMBER_POS - x, y);
                 break;
             case AIM_GOAL_RED:
-                autoAim(144 - x, 144 - y);
-                break;
+                autoAimHoodPlusVelo(144 - x, 144 - y);
+            break;
             case AIM_CHAMBER_RED:
-                autoAim(CHAMBER_POS - x, 144 - y);
+                autoAimHoodPlusVelo(CHAMBER_POS - x, 144 - y);
                 break;
         }
     }
@@ -62,13 +64,14 @@ public class Outtake {
     public static void init(HardwareMap hwMap) {
         outtakeMotor2 = hwMap.get(DcMotorEx.class, "outtakeMotor2");
         outtakeMotor1 = hwMap.get(DcMotorEx.class, "outtakeMotor1");
+        outtakeMotor1 = hwMap.get(DcMotorEx.class, "motorFR");
         outtakeMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
-        //rotateServo = hwMap.get(Servo.class, "rotate");
-        //hood = hwMap.get(Servo.class, "hood");
+        rotateServo = hwMap.get(Servo.class, "rotate");
+        hood = hwMap.get(Servo.class, "hood");
 
         //initialize to start positions (placeholders)
-        //hood.setPosition(FRONT_HOOD);
-        //rotateServo.setPosition(0);
+        hood.setPosition(FAR_HOOD);
+        rotateServo.setPosition(0);
 
         outtakeMotor1.setVelocityPIDFCoefficients(11, 3, 2, 2);
         outtakeMotor2.setVelocityPIDFCoefficients(11, 3, 2, 2);
@@ -116,28 +119,37 @@ public class Outtake {
         }
 
 
-        rotateServo.setPosition((int) pos);
+        rotateServo.setPosition(pos);
     }
 
-    public static void autoAimHoodPlusVelo(double x, double y, int height) {
+    public static void autoAimHoodPlusVelo(double x, double y) {
         double target, dist, pos, hoodPos, hoodAngle;
+        rotateEncoder.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         target = Math.atan((y) / x);
 
-        pos = target * (2048 / 360) + OFFSET;
+        pos = target * (65.871) + OFFSET;
 
         dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-        hoodAngle = acot(dist / (4 * height));
+        hoodAngle = acot(dist / (4 * HEIGHT));
 
-        speed = Math.sqrt((2 * height * 386.089) / (Math.pow(Math.sin(hoodAngle), 2)));
+        speed = Math.sqrt((2 * HEIGHT * 386.089) / (Math.pow(Math.sin(hoodAngle), 2)));
 
         hoodPos = 0.76 - (0.56 / 17) * (64 - hoodAngle);
 
-        telemetry.addData("Hood Angle:", hoodAngle);
-        telemetry.addData("Hood Pos:", hoodPos);
-        telemetry.addData("speed:", speed);
-        telemetry.addData("Outtake Position:", pos);
+        if (hoodPos > .7) {
+            hoodPos = .7;
+        }
+        if (hoodPos < .25) {
+            hoodPos = .25;
+        }
+        hood.setPosition(hoodPos);
+        rotateEncoder.setTargetPosition((int)pos);
+        outtakeMotor1.setVelocity(speed);
+        outtakeMotor2.setVelocity(speed);
+
+
     }
 
     private static double acot(double x) {

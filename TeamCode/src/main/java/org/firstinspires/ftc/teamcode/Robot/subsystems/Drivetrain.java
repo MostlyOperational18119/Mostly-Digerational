@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 public class Drivetrain {
-    static private DcMotor frontLeft, frontRight, backLeft, backRight;
+    static public DcMotor frontLeft, frontRight, backLeft, backRight;
 
     public static void init (HardwareMap hwMap) {
         frontLeft = hwMap.get(DcMotor.class, "motorFL");
