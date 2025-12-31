@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
-@TeleOp(name="drivetrain testing")
+@TeleOp(name="TeleOp")
 public class competitionOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

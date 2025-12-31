@@ -103,7 +103,7 @@ public class Outtake {
 
         target = Math.atan((y) / x);
 
-        pos = target * (2048 / 360) + OFFSET;
+        pos = target * (65.871) + OFFSET;
 
         dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
