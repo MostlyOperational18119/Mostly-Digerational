@@ -8,6 +8,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import java.util.Arrays;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
@@ -244,33 +245,32 @@ public class Indexer {
     //Transfer Part Duex import
 
     public static long startLaunch(int chamberNum) {
-        int[] slots = slotColors();
+        int[] slots = Arrays.copyOf(slotColors(), 3);
         long startTime = System.currentTimeMillis();
-        if (slots[0] == nextBall(slots, chamberNum, pattern)) {
+        if (slots[0] == nextBall(chamberNum, pattern)) {
             currentState0 = States.LAUNCH;
-        } else if (slots[1] == nextBall(slots, chamberNum, pattern)) {
+        } else if (slots[1] == nextBall(chamberNum, pattern)) {
             currentState1 = States.LAUNCH;
-        } else if (slots[2] == nextBall(slots, chamberNum, pattern)) {
+        } else if (slots[2] == nextBall(chamberNum, pattern)) {
             currentState2 = States.LAUNCH;
         }
         return startTime;
     }
 
     public static void update (boolean launch){
-        int[] slots = slotColors();
-        if (currentState0 == States.LAUNCH) {
+        if (currentState0 == States.LAUNCH || getColorSlot0(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 0) {
             if (launch == true) {
                 currentState0 = States.EMPTY;
             }
             currentState0 = States.IDLE;
         }
-        if (currentState1 == States.LAUNCH) {
+        if (currentState1 == States.LAUNCH || getColorSlot0(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 0) {
             if (launch == true) {
                 currentState1 = States.EMPTY;
             }
             currentState1 = States.IDLE;
         }
-        if (currentState2 == States.LAUNCH) {
+        if (currentState2 == States.LAUNCH || getColorSlot0(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 0) {
             if (launch == true) {
                 currentState2 = States.EMPTY;
             }
@@ -278,16 +278,8 @@ public class Indexer {
         }
     }
 
-    public static int nextBall(int[] slots, int chamberNum, int[] pattern) {
+    public static int nextBall(int chamberNum, int[] pattern) {
         int patternIndex = chamberNum % 3;
-        int desiredColor = pattern[patternIndex];
-        int emptyCount = 0;
-
-        for (int i = 0; i < slots.length; i++) {
-            if (slots[i] == desiredColor) {
-                return i;
-            }
-        }
-        return -1;
+        return pattern[patternIndex];
     }
 }
