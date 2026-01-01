@@ -27,7 +27,9 @@ public class competitionOpMode extends LinearOpMode {
         boolean red = false;
         int launch = -1;
         long startTime = 0;
+        long startTime0 = 0, startTime1, startTime2;
         final long WAIT = 300;
+        final long LAUNCH_TIME = 150;
 
 
 
@@ -52,6 +54,7 @@ public class competitionOpMode extends LinearOpMode {
             boolean X = gamepad1.xWasPressed();
             boolean A = gamepad1.aWasPressed();
             boolean intake = gamepad1.right_trigger > 0.5;
+            boolean Y = gamepad1.yWasPressed();
 
             if (X) {
                 launch *= -1;
@@ -71,6 +74,28 @@ public class competitionOpMode extends LinearOpMode {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime-startTime > WAIT) {
                     startTime = Indexer.startLaunch(4);
+                }
+            }
+            if (Y) {
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - startTime0 > WAIT) {
+                    startTime0 = Outtake.launch0();
+                    if (currentTime - startTime0 > LAUNCH_TIME) {
+                        Outtake.down0();
+                    }
+                    if (currentTime - startTime0 > WAIT) {
+                        startTime1 = Outtake.launch1();
+                        if (currentTime - startTime1 > LAUNCH_TIME) {
+                            Outtake.down1();
+                        }
+                        if (currentTime - startTime1 > WAIT) {
+                            startTime2 = Outtake.launch2();
+                            if (currentTime - startTime2 > LAUNCH_TIME) {
+                                Outtake.down2();
+                            }
+                        }
+                    }
+
                 }
             }
 

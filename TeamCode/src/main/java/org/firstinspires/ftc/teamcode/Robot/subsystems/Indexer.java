@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import android.util.Log;
@@ -25,6 +26,8 @@ public class Indexer {
         EMPTY
     }
 
+
+
     public static int[] pattern = new int[]{1, 2, 2}; // change to new int[3];
     public static States currentState0, currentState1, currentState2;
     static int currentBall; //ball being launched (0, 1, or 2)
@@ -47,6 +50,44 @@ public class Indexer {
         updateSlot1();
         updateSlot2();
     }
+
+
+    public static long launch0() {
+        currentState0 = States.LAUNCH;
+        long startTime = System.currentTimeMillis();
+
+
+        return startTime;
+    }
+
+    public static long launch1() {
+        currentState1 = States.LAUNCH;
+        long startTime = System.currentTimeMillis();
+
+
+        return startTime;
+    }
+
+    public static long launch2() {
+        currentState2 = States.LAUNCH;
+        long startTime = System.currentTimeMillis();
+
+
+        return startTime;
+    }
+
+    public static void down0() {
+        currentState0 = States.IDLE;
+    }
+
+
+
+
+
+
+
+
+
 
     public static double slotColor0Red () {
         return slot0Sensor.red();
@@ -286,4 +327,8 @@ public class Indexer {
         int patternIndex = chamberNum % 3;
         return pattern[patternIndex];
     }
+
+
+
+
 }
