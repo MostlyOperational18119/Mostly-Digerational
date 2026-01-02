@@ -22,8 +22,7 @@ public class Indexer {
 
     public enum States {
         LAUNCH,
-        IDLE,
-        EMPTY
+        IDLE
     }
 
 
@@ -118,9 +117,9 @@ public class Indexer {
     }
 
     public static String slot0Test () {
-        if (getColorSlot0(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 2) {
+        if (getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 2) {
             return "green";
-        } else if (getColorSlot0(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) ==1 ) {
+        } else if (getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) ==1 ) {
             return "purple";
         } else {
             return "empty";
@@ -128,9 +127,9 @@ public class Indexer {
     }
 
     public static String slot1Test() {
-        if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 2) {
+        if (getColorSlot(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 2) {
             return "green";
-        } else if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) ==1 ) {
+        } else if (getColorSlot(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) ==1 ) {
             return "purple";
         } else {
             return "empty";
@@ -138,15 +137,15 @@ public class Indexer {
     }
 
     public static String slot2Test() {
-        if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 2) {
+        if (getColorSlot(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 2) {
             return "green";
-        } else if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) ==1 ) {
+        } else if (getColorSlot(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) ==1 ) {
             return "purple";
         } else {
             return "empty";
         }
     }
-    private static int getColorSlot0 (double red, double green, double blue) {
+    private static int getColorSlot (double red, double green, double blue) {
         if (green/blue > 1.3 && green/blue < 1.6 && green > 90) {
             return 2;
         } else if (red/green > .9 && red/green < 1.2 && red > 85) {
@@ -156,90 +155,38 @@ public class Indexer {
         }
     }
 
-    private static int getColorSlot1 (double red, double green, double blue) {
-        if (green/blue > 1.3 && green/blue < 1.6 && green > 65) {
-            return 2;
-        } else if (red/green > .9 && red/green < 1.2 && blue > 45) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
-    private static int getColorSlot2 (double red, double green, double blue) {
-        if (green/blue > 1.3 && green/blue < 1.6) {
-            return 2;
-        } else if (red/green > .9 && red/green < 1.2 && red > 100) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
+//    private static int getColorSlot1 (double red, double green, double blue) {
+//        if (green/blue > 1.3 && green/blue < 1.6 && green > 65) {
+//            return 2;
+//        } else if (red/green > .9 && red/green < 1.2 && blue > 45) {
+//            return 1;
+//        } else {
+//            return 0;
+//        }
+//    }
+//
+//    private static int getColorSlot2 (double red, double green, double blue) {
+//        if (green/blue > 1.3 && green/blue < 1.6) {
+//            return 2;
+//        } else if (red/green > .9 && red/green < 1.2 && red > 100) {
+//            return 1;
+//        } else {
+//            return 0;
+//        }
+//    }
 
 
     public static int[] slotColors() {
         int[] slots = new int[3];
 
-        slots[0] = getColorSlot0(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue());
-        slots[1] = getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue());
-        slots[2] = getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue());
+        slots[0] = getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue());
+        slots[1] = getColorSlot(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue());
+        slots[2] = getColorSlot(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue());
 
 
 
         return slots;
     }
-
-
-
-
-
-//    public static int[] slotColors() {
-//
-//        //green = 2, purple = 1, empty = 0;
-//        double hue0, hue1, hue2;
-//
-//        NormalizedRGBA slot0Colors = slot0Sensor.getNormalizedColors();
-//        hue0 = JavaUtil.colorToHue(slot0Colors.toColor());
-//        NormalizedRGBA slot1Colors = slot1Sensor.getNormalizedColors();
-//        hue1 = JavaUtil.colorToHue(slot1Colors.toColor());
-//        NormalizedRGBA slot2Colors = slot2Sensor.getNormalizedColors();
-//        hue2 = JavaUtil.colorToHue(slot2Colors.toColor());
-//
-////        Log.i("Indexer", String.format("Hue 0: %d", hue0));
-////        Log.i("Indexer", String.format("Hue 1: %d", hue1));
-////        Log.i("Indexer", String.format("Hue 2: %d", hue2));
-//
-//        int[] slots = new int[3];
-//
-//        //0 slot
-//        if (180 >= hue0 && hue0 >= 150) {
-//            slots[0] = 2;
-//        } else if (300 >= hue0 && hue0 >= 240) {
-//            slots[0] = 1;
-//        } else {
-//            slots[0] = 0;
-//        }
-//
-//        //1 slot
-//        if (180 >= hue1 && hue1 >= 150) {
-//            slots[1] = 2;
-//        } else if (300 >= hue1 && hue1 >= 240) {
-//            slots[1] = 1;
-//        } else {
-//            slots[1] = 0;
-//        }
-//
-//        //2 slot
-//        if (180 >= hue2 && hue2 >= 150) {
-//            slots[2] = 2;
-//        } else if (300 >= hue2 && hue2 >= 240) {
-//            slots[2] = 1;
-//        } else {
-//            slots[2] = 0;
-//        }
-//
-//        return slots;
-//    }
 
     public static void updateSlot0 () {
         switch (currentState0) {
@@ -248,22 +195,6 @@ public class Indexer {
                 break;
             case IDLE:
                 slot0.setPosition(DOWN_POS_0);
-                break;
-            case EMPTY:
-                slot0.setPosition(MID_POS_0);
-                break;
-        }
-    }
-    public static void updateSlot2 () {
-        switch (currentState2) {
-            case LAUNCH:
-                slot2.setPosition(UP_POS_2);
-                break;
-            case IDLE:
-                slot2.setPosition(DOWN_POS_2);
-                break;
-            case EMPTY:
-                slot2.setPosition(MID_POS_2);
                 break;
         }
     }
@@ -276,12 +207,19 @@ public class Indexer {
             case IDLE:
                 slot1.setPosition(DOWN_POS_1);
                 break;
-            case EMPTY:
-                slot1.setPosition(MID_POS_1);
-                break;
         }
     }
 
+    public static void updateSlot2 () {
+        switch (currentState2) {
+            case LAUNCH:
+                slot2.setPosition(UP_POS_2);
+                break;
+            case IDLE:
+                slot2.setPosition(DOWN_POS_2);
+                break;
+        }
+    }
 
     //Transfer Part Duex import
 
@@ -299,21 +237,21 @@ public class Indexer {
     }
 
     public static void update (boolean launch){
-        if (currentState0 == States.LAUNCH || getColorSlot0(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 0) {
-            if (launch == true) {
-                currentState0 = States.EMPTY;
+        if (currentState0 == States.LAUNCH || getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 0) {
+            if (launch) {
+                slot0.setPosition(MID_POS_0);
             }
             currentState0 = States.IDLE;
         }
-        if (currentState1 == States.LAUNCH || getColorSlot0(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 0) {
-            if (launch == true) {
-                currentState1 = States.EMPTY;
+        if (currentState1 == States.LAUNCH || getColorSlot(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 0) {
+            if (launch) {
+                slot1.setPosition(MID_POS_1);
             }
             currentState1 = States.IDLE;
         }
-        if (currentState2 == States.LAUNCH || getColorSlot0(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 0) {
-            if (launch == true) {
-                currentState2 = States.EMPTY;
+        if (currentState2 == States.LAUNCH || getColorSlot(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 0) {
+            if (launch) {
+                slot2.setPosition(MID_POS_2);
             }
             currentState2 = States.IDLE;
         }

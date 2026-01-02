@@ -56,6 +56,7 @@ public class competitionOpMode extends LinearOpMode {
             boolean intake = gamepad1.right_trigger > 0.5;
             boolean Y = gamepad1.yWasPressed();
 
+            //look at chamber or shoot
             if (X) {
                 launch *= -1;
             }
@@ -76,28 +77,28 @@ public class competitionOpMode extends LinearOpMode {
                     startTime = Indexer.startLaunch(4);
                 }
             }
-            if (Y) {
-                long currentTime = System.currentTimeMillis();
-                if (currentTime - startTime0 > WAIT) {
-                    startTime0 = Outtake.launch0();
-                    if (currentTime - startTime0 > LAUNCH_TIME) {
-                        Outtake.down0();
-                    }
-                    if (currentTime - startTime0 > WAIT) {
-                        startTime1 = Outtake.launch1();
-                        if (currentTime - startTime1 > LAUNCH_TIME) {
-                            Outtake.down1();
-                        }
-                        if (currentTime - startTime1 > WAIT) {
-                            startTime2 = Outtake.launch2();
-                            if (currentTime - startTime2 > LAUNCH_TIME) {
-                                Outtake.down2();
-                            }
-                        }
-                    }
-
-                }
-            }
+//            if (Y) {
+//                long currentTime = System.currentTimeMillis();
+//                if (currentTime - startTime0 > WAIT) {
+//                    startTime0 = Outtake.launch0();
+//                    if (currentTime - startTime0 > LAUNCH_TIME) {
+//                        Outtake.down0();
+//                    }
+//                    if (currentTime - startTime0 > WAIT) {
+//                        startTime1 = Outtake.launch1();
+//                        if (currentTime - startTime1 > LAUNCH_TIME) {
+//                            Outtake.down1();
+//                        }
+//                        if (currentTime - startTime1 > WAIT) {
+//                            startTime2 = Outtake.launch2();
+//                            if (currentTime - startTime2 > LAUNCH_TIME) {
+//                                Outtake.down2();
+//                            }
+//                        }
+//                    }
+//
+//                }
+//            }
 
             //intake balls
             Intake.switchIntake(intake);
