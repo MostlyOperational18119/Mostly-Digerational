@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 public class Drivetrain {
-    static public DcMotor frontLeft, frontRight, backLeft, backRight;
+    static public DcMotor frontLeft, backLeft, backRight, frontRight;
 
     public static void init (HardwareMap hwMap) {
         frontLeft = hwMap.get(DcMotor.class, "motorFL");
@@ -15,6 +16,8 @@ public class Drivetrain {
         frontRight = hwMap.get(DcMotor.class, "motorFR");
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft = hwMap.get(DcMotor.class, "motorBL");
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -36,6 +39,9 @@ public class Drivetrain {
         backLeft.setPower(Range.clip(bl, -1, 1));
         backRight.setPower(Range.clip(br, -1, 1));
 
+    }
+    public static int outtakePosition() {
+        return frontRight.getCurrentPosition();
     }
 
 }
