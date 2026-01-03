@@ -23,8 +23,8 @@ public class ClutchTest extends LinearOpMode {
 //            if (gamepad1.bWasPressed()) {
 //                Outtake.offOuttake();
 //            }
-            telemetry.addData("motor 1 velocity", Outtake.testTelemetryMotor1());
-            telemetry.addData("motor 2 velocity", Outtake.testTelemetryMotor2());
+//            telemetry.addData("motor 1 velocity", Outtake.testTelemetryMotor1());
+//            telemetry.addData("motor 2 velocity", Outtake.testTelemetryMotor2());
             telemetry.update();
         }
     }
