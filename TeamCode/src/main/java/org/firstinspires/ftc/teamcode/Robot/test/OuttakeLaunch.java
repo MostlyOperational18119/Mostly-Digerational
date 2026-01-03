@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Robot.test;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
 @TeleOp(name = "test launch")
@@ -12,7 +13,10 @@ public class OuttakeLaunch extends LinearOpMode {
 
         double targetClicks = 0;
 
+        Drivetrain.init(hardwareMap);
         Outtake.init(hardwareMap);
+
+        waitForStart();
 
         while (opModeIsActive()) {
             targetClicks = Outtake.pointAtGoal();

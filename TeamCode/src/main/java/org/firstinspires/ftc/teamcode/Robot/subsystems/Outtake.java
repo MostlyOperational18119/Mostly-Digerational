@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Outtake {
 
     //motors+servos
-    private static DcMotorEx outtakeMotor1, outtakeMotor2;
+    private static DcMotorEx outtakeMotorLeft, outtakeMotorRight;
     private static DcMotor encoderMotor;
     private static Servo hood;
     private static CRServo rotateServo;
@@ -46,9 +46,9 @@ public class Outtake {
     }
 
     public static void init(HardwareMap hwMap) {
-        outtakeMotor2 = hwMap.get(DcMotorEx.class, "outtakeMotor2");
-        outtakeMotor1 = hwMap.get(DcMotorEx.class, "outtakeMotor1");
-        outtakeMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
+        outtakeMotorRight = hwMap.get(DcMotorEx.class, "outtakeMotorRight");
+        outtakeMotorLeft = hwMap.get(DcMotorEx.class, "outtakeMotorLeft");
+        outtakeMotorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rotateServo = hwMap.get(CRServo.class, "rotate");
         hood = hwMap.get(Servo.class, "hood"); //min = 0.72, max = 0.01
 
@@ -60,8 +60,8 @@ public class Outtake {
         hood.setPosition(FAR_HOOD);
         rotateServo.setPower(0);
 
-        outtakeMotor1.setVelocityPIDFCoefficients(11, 3, 2, 2);
-        outtakeMotor2.setVelocityPIDFCoefficients(11, 3, 2, 2);
+        outtakeMotorLeft.setVelocityPIDFCoefficients(11, 3, 2, 2);
+        outtakeMotorRight.setVelocityPIDFCoefficients(11, 3, 2, 2);
 
         //set blue/red aiming
         if (isBlue) {goalX = 0;} else {goalX = 144;}
@@ -147,16 +147,16 @@ public class Outtake {
             speed = SPEED_CONST_FAR * Math.sqrt(dist);
         }
 
-        outtakeMotor1.setVelocity(speed);
-        outtakeMotor1.setVelocity(speed);
+        outtakeMotorLeft.setVelocity(speed);
+        outtakeMotorLeft.setVelocity(speed);
     }
 
     public static double testTelemetryMotor1() { //clutch test program
-        return outtakeMotor1.getVelocity();
+        return outtakeMotorLeft.getVelocity();
     }
 
     public static double testTelemetryMotor2() { //test program
-        return outtakeMotor2.getVelocity();
+        return outtakeMotorRight.getVelocity();
     }
 
 
