@@ -11,9 +11,11 @@ public class AutoAimTest2 extends LinearOpMode {
     @Override
     public void runOpMode(){
 
+        double targetClicks = 0;
+
         Drivetrain.init(hardwareMap);
         Outtake.init(hardwareMap);
-        OuttakeDemo.init(hardwareMap);
+
 
         //double launcherYawRotation = 0;
 
@@ -21,17 +23,18 @@ public class AutoAimTest2 extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            Outtake.update(OuttakeDemo.setTarget(OuttakeDemo.nicksLittleHelper()));
+            targetClicks = Outtake.pointAtGoal();
+            Outtake.update(Outtake.setTarget(targetClicks));
 
             telemetry.addData("current position", Drivetrain.outtakePosition());
-            telemetry.addData("target position", OuttakeDemo.setTarget(OuttakeDemo.nicksLittleHelper()));
-            telemetry.addData("target setRotation", OuttakeDemo.setRotationPosition(OuttakeDemo.nicksLittleHelper()));
-            telemetry.addData("target angle/clicks", OuttakeDemo.nicksLittleHelper());
-            telemetry.addData("target angle", OuttakeDemo.nicksLittleTelemetry1());
+            telemetry.addData("target position", Outtake.setTarget(Outtake.pointAtGoal()));
+            telemetry.addData("target setRotation", Outtake.setRotationPosition(Outtake.pointAtGoal()));
+            telemetry.addData("target angle/clicks", Outtake.pointAtGoal());
+            telemetry.addData("target angle", (targetClicks - 2816)/68.555);
 
             telemetry.update();
 
-            //Outtake.update(Outtake.setRotationPosition(OuttakeDemo.nicksLittleHelper()));
+            //Outtake.update(Outtake.setRotationPosition(Outtake.nicksLittleHelper()));
         }
     }
 }

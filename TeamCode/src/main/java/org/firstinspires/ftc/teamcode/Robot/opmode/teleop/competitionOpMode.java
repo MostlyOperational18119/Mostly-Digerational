@@ -63,7 +63,7 @@ public class competitionOpMode extends LinearOpMode {
 
             
             Drivetrain.drive(y, x, rx);
-            Outtake.outtakeUpdate(currentPose.getX(), currentPose.getY(), launch, red);
+            //Outtake.outtakeUpdate(currentPose.getX(), currentPose.getY(), launch, red);
 
             if (launch > 0) {
                 Indexer.update(true);
