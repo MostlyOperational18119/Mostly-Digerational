@@ -79,15 +79,6 @@ public class Indexer {
         currentState0 = States.IDLE;
     }
 
-
-
-
-
-
-
-
-
-
     public static double slotColor0Red () {
         return slot0Sensor.red();
     }

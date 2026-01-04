@@ -60,8 +60,8 @@ public class Outtake {
         hood.setPosition(FAR_HOOD);
         rotateServo.setPower(0);
 
-        outtakeMotorLeft.setVelocityPIDFCoefficients(11, 3, 2, 2);
-        outtakeMotorRight.setVelocityPIDFCoefficients(11, 3, 2, 2);
+        outtakeMotorLeft.setVelocityPIDFCoefficients(4, 2, 6, 2);
+        outtakeMotorRight.setVelocityPIDFCoefficients(4, 2, 6, 2);
 
         //set blue/red aiming
         if (isBlue) {goalX = 0;} else {goalX = 144;}
