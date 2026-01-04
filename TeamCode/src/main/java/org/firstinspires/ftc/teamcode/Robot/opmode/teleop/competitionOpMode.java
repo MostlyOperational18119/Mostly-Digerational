@@ -71,7 +71,7 @@ public class competitionOpMode extends LinearOpMode {
                 Indexer.update(false);
             }
 
-            if ((A) && (launch > 0)) {
+            if ((A) && (launch < 0)) {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime-startTime > WAIT) {
                     startTime = Indexer.startLaunch(4);
