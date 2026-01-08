@@ -55,6 +55,7 @@ public class competitionOpMode extends LinearOpMode {
             boolean A = gamepad1.aWasPressed();
             boolean intake = gamepad1.right_trigger > 0.5;
             boolean Y = gamepad1.yWasPressed();
+            boolean lt = gamepad1.left_trigger > 0.5;
 
             //look at chamber or shoot
             if (X) {
@@ -77,6 +78,16 @@ public class competitionOpMode extends LinearOpMode {
                     startTime = Indexer.startLaunch(4);
                 }
             }
+
+            if (lt) {
+                Drivetrain.BreakPadDown();
+                
+            } else {
+                Drivetrain.BreakPadUp();
+            }
+
+
+
 //            if (Y) {
 //                long currentTime = System.currentTimeMillis();
 //                if (currentTime - startTime0 > WAIT) {
