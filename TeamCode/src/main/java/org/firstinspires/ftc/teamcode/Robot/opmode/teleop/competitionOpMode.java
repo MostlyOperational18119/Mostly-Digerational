@@ -64,13 +64,8 @@ public class competitionOpMode extends LinearOpMode {
 
             
             Drivetrain.drive(y, x, rx);
-            //Outtake.outtakeUpdate(currentPose.getX(), currentPose.getY(), launch, red);
 
-            if (launch > 0) {
-                Indexer.update(true);
-            } else {
-                Indexer.update(false);
-            }
+            Indexer.update(launch > 0);
 
             if ((A) && (launch < 0)) {
                 long currentTime = System.currentTimeMillis();
@@ -86,30 +81,6 @@ public class competitionOpMode extends LinearOpMode {
                 Drivetrain.BreakPadUp();
             }
 
-
-
-//            if (Y) {
-//                long currentTime = System.currentTimeMillis();
-//                if (currentTime - startTime0 > WAIT) {
-//                    startTime0 = Outtake.launch0();
-//                    if (currentTime - startTime0 > LAUNCH_TIME) {
-//                        Outtake.down0();
-//                    }
-//                    if (currentTime - startTime0 > WAIT) {
-//                        startTime1 = Outtake.launch1();
-//                        if (currentTime - startTime1 > LAUNCH_TIME) {
-//                            Outtake.down1();
-//                        }
-//                        if (currentTime - startTime1 > WAIT) {
-//                            startTime2 = Outtake.launch2();
-//                            if (currentTime - startTime2 > LAUNCH_TIME) {
-//                                Outtake.down2();
-//                            }
-//                        }
-//                    }
-//
-//                }
-//            }
 
             //intake balls
             Intake.switchIntake(intake);
