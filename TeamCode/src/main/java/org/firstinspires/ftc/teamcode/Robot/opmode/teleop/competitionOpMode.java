@@ -81,7 +81,7 @@ public class competitionOpMode extends LinearOpMode {
 
             if (lt) {
                 Drivetrain.BreakPadDown();
-                
+
             } else {
                 Drivetrain.BreakPadUp();
             }
