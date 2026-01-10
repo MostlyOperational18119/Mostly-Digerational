@@ -19,7 +19,7 @@ public class BabyBotProgram extends LinearOpMode {
         rotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rotate.setPower(0.5);
         Servo release = hardwareMap.get(Servo.class, "release");
-        release.setPosition(0.61);
+        release.setPosition(0.65);
         waitForStart();
         while (opModeIsActive()) {
             double leftY = (-gamepad1.left_stick_y) * 1.25;
