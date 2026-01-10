@@ -22,13 +22,13 @@ public class Constants {
 //            .useSecondaryTranslationalPIDF(true)
 //            .useSecondaryHeadingPIDF(true)
 //            .useSecondaryDrivePIDF(true)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.5, 0, 0.1, 0.015))
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.5, 0.0001, 0.04, 0.015))
 //            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0, 0, 0.01, 0.01))
-            .headingPIDFCoefficients(new PIDFCoefficients(1.5, 0, 0.01, 0.01));
+            .headingPIDFCoefficients(new PIDFCoefficients(1.5, 0, 0.01, 0.01))
 //            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.01, 0.01))
-//            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.025, 0, 0.0001, 0.6, 0.01))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.07, 0, 0.0001, 0.6, 0.015))
 //            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.02, 0, 0.0005, 0.6, 0.01))
-//            .centripetalScaling(0.0002);
+            .centripetalScaling(0.0005);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -43,7 +43,7 @@ public class Constants {
             .xVelocity(75.11049)
             .yVelocity(62.15537);
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 0.6, 1);
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(1.866768)
             .strafePodX(-0.020869)

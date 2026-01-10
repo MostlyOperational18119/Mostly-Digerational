@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
@@ -94,15 +95,17 @@ public class Limelight {
 
     public Optional<Integer[]> getPattern() {
         if (results != null && results.containsKey(ToRobotMsg.ResultType.BallLine)) {
-            AprilTagResult result = (AprilTagResult) results.get(ToRobotMsg.ResultType.AprilTag);
+            ArrayList<AprilTagResult> tagResults = (ArrayList<AprilTagResult>) results.get(ToRobotMsg.ResultType.AprilTag);
 
-            switch (result.tagID) {
-                case 21:
-                    return Optional.of(new Integer[]{0, 1, 1});
-                case 22:
-                    return Optional.of(new Integer[]{1, 0, 1});
-                case 23:
-                    return Optional.of(new Integer[]{1, 1, 0});
+            for (AprilTagResult tagResult : tagResults) {
+                switch (tagResult.tagID) {
+                    case 21:
+                        return Optional.of(new Integer[]{0, 1, 1});
+                    case 22:
+                        return Optional.of(new Integer[]{1, 0, 1});
+                    case 23:
+                        return Optional.of(new Integer[]{1, 1, 0});
+                }
             }
         }
 

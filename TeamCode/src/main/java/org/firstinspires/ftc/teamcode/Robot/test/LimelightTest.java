@@ -26,6 +26,8 @@ public class LimelightTest extends LinearOpMode {
 
 
         while (opModeIsActive()) {
+            limelight.update();
+
             Optional<Integer> ballCount = limelight.getBallCount();
             Optional<Integer[]> pattern = limelight.getPattern();
 
