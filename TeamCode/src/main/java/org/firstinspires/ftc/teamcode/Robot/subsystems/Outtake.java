@@ -21,7 +21,6 @@ public class Outtake {
 
     //outtake speed stuff
     private static final double SPEED_CONST_CLOSE = 231.2, SPEED_CONST_FAR = 204, FAR_HOOD = .20, CLOSE_HOOD = .76;
-    private static double speed = 2800;
 
     //stuff for aiming
     private static int maxClicks =  24680;
@@ -103,6 +102,7 @@ public class Outtake {
     public static double pointAtChamber() {
         double dx = goalX - robotX;
         double dy = chamberY - robotY;
+        Indexer.chamberIncrease = 0;
 
         double absoluteAngleToGoal = Math.toDegrees(Math.atan2(dy, dx));
         absoluteAngleToGoal = ((absoluteAngleToGoal % 360) + 360) % 360;
