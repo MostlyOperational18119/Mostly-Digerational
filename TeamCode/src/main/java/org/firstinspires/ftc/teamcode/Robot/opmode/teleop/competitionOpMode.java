@@ -65,14 +65,14 @@ public class competitionOpMode extends LinearOpMode {
             
             Drivetrain.drive(y, x, rx);
 
-            Indexer.update(launch > 0);
+            //Indexer.update(launch > 0);
 
-            if ((A) && (launch < 0)) {
-                long currentTime = System.currentTimeMillis();
-                if (currentTime-startTime > WAIT) {
-                    startTime = Indexer.startLaunch(4);
-                }
-            }
+//            if ((A) && (launch < 0)) {
+//                long currentTime = System.currentTimeMillis();
+//                if (currentTime-startTime > WAIT) {
+//                    startTime = Indexer.startLaunch(4);
+//                }
+//            }
 
             if (lt) {
                 Drivetrain.BreakPadDown();

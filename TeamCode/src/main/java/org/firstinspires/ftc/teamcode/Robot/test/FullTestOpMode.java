@@ -37,15 +37,15 @@ public class FullTestOpMode extends LinearOpMode {
                 launch *= -1;
             }
 
-            Indexer.update(launch > 0);
+            //Indexer.update(launch > 0);
 
 
-            if ((A) && (launch < 0)) {
-                long currentTime = System.currentTimeMillis();
-                if (currentTime-startTime > WAIT) {
-                    startTime = Indexer.startLaunch(4);
-                }
-            }
+//            if ((A) && (launch < 0)) {
+//                long currentTime = System.currentTimeMillis();
+//                if (currentTime-startTime > WAIT) {
+//                    startTime = Indexer.startLaunch(4);
+//                }
+//            }
 
             //intake balls
             if (intake) {

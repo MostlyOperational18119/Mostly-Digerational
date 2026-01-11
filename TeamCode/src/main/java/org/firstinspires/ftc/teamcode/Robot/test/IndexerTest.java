@@ -9,28 +9,37 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 public class IndexerTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-
+        int chamberNum = 0;
+        int chamberIncrease = -1;
         Indexer.init(hardwareMap);
-//        Indexer.startLaunch();
 
         waitForStart();
         while (opModeIsActive()) {
-            
+
+            Indexer.startLaunch(chamberNum);
+            Indexer.updateSlot2();
+            Indexer.updateSlot0();
+            Indexer.updateSlot1();
+
+            telemetry.addData("slot0 state", Indexer.currentState0);
+            telemetry.addData("slot1 state", Indexer.currentState1);
+            telemetry.addData("slot2 state", Indexer.currentState2);
+            telemetry.addData("chamber increase", Indexer.chamberIncrease);
 
             telemetry.addData("slot0red: ", Indexer.slotColor0Red());
             telemetry.addData("slot0green: ", Indexer.slotColor0Green());
             telemetry.addData("slot0blue: ", Indexer.slotColor0Blue());
-            telemetry.addData("Slot0: ", Indexer.slot0Test());
+            telemetry.addData("Slot0 (array): ", Indexer.slotColors()[0]);
 
             telemetry.addData("slot1red: ", Indexer.slotColor1Red());
             telemetry.addData("slot1green: ", Indexer.slotColor1Green());
             telemetry.addData("slot1blue: ", Indexer.slotColor1Blue());
-            telemetry.addData("Slot1: ", Indexer.slot1Test());
+            telemetry.addData("Slot1 (array): ", Indexer.slotColors()[1]);
 
             telemetry.addData("slot2red: ", Indexer.slotColor2Red());
             telemetry.addData("slot2green: ", Indexer.slotColor2Green());
             telemetry.addData("slot2blue: ", Indexer.slotColor2Blue());
-            telemetry.addData("Slot2: ", Indexer.slot2Test());
+            telemetry.addData("Slot2 (array): ", Indexer.slotColors()[2]);
 
             telemetry.update();
         }
