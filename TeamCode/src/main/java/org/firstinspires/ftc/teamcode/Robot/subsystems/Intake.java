@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake {
-    static private DcMotorEx intakeFront, intakeRear;
+    static public DcMotorEx intakeFront, intakeRear;
     private static float power;
 
     

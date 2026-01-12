@@ -55,7 +55,7 @@ public class Drivetrain {
 
     }
     public static int outtakePosition() {
-        return frontLeft.getCurrentPosition();
+        return -Intake.intakeFront.getCurrentPosition();
     }
 
 }

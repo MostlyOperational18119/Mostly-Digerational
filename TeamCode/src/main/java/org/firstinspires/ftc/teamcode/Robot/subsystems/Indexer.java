@@ -17,9 +17,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Indexer {
     public static Servo slot0, slot1, slot2;
-    public static double UP_POS_0 = 0.08, DOWN_POS_0 = 0.48, MID_POS_0 = 0.34;
-    public static double UP_POS_1 = 0.08, DOWN_POS_1 = 0.48, MID_POS_1 = 0.34;
-    public static double UP_POS_2 = 0.86, DOWN_POS_2 = 0.49, MID_POS_2 = 0.66;
+    public static double UP_POS_0 = 0.05, DOWN_POS_0 = 0.48, MID_POS_0 = 0.34;
+    public static double UP_POS_1 = 0.05, DOWN_POS_1 = 0.48, MID_POS_1 = 0.34;
+    public static double UP_POS_2 = 0.89, DOWN_POS_2 = 0.49, MID_POS_2 = 0.66;
 
     public enum States {
         LAUNCH,
@@ -29,6 +29,8 @@ public class Indexer {
 
     static int chamberNum = 0;
     public static int chamberIncrease = 0;
+
+    static long startTime = 0;
 
     public static int[] pattern = new int[]{1, 1, 2}; // change to new int[3];
     public static States currentState0, currentState1, currentState2;
@@ -53,7 +55,7 @@ public class Indexer {
 
     public static long launch0() {
         currentState0 = States.LAUNCH;
-        long startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
 
 
         return startTime;
@@ -61,7 +63,7 @@ public class Indexer {
 
     public static long launch1() {
         currentState1 = States.LAUNCH;
-        long startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
 
 
         return startTime;
@@ -69,7 +71,7 @@ public class Indexer {
 
     public static long launch2() {
         currentState2 = States.LAUNCH;
-        long startTime = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
 
 
         return startTime;
@@ -159,10 +161,12 @@ public class Indexer {
             case LAUNCH:
                 slot0.setPosition(UP_POS_0);
                 if (getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue(), slot0Sensor.getDistance(DistanceUnit.MM)) == 0) {
-                    slot0.setPosition(MID_POS_0);
+                    //slot0.setPosition(MID_POS_0);
                     chamberIncrease += 1;
                 }
-                currentState0 = States.IDLE;
+                if (System.currentTimeMillis() - startTime > 500) {
+                    currentState0 = States.IDLE;
+                }
                 break;
             case IDLE:
                 slot0.setPosition(DOWN_POS_0);
@@ -175,10 +179,12 @@ public class Indexer {
             case LAUNCH:
                 slot1.setPosition(UP_POS_1);
                 if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue(), slot1Sensor.getDistance(DistanceUnit.MM)) == 0) {
-                    slot1.setPosition(MID_POS_1);
+                    //slot1.setPosition(MID_POS_1);
                     chamberIncrease += 1;
                 }
-                currentState1= States.IDLE;
+                if (System.currentTimeMillis() - startTime > 500) {
+                    currentState1 = States.IDLE;
+                }
                 break;
             case IDLE:
                 slot1.setPosition(DOWN_POS_1);
@@ -191,10 +197,12 @@ public class Indexer {
             case LAUNCH:
                 slot2.setPosition(UP_POS_2);
                 if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue(), slot2Sensor.getDistance(DistanceUnit.MM)) == 0) {
-                    slot2.setPosition(MID_POS_2);
+                    //slot2.setPosition(MID_POS_2);
                     chamberIncrease += 1;
                 }
-                currentState2 = States.IDLE;
+                if (System.currentTimeMillis() - startTime > 500) {
+                    currentState2 = States.IDLE;
+                }
                 break;
             case IDLE:
                 slot2.setPosition(DOWN_POS_2);
