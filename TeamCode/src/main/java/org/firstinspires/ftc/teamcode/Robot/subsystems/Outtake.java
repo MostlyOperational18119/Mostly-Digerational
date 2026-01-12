@@ -28,10 +28,10 @@ public class Outtake {
     static double outtakePower = 0.0;
 
     //stuff for auto aiming
-    static boolean isBlue;
-    static double robotX = 72;
-    static double robotY = 72;
-    static double robotOrientation = 0;
+    public static boolean isBlue = false;
+    public static double robotX = 72;
+    public static double robotY = 72;
+    public static double robotOrientation = 0;
     static double goalX;
     static double goalY = 144;
     static double chamberY = 96;
@@ -51,7 +51,7 @@ public class Outtake {
         rotateServo = hwMap.get(CRServo.class, "rotate");
         hood = hwMap.get(Servo.class, "hood"); //min = 0.72, max = 0.01
 
-        encoderMotor = hwMap.get(DcMotor.class, "motorFR");
+        encoderMotor = hwMap.get(DcMotor.class, "motorFL");
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -158,7 +158,6 @@ public class Outtake {
     public static double testTelemetryMotor2() { //test program
         return outtakeMotorRight.getVelocity();
     }
-
 
 
 }
