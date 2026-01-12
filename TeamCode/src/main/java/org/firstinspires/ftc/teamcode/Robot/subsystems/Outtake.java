@@ -51,7 +51,7 @@ public class Outtake {
         rotateServo = hwMap.get(CRServo.class, "rotate");
         hood = hwMap.get(Servo.class, "hood"); //min = 0.72, max = 0.01
 
-        encoderMotor = hwMap.get(DcMotor.class, "motorFL");
+        encoderMotor = hwMap.get(DcMotor.class, "frontIntake");
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -85,6 +85,7 @@ public class Outtake {
         target = Math.max(0, Math.min(maxClicks, target));
         return (int) target;
     }
+
     public static double pointAtGoal() {
         double dx = goalX - robotX;
         double dy = goalY - robotY;
@@ -148,7 +149,7 @@ public class Outtake {
         }
 
         outtakeMotorLeft.setVelocity(speed);
-        outtakeMotorLeft.setVelocity(speed);
+        outtakeMotorRight.setVelocity(speed);
     }
 
     public static double testTelemetryMotor1() { //clutch test program
