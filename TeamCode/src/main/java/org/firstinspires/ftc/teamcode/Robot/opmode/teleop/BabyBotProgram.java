@@ -33,7 +33,7 @@ public class BabyBotProgram extends LinearOpMode {
             }
             if (gamepad1.aWasPressed()) {
                 release.setPosition(0.8);
-                sleep(300);
+                sleep(1000);
                 release.setPosition(0.61);
             }
         }
