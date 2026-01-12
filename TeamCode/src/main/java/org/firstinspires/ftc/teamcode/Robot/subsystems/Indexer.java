@@ -30,8 +30,7 @@ public class Indexer {
     static int chamberNum = 0;
     public static int chamberIncrease = 0;
 
-
-    public static int[] pattern = new int[]{2, 2, 1}; // change to new int[3];
+    public static int[] pattern = new int[]{1, 1, 2}; // change to new int[3];
     public static States currentState0, currentState1, currentState2;
     static int currentBall; //ball being launched (0, 1, or 2)
     private static RevColorSensorV3 slot0Sensor, slot1Sensor, slot2Sensor;
