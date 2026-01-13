@@ -13,12 +13,13 @@ import java.util.Arrays;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Indexer {
     public static Servo slot0, slot1, slot2;
-    public static double UP_POS_0 = 0.12, DOWN_POS_0 = 0.48, MID_POS_0 = 0.34;
-    public static double UP_POS_1 = 0.12, DOWN_POS_1 = 0.48, MID_POS_1 = 0.34;
-    public static double UP_POS_2 = 0.88, DOWN_POS_2 = 0.48, MID_POS_2 = 0.66;
+    public static double UP_POS_0 = 0.08, DOWN_POS_0 = 0.48, MID_POS_0 = 0.34;
+    public static double UP_POS_1 = 0.08, DOWN_POS_1 = 0.48, MID_POS_1 = 0.34;
+    public static double UP_POS_2 = 0.86, DOWN_POS_2 = 0.49, MID_POS_2 = 0.66;
 
     public enum States {
         LAUNCH,
@@ -26,8 +27,10 @@ public class Indexer {
     }
 
 
+    static int chamberNum = 0;
+    public static int chamberIncrease = 0;
 
-    public static int[] pattern = new int[]{1, 2, 2}; // change to new int[3];
+    public static int[] pattern = new int[]{1, 1, 2}; // change to new int[3];
     public static States currentState0, currentState1, currentState2;
     static int currentBall; //ball being launched (0, 1, or 2)
     private static RevColorSensorV3 slot0Sensor, slot1Sensor, slot2Sensor;
@@ -45,9 +48,6 @@ public class Indexer {
         currentState1 = States.IDLE;
         currentState2 = States.IDLE;
 
-        updateSlot0();
-        updateSlot1();
-        updateSlot2();
     }
 
 
@@ -107,72 +107,47 @@ public class Indexer {
         return slot2Sensor.blue();
     }
 
-    public static String slot0Test () {
-        if (getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 2) {
-            return "green";
-        } else if (getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) ==1 ) {
-            return "purple";
-        } else {
-            return "empty";
-        }
-    }
+    public static double slot0Distance() {return slot0Sensor.getDistance(DistanceUnit.MM);}
 
-    public static String slot1Test() {
-        if (getColorSlot(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 2) {
-            return "green";
-        } else if (getColorSlot(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) ==1 ) {
-            return "purple";
-        } else {
-            return "empty";
-        }
-    }
 
-    public static String slot2Test() {
-        if (getColorSlot(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 2) {
-            return "green";
-        } else if (getColorSlot(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) ==1 ) {
-            return "purple";
-        } else {
-            return "empty";
-        }
-    }
-    private static int getColorSlot (double red, double green, double blue) {
-        if (green/blue > 1.3 && green/blue < 1.6 && green > 90) {
+    //these are tuned for each individual color sensor
+    private static int getColorSlot (double red, double green, double blue, double distance) {
+        if (distance < 35 && green / blue > 1.3 && green / blue < 1.6 && green > 90) {
             return 2;
-        } else if (red/green > .9 && red/green < 1.2 && red > 85) {
+        } else if (distance < 35 && red / green > .9 && red / green < 1.2 && red > 85) {
             return 1;
         } else {
             return 0;
         }
     }
 
-//    private static int getColorSlot1 (double red, double green, double blue) {
-//        if (green/blue > 1.3 && green/blue < 1.6 && green > 65) {
-//            return 2;
-//        } else if (red/green > .9 && red/green < 1.2 && blue > 45) {
-//            return 1;
-//        } else {
-//            return 0;
-//        }
-//    }
-//
-//    private static int getColorSlot2 (double red, double green, double blue) {
-//        if (green/blue > 1.3 && green/blue < 1.6) {
-//            return 2;
-//        } else if (red/green > .9 && red/green < 1.2 && red > 100) {
-//            return 1;
-//        } else {
-//            return 0;
-//        }
-//    }
+    private static int getColorSlot1 (double red, double green, double blue, double distance) {
+        if (distance < 35 && green/blue > 1.3 && green/blue < 1.6 && green > 65) {
+            return 2;
+        } else if (distance < 35 && red/green > .9 && red/green < 1.2 && blue > 45) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    private static int getColorSlot2 (double red, double green, double blue, double distance) {
+        if (distance < 35 && green/blue > 1.3 && green/blue < 1.6 && green > 150) {
+            return 2;
+        } else if (distance < 35 && red/green > .9 && red/green < 1.2 && red > 200 && blue > 400) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
 
     public static int[] slotColors() {
         int[] slots = new int[3];
 
-        slots[0] = getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue());
-        slots[1] = getColorSlot(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue());
-        slots[2] = getColorSlot(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue());
+        slots[0] = getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue(), slot0Sensor.getDistance(DistanceUnit.MM));
+        slots[1] = getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue(), slot1Sensor.getDistance(DistanceUnit.MM));
+        slots[2] = getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue(), slot2Sensor.getDistance(DistanceUnit.MM));
 
 
 
@@ -183,6 +158,11 @@ public class Indexer {
         switch (currentState0) {
             case LAUNCH:
                 slot0.setPosition(UP_POS_0);
+                if (getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue(), slot0Sensor.getDistance(DistanceUnit.MM)) == 0) {
+                    slot0.setPosition(MID_POS_0);
+                    chamberIncrease += 1;
+                }
+                currentState0 = States.IDLE;
                 break;
             case IDLE:
                 slot0.setPosition(DOWN_POS_0);
@@ -194,6 +174,11 @@ public class Indexer {
         switch (currentState1) {
             case LAUNCH:
                 slot1.setPosition(UP_POS_1);
+                if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue(), slot1Sensor.getDistance(DistanceUnit.MM)) == 0) {
+                    slot1.setPosition(MID_POS_1);
+                    chamberIncrease += 1;
+                }
+                currentState1= States.IDLE;
                 break;
             case IDLE:
                 slot1.setPosition(DOWN_POS_1);
@@ -205,6 +190,11 @@ public class Indexer {
         switch (currentState2) {
             case LAUNCH:
                 slot2.setPosition(UP_POS_2);
+                if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue(), slot2Sensor.getDistance(DistanceUnit.MM)) == 0) {
+                    slot2.setPosition(MID_POS_2);
+                    chamberIncrease += 1;
+                }
+                currentState2 = States.IDLE;
                 break;
             case IDLE:
                 slot2.setPosition(DOWN_POS_2);
@@ -217,47 +207,47 @@ public class Indexer {
     public static long startLaunch(int chamberNum) {
         int[] slots = Arrays.copyOf(slotColors(), 3);
         long startTime = System.currentTimeMillis();
-        if (slots[0] == nextBall(chamberNum, pattern)) {
+        if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
             currentState0 = States.LAUNCH;
-        } else if (slots[1] == nextBall(chamberNum, pattern)) {
-            currentState1 = States.LAUNCH;
-        } else if (slots[2] == nextBall(chamberNum, pattern)) {
+            chamberIncrease += 1;
+        } else if (slots[2] == nextBall(chamberNum, chamberIncrease, pattern)) {
             currentState2 = States.LAUNCH;
+            chamberIncrease += 1;
+        } else if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
+            currentState1 = States.LAUNCH;
+            chamberIncrease += 1;
         }
         return startTime;
     }
 
-    public static void update (boolean launch){
-        if (currentState0 == States.LAUNCH || getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 0) {
-            if (launch) {
-                slot0.setPosition(MID_POS_0);
-            }
-            currentState0 = States.IDLE;
-        }
-        if (currentState1 == States.LAUNCH || getColorSlot(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 0) {
-            if (launch) {
-                slot1.setPosition(MID_POS_1);
-            }
-            currentState1 = States.IDLE;
-        }
-        if (currentState2 == States.LAUNCH || getColorSlot(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 0) {
-            if (launch) {
-                slot2.setPosition(MID_POS_2);
-            }
-            currentState2 = States.IDLE;
-        }
-
-        updateSlot0();
-        updateSlot1();
-        updateSlot2();
-    }
-
-    public static int nextBall(int chamberNum, int[] pattern) {
-        int patternIndex = chamberNum % 3;
+//    public static void update (boolean launch){
+//        if (currentState0 == States.LAUNCH || getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 0) {
+//            if (launch) {
+//                slot0.setPosition(MID_POS_0);
+//            }
+//            currentState0 = States.IDLE;
+//        }
+//        if (currentState1 == States.LAUNCH || getColorSlot(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 0) {
+//            if (launch) {
+//                slot1.setPosition(MID_POS_1);
+//            }
+//            currentState1 = States.IDLE;
+//        }
+//        if (currentState2 == States.LAUNCH || getColorSlot(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 0) {
+//            if (launch) {
+//                slot2.setPosition(MID_POS_2);
+//            }
+//            currentState2 = States.IDLE;
+//        }
+//
+//        updateSlot0();
+//        updateSlot1();
+//        updateSlot2();
+//    }
+    public static int nextBall(int chamberNum, int chamberIncrease, int[] pattern) {
+        int patternIndex = (chamberNum + chamberIncrease) % 3;
         return pattern[patternIndex];
     }
-
-
 
 
 }

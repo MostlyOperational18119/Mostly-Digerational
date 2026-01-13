@@ -34,22 +34,22 @@ public class competitionOpMode extends LinearOpMode {
 
 
         Drivetrain.init(hardwareMap);
-        Outtake.init(hardwareMap);
-        Intake.init(hardwareMap);
-        Indexer.init(hardwareMap);
-
-        final Pose startPose = new Pose(0, 0, 0);
-        Pose currentPose = startPose;
-        Follower follower;
-        follower =  Constants.createFollower(hardwareMap);
+//        Outtake.init(hardwareMap);
+//        Intake.init(hardwareMap);
+//        Indexer.init(hardwareMap);
+//
+//        final Pose startPose = new Pose(0, 0, 0);
+//        Pose currentPose = startPose;
+//        Follower follower;
+//        follower =  Constants.createFollower(hardwareMap);
 
         waitForStart();
 
         while (opModeIsActive()) {
 
             //drivetrain controller input variable declarations
-            float y = -gamepad1.left_stick_y; // y stick is not reversed
-            float x = -gamepad1.left_stick_x;
+            float y = -gamepad1.left_stick_y;
+            float x = gamepad1.left_stick_x;
             float rx = gamepad1.right_stick_x;
             boolean X = gamepad1.xWasPressed();
             boolean A = gamepad1.aWasPressed();
@@ -58,40 +58,40 @@ public class competitionOpMode extends LinearOpMode {
             boolean lt = gamepad1.left_trigger > 0.5;
 
             //look at chamber or shoot
-            if (X) {
-                launch *= -1;
-            }
+//            if (X) {
+//                launch *= -1;
+//            }
 
             
             Drivetrain.drive(y, x, rx);
 
-            Indexer.update(launch > 0);
+            //Indexer.update(launch > 0);
 
-            if ((A) && (launch < 0)) {
-                long currentTime = System.currentTimeMillis();
-                if (currentTime-startTime > WAIT) {
-                    startTime = Indexer.startLaunch(4);
-                }
-            }
+//            if ((A) && (launch < 0)) {
+//                long currentTime = System.currentTimeMillis();
+//                if (currentTime-startTime > WAIT) {
+//                    startTime = Indexer.startLaunch(4);
+//                }
+//            }
 
-            if (lt) {
-                Drivetrain.BreakPadDown();
-
-            } else {
-                Drivetrain.BreakPadUp();
-            }
-
-
-            //intake balls
-            Intake.switchIntake(intake);
-
-            int[] slots = Indexer.slotColors();
-
-            telemetry.addData("launch", launch);
-            telemetry.addData("slot0", slots[0]);
-            telemetry.addData("slot1", slots[1]);
-            telemetry.addData("slot2", slots[2]);
-            telemetry.update();
+//            if (lt) {
+//                Drivetrain.BreakPadDown();
+//
+//            } else {
+//                Drivetrain.BreakPadUp();
+//            }
+//
+//
+//            //intake balls
+//            Intake.switchIntake(intake);
+//
+//            int[] slots = Indexer.slotColors();
+//
+//            telemetry.addData("launch", launch);
+//            telemetry.addData("slot0", slots[0]);
+//            telemetry.addData("slot1", slots[1]);
+//            telemetry.addData("slot2", slots[2]);
+//            telemetry.update();
         }
     }
 }

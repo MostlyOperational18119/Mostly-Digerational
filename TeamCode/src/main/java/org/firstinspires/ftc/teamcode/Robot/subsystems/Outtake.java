@@ -21,7 +21,6 @@ public class Outtake {
 
     //outtake speed stuff
     private static final double SPEED_CONST_CLOSE = 231.2, SPEED_CONST_FAR = 204, FAR_HOOD = .20, CLOSE_HOOD = .76;
-    private static double speed = 2800;
 
     //stuff for aiming
     private static int maxClicks =  24680;
@@ -29,10 +28,10 @@ public class Outtake {
     static double outtakePower = 0.0;
 
     //stuff for auto aiming
-    static boolean isBlue;
-    static double robotX = 72;
-    static double robotY = 72;
-    static double robotOrientation = 0;
+    public static boolean isBlue = false;
+    public static double robotX = 72;
+    public static double robotY = 72;
+    public static double robotOrientation = 0;
     static double goalX;
     static double goalY = 144;
     static double chamberY = 96;
@@ -52,7 +51,7 @@ public class Outtake {
         rotateServo = hwMap.get(CRServo.class, "rotate");
         hood = hwMap.get(Servo.class, "hood"); //min = 0.72, max = 0.01
 
-        encoderMotor = hwMap.get(DcMotor.class, "motorFR");
+        encoderMotor = hwMap.get(DcMotor.class, "motorFL");
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -103,6 +102,7 @@ public class Outtake {
     public static double pointAtChamber() {
         double dx = goalX - robotX;
         double dy = chamberY - robotY;
+        Indexer.chamberIncrease = 0;
 
         double absoluteAngleToGoal = Math.toDegrees(Math.atan2(dy, dx));
         absoluteAngleToGoal = ((absoluteAngleToGoal % 360) + 360) % 360;
@@ -158,7 +158,6 @@ public class Outtake {
     public static double testTelemetryMotor2() { //test program
         return outtakeMotorRight.getVelocity();
     }
-
 
 
 }
