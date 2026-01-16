@@ -20,7 +20,7 @@ public class Outtake {
     private static CRServo rotateServo;
 
     //outtake speed stuff
-    private static final double SPEED_CONST_CLOSE = 231.2, SPEED_CONST_FAR = 204, FAR_HOOD = .20, CLOSE_HOOD = .76;
+    private static final double SPEED_CONST_CLOSE = 231.2, SPEED_CONST_FAR = 204, ClOSE_HOOD = .40, FAR_HOOD = .72;
 
     //stuff for aiming
     private static int maxClicks =  24680;
@@ -56,7 +56,7 @@ public class Outtake {
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         //initialize to start positions (placeholders)
-        hood.setPosition(FAR_HOOD);
+        hood.setPosition(ClOSE_HOOD);
         rotateServo.setPower(0);
 
         outtakeMotorLeft.setVelocityPIDFCoefficients(4, 2, 6, 2);
@@ -144,8 +144,10 @@ public class Outtake {
 
         if (dist < 80) {
             speed = SPEED_CONST_CLOSE * Math.sqrt(dist);
+            hood.setPosition(ClOSE_HOOD);
         } else {
             speed = SPEED_CONST_FAR * Math.sqrt(dist);
+            hood.setPosition(FAR_HOOD);
         }
 
         outtakeMotorLeft.setVelocity(speed);

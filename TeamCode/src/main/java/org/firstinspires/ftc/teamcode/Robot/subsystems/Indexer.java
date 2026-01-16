@@ -17,9 +17,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Indexer {
     public static Servo slot0, slot1, slot2;
-    public static double UP_POS_0 = 0.05, DOWN_POS_0 = 0.48, MID_POS_0 = 0.34;
-    public static double UP_POS_1 = 0.05, DOWN_POS_1 = 0.48, MID_POS_1 = 0.34;
-    public static double UP_POS_2 = 0.89, DOWN_POS_2 = 0.49, MID_POS_2 = 0.66;
+    public static double UP_POS_0 = 0, DOWN_POS_0 = 0.48, MID_POS_0 = 0.34;
+    public static double UP_POS_1 = 0, DOWN_POS_1 = 0.48, MID_POS_1 = 0.34;
+    public static double UP_POS_2 = 0.92, DOWN_POS_2 = 0.49, MID_POS_2 = 0.66;
 
     public enum States {
         LAUNCH,
@@ -164,7 +164,7 @@ public class Indexer {
                     //slot0.setPosition(MID_POS_0);
                     chamberIncrease += 1;
                 }
-                if (System.currentTimeMillis() - startTime > 500) {
+                if (System.currentTimeMillis() - startTime > 2000) {
                     currentState0 = States.IDLE;
                 }
                 break;
@@ -182,7 +182,7 @@ public class Indexer {
                     //slot1.setPosition(MID_POS_1);
                     chamberIncrease += 1;
                 }
-                if (System.currentTimeMillis() - startTime > 500) {
+                if (System.currentTimeMillis() - startTime > 2000) {
                     currentState1 = States.IDLE;
                 }
                 break;
@@ -200,7 +200,7 @@ public class Indexer {
                     //slot2.setPosition(MID_POS_2);
                     chamberIncrease += 1;
                 }
-                if (System.currentTimeMillis() - startTime > 500) {
+                if (System.currentTimeMillis() - startTime > 2000) {
                     currentState2 = States.IDLE;
                 }
                 break;
