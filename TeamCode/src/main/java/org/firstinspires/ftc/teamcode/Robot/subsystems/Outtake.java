@@ -153,6 +153,15 @@ public class Outtake {
         outtakeMotorLeft.setVelocity(speed);
         outtakeMotorRight.setVelocity(speed);
     }
+    
+    public static void changeHood(double position) {
+        hood.setPosition(position);
+    }
+
+    public static void changeSpeed(double speed) {
+        outtakeMotorLeft.setVelocity(speed);
+        outtakeMotorRight.setVelocity(speed);
+    }
 
     public static double testTelemetryMotor1() { //clutch test program
         return outtakeMotorLeft.getVelocity();
