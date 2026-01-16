@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 @Autonomous(name = "BlueFrontM3")
 public class BlueFrontAutoM3 extends LinearOpMode {
     Pose start = new Pose(32.5, 134.5, Math.toRadians(90));
-    Pose shoot1 = new Pose(47.5, 96.5, Math.toRadians(140));
+    Pose shoot1 = new Pose(62.7, 80.8, Math.toRadians(135));
     Follower follower;
     PathChain startToShoot1;
 
@@ -57,7 +57,7 @@ public class BlueFrontAutoM3 extends LinearOpMode {
             if (!follower.isBusy()) {
                 switch (state) {
                     case 0:
-                        targetClicks = Outtake.setTarget(Outtake.setRotationPosition(0.35));
+                        targetClicks = Outtake.setTarget(Outtake.setRotationPosition(0.42));
                         follower.followPath(startToShoot1, 1, true);
                         state = 1;
                         launchDelayTimer = System.currentTimeMillis();
