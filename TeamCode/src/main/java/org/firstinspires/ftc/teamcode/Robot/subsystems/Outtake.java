@@ -146,7 +146,7 @@ public class Outtake {
             speed = SPEED_CONST_CLOSE * Math.sqrt(dist);
         } else {
             speed = SPEED_CONST_FAR * Math.sqrt(dist);
-        }
+      }
 
         outtakeMotorLeft.setVelocity(speed);
         outtakeMotorRight.setVelocity(speed);
