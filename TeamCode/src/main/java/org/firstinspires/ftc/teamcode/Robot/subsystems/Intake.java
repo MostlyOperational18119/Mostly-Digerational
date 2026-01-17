@@ -20,7 +20,7 @@ public class Intake {
         }
     }
     public static void intakeGo () { //think really hard about what this does
-        power = 0.7f;
+        power = 999999999f;
         intakeFront.setPower(power);
         intakeRear.setPower(power);
     }
