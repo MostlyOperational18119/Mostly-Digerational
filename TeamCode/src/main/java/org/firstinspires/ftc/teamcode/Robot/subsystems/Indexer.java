@@ -164,7 +164,7 @@ public class Indexer {
                     //slot0.setPosition(MID_POS_0);
                     chamberIncrease += 1;
                 }
-                if (System.currentTimeMillis() - startTime > 2000) {
+                if (System.currentTimeMillis() - startTime > 300) {
                     currentState0 = States.IDLE;
                 }
                 break;
@@ -182,7 +182,7 @@ public class Indexer {
                     //slot1.setPosition(MID_POS_1);
                     chamberIncrease += 1;
                 }
-                if (System.currentTimeMillis() - startTime > 2000) {
+                if (System.currentTimeMillis() - startTime > 300) {
                     currentState1 = States.IDLE;
                 }
                 break;
@@ -200,7 +200,7 @@ public class Indexer {
                     //slot2.setPosition(MID_POS_2);
                     chamberIncrease += 1;
                 }
-                if (System.currentTimeMillis() - startTime > 2000) {
+                if (System.currentTimeMillis() - startTime > 300) {
                     currentState2 = States.IDLE;
                 }
                 break;
