@@ -12,15 +12,20 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
+import org.opencv.core.Mat;
 
 @Autonomous(name = "BlueBackM3")
 public class BlueBackAutoM3 extends LinearOpMode {
     Pose start = new Pose(56, 8, Math.toRadians(0));
-    Pose intakePrep = new Pose(43, 36, Math.toRadians(0));
-    Pose intakeEnd = new Pose(15, 36, Math.toRadians(0));
+    Pose intakePrep1 = new Pose(43, 36, Math.toRadians(0));
+    Pose intakeEnd1 = new Pose(15, 36, Math.toRadians(0));
+    Pose intakeEnd2 = new Pose(43, 60, Math.toRadians(0));
+    Pose intakeEnd3 = new Pose(43, 84, Math.toRadians(0));
+    Pose intakePrep2 = new Pose(56, 8, Math.toRadians(0));
+    Pose intakePrep3 = new Pose(56, 8, Math.toRadians(0));
     Pose park = new Pose(36, 8, Math.toRadians(0));
     Follower follower;
-    PathChain startToIntakePrep, intake, intakeToLaunch, launchToPark;
+    PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, launchToPark;
     int state = 0;
     int targetClicks = 0;
     long launchDelayTimer = 0;
@@ -34,18 +39,44 @@ public class BlueBackAutoM3 extends LinearOpMode {
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
 
-        startToIntakePrep = follower.pathBuilder()
-                .addPath(new BezierLine(start, intakePrep))
-                .setLinearHeadingInterpolation(start.getHeading(), intakePrep.getHeading())
+        toIntakePrep1 = follower.pathBuilder()
+                .addPath(new BezierLine(start, intakePrep1))
+                .setLinearHeadingInterpolation(start.getHeading(), intakePrep1.getHeading())
                 .build();
-        intake = follower.pathBuilder()
-                .addPath(new BezierLine(intakePrep, intakeEnd))
-                .setLinearHeadingInterpolation(intakePrep.getHeading(), intakeEnd.getHeading())
+        intake1 = follower.pathBuilder()
+                .addPath(new BezierLine(intakePrep1, intakeEnd1))
+                .setLinearHeadingInterpolation(intakePrep1.getHeading(), intakeEnd1.getHeading())
                 .build();
-        intakeToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(intakeEnd, start))
-                .setLinearHeadingInterpolation(intakeEnd.getHeading(), start.getHeading())
+        intakeToLaunch1 = follower.pathBuilder()
+                .addPath(new BezierLine(intakeEnd1, start))
+                .setLinearHeadingInterpolation(intakeEnd1.getHeading(), start.getHeading())
                 .build();
+        toIntakePrep2 = follower.pathBuilder()
+                .addPath(new BezierLine(start, intakePrep2))
+                .setLinearHeadingInterpolation(start.getHeading(), intakePrep2.getHeading())
+                .build();
+
+        intake2 = follower.pathBuilder()
+                .addPath(new BezierLine(intakePrep2, intakeEnd2))
+                .setLinearHeadingInterpolation(intakePrep2.getHeading(), intakeEnd2.getHeading())
+                .build();
+
+        intakeToLaunch2 = follower.pathBuilder()
+                .addPath(new BezierLine(intakeEnd2, start))
+                .setLinearHeadingInterpolation(intakeEnd2.getHeading(), start.getHeading())
+                .build();
+
+        toIntakePrep3 = follower.pathBuilder()
+                .addPath(new BezierLine(start, intakePrep3))
+                .setLinearHeadingInterpolation(start.getHeading(), intakePrep3.getHeading())
+                .build();
+
+        intake3 = follower.pathBuilder()
+                .addPath(new BezierLine(intakePrep3, intakeEnd3))
+                .setLinearHeadingInterpolation(intakePrep3.getHeading(), intakeEnd3.getHeading())
+                .build();
+
+
         launchToPark = follower.pathBuilder()
                 .addPath(new BezierLine(start, park))
                 .setLinearHeadingInterpolation(start.getHeading(), park.getHeading())
@@ -90,16 +121,16 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         break;
                     case 1:
                         //targetClicks = Outtake.setTarget(Outtake.setRotationPosition(0.42));
-                        follower.followPath(startToIntakePrep, 1, true);
+                        follower.followPath(toIntakePrep1, 1, true);
                         state = 2;
                         launchDelayTimer = System.currentTimeMillis();
                         break;
                     case 2:
-                        follower.followPath(intake, 1, true);
+                        follower.followPath(intake1, 1, true);
                         state = 3;
                         break;
                     case 3:
-                        follower.followPath(intakeToLaunch);
+                        follower.followPath(intakeToLaunch1);
                         state = 4;
                         launchDelayTimer = System.currentTimeMillis();
                         break;
@@ -123,8 +154,21 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 5:
-                        follower.followPath(launchToPark);
+                        follower.followPath(toIntakePrep2, 1, true);
                         state = 6;
+                        break;
+                    case 6:
+                        follower.followPath(intake2, 1, true);
+                        state = 7;
+                        break;
+                    case 7:
+                        follower.followPath(intakeToLaunch2, 1, true);
+                        state = 8;
+                        break;
+                    // Next write the outtake sequence and the rest of the auto for the third row
+                    case 10:
+                        follower.followPath(launchToPark);
+                        state = 11;
                         break;
                 }
             }
