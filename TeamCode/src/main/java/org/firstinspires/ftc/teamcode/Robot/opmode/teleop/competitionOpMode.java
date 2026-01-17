@@ -40,7 +40,7 @@ public class competitionOpMode extends LinearOpMode {
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
 
-        Pose start = new Pose(72,72, Math.toRadians(90));
+        Pose start = new Pose(16.641,16.1903, Math.toRadians(90));
         Follower follower;
         follower =  Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
@@ -60,6 +60,8 @@ public class competitionOpMode extends LinearOpMode {
             boolean intake = gamepad1.right_trigger > 0.5;
             boolean Y = gamepad1.yWasPressed();
             boolean lt = gamepad1.left_trigger > 0.5;
+            boolean lb = gamepad1.leftBumperWasPressed();
+            boolean rb = gamepad1.rightBumperWasPressed();
 
             follower.update();
             Outtake.robotY = follower.getPose().getY();
@@ -104,15 +106,15 @@ public class competitionOpMode extends LinearOpMode {
                 if (System.currentTimeMillis() - launchDelayTimer > 1000) {
                     switch (launchCount) {
                         case 0:
-                            launchDelayTimer = Indexer.launch0();
+                            launchDelayTimer = Indexer.launch1();
                             launchCount = 1;
                             break;
                         case 1:
-                            launchDelayTimer = Indexer.launch1();
+                            launchDelayTimer = Indexer.launch2();
                             launchCount = 2;
                             break;
                         case 2:
-                            launchDelayTimer = Indexer.launch2();
+                            launchDelayTimer = Indexer.launch0();
                             isLaunching = false;
                             launchCount = 0;
                             break;
@@ -124,10 +126,16 @@ public class competitionOpMode extends LinearOpMode {
                 isLaunching = true;
             }
 
+            if (lb) {
+                Outtake.angleOffset += 1;
+            }
+            if (rb) {
+                Outtake.angleOffset -= 1;
+            }
+
 //            int[] slots = Indexer.slotColors();
-            telemetry.addData("isLaunching", isLaunching);
-            telemetry.addData("launchDelayTimer", launchDelayTimer);
-            telemetry.addData("slot 0 state", Indexer.currentState0);
+            telemetry.addData("Y", Outtake.robotY);
+            telemetry.addData("X", Outtake.robotX);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);

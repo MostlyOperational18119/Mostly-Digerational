@@ -20,7 +20,7 @@ public class Outtake {
     private static CRServo rotateServo;
 
     //outtake speed stuff
-    private static final double SPEED_CONST_CLOSE = 231.2, SPEED_CONST_FAR = 204, FAR_HOOD = .0, CLOSE_HOOD = .36;
+    private static final double SPEED_CONST_CLOSE = 100w, SPEED_CONST_FAR = 204, FAR_HOOD = .0, CLOSE_HOOD = .0;
 
     //stuff for aiming
     private static int maxClicks =  24680;
@@ -32,6 +32,7 @@ public class Outtake {
     public static double robotX = 72;
     public static double robotY = 72;
     public static double robotOrientation = 0;
+    public static int angleOffset = 90;
     static double goalX;
     static double goalY = 144;
     static double chamberY = 96;
@@ -59,8 +60,8 @@ public class Outtake {
         hood.setPosition(FAR_HOOD);
         rotateServo.setPower(0);
 
-        outtakeMotorLeft.setVelocityPIDFCoefficients(4, 2, 6, 2);
-        outtakeMotorRight.setVelocityPIDFCoefficients(4, 2, 6, 2);
+        outtakeMotorLeft.setVelocityPIDFCoefficients(6, 2, 6, 2);
+        outtakeMotorRight.setVelocityPIDFCoefficients(6, 2, 6, 2);
 
         //set blue/red aiming
         if (isBlue) {goalX = 0;} else {goalX = 144;}
@@ -94,11 +95,11 @@ public class Outtake {
         absoluteAngleToGoal = ((absoluteAngleToGoal % 360) + 360) % 360;
 
         // Flip the angle calculation
-        double relativeAngle = 360 - (absoluteAngleToGoal - (90 +robotOrientation));
+        double relativeAngle = 360 - (absoluteAngleToGoal - (angleOffset + robotOrientation));
 
         relativeAngle = ((relativeAngle % 360) + 360) % 360;
 
-        return (relativeAngle * 68.555) + 3850;
+        return (relativeAngle * 65.871345) + 4000;
     }
     public static double pointAtChamber() {
         double dx = goalX - robotX;
@@ -142,7 +143,7 @@ public class Outtake {
 
         double dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-        if (dist < 80) {
+        if (robotY > 60) {
             hood.setPosition(CLOSE_HOOD);
             speed = SPEED_CONST_CLOSE * Math.sqrt(dist);
         } else {
