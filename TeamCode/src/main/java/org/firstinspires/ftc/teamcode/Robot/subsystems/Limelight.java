@@ -75,7 +75,7 @@ public class Limelight {
 
     // Doesn't need to be public, probably just going to cause problems
     private void connect() throws IOException {
-        socket = new Socket("172.29.0.1", 8888);
+        socket = new Socket("10.12.194.1", 8888);
 
         in = new DataInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
