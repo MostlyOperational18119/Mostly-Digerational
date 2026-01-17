@@ -20,7 +20,7 @@ public class Outtake {
     private static CRServo rotateServo;
 
     //outtake speed stuff
-    private static final double SPEED_CONST_CLOSE = 231.2, SPEED_CONST_FAR = 204, FAR_HOOD = .20, CLOSE_HOOD = .76;
+    private static final double SPEED_CONST_CLOSE = 231.2, SPEED_CONST_FAR = 204, FAR_HOOD = .0, CLOSE_HOOD = .36;
 
     //stuff for aiming
     private static int maxClicks =  24680;
@@ -94,11 +94,11 @@ public class Outtake {
         absoluteAngleToGoal = ((absoluteAngleToGoal % 360) + 360) % 360;
 
         // Flip the angle calculation
-        double relativeAngle = 360 - (absoluteAngleToGoal + 90 - robotOrientation);
+        double relativeAngle = 360 - (absoluteAngleToGoal - (90 +robotOrientation));
 
         relativeAngle = ((relativeAngle % 360) + 360) % 360;
 
-        return (relativeAngle * 68.555) + 2816;
+        return (relativeAngle * 68.555) + 3850;
     }
     public static double pointAtChamber() {
         double dx = goalX - robotX;
@@ -143,8 +143,10 @@ public class Outtake {
         double dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
         if (dist < 80) {
+            hood.setPosition(CLOSE_HOOD);
             speed = SPEED_CONST_CLOSE * Math.sqrt(dist);
         } else {
+            hood.setPosition(FAR_HOOD);
             speed = SPEED_CONST_FAR * Math.sqrt(dist);
       }
 

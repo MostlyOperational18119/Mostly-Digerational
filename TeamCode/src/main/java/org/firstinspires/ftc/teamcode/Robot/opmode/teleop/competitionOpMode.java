@@ -24,26 +24,30 @@ public class competitionOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         //placeholders
-        boolean red = false;
         int launch = -1;
         long startTime = 0;
         long startTime0 = 0, startTime1, startTime2;
         final long WAIT = 300;
         final long LAUNCH_TIME = 150;
+        long launchDelayTimer = 0;
+        boolean isLaunching = false;
+        int launchCount = 0;
 
-
+        Outtake.isBlue = false;
 
         Drivetrain.init(hardwareMap);
-//        Outtake.init(hardwareMap);
-//        Intake.init(hardwareMap);
-//        Indexer.init(hardwareMap);
-//
-//        final Pose startPose = new Pose(0, 0, 0);
-//        Pose currentPose = startPose;
-//        Follower follower;
-//        follower =  Constants.createFollower(hardwareMap);
+        Outtake.init(hardwareMap);
+        Intake.init(hardwareMap);
+        Indexer.init(hardwareMap);
+
+        Pose start = new Pose(72,72, Math.toRadians(90));
+        Follower follower;
+        follower =  Constants.createFollower(hardwareMap);
+        follower.setStartingPose(start);
 
         waitForStart();
+
+        launchDelayTimer = System.currentTimeMillis();
 
         while (opModeIsActive()) {
 
@@ -57,6 +61,11 @@ public class competitionOpMode extends LinearOpMode {
             boolean Y = gamepad1.yWasPressed();
             boolean lt = gamepad1.left_trigger > 0.5;
 
+            follower.update();
+            Outtake.robotY = follower.getPose().getY();
+            Outtake.robotX = follower.getPose().getX();
+            Outtake.robotOrientation = Math.toDegrees(follower.getHeading());
+
             //look at chamber or shoot
 //            if (X) {
 //                launch *= -1;
@@ -64,8 +73,12 @@ public class competitionOpMode extends LinearOpMode {
 
             
             Drivetrain.drive(y, x, rx);
+            Outtake.outtakeUpdate(-1);
+            Outtake.outtakeSpeed();
 
-            //Indexer.update(launch > 0);
+            Indexer.updateSlot0();
+            Indexer.updateSlot1();
+            Indexer.updateSlot2();
 
 //            if ((A) && (launch < 0)) {
 //                long currentTime = System.currentTimeMillis();
@@ -80,13 +93,42 @@ public class competitionOpMode extends LinearOpMode {
 //            } else {
 //                Drivetrain.BreakPadUp();
 //            }
-//
-//
-//            //intake balls
-//            Intake.switchIntake(intake);
-//
+
+            if (intake) {
+                Intake.intakeGo();
+            } else {
+                Intake.intakeStop();
+            }
+
+            if (isLaunching) {
+                if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                    switch (launchCount) {
+                        case 0:
+                            launchDelayTimer = Indexer.launch0();
+                            launchCount = 1;
+                            break;
+                        case 1:
+                            launchDelayTimer = Indexer.launch1();
+                            launchCount = 2;
+                            break;
+                        case 2:
+                            launchDelayTimer = Indexer.launch2();
+                            isLaunching = false;
+                            launchCount = 0;
+                            break;
+                    }
+                }
+            }
+
+            if (A) {
+                isLaunching = true;
+            }
+
 //            int[] slots = Indexer.slotColors();
-//
+            telemetry.addData("isLaunching", isLaunching);
+            telemetry.addData("launchDelayTimer", launchDelayTimer);
+            telemetry.addData("slot 0 state", Indexer.currentState0);
+            telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);
 //            telemetry.addData("slot1", slots[1]);
