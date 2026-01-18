@@ -20,7 +20,7 @@ public class Outtake {
     private static CRServo rotateServo;
 
     //outtake speed stuff
-    private static final double SPEED_CONST_CLOSE = 100w, SPEED_CONST_FAR = 204, FAR_HOOD = .0, CLOSE_HOOD = .0;
+    private static final double SPEED_CONST_CLOSE = 100, SPEED_CONST_FAR = 204, FAR_HOOD = .0, CLOSE_HOOD = .0;
 
     //stuff for aiming
     private static int maxClicks =  24680;
@@ -36,6 +36,7 @@ public class Outtake {
     static double goalX;
     static double goalY = 144;
     static double chamberY = 96;
+    public static double p = 6, i = 2, d =6, f = 2;
 
     //state machine
     public static States currentState = States.AIM_CHAMBER;
@@ -60,8 +61,8 @@ public class Outtake {
         hood.setPosition(FAR_HOOD);
         rotateServo.setPower(0);
 
-        outtakeMotorLeft.setVelocityPIDFCoefficients(6, 2, 6, 2);
-        outtakeMotorRight.setVelocityPIDFCoefficients(6, 2, 6, 2);
+        outtakeMotorLeft.setVelocityPIDFCoefficients(p, i, d, f);
+        outtakeMotorRight.setVelocityPIDFCoefficients(p, i, d, f);
 
         //set blue/red aiming
         if (isBlue) {goalX = 0;} else {goalX = 144;}
