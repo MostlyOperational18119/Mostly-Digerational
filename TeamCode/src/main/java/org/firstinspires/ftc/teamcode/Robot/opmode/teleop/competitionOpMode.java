@@ -32,6 +32,7 @@ public class competitionOpMode extends LinearOpMode {
         long launchDelayTimer = 0;
         boolean isLaunching = false;
         int launchCount = 0;
+        int currentTransfer = 0;
 
         Outtake.isBlue = false;
 
@@ -56,12 +57,17 @@ public class competitionOpMode extends LinearOpMode {
             float x = gamepad1.left_stick_x;
             float rx = gamepad1.right_stick_x;
             boolean X = gamepad1.xWasPressed();
+            boolean B = gamepad1.bWasPressed();
             boolean A = gamepad1.aWasPressed();
             boolean intake = gamepad1.right_trigger > 0.5;
             boolean Y = gamepad1.yWasPressed();
             boolean lt = gamepad1.left_trigger > 0.5;
             boolean lb = gamepad1.leftBumperWasPressed();
             boolean rb = gamepad1.rightBumperWasPressed();
+            boolean dpadUp = gamepad1.dpadUpWasPressed();
+            boolean dpadDown = gamepad1.dpadDownWasPressed();
+            boolean dpadRight = gamepad1.dpadRightWasPressed();
+            boolean dpadLeft = gamepad1.dpadLeftWasPressed();
 
             follower.update();
             Outtake.robotY = follower.getPose().getY();
@@ -106,15 +112,15 @@ public class competitionOpMode extends LinearOpMode {
                 if (System.currentTimeMillis() - launchDelayTimer > 1000) {
                     switch (launchCount) {
                         case 0:
-                            launchDelayTimer = Indexer.launch1();
+                            launchDelayTimer = Indexer.launch0();
                             launchCount = 1;
                             break;
                         case 1:
-                            launchDelayTimer = Indexer.launch2();
+                            launchDelayTimer = Indexer.launch1();
                             launchCount = 2;
                             break;
                         case 2:
-                            launchDelayTimer = Indexer.launch0();
+                            launchDelayTimer = Indexer.launch2();
                             isLaunching = false;
                             launchCount = 0;
                             break;
@@ -126,16 +132,86 @@ public class competitionOpMode extends LinearOpMode {
                 isLaunching = true;
             }
 
-            if (lb) {
-                Outtake.angleOffset += 1;
+            //if (lb) {
+            //    Outtake.angleOffset += 1;
+            //}
+            //if (rb) {
+            //    Outtake.angleOffset -= 1;
+            //}
+
+            if (dpadUp) {
+                Outtake.SPEED_CONST_CLOSE += 2;
             }
+            if (dpadDown) {
+                Outtake.SPEED_CONST_CLOSE -= 2;
+            }
+            if (dpadLeft) {
+                Outtake.SPEED_CONST_FAR += 2;
+            }
+            if (dpadRight) {
+                Outtake.SPEED_CONST_FAR -= 2;
+            }
+            if (X) {
+               Outtake.CLOSE_HOOD += 0.01;
+               Outtake.FAR_HOOD += 0.01;
+            }
+            if (B) {
+                Outtake.CLOSE_HOOD -= 0.01;
+                Outtake.FAR_HOOD -= 0.01;
+            }
+
+            if (Y) {
+                currentTransfer += 1;
+                if (currentTransfer >= 3) {
+                    currentTransfer = 1;
+                }
+            }
+
+            if (lb) {
+                switch (currentTransfer) {
+                    case 0:
+                        Indexer.UP_POS_0 += 0.01;
+                        break;
+                    case 1:
+                        Indexer.UP_POS_1 += 0.01;
+                        break;
+                    case 2:
+                        Indexer.UP_POS_2 += 0.01;
+                        break;
+                }
+            }
+
             if (rb) {
-                Outtake.angleOffset -= 1;
+                switch (currentTransfer) {
+                    case 0:
+                        Indexer.UP_POS_0 -= 0.01;
+                        break;
+                    case 1:
+                        Indexer.UP_POS_1 -= 0.01;
+                        break;
+                    case 2:
+                        Indexer.UP_POS_2 -= 0.01;
+                        break;
+                }
+            }
+
+            if (gamepad1.backWasPressed()) {
+                if (Outtake.goalX == 140) {
+                    Outtake.goalX = 4;
+                } else {
+                    Outtake.goalX = 140;
+                }
             }
 
 //            int[] slots = Indexer.slotColors();
-            telemetry.addData("Y", Outtake.robotY);
-            telemetry.addData("X", Outtake.robotX);
+            telemetry.addData("speed const close", Outtake.SPEED_CONST_CLOSE);
+            telemetry.addData("speed const far", Outtake.SPEED_CONST_FAR);
+            telemetry.addData("hood angle", Outtake.CLOSE_HOOD);
+            telemetry.addData("odometry X", Outtake.robotX);
+            telemetry.addData("odometry Y", Outtake.robotY);
+            telemetry.addData("up position 0", Indexer.UP_POS_0);
+            telemetry.addData("up position 1", Indexer.UP_POS_1);
+            telemetry.addData("up position 2", Indexer.UP_POS_2);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);
