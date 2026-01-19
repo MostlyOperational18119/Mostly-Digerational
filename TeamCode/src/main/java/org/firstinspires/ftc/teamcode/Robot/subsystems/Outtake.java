@@ -156,7 +156,7 @@ public class Outtake {
         outtakeMotorRight.setVelocity(speed);
     }
 
-    public static void updatePID(double p, double i, double d, double f) {
+    public static void updatePID() {
         outtakeMotorLeft.setVelocityPIDFCoefficients(p, i, d, f);
         outtakeMotorRight.setVelocityPIDFCoefficients(p, i, d, f);
     }
