@@ -1,6 +1,10 @@
-package org.firstinspires.ftc.teamcode.Robot.opmode.teleop;
+package org.firstinspires.ftc.teamcode.Robot.test;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+import static org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake.d;
+import static org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake.f;
+import static org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake.i;
+import static org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake.p;
 
 import android.widget.AdapterView;
 
@@ -152,52 +156,54 @@ public class PIDtest extends LinearOpMode {
                 switch (PIDselect) {
                 case 0:
                     if (up) {
-                        Outtake.p += .1;
+                        p += .1;
                     }
                     if (dp) {
-                        Outtake.p -= .1;
+                        p -= .1;
                     }
 
                     break;
                 case 1:
 
                     if (up) {
-                        Outtake.i += .1;
+                        i += .1;
                     }
                     if (dp) {
-                        Outtake.i -= .1;
+                        i -= .1;
                     }
 
                     break;
                 case 2:
 
                     if (up) {
-                        Outtake.d += .1;
+                        d += .1;
                     }
                     if (dp) {
-                        Outtake.d -= .1;
+                        d -= .1;
                     }
 
                     break;
                 case 3:
 
                     if (up) {
-                        Outtake.f += .1;
+                        f += .1;
                     }
                     if (dp) {
-                        Outtake.f -= .1;
+                        f -= .1;
                     }
 
                     break;
             }
-            telemetry.addData("p", Outtake.p);
+            telemetry.addData("p", p);
 
-            telemetry.addData("i", Outtake.i);
+            telemetry.addData("i", i);
 
-            telemetry.addData("d", Outtake.d);
+            telemetry.addData("d", d);
 
-            telemetry.addData("f", Outtake.f);
+            telemetry.addData("f", f);
 
+
+            Outtake.updatePID(p, i, d, f);
 
 
 //            int[] slots = Indexer.slotColors();

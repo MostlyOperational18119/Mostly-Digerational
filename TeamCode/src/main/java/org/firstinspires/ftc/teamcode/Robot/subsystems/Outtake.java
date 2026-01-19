@@ -20,7 +20,7 @@ public class Outtake {
     private static CRServo rotateServo;
 
     //outtake speed stuff
-    private static final double SPEED_CONST_CLOSE = 100, SPEED_CONST_FAR = 204, FAR_HOOD = .0, CLOSE_HOOD = .0;
+    public static double SPEED_CONST_CLOSE = 60, SPEED_CONST_FAR = 362, FAR_HOOD = .0, CLOSE_HOOD = .0;
 
     //stuff for aiming
     private static int maxClicks =  24680;
@@ -33,7 +33,7 @@ public class Outtake {
     public static double robotY = 72;
     public static double robotOrientation = 0;
     public static int angleOffset = 90;
-    static double goalX;
+    public static double goalX;
     static double goalY = 144;
     static double chamberY = 96;
     public static double p = 6, i = 2, d =6, f = 2;
@@ -65,7 +65,7 @@ public class Outtake {
         outtakeMotorRight.setVelocityPIDFCoefficients(p, i, d, f);
 
         //set blue/red aiming
-        if (isBlue) {goalX = 0;} else {goalX = 144;}
+        if (isBlue) {goalX = 4;} else {goalX = 140;}
     }
 
     public static void update(int targetClicks) {
@@ -154,6 +154,11 @@ public class Outtake {
 
         outtakeMotorLeft.setVelocity(speed);
         outtakeMotorRight.setVelocity(speed);
+    }
+
+    public static void updatePID(double p, double i, double d, double f) {
+        outtakeMotorLeft.setVelocityPIDFCoefficients(p, i, d, f);
+        outtakeMotorRight.setVelocityPIDFCoefficients(p, i, d, f);
     }
 
     public static double testTelemetryMotor1() { //clutch test program
