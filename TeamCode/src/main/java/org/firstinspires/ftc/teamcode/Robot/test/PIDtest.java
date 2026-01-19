@@ -87,6 +87,7 @@ public class PIDtest extends LinearOpMode {
             Drivetrain.drive(y, x, rx);
             Outtake.outtakeUpdate(-1);
             Outtake.outtakeSpeed();
+            Outtake.updatePID();
 
             Indexer.updateSlot0();
             Indexer.updateSlot1();
@@ -203,7 +204,7 @@ public class PIDtest extends LinearOpMode {
             telemetry.addData("f", f);
 
 
-            Outtake.updatePID(p, i, d, f);
+            //Outtake.updatePID(p, i, d, f);
 
 
 //            int[] slots = Indexer.slotColors();

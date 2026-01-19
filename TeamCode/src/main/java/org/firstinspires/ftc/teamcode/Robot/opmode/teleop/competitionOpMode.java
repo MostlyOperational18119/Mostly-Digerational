@@ -83,6 +83,7 @@ public class competitionOpMode extends LinearOpMode {
             Drivetrain.drive(y, x, rx);
             Outtake.outtakeUpdate(-1);
             Outtake.outtakeSpeed();
+            Outtake.updatePID();
 
             Indexer.updateSlot0();
             Indexer.updateSlot1();
@@ -140,16 +141,32 @@ public class competitionOpMode extends LinearOpMode {
             //}
 
             if (dpadUp) {
-                Outtake.SPEED_CONST_CLOSE += 2;
+                //Outtake.SPEED_CONST_CLOSE += 2;
+                if (Outtake.p <= 20) {
+                    Outtake.p += 0.5;
+                } else
+                    Outtake.p = 0;
             }
             if (dpadDown) {
-                Outtake.SPEED_CONST_CLOSE -= 2;
+                //Outtake.SPEED_CONST_CLOSE -= 2;
+                if (Outtake.i <= 5) {
+                    Outtake.i += 0.5;
+                } else
+                    Outtake.i = 0;
             }
             if (dpadLeft) {
-                Outtake.SPEED_CONST_FAR += 2;
+                //Outtake.SPEED_CONST_FAR += 2;
+                if (Outtake.d <= 20) {
+                    Outtake.d += 0.5;
+                } else
+                    Outtake.d = 0;
             }
             if (dpadRight) {
-                Outtake.SPEED_CONST_FAR -= 2;
+                //Outtake.SPEED_CONST_FAR -= 2;
+                if (Outtake.f <= 10) {
+                    Outtake.f += 0.5;
+                } else
+                    Outtake.f = 0;
             }
             if (X) {
                Outtake.CLOSE_HOOD += 0.01;
@@ -212,6 +229,12 @@ public class competitionOpMode extends LinearOpMode {
             telemetry.addData("up position 0", Indexer.UP_POS_0);
             telemetry.addData("up position 1", Indexer.UP_POS_1);
             telemetry.addData("up position 2", Indexer.UP_POS_2);
+            telemetry.addData("Left motor velo", Outtake.testTelemetryMotor1());
+            telemetry.addData("Right motor velo", Outtake.testTelemetryMotor2());
+            telemetry.addData("P value", Outtake.p);
+            telemetry.addData("I value", Outtake.i);
+            telemetry.addData("D value", Outtake.d);
+            telemetry.addData("F value", Outtake.f);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);
