@@ -83,7 +83,7 @@ public class competitionOpMode extends LinearOpMode {
             Drivetrain.drive(y, x, rx);
             Outtake.outtakeUpdate(-1);
             Outtake.outtakeSpeed();
-            Outtake.updatePID();
+            //Outtake.updatePID();
 
             Indexer.updateSlot0();
             Indexer.updateSlot1();

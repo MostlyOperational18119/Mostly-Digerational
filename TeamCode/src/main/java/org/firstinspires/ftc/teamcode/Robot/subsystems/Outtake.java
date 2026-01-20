@@ -20,7 +20,7 @@ public class Outtake {
     private static CRServo rotateServo;
 
     //outtake speed stuff
-    public static double SPEED_CONST_CLOSE = 60, SPEED_CONST_FAR = 362, FAR_HOOD = .0, CLOSE_HOOD = .0;
+    public static double SPEED_CONST_VERY_CLOSE = 60, SPEED_CONST_CLOSE = 80, SPEED_CONST_FAR = 362, VERY_CLOSE_HOOD = 0, FAR_HOOD = .0, CLOSE_HOOD = .0;
 
     //stuff for aiming
     private static int maxClicks =  24680;
@@ -36,7 +36,7 @@ public class Outtake {
     public static double goalX;
     static double goalY = 144;
     static double chamberY = 96;
-    public static double p = 6, i = 2, d =6, f = 2;
+    public static double p = 6, i = 2, d = 6, f = 2;
 
     //state machine
     public static States currentState = States.AIM_CHAMBER;
@@ -147,6 +147,9 @@ public class Outtake {
         if (robotY > 60) {
             hood.setPosition(CLOSE_HOOD);
             speed = SPEED_CONST_CLOSE * Math.sqrt(dist);
+        } else if (robotY > 40 && (robotX > 60 || robotX < 84)){
+            hood.setPosition(VERY_CLOSE_HOOD);
+            speed= SPEED_CONST_VERY_CLOSE * Math.sqrt(dist);
         } else {
             hood.setPosition(FAR_HOOD);
             speed = SPEED_CONST_FAR * Math.sqrt(dist);
@@ -156,16 +159,28 @@ public class Outtake {
         outtakeMotorRight.setVelocity(speed);
     }
 
-    public static void updatePID() {
+
+
+    //testing and making variables configurable
+    public static void updatePID(double p, double i, double d, double f) {
         outtakeMotorLeft.setVelocityPIDFCoefficients(p, i, d, f);
         outtakeMotorRight.setVelocityPIDFCoefficients(p, i, d, f);
     }
-
-    public static double testTelemetryMotor1() { //clutch test program
+    public static void updateSpeedConsts(double close, double closer, double far){
+        SPEED_CONST_CLOSE = close;
+        SPEED_CONST_VERY_CLOSE = closer;
+        SPEED_CONST_FAR = far;
+    }
+    public static void updateHoodPositions(double close, double closer, double far){
+        VERY_CLOSE_HOOD = closer;
+        CLOSE_HOOD = closer;
+        FAR_HOOD = far;
+    }
+    public static double testTelemetryMotor1() {
         return outtakeMotorLeft.getVelocity();
     }
 
-    public static double testTelemetryMotor2() { //test program
+    public static double testTelemetryMotor2() {
         return outtakeMotorRight.getVelocity();
     }
 
