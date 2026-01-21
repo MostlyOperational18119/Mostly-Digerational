@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Robot.opmode.teleop.configurableTeleop;
 
 public class Outtake {
 
@@ -20,7 +21,14 @@ public class Outtake {
     private static CRServo rotateServo;
 
     //outtake speed stuff
-    public static double SPEED_CONST_VERY_CLOSE = 60, SPEED_CONST_CLOSE = 80, SPEED_CONST_FAR = 362, VERY_CLOSE_HOOD = 0, FAR_HOOD = .0, CLOSE_HOOD = .0;
+    //hood min: 0.58, hood max: 0
+    public static double SPEED_CONST_VERY_CLOSE = 40, SPEED_CONST_CLOSE = 60, SPEED_CONST_FAR = 362, VERY_CLOSE_HOOD = 0.58, FAR_HOOD = 0, CLOSE_HOOD = .3;
+
+    //configurable testing
+    //public static double SPEED_CONST_VERY_CLOSE = configurableTeleop.VERY_CLOSE_SPEED, SPEED_CONST_CLOSE = configurableTeleop.CLOSE_SPEED, SPEED_CONST_FAR = configurableTeleop.FAR_SPEED, VERY_CLOSE_HOOD = configurableTeleop.CLOSER_HOOD, FAR_HOOD = configurableTeleop.FAR_HOOD, CLOSE_HOOD = configurableTeleop.CLOSE_HOOD;
+
+    //testing/telemetry variables
+    public static double distance, velocity;
 
     //stuff for aiming
     private static int maxClicks =  24680;
@@ -36,7 +44,10 @@ public class Outtake {
     public static double goalX;
     static double goalY = 144;
     static double chamberY = 96;
+
+    //temporarily commented out for configurableTeleop
     public static double p = 6, i = 2, d = 6, f = 2;
+    //public static double p = configurableTeleop.p, i = configurableTeleop.i, d = configurableTeleop.d, f = configurableTeleop.f;
 
     //state machine
     public static States currentState = States.AIM_CHAMBER;
@@ -51,7 +62,7 @@ public class Outtake {
         outtakeMotorLeft = hwMap.get(DcMotorEx.class, "outtakeMotorLeft");
         outtakeMotorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         rotateServo = hwMap.get(CRServo.class, "rotate");
-        hood = hwMap.get(Servo.class, "hood"); //min = 0.72, max = 0.01
+        hood = hwMap.get(Servo.class, "hood"); //min = 0.58, max = 0
 
         encoderMotor = hwMap.get(DcMotor.class, "frontIntake");
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -139,21 +150,25 @@ public class Outtake {
 
     public static void outtakeSpeed() {
         double dx = goalX - robotX;
-        double dy = goalX - robotY;
+        double dy = goalY - robotY;
         double speed;
 
         double dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        distance = dist;
 
         if (robotY > 60) {
             hood.setPosition(CLOSE_HOOD);
             speed = SPEED_CONST_CLOSE * Math.sqrt(dist);
+            velocity = speed;
         } else if (robotY > 40 && (robotX > 60 || robotX < 84)){
             hood.setPosition(VERY_CLOSE_HOOD);
-            speed= SPEED_CONST_VERY_CLOSE * Math.sqrt(dist);
+            speed = SPEED_CONST_VERY_CLOSE * Math.sqrt(dist);
+            velocity = speed;
         } else {
             hood.setPosition(FAR_HOOD);
             speed = SPEED_CONST_FAR * Math.sqrt(dist);
-      }
+            velocity = speed;
+        }
 
         outtakeMotorLeft.setVelocity(speed);
         outtakeMotorRight.setVelocity(speed);
@@ -173,16 +188,16 @@ public class Outtake {
     }
     public static void updateHoodPositions(double close, double closer, double far){
         VERY_CLOSE_HOOD = closer;
-        CLOSE_HOOD = closer;
+        CLOSE_HOOD = close;
         FAR_HOOD = far;
     }
     public static double testTelemetryMotor1() {
         return outtakeMotorLeft.getVelocity();
     }
-
     public static double testTelemetryMotor2() {
         return outtakeMotorRight.getVelocity();
     }
-
-
+    public static double returnHoodPos(){
+        return hood.getPosition();
+    }
 }

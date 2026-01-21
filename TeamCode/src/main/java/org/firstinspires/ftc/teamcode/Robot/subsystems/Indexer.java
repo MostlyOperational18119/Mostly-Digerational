@@ -14,12 +14,20 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Robot.opmode.teleop.configurableTeleop;
 
 public class Indexer {
     public static Servo slot0, slot1, slot2;
     public static double UP_POS_0 = 0, DOWN_POS_0 = 0.44, MID_POS_0 = 0.34;
     public static double UP_POS_1 = 0, DOWN_POS_1 = 0.54, MID_POS_1 = 0.34;
     public static double UP_POS_2 = 1.0, DOWN_POS_2 = 0.46, MID_POS_2 = 0.66;
+    public static double BRAKE_DOWN = 0, BRAKE_UP = 0;
+
+    //temporarily commented out for configurableTeleop
+    public static double LAUNCH_WAIT = 300;
+
+    //configurable testing
+    //public static double LAUNCH_WAIT = configurableTeleop.LAUNCH_WAIT;
 
     public enum States {
         LAUNCH,
@@ -33,9 +41,10 @@ public class Indexer {
     static long startTime = 0;
 
     public static int[] pattern = new int[]{1, 1, 2}; // change to new int[3];
-    public static States currentState0, currentState1, currentState2;
+    public static States currentState0, currentState1, currentState2, currentStateBrake;
     static int currentBall; //ball being launched (0, 1, or 2)
     private static RevColorSensorV3 slot0Sensor, slot1Sensor, slot2Sensor;
+    private static Servo brakePad;
 
     public static void init(HardwareMap hwMap) {
         slot0Sensor = hwMap.get(RevColorSensorV3.class, "index0");
@@ -44,11 +53,14 @@ public class Indexer {
         slot0 = hwMap.get(Servo.class, "transfer0");
         slot1 = hwMap.get(Servo.class, "transfer1");
         slot2 = hwMap.get(Servo.class, "transfer2");
+        brakePad = hwMap.get(Servo.class, "BrakePad");
 
         //initialize to start position
         currentState0 = States.IDLE;
         currentState1 = States.IDLE;
         currentState2 = States.IDLE;
+        currentStateBrake = States.IDLE;
+        brakePad.setPosition(BRAKE_UP);
 
     }
 
@@ -156,16 +168,28 @@ public class Indexer {
         return slots;
     }
 
+    public static void updateBrakePad () {
+        switch (currentStateBrake) {
+            case LAUNCH:
+                brakePad.setPosition(BRAKE_DOWN);
+                break;
+            case IDLE:
+                brakePad.setPosition(BRAKE_UP);
+        }
+    }
+
     public static void updateSlot0 () {
         switch (currentState0) {
             case LAUNCH:
+                currentStateBrake = States.LAUNCH;
                 slot0.setPosition(UP_POS_0);
                 if (getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue(), slot0Sensor.getDistance(DistanceUnit.MM)) == 0) {
                     //slot0.setPosition(MID_POS_0);
                     chamberIncrease += 1;
                 }
-                if (System.currentTimeMillis() - startTime > 300) {
+                if (System.currentTimeMillis() - startTime > LAUNCH_WAIT) {
                     currentState0 = States.IDLE;
+                    currentStateBrake = States.IDLE;
                 }
                 break;
             case IDLE:
@@ -177,13 +201,15 @@ public class Indexer {
     public static void updateSlot1 () {
         switch (currentState1) {
             case LAUNCH:
+                currentStateBrake = States.LAUNCH;
                 slot1.setPosition(UP_POS_1);
                 if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue(), slot1Sensor.getDistance(DistanceUnit.MM)) == 0) {
                     //slot1.setPosition(MID_POS_1);
                     chamberIncrease += 1;
                 }
-                if (System.currentTimeMillis() - startTime > 300) {
+                if (System.currentTimeMillis() - startTime > LAUNCH_WAIT) {
                     currentState1 = States.IDLE;
+                    currentStateBrake = States.IDLE;
                 }
                 break;
             case IDLE:
@@ -195,13 +221,15 @@ public class Indexer {
     public static void updateSlot2 () {
         switch (currentState2) {
             case LAUNCH:
+                currentStateBrake = States.LAUNCH;
                 slot2.setPosition(UP_POS_2);
                 if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue(), slot2Sensor.getDistance(DistanceUnit.MM)) == 0) {
                     //slot2.setPosition(MID_POS_2);
                     chamberIncrease += 1;
                 }
-                if (System.currentTimeMillis() - startTime > 300) {
+                if (System.currentTimeMillis() - startTime > LAUNCH_WAIT) {
                     currentState2 = States.IDLE;
+                    currentStateBrake = States.IDLE;
                 }
                 break;
             case IDLE:
@@ -228,33 +256,14 @@ public class Indexer {
         return startTime;
     }
 
-//    public static void update (boolean launch){
-//        if (currentState0 == States.LAUNCH || getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue()) == 0) {
-//            if (launch) {
-//                slot0.setPosition(MID_POS_0);
-//            }
-//            currentState0 = States.IDLE;
-//        }
-//        if (currentState1 == States.LAUNCH || getColorSlot(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue()) == 0) {
-//            if (launch) {
-//                slot1.setPosition(MID_POS_1);
-//            }
-//            currentState1 = States.IDLE;
-//        }
-//        if (currentState2 == States.LAUNCH || getColorSlot(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue()) == 0) {
-//            if (launch) {
-//                slot2.setPosition(MID_POS_2);
-//            }
-//            currentState2 = States.IDLE;
-//        }
-//
-//        updateSlot0();
-//        updateSlot1();
-//        updateSlot2();
-//    }
     public static int nextBall(int chamberNum, int chamberIncrease, int[] pattern) {
         int patternIndex = (chamberNum + chamberIncrease) % 3;
         return pattern[patternIndex];
+    }
+
+    //stuff for configurableTeleop
+    public static void updateWaitTime(double time) {
+        LAUNCH_WAIT = time;
     }
 
 
