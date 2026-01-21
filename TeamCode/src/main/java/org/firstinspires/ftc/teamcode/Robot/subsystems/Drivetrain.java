@@ -10,10 +10,10 @@ import com.qualcomm.robotcore.util.Range;
 public class Drivetrain {
     static public DcMotor frontLeft, backLeft, backRight, frontRight;
 
-    public static final int DOWNPOS = 0;
-    public final static int UPPOS = 1;
+//    public static final int DOWNPOS = 0;
+//    public final static int UPPOS = 1;
+//    static public Servo BreakPad;
 
-    static public Servo BreakPad;
     public static void init (HardwareMap hwMap) {
         frontLeft = hwMap.get(DcMotor.class, "motorFL");
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -29,16 +29,16 @@ public class Drivetrain {
         backRight = hwMap.get(DcMotor.class, "motorBR");
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        BreakPad = hwMap.get(Servo.class, "BreakPad");
+        //BreakPad = hwMap.get(Servo.class, "BreakPad");
     }
 
-    static public void BreakPadDown () {
-        BreakPad.setPosition(DOWNPOS);
-    }
+//    static public void BreakPadDown () {
+//        BreakPad.setPosition(DOWNPOS);
+//    }
 
-    static public void BreakPadUp () {
-        BreakPad.setPosition(UPPOS);
-    }
+//    static public void BreakPadUp () {
+//        BreakPad.setPosition(UPPOS);
+//    }
 
     static public void drive(float ly, float lx, float rx) {
 

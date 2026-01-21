@@ -79,11 +79,9 @@ public class competitionOpMode extends LinearOpMode {
 //                launch *= -1;
 //            }
 
-            
             Drivetrain.drive(y, x, rx);
             Outtake.outtakeUpdate(-1);
             Outtake.outtakeSpeed();
-            //Outtake.updatePID();
 
             Indexer.updateSlot0();
             Indexer.updateSlot1();
@@ -140,77 +138,77 @@ public class competitionOpMode extends LinearOpMode {
             //    Outtake.angleOffset -= 1;
             //}
 
-            if (dpadUp) {
-                //Outtake.SPEED_CONST_CLOSE += 2;
-                if (Outtake.p <= 20) {
-                    Outtake.p += 0.5;
-                } else
-                    Outtake.p = 0;
-            }
-            if (dpadDown) {
-                //Outtake.SPEED_CONST_CLOSE -= 2;
-                if (Outtake.i <= 5) {
-                    Outtake.i += 0.5;
-                } else
-                    Outtake.i = 0;
-            }
-            if (dpadLeft) {
-                //Outtake.SPEED_CONST_FAR += 2;
-                if (Outtake.d <= 20) {
-                    Outtake.d += 0.5;
-                } else
-                    Outtake.d = 0;
-            }
-            if (dpadRight) {
-                //Outtake.SPEED_CONST_FAR -= 2;
-                if (Outtake.f <= 10) {
-                    Outtake.f += 0.5;
-                } else
-                    Outtake.f = 0;
-            }
-            if (X) {
-               Outtake.CLOSE_HOOD += 0.01;
-               Outtake.FAR_HOOD += 0.01;
-            }
-            if (B) {
-                Outtake.CLOSE_HOOD -= 0.01;
-                Outtake.FAR_HOOD -= 0.01;
-            }
-
-            if (Y) {
-                currentTransfer += 1;
-                if (currentTransfer >= 3) {
-                    currentTransfer = 1;
-                }
-            }
-
-            if (lb) {
-                switch (currentTransfer) {
-                    case 0:
-                        Indexer.UP_POS_0 += 0.01;
-                        break;
-                    case 1:
-                        Indexer.UP_POS_1 += 0.01;
-                        break;
-                    case 2:
-                        Indexer.UP_POS_2 += 0.01;
-                        break;
-                }
-            }
-
-            if (rb) {
-                switch (currentTransfer) {
-                    case 0:
-                        Indexer.UP_POS_0 -= 0.01;
-                        break;
-                    case 1:
-                        Indexer.UP_POS_1 -= 0.01;
-                        break;
-                    case 2:
-                        Indexer.UP_POS_2 -= 0.01;
-                        break;
-                }
-            }
+//            if (dpadUp) {
+//                //Outtake.SPEED_CONST_CLOSE += 2;
+//                if (Outtake.p <= 20) {
+//                    Outtake.p += 0.5;
+//                } else
+//                    Outtake.p = 0;
+//            }
+//            if (dpadDown) {
+//                //Outtake.SPEED_CONST_CLOSE -= 2;
+//                if (Outtake.i <= 5) {
+//                    Outtake.i += 0.5;
+//                } else
+//                    Outtake.i = 0;
+//            }
+//            if (dpadLeft) {
+//                //Outtake.SPEED_CONST_FAR += 2;
+//                if (Outtake.d <= 20) {
+//                    Outtake.d += 0.5;
+//                } else
+//                    Outtake.d = 0;
+//            }
+//            if (dpadRight) {
+//                //Outtake.SPEED_CONST_FAR -= 2;
+//                if (Outtake.f <= 10) {
+//                    Outtake.f += 0.5;
+//                } else
+//                    Outtake.f = 0;
+//            }
+//            if (X) {
+//               Outtake.CLOSE_HOOD += 0.01;
+//               Outtake.FAR_HOOD += 0.01;
+//            }
+//            if (B) {
+//                Outtake.CLOSE_HOOD -= 0.01;
+//                Outtake.FAR_HOOD -= 0.01;
+//            }
+//
+//            if (Y) {
+//                currentTransfer += 1;
+//                if (currentTransfer >= 3) {
+//                    currentTransfer = 1;
+//                }
+//            }
+//
+//            if (lb) {
+//                switch (currentTransfer) {
+//                    case 0:
+//                        Indexer.UP_POS_0 += 0.01;
+//                        break;
+//                    case 1:
+//                        Indexer.UP_POS_1 += 0.01;
+//                        break;
+//                    case 2:
+//                        Indexer.UP_POS_2 += 0.01;
+//                        break;
+//                }
+//            }
+//
+//            if (rb) {
+//                switch (currentTransfer) {
+//                    case 0:
+//                        Indexer.UP_POS_0 -= 0.01;
+//                        break;
+//                    case 1:
+//                        Indexer.UP_POS_1 -= 0.01;
+//                        break;
+//                    case 2:
+//                        Indexer.UP_POS_2 -= 0.01;
+//                        break;
+//                }
+//            }
 
             if (gamepad1.backWasPressed()) {
                 if (Outtake.goalX == 140) {
@@ -221,6 +219,8 @@ public class competitionOpMode extends LinearOpMode {
             }
 
 //            int[] slots = Indexer.slotColors();
+            telemetry.addData("supposed velo", Outtake.velocity);
+            telemetry.addData("supposed dist", Outtake.distance);
             telemetry.addData("speed const close", Outtake.SPEED_CONST_CLOSE);
             telemetry.addData("speed const far", Outtake.SPEED_CONST_FAR);
             telemetry.addData("hood angle", Outtake.CLOSE_HOOD);
