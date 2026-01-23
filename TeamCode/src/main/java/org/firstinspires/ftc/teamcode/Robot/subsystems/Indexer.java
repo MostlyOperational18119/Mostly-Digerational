@@ -60,7 +60,7 @@ public class Indexer {
         currentState1 = States.IDLE;
         currentState2 = States.IDLE;
         currentStateBrake = States.IDLE;
-        brakePad.setPosition(BRAKE_UP);
+        //brakePad.setPosition(BRAKE_UP);
 
     }
 

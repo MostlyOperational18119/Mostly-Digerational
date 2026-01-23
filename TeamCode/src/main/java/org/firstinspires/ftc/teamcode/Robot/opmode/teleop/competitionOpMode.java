@@ -138,20 +138,12 @@ public class competitionOpMode extends LinearOpMode {
             //    Outtake.angleOffset -= 1;
             //}
 
-//            if (dpadUp) {
-//                //Outtake.SPEED_CONST_CLOSE += 2;
-//                if (Outtake.p <= 20) {
-//                    Outtake.p += 0.5;
-//                } else
-//                    Outtake.p = 0;
-//            }
-//            if (dpadDown) {
-//                //Outtake.SPEED_CONST_CLOSE -= 2;
-//                if (Outtake.i <= 5) {
-//                    Outtake.i += 0.5;
-//                } else
-//                    Outtake.i = 0;
-//            }
+            if (dpadUp) {
+                Outtake.SPEED_CONST_VERY_CLOSE += 2;
+            }
+            if (dpadDown) {
+                Outtake.SPEED_CONST_VERY_CLOSE -= 2;
+            }
 //            if (dpadLeft) {
 //                //Outtake.SPEED_CONST_FAR += 2;
 //                if (Outtake.d <= 20) {
@@ -166,14 +158,12 @@ public class competitionOpMode extends LinearOpMode {
 //                } else
 //                    Outtake.f = 0;
 //            }
-//            if (X) {
-//               Outtake.CLOSE_HOOD += 0.01;
-//               Outtake.FAR_HOOD += 0.01;
-//            }
-//            if (B) {
-//                Outtake.CLOSE_HOOD -= 0.01;
-//                Outtake.FAR_HOOD -= 0.01;
-//            }
+            if (X) {
+               Outtake.VERY_CLOSE_HOOD += 0.01;
+            }
+            if (B) {
+                Outtake.VERY_CLOSE_HOOD -= 0.01;
+            }
 //
 //            if (Y) {
 //                currentTransfer += 1;
@@ -221,7 +211,7 @@ public class competitionOpMode extends LinearOpMode {
 //            int[] slots = Indexer.slotColors();
             telemetry.addData("supposed velo", Outtake.velocity);
             telemetry.addData("supposed dist", Outtake.distance);
-            telemetry.addData("speed const close", Outtake.SPEED_CONST_CLOSE);
+            telemetry.addData("speed const VERY close", Outtake.SPEED_CONST_VERY_CLOSE);
             telemetry.addData("speed const far", Outtake.SPEED_CONST_FAR);
             telemetry.addData("hood angle", Outtake.CLOSE_HOOD);
             telemetry.addData("odometry X", Outtake.robotX);

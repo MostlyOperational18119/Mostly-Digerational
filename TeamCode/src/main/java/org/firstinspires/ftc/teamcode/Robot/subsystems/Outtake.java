@@ -17,7 +17,7 @@ public class Outtake {
     //motors+servos
     private static DcMotorEx outtakeMotorLeft, outtakeMotorRight;
     private static DcMotor encoderMotor;
-    private static Servo hood;
+    public static Servo hood;
     private static CRServo rotateServo;
 
     //outtake speed stuff
@@ -156,11 +156,11 @@ public class Outtake {
         double dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
         distance = dist;
 
-        if (robotY > 60) {
+        if (robotY > 60 && robotY <= 80) {
             hood.setPosition(CLOSE_HOOD);
             speed = SPEED_CONST_CLOSE * Math.sqrt(dist);
             velocity = speed;
-        } else if (robotY > 40 && (robotX > 60 || robotX < 84)){
+        } else if (robotY > 80 && (robotX < 60 || robotX > 84)){
             hood.setPosition(VERY_CLOSE_HOOD);
             speed = SPEED_CONST_VERY_CLOSE * Math.sqrt(dist);
             velocity = speed;
