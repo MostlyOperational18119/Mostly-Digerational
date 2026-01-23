@@ -18,14 +18,14 @@ import org.opencv.core.Mat;
 public class BlueBackAutoM3 extends LinearOpMode {
     Pose start = new Pose(56, 8, Math.toRadians(0));
     Pose intakePrep1 = new Pose(43, 36, Math.toRadians(0));
+    Pose intakePrep2 = new Pose(43, 60, Math.toRadians(0));
+    Pose intakePrep3 = new Pose(43, 84, Math.toRadians(0));
     Pose intakeEnd1 = new Pose(15, 36, Math.toRadians(0));
-    Pose intakeEnd2 = new Pose(43, 60, Math.toRadians(0));
-    Pose intakeEnd3 = new Pose(43, 84, Math.toRadians(0));
-    Pose intakePrep2 = new Pose(56, 8, Math.toRadians(0));
-    Pose intakePrep3 = new Pose(56, 8, Math.toRadians(0));
+    Pose intakeEnd2 = new Pose(15, 60, Math.toRadians(0));
+    Pose intakeEnd3 = new Pose(15, 84, Math.toRadians(0));
     Pose park = new Pose(36, 8, Math.toRadians(0));
     Follower follower;
-    PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, launchToPark;
+    PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
     int state = 0;
     int targetClicks = 0;
     long launchDelayTimer = 0;
@@ -35,6 +35,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
     public void runOpMode() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
+        Outtake.isBlue = true;
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
@@ -76,6 +77,10 @@ public class BlueBackAutoM3 extends LinearOpMode {
                 .setLinearHeadingInterpolation(intakePrep3.getHeading(), intakeEnd3.getHeading())
                 .build();
 
+        intakeToLaunch3 = follower.pathBuilder()
+                .addPath(new BezierLine(intakeEnd3, start))
+                .setLinearHeadingInterpolation(intakeEnd3.getHeading(), start.getHeading())
+                .build();
 
         launchToPark = follower.pathBuilder()
                 .addPath(new BezierLine(start, park))
@@ -87,19 +92,31 @@ public class BlueBackAutoM3 extends LinearOpMode {
         Outtake.outtakeSpeed();
 
         while (opModeIsActive()) {
-            Outtake.update(targetClicks);
+//            Outtake.update(targetClicks);
             follower.update();
             Indexer.updateSlot0();
             Indexer.updateSlot1();
             Indexer.updateSlot2();
+            Outtake.robotOrientation = Math.toDegrees(follower.getHeading());
+            Outtake.robotY = follower.getPose().getY();
+            Outtake.robotX = follower.getPose().getX();
+            Outtake.outtakeSpeed();
+            Outtake.outtakeUpdate(-1);
 
             telemetry.addData("clicks", Drivetrain.outtakePosition());
             telemetry.addData("time delta", System.currentTimeMillis() - launchDelayTimer);
             telemetry.addData("slot 1 state", Indexer.currentState1);
+            telemetry.addData("robot x follower", follower.getPose().getX());
             telemetry.update();
 
             if (!follower.isBusy()) {
                 switch (state) {
+                    case -1:
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                            state = 0;
+                            launchDelayTimer = System.currentTimeMillis();
+                        }
+                        break;
                     case 0:
                         if (System.currentTimeMillis() - launchDelayTimer > 1000) {
                             switch (launchCount) {
@@ -164,11 +181,61 @@ public class BlueBackAutoM3 extends LinearOpMode {
                     case 7:
                         follower.followPath(intakeToLaunch2, 1, true);
                         state = 8;
+                        launchDelayTimer = System.currentTimeMillis();
                         break;
-                    // Next write the outtake sequence and the rest of the auto for the third row
+                    case 8:
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                            switch (launchCount) {
+                                case 0:
+                                    launchDelayTimer = Indexer.launch0();
+                                    launchCount = 1;
+                                    break;
+                                case 1:
+                                    launchDelayTimer = Indexer.launch1();
+                                    launchCount = 2;
+                                    break;
+                                case 2:
+                                    launchDelayTimer = Indexer.launch2();
+                                    state = 9;
+                                    launchCount = 0;
+                                    break;
+                            }
+                        }
+                        break;
+                    case 9:
+                        follower.followPath(toIntakePrep3, 1, true);
+                        state = 10;
+                        break;
                     case 10:
-                        follower.followPath(launchToPark);
+                        follower.followPath(intake3, 1, true);
                         state = 11;
+                        break;
+                    case 11:
+                        follower.followPath(intakeToLaunch3, 1, true);
+                        state = 12;
+                        launchDelayTimer = System.currentTimeMillis();
+                        break;
+                    case 12:
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                            switch (launchCount) {
+                                case 0:
+                                    launchDelayTimer = Indexer.launch0();
+                                    launchCount = 1;
+                                    break;
+                                case 1:
+                                    launchDelayTimer = Indexer.launch1();
+                                    launchCount = 2;
+                                    break;
+                                case 2:
+                                    launchDelayTimer = Indexer.launch2();
+                                    state = 13;
+                                    launchCount = 0;
+                                    break;
+                            }
+                        }
+                    case 13:
+                        follower.followPath(launchToPark);
+                        state = 14;
                         break;
                 }
             }
