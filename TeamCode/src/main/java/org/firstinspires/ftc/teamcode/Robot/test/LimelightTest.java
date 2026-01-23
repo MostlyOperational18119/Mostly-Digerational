@@ -5,7 +5,7 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Robot.subsystems.Limelight;
+import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
 
 import java.io.IOException;
 import java.util.Optional;
