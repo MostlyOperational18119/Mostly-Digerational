@@ -16,14 +16,14 @@ import org.opencv.core.Mat;
 
 @Autonomous(name = "BlueBackM3")
 public class BlueBackAutoM3 extends LinearOpMode {
-    Pose start = new Pose(56, 8, Math.toRadians(0));
-    Pose intakePrep1 = new Pose(43, 36, Math.toRadians(0));
-    Pose intakePrep2 = new Pose(43, 60, Math.toRadians(0));
-    Pose intakePrep3 = new Pose(43, 84, Math.toRadians(0));
-    Pose intakeEnd1 = new Pose(15, 36, Math.toRadians(0));
-    Pose intakeEnd2 = new Pose(15, 60, Math.toRadians(0));
-    Pose intakeEnd3 = new Pose(15, 84, Math.toRadians(0));
-    Pose park = new Pose(36, 8, Math.toRadians(0));
+    Pose start = new Pose(56, 8, Math.toRadians(180));
+    Pose intakePrep1 = new Pose(43, 36, Math.toRadians(180));
+    Pose intakePrep2 = new Pose(43, 60, Math.toRadians(180));
+    Pose intakePrep3 = new Pose(43, 84, Math.toRadians(180));
+    Pose intakeEnd1 = new Pose(15, 36, Math.toRadians(180));
+    Pose intakeEnd2 = new Pose(15, 60, Math.toRadians(180));
+    Pose intakeEnd3 = new Pose(15, 84, Math.toRadians(180));
+    Pose park = new Pose(36, 8, Math.toRadians(180));
     Follower follower;
     PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
     int state = 0;
@@ -112,13 +112,13 @@ public class BlueBackAutoM3 extends LinearOpMode {
             if (!follower.isBusy()) {
                 switch (state) {
                     case -1:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 5000) {
                             state = 0;
                             launchDelayTimer = System.currentTimeMillis();
                         }
                         break;
                     case 0:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 2000) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -138,21 +138,23 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         break;
                     case 1:
                         //targetClicks = Outtake.setTarget(Outtake.setRotationPosition(0.42));
-                        follower.followPath(toIntakePrep1, 1, true);
+                        follower.followPath(toIntakePrep1, 0.8, true);
                         state = 2;
                         launchDelayTimer = System.currentTimeMillis();
+                        Intake.intakeGo();
                         break;
                     case 2:
-                        follower.followPath(intake1, 1, true);
+                        follower.followPath(intake1, 0.6, true);
                         state = 3;
                         break;
                     case 3:
                         follower.followPath(intakeToLaunch1);
                         state = 4;
                         launchDelayTimer = System.currentTimeMillis();
+                        Intake.intakeStop();
                         break;
                     case 4:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 2000) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -184,7 +186,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         launchDelayTimer = System.currentTimeMillis();
                         break;
                     case 8:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 2000) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();

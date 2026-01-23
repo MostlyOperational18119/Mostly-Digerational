@@ -24,7 +24,7 @@ public class Indexer {
     public static double BRAKE_DOWN = 0, BRAKE_UP = 0;
 
     //temporarily commented out for configurableTeleop
-    public static double LAUNCH_WAIT = 300;
+    public static double LAUNCH_WAIT = 500;
 
     //configurable testing
     //public static double LAUNCH_WAIT = configurableTeleop.LAUNCH_WAIT;
