@@ -13,15 +13,16 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
-@Autonomous(name = "BlueBackM3")
+@Autonomous(name = "RedBackM3")
 public class RedBackAutoM3 extends LinearOpMode {
     Pose start = new Pose(88, 8, Math.toRadians(180));
+    Pose launch = new Pose(88, 10, Math.toRadians(180));
     Pose intakePrep1 = new Pose(101, 36, Math.toRadians(180));
-    Pose intakePrep2 = new Pose(101, 60, Math.toRadians(180));
+    Pose intakePrep2 = new Pose(101, 58, Math.toRadians(180));
     Pose intakePrep3 = new Pose(101, 84, Math.toRadians(180));
-    Pose intakeEnd1 = new Pose(126, 36, Math.toRadians(180));
-    Pose intakeEnd2 = new Pose(126, 60, Math.toRadians(180));
-    Pose intakeEnd3 = new Pose(126, 84, Math.toRadians(180));
+    Pose intakeEnd1 = new Pose(132, 36, Math.toRadians(180));
+    Pose intakeEnd2 = new Pose(132, 58, Math.toRadians(180));
+    Pose intakeEnd3 = new Pose(130, 84, Math.toRadians(180));
     Pose park = new Pose(108, 8, Math.toRadians(180));
     Follower follower;
     PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
@@ -40,20 +41,20 @@ public class RedBackAutoM3 extends LinearOpMode {
         Indexer.init(hardwareMap);
 
         toIntakePrep1 = follower.pathBuilder()
-                .addPath(new BezierLine(start, intakePrep1))
-                .setLinearHeadingInterpolation(start.getHeading(), intakePrep1.getHeading())
+                .addPath(new BezierLine(launch, intakePrep1))
+                .setLinearHeadingInterpolation(launch.getHeading(), intakePrep1.getHeading())
                 .build();
         intake1 = follower.pathBuilder()
                 .addPath(new BezierLine(intakePrep1, intakeEnd1))
                 .setLinearHeadingInterpolation(intakePrep1.getHeading(), intakeEnd1.getHeading())
                 .build();
         intakeToLaunch1 = follower.pathBuilder()
-                .addPath(new BezierLine(intakeEnd1, start))
-                .setLinearHeadingInterpolation(intakeEnd1.getHeading(), start.getHeading())
+                .addPath(new BezierLine(intakeEnd1, launch))
+                .setLinearHeadingInterpolation(intakeEnd1.getHeading(), launch.getHeading())
                 .build();
         toIntakePrep2 = follower.pathBuilder()
-                .addPath(new BezierLine(start, intakePrep2))
-                .setLinearHeadingInterpolation(start.getHeading(), intakePrep2.getHeading())
+                .addPath(new BezierLine(launch, intakePrep2))
+                .setLinearHeadingInterpolation(launch.getHeading(), intakePrep2.getHeading())
                 .build();
 
         intake2 = follower.pathBuilder()
@@ -62,13 +63,13 @@ public class RedBackAutoM3 extends LinearOpMode {
                 .build();
 
         intakeToLaunch2 = follower.pathBuilder()
-                .addPath(new BezierLine(intakeEnd2, start))
-                .setLinearHeadingInterpolation(intakeEnd2.getHeading(), start.getHeading())
+                .addPath(new BezierLine(intakeEnd2, launch))
+                .setLinearHeadingInterpolation(intakeEnd2.getHeading(), launch.getHeading())
                 .build();
 
         toIntakePrep3 = follower.pathBuilder()
-                .addPath(new BezierLine(start, intakePrep3))
-                .setLinearHeadingInterpolation(start.getHeading(), intakePrep3.getHeading())
+                .addPath(new BezierLine(launch, intakePrep3))
+                .setLinearHeadingInterpolation(launch.getHeading(), intakePrep3.getHeading())
                 .build();
 
         intake3 = follower.pathBuilder()
@@ -77,13 +78,13 @@ public class RedBackAutoM3 extends LinearOpMode {
                 .build();
 
         intakeToLaunch3 = follower.pathBuilder()
-                .addPath(new BezierLine(intakeEnd3, start))
-                .setLinearHeadingInterpolation(intakeEnd3.getHeading(), start.getHeading())
+                .addPath(new BezierLine(intakeEnd3, launch))
+                .setLinearHeadingInterpolation(intakeEnd3.getHeading(), launch.getHeading())
                 .build();
 
         launchToPark = follower.pathBuilder()
-                .addPath(new BezierLine(start, park))
-                .setLinearHeadingInterpolation(start.getHeading(), park.getHeading())
+                .addPath(new BezierLine(launch, park))
+                .setLinearHeadingInterpolation(launch.getHeading(), park.getHeading())
                 .build();
 
         waitForStart();
@@ -119,7 +120,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 0:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 30) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -138,7 +139,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 1:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 30) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
                                     case 0:
@@ -168,22 +169,22 @@ public class RedBackAutoM3 extends LinearOpMode {
                         break;
                     case 3:
                         //targetClicks = Outtake.setTarget(Outtake.setRotationPosition(0.42));
-                        follower.followPath(toIntakePrep1, 0.8, true);
+                        follower.followPath(toIntakePrep1, 1, true);
                         state = 4;
                         Intake.intakeGo();
                         break;
                     case 4:
-                        follower.followPath(intake1, 0.6, true);
+                        follower.followPath(intake1, 0.8, true);
                         state = 5;
                         break;
                     case 5:
+                        follower.followPath(intakeToLaunch1, 1, true);
                         Intake.intakeStop();
-                        follower.followPath(intakeToLaunch1, 0.8, true);
                         state = 6;
                         launchDelayTimer = System.currentTimeMillis();
                         break;
                     case 6:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 30) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -202,7 +203,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 7:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 30) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
                                     case 0:
@@ -231,22 +232,22 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 9:
-                        follower.followPath(toIntakePrep2, 0.8, true);
+                        follower.followPath(toIntakePrep2, 1, true);
                         state = 10;
                         Intake.intakeGo();
                         break;
                     case 10:
-                        follower.followPath(intake2, 0.6, true);
+                        follower.followPath(intake2, 0.8, true);
                         state = 11;
                         break;
                     case 11:
+                        follower.followPath(intakeToLaunch2, 1, true);
                         Intake.intakeStop();
-                        follower.followPath(intakeToLaunch2, 0.8, true);
                         state = 12;
                         launchDelayTimer = System.currentTimeMillis();
                         break;
                     case 12:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 30) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -265,7 +266,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 13:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 30) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
                                     case 0:
@@ -294,22 +295,22 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 15:
-                        follower.followPath(toIntakePrep3, 0.8, true);
+                        follower.followPath(toIntakePrep3, 1, true);
                         state = 16;
                         Intake.intakeGo();
                         break;
                     case 16:
-                        follower.followPath(intake3, 0.6, true);
+                        follower.followPath(intake3, 0.8, true);
                         state = 17;
                         break;
                     case 17:
+                        follower.followPath(intakeToLaunch3, 1, true);
                         Intake.intakeStop();
-                        follower.followPath(intakeToLaunch3, 0.8, true);
                         state = 18;
                         launchDelayTimer = System.currentTimeMillis();
                         break;
                     case 18:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 30) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -328,7 +329,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 19:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 30) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
                                     case 0:
@@ -352,7 +353,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 20:
-                        follower.followPath(launchToPark, 0.6, true);
+                        follower.followPath(launchToPark, 1, true);
                         state = 21;
                         break;
                 }
