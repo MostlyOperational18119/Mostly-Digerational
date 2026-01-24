@@ -13,17 +13,17 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
-@Autonomous(name = "RedBackM3")
-public class RedBackAutoM3 extends LinearOpMode {
-    Pose start = new Pose(88, 8, Math.toRadians(180));
-    Pose launch = new Pose(88, 10, Math.toRadians(180));
-    Pose intakePrep1 = new Pose(98, 34, Math.toRadians(180));
-    Pose intakePrep2 = new Pose(98, 58, Math.toRadians(180));
-    Pose intakePrep3 = new Pose(98, 84, Math.toRadians(180));
-    Pose intakeEnd1 = new Pose(132, 34, Math.toRadians(180));
-    Pose intakeEnd2 = new Pose(132, 58, Math.toRadians(180));
-    Pose intakeEnd3 = new Pose(130, 84, Math.toRadians(180));
-    Pose park = new Pose(108, 8, Math.toRadians(180));
+@Autonomous(name = "BlueBackM3")
+public class BlueBackAutoM3 extends LinearOpMode {
+    Pose start = new Pose(56, 8, Math.toRadians(180));
+    Pose launch = new Pose(56, 10, Math.toRadians(180));
+    Pose intakePrep1 = new Pose(46, 34, Math.toRadians(180));
+    Pose intakePrep2 = new Pose(46, 58, Math.toRadians(180));
+    Pose intakePrep3 = new Pose(46, 84, Math.toRadians(180));
+    Pose intakeEnd1 = new Pose(12, 34, Math.toRadians(180));
+    Pose intakeEnd2 = new Pose(12, 58, Math.toRadians(180));
+    Pose intakeEnd3 = new Pose(14, 84, Math.toRadians(180));
+    Pose park = new Pose(36, 8, Math.toRadians(180));
     Follower follower;
     PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
     int state = -1;
@@ -35,7 +35,7 @@ public class RedBackAutoM3 extends LinearOpMode {
     public void runOpMode() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        Outtake.isBlue = false;
+        Outtake.isBlue = true;
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
@@ -189,7 +189,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 7:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 60) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -257,7 +257,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 14:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 60) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -305,72 +305,76 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 17:
-                        follower.followPath(toIntakePrep3, 1, true);
-                        state = 18;
-                        Intake.intakeGo();
+                        follower.followPath(launchToPark, 0.6, true);
+                        Intake.intakeStop();
                         break;
-                    case 18:
-                        follower.followPath(intake3, 0.8, true);
-                        state = 19;
-                        break;
-                    case 19:
-                        follower.followPath(intakeToLaunch3, 1, true);
-                        state = 20;
-                        launchDelayTimer = System.currentTimeMillis();
-                        break;
-                    case 20:
-                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
-                            Intake.intakeStop();
-                            state = 21;
-                        }
-                        break;
-                    case 21:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
-                            switch (launchCount) {
-                                case 0:
-                                    launchDelayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    launchDelayTimer = Indexer.launch1();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    launchDelayTimer = Indexer.launch2();
-                                    state = 19;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
-                        break;
-                    case 22:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            for (int i = 0; i < 3; i++) {
-                                switch (i) {
-                                    case 0:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch0();
-                                        }
-                                        break;
-                                    case 1:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch1();
-                                        }
-                                        break;
-                                    case 2:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch2();
-                                        }
-                                        state = 23;
-                                        break;
-                                }
-                            }
-                        }
-                        break;
-                    case 23:
-                        follower.followPath(launchToPark, 1, true);
-                        state = 60;
-                        break;
+//                    case 17:
+//                        follower.followPath(toIntakePrep3, 1, true);
+//                        state = 18;
+//                        Intake.intakeGo();
+//                        break;
+//                    case 18:
+//                        follower.followPath(intake3, 0.8, true);
+//                        state = 19;
+//                        break;
+//                    case 19:
+//                        follower.followPath(intakeToLaunch3, 1, true);
+//                        state = 20;
+//                        launchDelayTimer = System.currentTimeMillis();
+//                        break;
+//                    case 20:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+//                            Intake.intakeStop();
+//                            state = 21;
+//                        }
+//                        break;
+//                    case 21:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+//                            switch (launchCount) {
+//                                case 0:
+//                                    launchDelayTimer = Indexer.launch0();
+//                                    launchCount = 1;
+//                                    break;
+//                                case 1:
+//                                    launchDelayTimer = Indexer.launch1();
+//                                    launchCount = 2;
+//                                    break;
+//                                case 2:
+//                                    launchDelayTimer = Indexer.launch2();
+//                                    state = 19;
+//                                    launchCount = 0;
+//                                    break;
+//                            }
+//                        }
+//                        break;
+//                    case 22:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+//                            for (int i = 0; i < 3; i++) {
+//                                switch (i) {
+//                                    case 0:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch0();
+//                                        }
+//                                        break;
+//                                    case 1:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch1();
+//                                        }
+//                                        break;
+//                                    case 2:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch2();
+//                                        }
+//                                        state = 23;
+//                                        break;
+//                                }
+//                            }
+//                        }
+//                        break;
+//                    case 23:
+//                        follower.followPath(launchToPark, 1, true);
+//                        state = 60;
+//                        break;
                 }
             }
         }
