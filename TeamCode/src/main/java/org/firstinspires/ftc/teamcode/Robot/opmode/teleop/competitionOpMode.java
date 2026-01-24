@@ -126,7 +126,7 @@ public class competitionOpMode extends LinearOpMode {
             }
 
             if (isLaunching) {
-                if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                if (System.currentTimeMillis() - launchDelayTimer > 600) {
                     switch (launchCount) {
                         case 0:
                             launchDelayTimer = Indexer.launch0();

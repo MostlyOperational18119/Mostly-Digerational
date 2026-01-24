@@ -81,7 +81,7 @@ public class Outtake {
         rotateServo.setPower(0);
 
         //set blue/red aiming
-        if (isBlue) {goalX = 4;} else {goalX = 135;}
+        if (isBlue) {goalX = -10;} else {goalX = 135;}
     }
 
     public static void update(int targetClicks) {
