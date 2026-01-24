@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -57,7 +58,10 @@ public class Drivetrain {
     public static int outtakePosition() {
         return -Intake.intakeFront.getCurrentPosition();
     }
-
+    public static class StaticVars {
+        public static boolean isBlue;
+        public static Pose endPose;
+    }
 }
 
 
