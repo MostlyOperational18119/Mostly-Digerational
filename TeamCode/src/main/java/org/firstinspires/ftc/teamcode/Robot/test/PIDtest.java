@@ -1,11 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot.test;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-import static org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake.d;
-import static org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake.f;
-import static org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake.i;
-import static org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake.p;
-
 import android.widget.AdapterView;
 
 import com.pedropathing.follower.Follower;
@@ -85,7 +80,7 @@ public class PIDtest extends LinearOpMode {
 
 
             Drivetrain.drive(y, x, rx);
-            Outtake.outtakeUpdate(-1);
+//            Outtake.outtakeUpdate(-1);
             Outtake.outtakeSpeed();
             //Outtake.updatePID();
 
@@ -154,54 +149,6 @@ public class PIDtest extends LinearOpMode {
             PIDselect = Math.abs(PIDselect%4);
 
 
-                switch (PIDselect) {
-                case 0:
-                    if (up) {
-                        p += .1;
-                    }
-                    if (dp) {
-                        p -= .1;
-                    }
-
-                    break;
-                case 1:
-
-                    if (up) {
-                        i += .1;
-                    }
-                    if (dp) {
-                        i -= .1;
-                    }
-
-                    break;
-                case 2:
-
-                    if (up) {
-                        d += .1;
-                    }
-                    if (dp) {
-                        d -= .1;
-                    }
-
-                    break;
-                case 3:
-
-                    if (up) {
-                        f += .1;
-                    }
-                    if (dp) {
-                        f -= .1;
-                    }
-
-                    break;
-            }
-            telemetry.addData("p", p);
-
-            telemetry.addData("i", i);
-
-            telemetry.addData("d", d);
-
-            telemetry.addData("f", f);
 
 
             //Outtake.updatePID(p, i, d, f);

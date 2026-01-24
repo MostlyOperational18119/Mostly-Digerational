@@ -58,7 +58,7 @@ public class configurableTeleop extends LinearOpMode {
             Outtake.robotOrientation = Math.toDegrees(follower.getHeading());
 
             Drivetrain.drive(y, x, rx);
-            Outtake.outtakeUpdate(-1);
+            Outtake.outtakeUpdate(-1, 0);
             Outtake.outtakeSpeed();
 
             //indexer state machines
@@ -115,10 +115,6 @@ public class configurableTeleop extends LinearOpMode {
             telemetry.addData("up position 2", Indexer.UP_POS_2);
             telemetry.addData("Left motor velo", Outtake.testTelemetryMotor1());
             telemetry.addData("Right motor velo", Outtake.testTelemetryMotor2());
-            telemetry.addData("P value", Outtake.p);
-            telemetry.addData("I value", Outtake.i);
-            telemetry.addData("D value", Outtake.d);
-            telemetry.addData("F value", Outtake.f);
             telemetry.update();
         }
     }

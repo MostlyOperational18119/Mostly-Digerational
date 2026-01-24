@@ -9,26 +9,26 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Robot.opmode.teleop.configurableTeleop;
 
 public class Outtake {
 
     //motors+servos
-    private static DcMotorEx outtakeMotorLeft, outtakeMotorRight;
+    public static DcMotorEx outtakeMotorLeft;
+    public static DcMotorEx outtakeMotorRight;
     private static DcMotor encoderMotor;
     public static Servo hood;
     private static CRServo rotateServo;
 
     //outtake speed stuff
     //hood min: 0.58, hood max: 0
-    public static double SPEED_CONST_VERY_CLOSE = 40, SPEED_CONST_CLOSE = 60, SPEED_CONST_FAR = 362, VERY_CLOSE_HOOD = 0.58, FAR_HOOD = 0, CLOSE_HOOD = .3;
+    public static double SPEED_CONST_VERY_CLOSE = 270, SPEED_CONST_CLOSE = 205, SPEED_CONST_FAR = 205, VERY_CLOSE_HOOD = 0.58, FAR_HOOD = 0, CLOSE_HOOD = 0;
 
     //configurable testing
     //public static double SPEED_CONST_VERY_CLOSE = configurableTeleop.VERY_CLOSE_SPEED, SPEED_CONST_CLOSE = configurableTeleop.CLOSE_SPEED, SPEED_CONST_FAR = configurableTeleop.FAR_SPEED, VERY_CLOSE_HOOD = configurableTeleop.CLOSER_HOOD, FAR_HOOD = configurableTeleop.FAR_HOOD, CLOSE_HOOD = configurableTeleop.CLOSE_HOOD;
 
     //testing/telemetry variables
-    public static double distance, velocity;
+    public static double distance, speed;
 
     //stuff for aiming
     private static int maxClicks =  24680;
@@ -46,11 +46,14 @@ public class Outtake {
     static double chamberY = 96;
 
     //temporarily commented out for configurableTeleop
-    public static double p = 6, i = 2, d = 6, f = 2;
+    public static double VERY_CLOSE_P = 12, VERY_CLOSE_I = 1, VERY_CLOSE_D = 0;
+    public static double CLOSE_P = 12, CLOSE_I = 1, CLOSE_D = 0;
+    public static double FAR_P = 12, FAR_I = 1, FAR_D = 0;
     //public static double p = configurableTeleop.p, i = configurableTeleop.i, d = configurableTeleop.d, f = configurableTeleop.f;
 
     //state machine
     public static States currentState = States.AIM_CHAMBER;
+    public static String currentDistance = "";
 
     public enum States {
         AIM_CHAMBER,
@@ -68,15 +71,17 @@ public class Outtake {
         encoderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoderMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        outtakeMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        outtakeMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
         //initialize to start positions (placeholders)
         hood.setPosition(FAR_HOOD);
         rotateServo.setPower(0);
 
-        outtakeMotorLeft.setVelocityPIDFCoefficients(p, i, d, f);
-        outtakeMotorRight.setVelocityPIDFCoefficients(p, i, d, f);
-
         //set blue/red aiming
-        if (isBlue) {goalX = 4;} else {goalX = 140;}
+        if (isBlue) {goalX = 4;} else {goalX = 135;}
     }
 
     public static void update(int targetClicks) {
@@ -99,12 +104,12 @@ public class Outtake {
         return (int) target;
     }
 
-    public static double pointAtGoal() {
+    public static double pointAtGoal(int adjust) {
         double dx = goalX - robotX;
         double dy = goalY - robotY;
 
         double absoluteAngleToGoal = Math.toDegrees(Math.atan2(dy, dx));
-        absoluteAngleToGoal = ((absoluteAngleToGoal % 360) + 360) % 360;
+        absoluteAngleToGoal = (((absoluteAngleToGoal + adjust) % 360) + 360) % 360;
 
         // Flip the angle calculation
         double relativeAngle = 360 - (absoluteAngleToGoal - (angleOffset + robotOrientation));
@@ -113,13 +118,13 @@ public class Outtake {
 
         return (relativeAngle * 65.871345) + 4000;
     }
-    public static double pointAtChamber() {
+    public static double pointAtChamber(int adjust) {
         double dx = goalX - robotX;
         double dy = chamberY - robotY;
         Indexer.chamberIncrease = 0;
 
         double absoluteAngleToGoal = Math.toDegrees(Math.atan2(dy, dx));
-        absoluteAngleToGoal = ((absoluteAngleToGoal % 360) + 360) % 360;
+        absoluteAngleToGoal = (((absoluteAngleToGoal + adjust) % 360) + 360) % 360;
 
         // Flip the angle calculation
         double relativeAngle = 360 - (absoluteAngleToGoal + 90 - robotOrientation);
@@ -130,7 +135,7 @@ public class Outtake {
     }
 
 
-    public static void outtakeUpdate(int launch) {
+    public static void outtakeUpdate(int launch, int adjust) {
 
         if (launch > 0) {
             currentState = States.AIM_CHAMBER;
@@ -140,10 +145,10 @@ public class Outtake {
 
         switch (currentState) {
             case AIM_GOAL:
-                update(setTarget(pointAtGoal()));
+                update(setTarget(pointAtGoal(adjust)));
                 break;
             case AIM_CHAMBER:
-                update(setTarget(pointAtChamber()));
+                update(setTarget(pointAtChamber(adjust)));
                 break;
         }
     }
@@ -151,23 +156,28 @@ public class Outtake {
     public static void outtakeSpeed() {
         double dx = goalX - robotX;
         double dy = goalY - robotY;
-        double speed;
 
         double dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
         distance = dist;
 
-        if (robotY > 60 && robotY <= 80) {
-            hood.setPosition(CLOSE_HOOD);
-            speed = SPEED_CONST_CLOSE * Math.sqrt(dist);
-            velocity = speed;
-        } else if (robotY > 80 && (robotX < 60 || robotX > 84)){
+        if (dist < 60){
             hood.setPosition(VERY_CLOSE_HOOD);
             speed = SPEED_CONST_VERY_CLOSE * Math.sqrt(dist);
-            velocity = speed;
+            currentDistance = "very close";
+            outtakeMotorLeft.setVelocityPIDFCoefficients(VERY_CLOSE_P, VERY_CLOSE_I, VERY_CLOSE_D, 0);
+            outtakeMotorRight.setVelocityPIDFCoefficients(VERY_CLOSE_P, VERY_CLOSE_I, VERY_CLOSE_D, 0);
+        } else if (dist < 108) {
+            hood.setPosition(CLOSE_HOOD);
+            speed = SPEED_CONST_CLOSE * Math.sqrt(dist);
+            currentDistance = "close";
+            outtakeMotorLeft.setVelocityPIDFCoefficients(CLOSE_P, CLOSE_I, CLOSE_D, 0);
+            outtakeMotorRight.setVelocityPIDFCoefficients(CLOSE_P, CLOSE_I, CLOSE_D, 0);
         } else {
             hood.setPosition(FAR_HOOD);
             speed = SPEED_CONST_FAR * Math.sqrt(dist);
-            velocity = speed;
+            currentDistance = "far";
+            outtakeMotorLeft.setVelocityPIDFCoefficients(FAR_P, FAR_I, FAR_D, 0);
+            outtakeMotorRight.setVelocityPIDFCoefficients(FAR_P, FAR_I, FAR_D, 0);
         }
 
         outtakeMotorLeft.setVelocity(speed);
@@ -178,8 +188,8 @@ public class Outtake {
 
     //testing and making variables configurable
     public static void updatePID(double p, double i, double d, double f) {
-        outtakeMotorLeft.setVelocityPIDFCoefficients(p, i, d, f);
-        outtakeMotorRight.setVelocityPIDFCoefficients(p, i, d, f);
+        outtakeMotorLeft.setVelocityPIDFCoefficients(p, i, d, 0);
+        outtakeMotorRight.setVelocityPIDFCoefficients(p, i, d, 0);
     }
     public static void updateSpeedConsts(double close, double closer, double far){
         SPEED_CONST_CLOSE = close;
