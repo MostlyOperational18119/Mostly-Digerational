@@ -13,17 +13,17 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
-@Autonomous(name = "RedFrontM3")
-public class BlueFrontAutoM3 extends LinearOpMode {
-    Pose start = new Pose(33.31, 135.61, Math.toRadians(180));
-    Pose launch = new Pose(52.15, 91.71, Math.toRadians(180));
-    Pose intakePrep1 = new Pose(40.11, 83.12, Math.toRadians(180));
-    Pose intakePrep2 = new Pose(18, 83.12, Math.toRadians(180));
-    Pose intakePrep3 = new Pose(101, 84, Math.toRadians(180));
-    Pose intakeEnd1 = new Pose(126, 83.12, Math.toRadians(180));
-    Pose intakeEnd2 = new Pose(132, 58, Math.toRadians(180));
-    Pose intakeEnd3 = new Pose(130, 84, Math.toRadians(180));
-    Pose park = new Pose(110.69, 135.61, Math.toRadians(180));
+@Autonomous(name = "BlueBackM3")
+public class BlueBackAutoM3 extends LinearOpMode {
+    Pose start = new Pose(56, 8, Math.toRadians(180));
+    Pose launch = new Pose(56, 10, Math.toRadians(180));
+    Pose intakePrep1 = new Pose(43, 36, Math.toRadians(180));
+    Pose intakePrep2 = new Pose(43, 58, Math.toRadians(180));
+    Pose intakePrep3 = new Pose(43, 84, Math.toRadians(180));
+    Pose intakeEnd1 = new Pose(12, 36, Math.toRadians(180));
+    Pose intakeEnd2 = new Pose(12, 58, Math.toRadians(180));
+    Pose intakeEnd3 = new Pose(14, 84, Math.toRadians(180));
+    Pose park = new Pose(36, 8, Math.toRadians(180));
     Follower follower;
     PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
     int state = -1;
@@ -355,10 +355,6 @@ public class BlueFrontAutoM3 extends LinearOpMode {
                     case 20:
                         follower.followPath(launchToPark, 1, true);
                         state = 21;
-                        break;
-                    case 21:
-                        Drivetrain.StaticVars.isBlue = false;
-                        Drivetrain.StaticVars.endPose = follower.getPose();
                         break;
                 }
             }
