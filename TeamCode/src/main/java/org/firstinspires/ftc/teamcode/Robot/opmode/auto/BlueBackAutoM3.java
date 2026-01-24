@@ -120,7 +120,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 0:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -139,7 +139,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 1:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
                                     case 0:
@@ -163,7 +163,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         state = 2;
                         break;
                     case 2:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
                             state = 3;
                         }
                         break;
@@ -183,13 +183,13 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         launchDelayTimer = System.currentTimeMillis();
                         break;
                     case 6:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
                             Intake.intakeStop();
                             state = 7;
                         }
                         break;
                     case 7:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 60) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -208,7 +208,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 8:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
                                     case 0:
@@ -257,7 +257,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 14:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 60) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -276,7 +276,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 15:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
                                     case 0:
