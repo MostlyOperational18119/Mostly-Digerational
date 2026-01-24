@@ -35,10 +35,9 @@ public class configurableTeleop extends LinearOpMode {
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
 
-        Pose start = new Pose(16.641,16.1903, Math.toRadians(90));
         Follower follower;
         follower =  Constants.createFollower(hardwareMap);
-        follower.setStartingPose(start);
+        follower.setStartingPose(Outtake.start);
 
         waitForStart();
 

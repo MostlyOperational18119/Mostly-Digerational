@@ -308,6 +308,11 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         follower.followPath(launchToPark, 0.6, true);
                         Intake.intakeStop();
                         break;
+                    case 18:
+                        Drivetrain.StaticVars.isBlue = true;
+                        Drivetrain.StaticVars.endPose = follower.getPose();
+                        state = 19;
+                        break;
 //                    case 17:
 //                        follower.followPath(toIntakePrep3, 1, true);
 //                        state = 18;

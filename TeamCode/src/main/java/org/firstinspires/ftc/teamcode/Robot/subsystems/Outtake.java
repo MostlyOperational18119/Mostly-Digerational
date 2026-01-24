@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -37,6 +38,7 @@ public class Outtake {
 
     //stuff for auto aiming
     public static boolean isBlue = false;
+    public static Pose start = new Pose(16.641,16.1903, Math.toRadians(90));
     public static double robotX = 72;
     public static double robotY = 72;
     public static double robotOrientation = 0;
@@ -74,13 +76,14 @@ public class Outtake {
         outtakeMotorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         outtakeMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
-
         //initialize to start positions (placeholders)
         hood.setPosition(FAR_HOOD);
         rotateServo.setPower(0);
 
         //set blue/red aiming
+        isBlue = Drivetrain.StaticVars.isBlue;
+        start = Drivetrain.StaticVars.endPose;
+
         if (isBlue) {goalX = -10;} else {goalX = 135;}
     }
 
