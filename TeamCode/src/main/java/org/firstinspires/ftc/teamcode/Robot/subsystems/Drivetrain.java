@@ -59,8 +59,8 @@ public class Drivetrain {
         return -Intake.intakeFront.getCurrentPosition();
     }
     public static class StaticVars {
-        public static boolean isBlue;
-        public static Pose endPose;
+        public static boolean isBlue = false;
+        public static Pose endPose = new Pose(16.641,16.1903, Math.toRadians(90));
     }
 }
 

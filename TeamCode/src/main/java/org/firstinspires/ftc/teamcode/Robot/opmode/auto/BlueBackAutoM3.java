@@ -356,6 +356,78 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         follower.followPath(launchToPark, 1, true);
                         state = 21;
                         break;
+                    case 18:
+                        Drivetrain.StaticVars.isBlue = true;
+                        Drivetrain.StaticVars.endPose = follower.getPose();
+                        state = 19;
+                        break;
+//                    case 17:
+//                        follower.followPath(toIntakePrep3, 1, true);
+//                        state = 18;
+//                        Intake.intakeGo();
+//                        break;
+//                    case 18:
+//                        follower.followPath(intake3, 0.8, true);
+//                        state = 19;
+//                        break;
+//                    case 19:
+//                        follower.followPath(intakeToLaunch3, 1, true);
+//                        state = 20;
+//                        launchDelayTimer = System.currentTimeMillis();
+//                        break;
+//                    case 20:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+//                            Intake.intakeStop();
+//                            state = 21;
+//                        }
+//                        break;
+//                    case 21:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+//                            switch (launchCount) {
+//                                case 0:
+//                                    launchDelayTimer = Indexer.launch0();
+//                                    launchCount = 1;
+//                                    break;
+//                                case 1:
+//                                    launchDelayTimer = Indexer.launch1();
+//                                    launchCount = 2;
+//                                    break;
+//                                case 2:
+//                                    launchDelayTimer = Indexer.launch2();
+//                                    state = 19;
+//                                    launchCount = 0;
+//                                    break;
+//                            }
+//                        }
+//                        break;
+//                    case 22:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+//                            for (int i = 0; i < 3; i++) {
+//                                switch (i) {
+//                                    case 0:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch0();
+//                                        }
+//                                        break;
+//                                    case 1:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch1();
+//                                        }
+//                                        break;
+//                                    case 2:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch2();
+//                                        }
+//                                        state = 23;
+//                                        break;
+//                                }
+//                            }
+//                        }
+//                        break;
+//                    case 23:
+//                        follower.followPath(launchToPark, 1, true);
+//                        state = 60;
+//                        break;
                 }
             }
         }

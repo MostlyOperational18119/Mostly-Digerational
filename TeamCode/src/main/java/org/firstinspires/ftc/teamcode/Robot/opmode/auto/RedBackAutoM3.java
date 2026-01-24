@@ -369,7 +369,12 @@ public class RedBackAutoM3 extends LinearOpMode {
                         break;
                     case 23:
                         follower.followPath(launchToPark, 1, true);
-                        state = 60;
+                        state = 24;
+                        break;
+                    case 24:
+                        Drivetrain.StaticVars.isBlue = false;
+                        Drivetrain.StaticVars.endPose = follower.getPose();
+                        state = 25;
                         break;
                 }
             }

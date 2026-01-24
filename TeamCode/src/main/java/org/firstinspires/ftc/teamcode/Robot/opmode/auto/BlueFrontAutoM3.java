@@ -13,19 +13,19 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
-@Autonomous(name = "RedFrontM3")
+@Autonomous(name = "BlueFrontM3")
 public class BlueFrontAutoM3 extends LinearOpMode {
-    Pose start = new Pose(33.31, 135.61, Math.toRadians(180));
-    Pose launch = new Pose(52.15, 91.71, Math.toRadians(180));
-    Pose intakePrep1 = new Pose(40.11, 83.12, Math.toRadians(180));
-    Pose intakePrep2 = new Pose(18, 83.12, Math.toRadians(180));
-    Pose intakePrep3 = new Pose(101, 84, Math.toRadians(180));
-    Pose intakeEnd1 = new Pose(126, 83.12, Math.toRadians(180));
-    Pose intakeEnd2 = new Pose(132, 58, Math.toRadians(180));
-    Pose intakeEnd3 = new Pose(130, 84, Math.toRadians(180));
-    Pose park = new Pose(110.69, 135.61, Math.toRadians(180));
+    Pose start = new Pose(32, 134.5, Math.toRadians(180));
+    Pose launch = new Pose(48, 96, Math.toRadians(180));
+    Pose intakePrep1 = new Pose(40, 83, Math.toRadians(180));
+//    Pose intakePrep2 = new Pose(18, 83, Math.toRadians(180));
+//    Pose intakePrep3 = new Pose(43, 84, Math.toRadians(180));
+    Pose intakeEnd1 = new Pose(22, 83, Math.toRadians(180));
+//    Pose intakeEnd2 = new Pose(12, 58, Math.toRadians(180));
+//    Pose intakeEnd3 = new Pose(14, 84, Math.toRadians(180));
+    Pose park = new Pose(18, 100, Math.toRadians(180));
     Follower follower;
-    PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
+    PathChain startToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
     int state = -1;
     int targetClicks = 0;
     long launchDelayTimer = 0;
@@ -35,10 +35,15 @@ public class BlueFrontAutoM3 extends LinearOpMode {
     public void runOpMode() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        Outtake.isBlue = false;
+        Drivetrain.StaticVars.isBlue = true;
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
+
+        startToLaunch = follower.pathBuilder()
+                .addPath(new BezierLine(start, launch))
+                .setLinearHeadingInterpolation(start.getHeading(), launch.getHeading())
+                .build();
 
         toIntakePrep1 = follower.pathBuilder()
                 .addPath(new BezierLine(launch, intakePrep1))
@@ -52,35 +57,35 @@ public class BlueFrontAutoM3 extends LinearOpMode {
                 .addPath(new BezierLine(intakeEnd1, launch))
                 .setLinearHeadingInterpolation(intakeEnd1.getHeading(), launch.getHeading())
                 .build();
-        toIntakePrep2 = follower.pathBuilder()
-                .addPath(new BezierLine(launch, intakePrep2))
-                .setLinearHeadingInterpolation(launch.getHeading(), intakePrep2.getHeading())
-                .build();
-
-        intake2 = follower.pathBuilder()
-                .addPath(new BezierLine(intakePrep2, intakeEnd2))
-                .setLinearHeadingInterpolation(intakePrep2.getHeading(), intakeEnd2.getHeading())
-                .build();
-
-        intakeToLaunch2 = follower.pathBuilder()
-                .addPath(new BezierLine(intakeEnd2, launch))
-                .setLinearHeadingInterpolation(intakeEnd2.getHeading(), launch.getHeading())
-                .build();
-
-        toIntakePrep3 = follower.pathBuilder()
-                .addPath(new BezierLine(launch, intakePrep3))
-                .setLinearHeadingInterpolation(launch.getHeading(), intakePrep3.getHeading())
-                .build();
-
-        intake3 = follower.pathBuilder()
-                .addPath(new BezierLine(intakePrep3, intakeEnd3))
-                .setLinearHeadingInterpolation(intakePrep3.getHeading(), intakeEnd3.getHeading())
-                .build();
-
-        intakeToLaunch3 = follower.pathBuilder()
-                .addPath(new BezierLine(intakeEnd3, launch))
-                .setLinearHeadingInterpolation(intakeEnd3.getHeading(), launch.getHeading())
-                .build();
+//        toIntakePrep2 = follower.pathBuilder()
+//                .addPath(new BezierLine(launch, intakePrep2))
+//                .setLinearHeadingInterpolation(launch.getHeading(), intakePrep2.getHeading())
+//                .build();
+//
+//        intake2 = follower.pathBuilder()
+//                .addPath(new BezierLine(intakePrep2, intakeEnd2))
+//                .setLinearHeadingInterpolation(intakePrep2.getHeading(), intakeEnd2.getHeading())
+//                .build();
+//
+//        intakeToLaunch2 = follower.pathBuilder()
+//                .addPath(new BezierLine(intakeEnd2, launch))
+//                .setLinearHeadingInterpolation(intakeEnd2.getHeading(), launch.getHeading())
+//                .build();
+//
+//        toIntakePrep3 = follower.pathBuilder()
+//                .addPath(new BezierLine(launch, intakePrep3))
+//                .setLinearHeadingInterpolation(launch.getHeading(), intakePrep3.getHeading())
+//                .build();
+//
+//        intake3 = follower.pathBuilder()
+//                .addPath(new BezierLine(intakePrep3, intakeEnd3))
+//                .setLinearHeadingInterpolation(intakePrep3.getHeading(), intakeEnd3.getHeading())
+//                .build();
+//
+//        intakeToLaunch3 = follower.pathBuilder()
+//                .addPath(new BezierLine(intakeEnd3, launch))
+//                .setLinearHeadingInterpolation(intakeEnd3.getHeading(), launch.getHeading())
+//                .build();
 
         launchToPark = follower.pathBuilder()
                 .addPath(new BezierLine(launch, park))
@@ -109,82 +114,25 @@ public class BlueFrontAutoM3 extends LinearOpMode {
             telemetry.addData("time delta", System.currentTimeMillis() - launchDelayTimer);
             telemetry.addData("slot 1 state", Indexer.currentState1);
             telemetry.addData("robot x follower", follower.getPose().getX());
+            telemetry.addData("flywheel speed target", Outtake.speed);
+            telemetry.addData("flywheel speed", Outtake.outtakeMotorLeft.getVelocity());
             telemetry.update();
 
             if (!follower.isBusy()) {
                 switch (state) {
                     case -1:
-                        if (System.currentTimeMillis() - launchDelayTimer > 2000) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
                             state = 0;
-                            launchDelayTimer = System.currentTimeMillis();
                         }
                         break;
                     case 0:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            switch (launchCount) {
-                                case 0:
-                                    launchDelayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    launchDelayTimer = Indexer.launch1();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    launchDelayTimer = Indexer.launch2();
-                                    state = 1;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
+                        follower.followPath(startToLaunch, 0.8, true);
+                        launchDelayTimer = System.currentTimeMillis();
+                        state = 1;
+                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
                         break;
                     case 1:
                         if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            for (int i = 0; i < 3; i++) {
-                                switch (i) {
-                                    case 0:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch0();
-                                        }
-                                        break;
-                                    case 1:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch1();
-                                        }
-                                        break;
-                                    case 2:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch2();
-                                        }
-                                        break;
-                                }
-                            }
-                        }
-                        state = 2;
-                        break;
-                    case 2:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
-                            state = 3;
-                        }
-                        break;
-                    case 3:
-                        //targetClicks = Outtake.setTarget(Outtake.setRotationPosition(0.42));
-                        follower.followPath(toIntakePrep1, 1, true);
-                        state = 4;
-                        Intake.intakeGo();
-                        break;
-                    case 4:
-                        follower.followPath(intake1, 0.8, true);
-                        state = 5;
-                        break;
-                    case 5:
-                        follower.followPath(intakeToLaunch1, 1, true);
-                        Intake.intakeStop();
-                        state = 6;
-                        launchDelayTimer = System.currentTimeMillis();
-                        break;
-                    case 6:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -196,13 +144,13 @@ public class BlueFrontAutoM3 extends LinearOpMode {
                                     break;
                                 case 2:
                                     launchDelayTimer = Indexer.launch2();
-                                    state = 7;
+                                    state = 2;
                                     launchCount = 0;
                                     break;
                             }
                         }
                         break;
-                    case 7:
+                    case 2:
                         if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
@@ -220,146 +168,224 @@ public class BlueFrontAutoM3 extends LinearOpMode {
                                         if (Indexer.slotColors()[i] != 0) {
                                             launchDelayTimer = Indexer.launch2();
                                         }
-                                        state = 8;
                                         break;
                                 }
                             }
+                        }
+                        state = 3;
+                        break;
+                    case 3:
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                            state = 4;
+                        }
+                        break;
+                    case 4:
+                        //targetClicks = Outtake.setTarget(Outtake.setRotationPosition(0.42));
+                        follower.followPath(toIntakePrep1, 0.7, true);
+                        state = 5;
+                        Intake.intakeGo();
+                        break;
+                    case 5:
+                        follower.followPath(intake1, 0.6, true);
+                        state = 6;
+                        break;
+                    case 6:
+                        follower.followPath(intakeToLaunch1, 1, true);
+                        state = 7;
+                        launchDelayTimer = System.currentTimeMillis();
+                        break;
+                    case 7:
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                            state = 8;
+                            launchDelayTimer = System.currentTimeMillis();
+                            Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
                         }
                         break;
                     case 8:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
-                            state = 9;
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+                            switch (launchCount) {
+                                case 0:
+                                    launchDelayTimer = Indexer.launch0();
+                                    launchCount = 1;
+                                    Intake.intakeStop();
+                                    break;
+                                case 1:
+                                    launchDelayTimer = Indexer.launch1();
+                                    launchCount = 2;
+                                    break;
+                                case 2:
+                                    launchDelayTimer = Indexer.launch2();
+                                    state = 9;
+                                    launchCount = 0;
+                                    break;
+                            }
                         }
                         break;
                     case 9:
-                        follower.followPath(toIntakePrep2, 1, true);
-                        state = 10;
-                        Intake.intakeGo();
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+                            for (int i = 0; i < 3; i++) {
+                                switch (i) {
+                                    case 0:
+                                        if (Indexer.slotColors()[i] != 0) {
+                                            launchDelayTimer = Indexer.launch0();
+                                        }
+                                        break;
+                                    case 1:
+                                        if (Indexer.slotColors()[i] != 0) {
+                                            launchDelayTimer = Indexer.launch1();
+                                        }
+                                        break;
+                                    case 2:
+                                        if (Indexer.slotColors()[i] != 0) {
+                                            launchDelayTimer = Indexer.launch2();
+                                        }
+                                        state = 9;
+                                        break;
+                                }
+                            }
+                        }
                         break;
                     case 10:
-                        follower.followPath(intake2, 0.8, true);
-                        state = 11;
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                            state = 10;
+                        }
                         break;
                     case 11:
-                        follower.followPath(intakeToLaunch2, 1, true);
-                        Intake.intakeStop();
+                        follower.followPath(launchToPark, 1, true);
                         state = 12;
-                        launchDelayTimer = System.currentTimeMillis();
-                        break;
-                    case 12:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
-                            switch (launchCount) {
-                                case 0:
-                                    launchDelayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    launchDelayTimer = Indexer.launch1();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    launchDelayTimer = Indexer.launch2();
-                                    state = 13;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
-                        break;
-                    case 13:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            for (int i = 0; i < 3; i++) {
-                                switch (i) {
-                                    case 0:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch0();
-                                        }
-                                        break;
-                                    case 1:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch1();
-                                        }
-                                        break;
-                                    case 2:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch2();
-                                        }
-                                        state = 14;
-                                        break;
-                                }
-                            }
-                        }
-                        break;
-                    case 14:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
-                            state = 15;
-                        }
-                        break;
-                    case 15:
-                        follower.followPath(toIntakePrep3, 1, true);
-                        state = 16;
                         Intake.intakeGo();
                         break;
-                    case 16:
-                        follower.followPath(intake3, 0.8, true);
-                        state = 17;
-                        break;
-                    case 17:
-                        follower.followPath(intakeToLaunch3, 1, true);
-                        Intake.intakeStop();
-                        state = 18;
-                        launchDelayTimer = System.currentTimeMillis();
-                        break;
-                    case 18:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
-                            switch (launchCount) {
-                                case 0:
-                                    launchDelayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    launchDelayTimer = Indexer.launch1();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    launchDelayTimer = Indexer.launch2();
-                                    state = 19;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
-                        break;
-                    case 19:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            for (int i = 0; i < 3; i++) {
-                                switch (i) {
-                                    case 0:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch0();
-                                        }
-                                        break;
-                                    case 1:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch1();
-                                        }
-                                        break;
-                                    case 2:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch2();
-                                        }
-                                        state = 20;
-                                        break;
-                                }
-                            }
-                        }
-                        break;
-                    case 20:
-                        follower.followPath(launchToPark, 1, true);
-                        state = 21;
-                        break;
-                    case 21:
-                        Drivetrain.StaticVars.isBlue = false;
+                    case 12:
+                        Drivetrain.StaticVars.isBlue = true;
                         Drivetrain.StaticVars.endPose = follower.getPose();
+                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE * 1.1;
+                        state = 13;
                         break;
+//                    case 12:
+//                        follower.followPath(intake2, 0.8, true);
+//                        state = 13;
+//                        break;
+//                    case 13:
+//                        follower.followPath(intakeToLaunch2, 1, true);
+//                        Intake.intakeStop();
+//                        state = 14;
+//                        launchDelayTimer = System.currentTimeMillis();
+//                        break;
+//                    case 14:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 600 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+//                            switch (launchCount) {
+//                                case 0:
+//                                    launchDelayTimer = Indexer.launch0();
+//                                    launchCount = 1;
+//                                    break;
+//                                case 1:
+//                                    launchDelayTimer = Indexer.launch1();
+//                                    launchCount = 2;
+//                                    break;
+//                                case 2:
+//                                    launchDelayTimer = Indexer.launch2();
+//                                    state = 14;
+//                                    launchCount = 0;
+//                                    break;
+//                            }
+//                        }
+//                        break;
+//                    case 15:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 600 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+//                            for (int i = 0; i < 3; i++) {
+//                                switch (i) {
+//                                    case 0:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch0();
+//                                        }
+//                                        break;
+//                                    case 1:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch1();
+//                                        }
+//                                        break;
+//                                    case 2:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch2();
+//                                        }
+//                                        state = 16;
+//                                        break;
+//                                }
+//                            }
+//                        }
+//                        break;
+//                    case 16:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+//                            state = 17;
+//                        }
+//                        break;
+//                    case 17:
+//                        follower.followPath(toIntakePrep3, 1, true);
+//                        state = 18;
+//                        Intake.intakeGo();
+//                        break;
+//                    case 18:
+//                        follower.followPath(intake3, 0.8, true);
+//                        state = 19;
+//                        break;
+//                    case 19:
+//                        follower.followPath(intakeToLaunch3, 1, true);
+//                        Intake.intakeStop();
+//                        state = 20;
+//                        launchDelayTimer = System.currentTimeMillis();
+//                        break;
+//                    case 20:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+//                            switch (launchCount) {
+//                                case 0:
+//                                    launchDelayTimer = Indexer.launch0();
+//                                    launchCount = 1;
+//                                    break;
+//                                case 1:
+//                                    launchDelayTimer = Indexer.launch1();
+//                                    launchCount = 2;
+//                                    break;
+//                                case 2:
+//                                    launchDelayTimer = Indexer.launch2();
+//                                    state = 21;
+//                                    launchCount = 0;
+//                                    break;
+//                            }
+//                        }
+//                        break;
+//                    case 21:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 600 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+//                            for (int i = 0; i < 3; i++) {
+//                                switch (i) {
+//                                    case 0:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch0();
+//                                        }
+//                                        break;
+//                                    case 1:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch1();
+//                                        }
+//                                        break;
+//                                    case 2:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch2();
+//                                        }
+//                                        state = 22;
+//                                        break;
+//                                }
+//                            }
+//                        }
+//                        break;
+//                    case 22:
+//                        follower.followPath(launchToPark, 1, true);
+//                        state = 23;
+//                        break;
+//                    case 23:
+//                        Drivetrain.StaticVars.isBlue = true;
+//                        Drivetrain.StaticVars.endPose = follower.getPose();
+//                        state = 24;
+//                        break;
                 }
             }
         }
