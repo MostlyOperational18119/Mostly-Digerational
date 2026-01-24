@@ -12,20 +12,14 @@ public class Intake {
         intakeFront = hwMap.get(DcMotorEx.class, "frontIntake");
         intakeRear = hwMap.get(DcMotorEx.class, "backIntake");
     }
-    public static void switchIntake(boolean intake) { //switches between idle and intaking (teleop)
-        if (intake) {
-            intakeGo();
-        } else {
-            intakeIdle();
-        }
-    }
     public static void intakeGo () { //think really hard about what this does
         power = 999999999f;
         intakeFront.setPower(power);
         intakeRear.setPower(power);
     }
-    public static void intakeIdle () { //teleop "off" still spins to keep balls from fleeing
-        power = 0.3f;
+
+    public static void intakeSpit () { //teleop "off" still spins to keep balls from fleeing
+        power = -9999999999f;
         intakeFront.setPower(power);
         intakeRear.setPower(power);
 

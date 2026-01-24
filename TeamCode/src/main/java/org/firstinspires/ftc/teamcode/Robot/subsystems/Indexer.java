@@ -125,7 +125,7 @@ public class Indexer {
 
 
     //these are tuned for each individual color sensor
-    private static int getColorSlot (double red, double green, double blue, double distance) {
+    public static int getColorSlot (double red, double green, double blue, double distance) {
         if (distance < 35 && green / blue > 1.3 && green / blue < 1.6 && green > 90) {
             return 2;
         } else if (distance < 35 && red / green > .9 && red / green < 1.2 && red > 85) {
@@ -135,7 +135,7 @@ public class Indexer {
         }
     }
 
-    private static int getColorSlot1 (double red, double green, double blue, double distance) {
+    public static int getColorSlot1 (double red, double green, double blue, double distance) {
         if (distance < 35 && green/blue > 1.3 && green/blue < 1.6 && green > 65) {
             return 2;
         } else if (distance < 35 && red/green > .9 && red/green < 1.2 && blue > 45) {
@@ -145,7 +145,7 @@ public class Indexer {
         }
     }
 
-    private static int getColorSlot2 (double red, double green, double blue, double distance) {
+    public static int getColorSlot2 (double red, double green, double blue, double distance) {
         if (distance < 35 && green/blue > 1.3 && green/blue < 1.6 && green > 150) {
             return 2;
         } else if (distance < 35 && red/green > .9 && red/green < 1.2 && red > 200 && blue > 400) {

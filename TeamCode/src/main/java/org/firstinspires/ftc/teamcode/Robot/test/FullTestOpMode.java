@@ -53,7 +53,7 @@ public class FullTestOpMode extends LinearOpMode {
 
             //outtake
             Outtake.outtakeSpeed();
-            Outtake.outtakeUpdate(launch);
+//            Outtake.outtakeUpdate(launch);
 
             //indexer
             Indexer.slotColors();
@@ -82,7 +82,7 @@ public class FullTestOpMode extends LinearOpMode {
             }
 
 
-            telemetry.addData("angle target: ", (Outtake.pointAtGoal() - 2816)/68.555);
+//            telemetry.addData("angle target: ", (Outtake.pointAtGoal() - 2816)/68.555);
             telemetry.addData("robot X", Outtake.robotX);
             telemetry.addData("robot Y", Outtake.robotY);
             telemetry.addData("robot heading", Outtake.robotOrientation);
