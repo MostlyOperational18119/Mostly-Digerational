@@ -17,10 +17,10 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 public class RedBackAutoM3 extends LinearOpMode {
     Pose start = new Pose(88, 8, Math.toRadians(180));
     Pose launch = new Pose(88, 10, Math.toRadians(180));
-    Pose intakePrep1 = new Pose(101, 36, Math.toRadians(180));
-    Pose intakePrep2 = new Pose(101, 58, Math.toRadians(180));
-    Pose intakePrep3 = new Pose(101, 84, Math.toRadians(180));
-    Pose intakeEnd1 = new Pose(132, 36, Math.toRadians(180));
+    Pose intakePrep1 = new Pose(98, 34, Math.toRadians(180));
+    Pose intakePrep2 = new Pose(98, 58, Math.toRadians(180));
+    Pose intakePrep3 = new Pose(98, 84, Math.toRadians(180));
+    Pose intakeEnd1 = new Pose(132, 34, Math.toRadians(180));
     Pose intakeEnd2 = new Pose(132, 58, Math.toRadians(180));
     Pose intakeEnd3 = new Pose(130, 84, Math.toRadians(180));
     Pose park = new Pose(108, 8, Math.toRadians(180));
@@ -179,11 +179,16 @@ public class RedBackAutoM3 extends LinearOpMode {
                         break;
                     case 5:
                         follower.followPath(intakeToLaunch1, 1, true);
-                        Intake.intakeStop();
                         state = 6;
                         launchDelayTimer = System.currentTimeMillis();
                         break;
                     case 6:
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                            Intake.intakeStop();
+                            state = 7;
+                        }
+                        break;
+                    case 7:
                         if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
                             switch (launchCount) {
                                 case 0:
@@ -196,76 +201,13 @@ public class RedBackAutoM3 extends LinearOpMode {
                                     break;
                                 case 2:
                                     launchDelayTimer = Indexer.launch2();
-                                    state = 7;
+                                    state = 8;
                                     launchCount = 0;
                                     break;
-                            }
-                        }
-                        break;
-                    case 7:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            for (int i = 0; i < 3; i++) {
-                                switch (i) {
-                                    case 0:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch0();
-                                        }
-                                        break;
-                                    case 1:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch1();
-                                        }
-                                        break;
-                                    case 2:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch2();
-                                        }
-                                        state = 8;
-                                        break;
-                                }
                             }
                         }
                         break;
                     case 8:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
-                            state = 9;
-                        }
-                        break;
-                    case 9:
-                        follower.followPath(toIntakePrep2, 1, true);
-                        state = 10;
-                        Intake.intakeGo();
-                        break;
-                    case 10:
-                        follower.followPath(intake2, 0.8, true);
-                        state = 11;
-                        break;
-                    case 11:
-                        follower.followPath(intakeToLaunch2, 1, true);
-                        Intake.intakeStop();
-                        state = 12;
-                        launchDelayTimer = System.currentTimeMillis();
-                        break;
-                    case 12:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
-                            switch (launchCount) {
-                                case 0:
-                                    launchDelayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    launchDelayTimer = Indexer.launch1();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    launchDelayTimer = Indexer.launch2();
-                                    state = 13;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
-                        break;
-                    case 13:
                         if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
@@ -283,33 +225,106 @@ public class RedBackAutoM3 extends LinearOpMode {
                                         if (Indexer.slotColors()[i] != 0) {
                                             launchDelayTimer = Indexer.launch2();
                                         }
-                                        state = 14;
+                                        state = 9;
                                         break;
                                 }
                             }
                         }
                         break;
+                    case 9:
+                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                            state = 10;
+                        }
+                        break;
+                    case 10:
+                        follower.followPath(toIntakePrep2, 1, true);
+                        state = 11;
+                        Intake.intakeGo();
+                        break;
+                    case 11:
+                        follower.followPath(intake2, 0.8, true);
+                        state = 12;
+                        break;
+                    case 12:
+                        follower.followPath(intakeToLaunch2, 1, true);
+                        state = 13;
+                        launchDelayTimer = System.currentTimeMillis();
+                        break;
+                    case 13:
+                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                            Intake.intakeStop();
+                            state = 14;
+                        }
+                        break;
                     case 14:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
-                            state = 15;
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+                            switch (launchCount) {
+                                case 0:
+                                    launchDelayTimer = Indexer.launch0();
+                                    launchCount = 1;
+                                    break;
+                                case 1:
+                                    launchDelayTimer = Indexer.launch1();
+                                    launchCount = 2;
+                                    break;
+                                case 2:
+                                    launchDelayTimer = Indexer.launch2();
+                                    state = 15;
+                                    launchCount = 0;
+                                    break;
+                            }
                         }
                         break;
                     case 15:
-                        follower.followPath(toIntakePrep3, 1, true);
-                        state = 16;
-                        Intake.intakeGo();
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+                            for (int i = 0; i < 3; i++) {
+                                switch (i) {
+                                    case 0:
+                                        if (Indexer.slotColors()[i] != 0) {
+                                            launchDelayTimer = Indexer.launch0();
+                                        }
+                                        break;
+                                    case 1:
+                                        if (Indexer.slotColors()[i] != 0) {
+                                            launchDelayTimer = Indexer.launch1();
+                                        }
+                                        break;
+                                    case 2:
+                                        if (Indexer.slotColors()[i] != 0) {
+                                            launchDelayTimer = Indexer.launch2();
+                                        }
+                                        state = 16;
+                                        break;
+                                }
+                            }
+                        }
                         break;
                     case 16:
-                        follower.followPath(intake3, 0.8, true);
-                        state = 17;
+                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                            state = 17;
+                        }
                         break;
                     case 17:
-                        follower.followPath(intakeToLaunch3, 1, true);
-                        Intake.intakeStop();
+                        follower.followPath(toIntakePrep3, 1, true);
                         state = 18;
-                        launchDelayTimer = System.currentTimeMillis();
+                        Intake.intakeGo();
                         break;
                     case 18:
+                        follower.followPath(intake3, 0.8, true);
+                        state = 19;
+                        break;
+                    case 19:
+                        follower.followPath(intakeToLaunch3, 1, true);
+                        state = 20;
+                        launchDelayTimer = System.currentTimeMillis();
+                        break;
+                    case 20:
+                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                            Intake.intakeStop();
+                            state = 21;
+                        }
+                        break;
+                    case 21:
                         if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
                             switch (launchCount) {
                                 case 0:
@@ -328,7 +343,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                             }
                         }
                         break;
-                    case 19:
+                    case 22:
                         if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
@@ -346,15 +361,15 @@ public class RedBackAutoM3 extends LinearOpMode {
                                         if (Indexer.slotColors()[i] != 0) {
                                             launchDelayTimer = Indexer.launch2();
                                         }
-                                        state = 20;
+                                        state = 23;
                                         break;
                                 }
                             }
                         }
                         break;
-                    case 20:
+                    case 23:
                         follower.followPath(launchToPark, 1, true);
-                        state = 21;
+                        state = 60;
                         break;
                 }
             }
