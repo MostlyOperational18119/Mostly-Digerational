@@ -1,15 +1,9 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.teleop;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import android.widget.AdapterView;
-
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.Robot.pedroPathing.Constants;
@@ -18,8 +12,8 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
-@TeleOp(name="TeleOp")
-public class competitionOpMode extends LinearOpMode {
+@TeleOp(name="TestOp")
+public class testOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -95,7 +89,7 @@ public class competitionOpMode extends LinearOpMode {
                 adjust += 1;
             }
 
-            Drivetrain.drive(y, x, rx);
+            //Drivetrain.drive(y, x, rx);
             Outtake.outtakeUpdate(-1, adjust);
             Outtake.outtakeSpeed();
 
@@ -162,15 +156,14 @@ public class competitionOpMode extends LinearOpMode {
                 count +=1;
             }
 
+            count = Math.abs(count%3);
+
             if (rb) {
                 Outtake.SPEED_CONST_VERY_CLOSE += 5;
             }
             if (lb) {
                 Outtake.SPEED_CONST_VERY_CLOSE -= 5;
             }
-
-
-            count = Math.abs(count%3);
 
             switch (Outtake.currentDistance) {
                 case "very close":

@@ -41,13 +41,20 @@ public class Drivetrain {
 //        BreakPad.setPosition(UPPOS);
 //    }
 
-    static public void drive(float ly, float lx, float rx) {
+    static public void drive(float ly, float lx, float rx, boolean clutch) {
 
         float denominator = Math.max(Math.abs(ly) + Math.abs(lx) + Math.abs(rx), 1);
         float fl = (ly + lx + rx) / denominator;
         float bl = (ly - lx + rx) / denominator;
         float fr = (ly - lx - rx) / denominator;
         float br = (ly + lx - rx) / denominator;
+
+        if (clutch) {
+            fl *= 0.6F;
+            bl *= 0.6F;
+            fr *= 0.6F;
+            br *= 0.6F;
+        }
 
         frontLeft.setPower(Range.clip(fl, -1, 1));
         frontRight.setPower(Range.clip(fr, -1, 1));
@@ -60,6 +67,7 @@ public class Drivetrain {
     }
     public static class StaticVars {
         public static boolean isBlue = false;
+        public static int outtakePos = 0;
         public static Pose endPose = new Pose(16.641,16.1903, Math.toRadians(90));
     }
 }

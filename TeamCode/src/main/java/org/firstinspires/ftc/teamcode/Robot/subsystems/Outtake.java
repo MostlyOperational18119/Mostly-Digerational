@@ -98,7 +98,7 @@ public class Outtake {
             rotateServo.setPower(outtakePower);
         }
     }
-    public static int setRotationPosition(double target) {
+    public static int getRotationPosition(double target) {
         target = Math.max(0, Math.min(1, target));
         return (int) (maxClicks * target);
     }
