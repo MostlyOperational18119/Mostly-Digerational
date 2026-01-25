@@ -12,7 +12,7 @@ public class ServoTester extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         double Position = 0.5;
-        Servo dropperServo = hardwareMap.servo.get("BrakePad");
+        Servo dropperServo = hardwareMap.servo.get("lift1");
 
         waitForStart();
 

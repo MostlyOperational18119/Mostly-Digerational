@@ -107,8 +107,13 @@ public class RedFrontAutoM3 extends LinearOpMode {
             Outtake.robotOrientation = Math.toDegrees(follower.getHeading());
             Outtake.robotY = follower.getPose().getY();
             Outtake.robotX = follower.getPose().getX();
-            Outtake.outtakeSpeed();
-            Outtake.outtakeUpdate(-1, 0);
+            if (state != 13) {
+                Outtake.outtakeSpeed();
+                Outtake.outtakeUpdate(-1, 0);
+            }
+            Drivetrain.StaticVars.endPose = follower.getPose();
+            Drivetrain.StaticVars.outtakePos = Drivetrain.outtakePosition();
+
 
             telemetry.addData("clicks", Drivetrain.outtakePosition());
             telemetry.addData("time delta", System.currentTimeMillis() - launchDelayTimer);
@@ -247,7 +252,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         break;
                     case 10:
                         if (System.currentTimeMillis() - launchDelayTimer > 1000) {
-                            state = 10;
+                            state = 11;
                         }
                         break;
                     case 11:
@@ -257,9 +262,11 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         break;
                     case 12:
                         Drivetrain.StaticVars.isBlue = true;
-                        Drivetrain.StaticVars.endPose = follower.getPose();
                         Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE * 1.1;
                         state = 13;
+                        break;
+                    case 13:
+                        Outtake.update(0);
                         break;
 //                    case 12:
 //                        follower.followPath(intake2, 0.8, true);
@@ -272,7 +279,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //                        launchDelayTimer = System.currentTimeMillis();
 //                        break;
 //                    case 14:
-//                        if (System.currentTimeMillis() - launchDelayTimer > 600 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+//                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
 //                            switch (launchCount) {
 //                                case 0:
 //                                    launchDelayTimer = Indexer.launch0();
@@ -291,7 +298,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //                        }
 //                        break;
 //                    case 15:
-//                        if (System.currentTimeMillis() - launchDelayTimer > 600 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+//                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
 //                            for (int i = 0; i < 3; i++) {
 //                                switch (i) {
 //                                    case 0:
@@ -354,7 +361,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //                        }
 //                        break;
 //                    case 21:
-//                        if (System.currentTimeMillis() - launchDelayTimer > 600 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+//                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
 //                            for (int i = 0; i < 3; i++) {
 //                                switch (i) {
 //                                    case 0:

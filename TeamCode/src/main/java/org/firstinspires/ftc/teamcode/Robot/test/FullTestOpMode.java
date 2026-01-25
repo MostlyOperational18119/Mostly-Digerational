@@ -49,7 +49,7 @@ public class FullTestOpMode extends LinearOpMode {
             boolean intake = gamepad1.right_trigger > 0.5;
 
             //drivetrain
-            Drivetrain.drive(y, x, rx);
+            //Drivetrain.drive(y, x, rx);
 
             //outtake
             Outtake.outtakeSpeed();

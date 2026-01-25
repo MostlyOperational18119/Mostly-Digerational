@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
-@Autonomous(name = "BlueBackM3")
+@Autonomous(name = "9BallBlueBackM3")
 public class BlueBackAutoM3 extends LinearOpMode {
     Pose start = new Pose(56, 8, Math.toRadians(180));
     Pose launch = new Pose(56, 10, Math.toRadians(180));
@@ -35,10 +35,11 @@ public class BlueBackAutoM3 extends LinearOpMode {
     public void runOpMode() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        Outtake.isBlue = true;
+        Drivetrain.StaticVars.isBlue = true;
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
+        Outtake.SPEED_CONST_FAR = Outtake.SPEED_CONST_FAR / 1.1;
 
         toIntakePrep1 = follower.pathBuilder()
                 .addPath(new BezierLine(launch, intakePrep1))
@@ -102,8 +103,12 @@ public class BlueBackAutoM3 extends LinearOpMode {
             Outtake.robotOrientation = Math.toDegrees(follower.getHeading());
             Outtake.robotY = follower.getPose().getY();
             Outtake.robotX = follower.getPose().getX();
-            Outtake.outtakeSpeed();
-            Outtake.outtakeUpdate(-1, 0);
+            if (state != 24 && state != 25) {
+                Outtake.outtakeSpeed();
+                Outtake.outtakeUpdate(-1, 0);
+            }
+            Drivetrain.StaticVars.endPose = follower.getPose();
+            Drivetrain.StaticVars.outtakePos = Drivetrain.outtakePosition();
 
             telemetry.addData("clicks", Drivetrain.outtakePosition());
             telemetry.addData("time delta", System.currentTimeMillis() - launchDelayTimer);
@@ -120,7 +125,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 0:
-                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -139,7 +144,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 1:
-                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
                                     case 0:
@@ -156,11 +161,11 @@ public class BlueBackAutoM3 extends LinearOpMode {
                                         if (Indexer.slotColors()[i] != 0) {
                                             launchDelayTimer = Indexer.launch2();
                                         }
+                                        state = 2;
                                         break;
                                 }
                             }
                         }
-                        state = 2;
                         break;
                     case 2:
                         if (System.currentTimeMillis() - launchDelayTimer > 500) {
@@ -183,13 +188,13 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         launchDelayTimer = System.currentTimeMillis();
                         break;
                     case 6:
-                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 700) {
                             Intake.intakeStop();
                             state = 7;
                         }
                         break;
                     case 7:
-                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -208,23 +213,26 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 8:
-                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
                                     case 0:
                                         if (Indexer.slotColors()[i] != 0) {
                                             launchDelayTimer = Indexer.launch0();
                                         }
+                                        i++;
                                         break;
                                     case 1:
                                         if (Indexer.slotColors()[i] != 0) {
                                             launchDelayTimer = Indexer.launch1();
                                         }
+                                        i++;
                                         break;
                                     case 2:
                                         if (Indexer.slotColors()[i] != 0) {
                                             launchDelayTimer = Indexer.launch2();
                                         }
+                                        i++;
                                         state = 9;
                                         break;
                                 }
@@ -257,7 +265,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 14:
-                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -276,23 +284,26 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 15:
-                        if (System.currentTimeMillis() - launchDelayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
                             for (int i = 0; i < 3; i++) {
                                 switch (i) {
                                     case 0:
                                         if (Indexer.slotColors()[i] != 0) {
                                             launchDelayTimer = Indexer.launch0();
                                         }
+                                        i++;
                                         break;
                                     case 1:
                                         if (Indexer.slotColors()[i] != 0) {
                                             launchDelayTimer = Indexer.launch1();
                                         }
+                                        i++;
                                         break;
                                     case 2:
                                         if (Indexer.slotColors()[i] != 0) {
                                             launchDelayTimer = Indexer.launch2();
                                         }
+                                        i++;
                                         state = 16;
                                         break;
                                 }
@@ -307,12 +318,14 @@ public class BlueBackAutoM3 extends LinearOpMode {
                     case 17:
                         follower.followPath(launchToPark, 0.6, true);
                         Intake.intakeStop();
+                        Outtake.SPEED_CONST_FAR = 205;
+                        state = 23;
                         break;
-                    case 18:
-                        Drivetrain.StaticVars.isBlue = true;
-                        Drivetrain.StaticVars.endPose = follower.getPose();
-                        state = 19;
-                        break;
+//                    case 18:
+//                        Drivetrain.StaticVars.isBlue = true;
+//                        Drivetrain.StaticVars.endPose = follower.getPose();
+//                        state = 19;
+//                        break;
 //                    case 17:
 //                        follower.followPath(toIntakePrep3, 1, true);
 //                        state = 18;
@@ -380,6 +393,14 @@ public class BlueBackAutoM3 extends LinearOpMode {
 //                        follower.followPath(launchToPark, 1, true);
 //                        state = 60;
 //                        break;
+                    case 23:
+                        follower.followPath(launchToPark, 1, true);
+                        state = 24;
+                        break;
+                    case 24:
+                        Outtake.update(0);
+                        Drivetrain.StaticVars.isBlue = true;
+                        break;
                 }
             }
         }
