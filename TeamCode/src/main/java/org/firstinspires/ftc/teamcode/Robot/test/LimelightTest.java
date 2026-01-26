@@ -29,13 +29,9 @@ public class LimelightTest extends LinearOpMode {
             limelight.update();
 
             Optional<Integer> ballCount = limelight.getBallCount();
-            Optional<Integer[]> ballPattern = limelight.getBallPattern();
             Optional<Integer[]> pattern = limelight.getPattern();
 
             if (ballCount.isPresent()) telemetry.addData("Ball count:", ballCount.get());
-            else telemetry.addLine("Ball count: unknown");
-
-            if (ballPattern.isPresent()) telemetry.addData("Ball count:", ballPattern.get());
             else telemetry.addLine("Ball count: unknown");
 
             if (pattern.isPresent()) telemetry.addData("Pattern:", pattern.get());
