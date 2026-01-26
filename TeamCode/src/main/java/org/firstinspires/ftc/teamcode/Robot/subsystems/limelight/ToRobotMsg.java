@@ -34,29 +34,12 @@ public class ToRobotMsg {
                 if ((resultType & 0x1) != 0x0) {
                     // pretend this doesn't exist for my sake :D
                     resultsPos++;
+
+                    // Get the number of balls
+                    int ballCount = data[resultsPos];
                     resultsPos++;
-                    BallColor[] ballColors = new BallColor[9];
-                    int ballLineCount = 0;
 
-
-                    int start = resultsPos;
-                    for (; resultsPos < (start + 0x9); resultsPos++) {
-                        int num = data[resultsPos]; // & 0xFF;
-
-                        Log.i("ToRobotMsg", String.format("%d, %d", resultsPos, num));
-
-                        if (num >= 0 && num < 3) {
-                            if (num != 0) ballLineCount++;
-                            ballColors[resultsPos - start] = BallColor.values()[num];
-                        }
-                        else ballColors[resultsPos - start] = BallColor.EMPTY;
-                    }
-
-                    if (ballColors != null) Log.i("ToRobotMsg", Arrays.toString(ballColors));
-                    else Log.i("ToRobotMsg", "Ball colors are null. Huh?");
-
-                    this.results.put(ResultType.BallLine, ballColors);
-                    this.results.put(ResultType.BallLineCount, ballLineCount);
+                    this.results.put(ResultType.BallCount, ballCount);
                 }
 
                 // Basalt
@@ -91,8 +74,7 @@ public class ToRobotMsg {
 
     public enum ResultType {
         None,
-        BallLine,
-        BallLineCount,
+        BallCount,
         Basalt,
         PnP,
         AprilTag
