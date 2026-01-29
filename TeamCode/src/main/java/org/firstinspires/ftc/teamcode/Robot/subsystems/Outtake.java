@@ -157,32 +157,36 @@ public class Outtake {
     }
 
     public static void outtakeSpeed() {
+        //distance from the goal
         double dx = goalX - robotX;
         double dy = goalY - robotY;
 
-        double dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        distance = dist;
+        distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-        if (dist < 60){
-            hood.setPosition(VERY_CLOSE_HOOD);
-            speed = SPEED_CONST_VERY_CLOSE * Math.sqrt(dist);
+        //logic for setting motor speeds, launch angles, and PID values
+        if (distance < 60){ //when the robot is extremely close to the goal (very short distance)
+            hood.setPosition(VERY_CLOSE_HOOD); //position of the hood -> small value
+            speed = SPEED_CONST_VERY_CLOSE * Math.sqrt(distance); //speed set to a tested value multiplied by distance
             currentDistance = "very close";
+
+            //unique PIDF coefficients to better control recoil from Artifacts
             outtakeMotorLeft.setVelocityPIDFCoefficients(VERY_CLOSE_P, VERY_CLOSE_I, VERY_CLOSE_D, 0);
             outtakeMotorRight.setVelocityPIDFCoefficients(VERY_CLOSE_P, VERY_CLOSE_I, VERY_CLOSE_D, 0);
-        } else if (dist < 108) {
+        } else if (distance < 108) { //this is maximum minimum distance of the close zone
             hood.setPosition(CLOSE_HOOD);
-            speed = SPEED_CONST_CLOSE * Math.sqrt(dist);
+            speed = SPEED_CONST_CLOSE * Math.sqrt(distance);
             currentDistance = "close";
             outtakeMotorLeft.setVelocityPIDFCoefficients(CLOSE_P, CLOSE_I, CLOSE_D, 0);
             outtakeMotorRight.setVelocityPIDFCoefficients(CLOSE_P, CLOSE_I, CLOSE_D, 0);
-        } else {
+        } else { //in all other situations, we'll be launching from the far zone
             hood.setPosition(FAR_HOOD);
-            speed = SPEED_CONST_FAR * Math.sqrt(dist);
+            speed = SPEED_CONST_FAR * Math.sqrt(distance);
             currentDistance = "far";
             outtakeMotorLeft.setVelocityPIDFCoefficients(FAR_P, FAR_I, FAR_D, 0);
             outtakeMotorRight.setVelocityPIDFCoefficients(FAR_P, FAR_I, FAR_D, 0);
         }
 
+        //set the motors to the calculated speed
         outtakeMotorLeft.setVelocity(speed);
         outtakeMotorRight.setVelocity(speed);
     }
