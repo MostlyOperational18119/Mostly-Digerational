@@ -106,7 +106,7 @@ public class RedBackAuto6BallM3 extends LinearOpMode {
             Outtake.robotX = follower.getPose().getX();
             if (state != 24 && state != 25) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, 0, false);
+                Outtake.outtakeUpdate(-1, false);
             }
             Drivetrain.StaticVars.endPose = follower.getPose();
             Drivetrain.StaticVars.outtakePos = Drivetrain.outtakePosition();

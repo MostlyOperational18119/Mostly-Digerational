@@ -11,6 +11,10 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @TeleOp(name="TeleOp")
 public class compOpMode extends LinearOpMode {
@@ -31,6 +35,8 @@ public class compOpMode extends LinearOpMode {
         int adjust = 0;
         double noCorrectAdjust = 0.0;
         boolean isCorrecting = true;
+        boolean limelightAvailable = true;
+        int numBalls = -1;
 
 //        Outtake.isBlue = false;
 //        Outtake.start = new Pose(16.641,16.1903, Math.toRadians(90));
@@ -40,6 +46,13 @@ public class compOpMode extends LinearOpMode {
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
         Lift.init(hardwareMap);
+        Limelight limelight;
+        try {
+            limelight = new Limelight();
+        } catch (IOException e) {
+            limelightAvailable = false;
+            limelight = null;
+        }
 
         Follower follower;
         follower = Constants.createFollower(hardwareMap);
@@ -72,9 +85,14 @@ public class compOpMode extends LinearOpMode {
             Outtake.robotOrientation = Math.toDegrees(follower.getHeading());
 
             //look at chamber or shoot
-//            if (X) {
-//                launch *= -1;
-//            }
+            if (X) {
+                launch *= -1;
+            }
+
+            if (limelightAvailable && launch > 0) {
+                Optional<Integer> ballCountUnsafe = limelight.getBallCount();
+                if (ballCountUnsafe.isPresent()) numBalls = ballCountUnsafe.get();
+            }
 
             if (isCorrecting) {
                 if (leftD) {
@@ -94,7 +112,7 @@ public class compOpMode extends LinearOpMode {
 
             Drivetrain.drive(y, x, rx, rb);
             if (isCorrecting) {
-                Outtake.outtakeUpdate(-1, true);
+                Outtake.outtakeUpdate(launch, true);
             } else {
                 Outtake.update(Outtake.getRotationPosition(noCorrectAdjust));
             }
@@ -174,6 +192,8 @@ public class compOpMode extends LinearOpMode {
             telemetry.addData("right flywheel velocity", Outtake.outtakeMotorRight.getVelocity());
             telemetry.addData("speed", Outtake.speed);
             telemetry.addData("Position", Drivetrain.StaticVars.endPose);
+            telemetry.addData("outtake position", Drivetrain.StaticVars.outtakePos);
+            telemetry.addData("chamber count", numBalls);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);

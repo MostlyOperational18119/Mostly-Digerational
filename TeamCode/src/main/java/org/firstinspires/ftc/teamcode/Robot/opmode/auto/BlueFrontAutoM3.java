@@ -109,7 +109,7 @@ public class BlueFrontAutoM3 extends LinearOpMode {
             Outtake.robotX = follower.getPose().getX();
             if (state != 13) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, 0, false);
+                Outtake.outtakeUpdate(-1, false);
             }
             Drivetrain.StaticVars.endPose = follower.getPose();
             Drivetrain.StaticVars.outtakePos = Drivetrain.outtakePosition();
