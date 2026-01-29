@@ -106,7 +106,7 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
             Outtake.robotX = follower.getPose().getX();
             if (state != 24 && state != 25) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, 0, false);
+                Outtake.outtakeUpdate(-1, false);
             }
             Drivetrain.StaticVars.endPose = follower.getPose();
             Drivetrain.StaticVars.outtakePos = Drivetrain.outtakePosition();
@@ -116,6 +116,7 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
             telemetry.addData("time delta", System.currentTimeMillis() - launchDelayTimer);
             telemetry.addData("slot 1 state", Indexer.currentState1);
             telemetry.addData("robot x follower", follower.getPose().getX());
+            telemetry.addData("outtake position", Drivetrain.StaticVars.outtakePos);
             telemetry.update();
 
             if (!follower.isBusy()) {
