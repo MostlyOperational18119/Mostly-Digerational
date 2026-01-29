@@ -109,7 +109,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
             Outtake.robotX = follower.getPose().getX();
             if (state != 13) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, 0);
+                Outtake.outtakeUpdate(-1, 0, false);
             }
             Drivetrain.StaticVars.endPose = follower.getPose();
             Drivetrain.StaticVars.outtakePos = Drivetrain.outtakePosition();
@@ -134,21 +134,21 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         follower.followPath(startToLaunch, 0.8, true);
                         launchDelayTimer = System.currentTimeMillis();
                         state = 1;
-                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
+//                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
                         break;
                     case 1:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
                                     launchCount = 1;
                                     break;
                                 case 1:
-                                    launchDelayTimer = Indexer.launch1();
+                                    launchDelayTimer = Indexer.launch2();
                                     launchCount = 2;
                                     break;
                                 case 2:
-                                    launchDelayTimer = Indexer.launch2();
+                                    launchDelayTimer = Indexer.launch1();
                                     state = 2;
                                     launchCount = 0;
                                     break;
@@ -156,28 +156,22 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 2:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            for (int i = 0; i < 3; i++) {
-                                switch (i) {
-                                    case 0:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch0();
-                                        }
-                                        break;
-                                    case 1:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch1();
-                                        }
-                                        break;
-                                    case 2:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch2();
-                                        }
-                                        break;
-                                }
+                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+                            // Check and launch any remaining balls in the indexer
+                            if (Indexer.slotColors()[0] != 0) {
+                                launchDelayTimer = Indexer.launch0();
+                                state = 1; // Stay in this state to check again
+                            } else if (Indexer.slotColors()[2] != 0) {
+                                launchDelayTimer = Indexer.launch2();
+                                state = 1; // Stay in this state to check again
+                            } else if (Indexer.slotColors()[1] != 0) {
+                                launchDelayTimer = Indexer.launch1();
+                                state = 1; // Stay in this state to check again
+                            } else {
+                                // All slots empty, move to next state
+                                state = 3;
                             }
                         }
-                        state = 3;
                         break;
                     case 3:
                         if (System.currentTimeMillis() - launchDelayTimer > 1000) {
@@ -203,11 +197,11 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         if (System.currentTimeMillis() - launchDelayTimer > 1000) {
                             state = 8;
                             launchDelayTimer = System.currentTimeMillis();
-                            Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
+//                            Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
                         }
                         break;
                     case 8:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
                             switch (launchCount) {
                                 case 0:
                                     launchDelayTimer = Indexer.launch0();
@@ -215,11 +209,11 @@ public class RedFrontAutoM3 extends LinearOpMode {
                                     Intake.intakeStop();
                                     break;
                                 case 1:
-                                    launchDelayTimer = Indexer.launch1();
+                                    launchDelayTimer = Indexer.launch2();
                                     launchCount = 2;
                                     break;
                                 case 2:
-                                    launchDelayTimer = Indexer.launch2();
+                                    launchDelayTimer = Indexer.launch1();
                                     state = 9;
                                     launchCount = 0;
                                     break;
@@ -227,26 +221,20 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 9:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            for (int i = 0; i < 3; i++) {
-                                switch (i) {
-                                    case 0:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch0();
-                                        }
-                                        break;
-                                    case 1:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch1();
-                                        }
-                                        break;
-                                    case 2:
-                                        if (Indexer.slotColors()[i] != 0) {
-                                            launchDelayTimer = Indexer.launch2();
-                                        }
-                                        state = 9;
-                                        break;
-                                }
+                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+                            // Check and launch any remaining balls in the indexer
+                            if (Indexer.slotColors()[0] != 0) {
+                                launchDelayTimer = Indexer.launch0();
+                                state = 1; // Stay in this state to check again
+                            } else if (Indexer.slotColors()[2] != 0) {
+                                launchDelayTimer = Indexer.launch2();
+                                state = 1; // Stay in this state to check again
+                            } else if (Indexer.slotColors()[1] != 0) {
+                                launchDelayTimer = Indexer.launch1();
+                                state = 1; // Stay in this state to check again
+                            } else {
+                                // All slots empty, move to next state
+                                state = 10;
                             }
                         }
                         break;
@@ -262,7 +250,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         break;
                     case 12:
                         Drivetrain.StaticVars.isBlue = true;
-                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE * 1.1;
+//                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE * 1.1;
                         state = 13;
                         break;
                     case 13:

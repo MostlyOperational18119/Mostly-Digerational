@@ -30,9 +30,6 @@ public class testOpMode extends LinearOpMode {
         int count = 0;
         int adjust = 0;
 
-        Outtake.isBlue = false;
-        Outtake.start = new Pose(16.641,16.1903, Math.toRadians(90));
-
         Drivetrain.init(hardwareMap);
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
@@ -68,10 +65,6 @@ public class testOpMode extends LinearOpMode {
             boolean back = gamepad1.backWasPressed();
             boolean startButton = gamepad1.startWasPressed();
 
-
-
-
-
             follower.update();
             Outtake.robotY = follower.getPose().getY();
             Outtake.robotX = follower.getPose().getX();
@@ -89,8 +82,8 @@ public class testOpMode extends LinearOpMode {
                 adjust += 1;
             }
 
-            //Drivetrain.drive(y, x, rx);
-            Outtake.outtakeUpdate(-1, adjust);
+            Drivetrain.drive(y, x, rx, false);
+            Outtake.outtakeUpdate(-1, true);
             Outtake.outtakeSpeed();
 
             Indexer.updateSlot0();
@@ -127,11 +120,11 @@ public class testOpMode extends LinearOpMode {
                             launchCount = 1;
                             break;
                         case 1:
-                            launchDelayTimer = Indexer.launch1();
+                            launchDelayTimer = Indexer.launch2();
                             launchCount = 2;
                             break;
                         case 2:
-                            launchDelayTimer = Indexer.launch2();
+                            launchDelayTimer = Indexer.launch1();
                             isLaunching = false;
                             launchCount = 0;
                             break;
@@ -159,10 +152,10 @@ public class testOpMode extends LinearOpMode {
             count = Math.abs(count%3);
 
             if (rb) {
-                Outtake.SPEED_CONST_VERY_CLOSE += 5;
+                Outtake.SPEED_CONST_CLOSE += 5;
             }
             if (lb) {
-                Outtake.SPEED_CONST_VERY_CLOSE -= 5;
+                Outtake.SPEED_CONST_CLOSE -= 5;
             }
 
             switch (Outtake.currentDistance) {
@@ -287,10 +280,10 @@ public class testOpMode extends LinearOpMode {
 //                    Outtake.f = 0;
 //            }
             if (X) {
-               Outtake.VERY_CLOSE_HOOD += 0.01;
+               Outtake.FAR_HOOD += 0.01;
             }
             if (B) {
-                Outtake.VERY_CLOSE_HOOD -= 0.01;
+                Outtake.FAR_HOOD -= 0.01;
             }
 //
 //            if (Y) {
@@ -329,10 +322,10 @@ public class testOpMode extends LinearOpMode {
 //            }
 
             if (Y) {
-                if (Outtake.goalX == 140) {
-                    Outtake.goalX = 4;
+                if (Outtake.goalX == Outtake.redX) {
+                    Outtake.goalX = Outtake.blueX;
                 } else {
-                    Outtake.goalX = 140;
+                    Outtake.goalX = Outtake.redX;
                 }
             }
 
@@ -353,6 +346,7 @@ public class testOpMode extends LinearOpMode {
             telemetry.addData("left flywheel velocity", Outtake.outtakeMotorLeft.getVelocity());
             telemetry.addData("right flywheel velocity", Outtake.outtakeMotorRight.getVelocity());
             telemetry.addData("speed", Outtake.speed);
+            telemetry.addData("auto end outtake position", Drivetrain.StaticVars.outtakePos);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);

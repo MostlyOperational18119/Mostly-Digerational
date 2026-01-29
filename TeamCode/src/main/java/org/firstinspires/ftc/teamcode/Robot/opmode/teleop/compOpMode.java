@@ -94,7 +94,7 @@ public class compOpMode extends LinearOpMode {
 
             Drivetrain.drive(y, x, rx, rb);
             if (isCorrecting) {
-                Outtake.outtakeUpdate(-1, adjust);
+                Outtake.outtakeUpdate(-1, true);
             } else {
                 Outtake.update(Outtake.getRotationPosition(noCorrectAdjust));
             }
@@ -149,10 +149,10 @@ public class compOpMode extends LinearOpMode {
 //            }
 
             if (Y) {
-                if (Outtake.goalX == -10) {
-                    Outtake.goalX = 135;
+                if (Outtake.goalX == Outtake.redX) {
+                    Outtake.goalX = Outtake.blueX + adjust;
                 } else {
-                    Outtake.goalX = -10;
+                    Outtake.goalX = Outtake.redX + adjust;
                 }
             }
 

@@ -20,11 +20,11 @@ public class Indexer {
     public static Servo slot0, slot1, slot2;
     public static double UP_POS_0 = 0, DOWN_POS_0 = 0.44, MID_POS_0 = 0.34;
     public static double UP_POS_1 = 0, DOWN_POS_1 = 0.54, MID_POS_1 = 0.34;
-    public static double UP_POS_2 = 1.0, DOWN_POS_2 = 0.46, MID_POS_2 = 0.66;
+    public static double UP_POS_2 = 1.0, DOWN_POS_2 = 0.43, MID_POS_2 = 0.66;
     public static double BRAKE_DOWN = 0, BRAKE_UP = 0;
 
     //temporarily commented out for configurableTeleop
-    public static double LAUNCH_WAIT = 500;
+    public static double LAUNCH_WAIT = 400;
 
     //configurable testing
     //public static double LAUNCH_WAIT = configurableTeleop.LAUNCH_WAIT;

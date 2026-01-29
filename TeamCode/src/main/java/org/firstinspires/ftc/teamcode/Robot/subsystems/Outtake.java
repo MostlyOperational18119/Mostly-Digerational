@@ -23,7 +23,7 @@ public class Outtake {
 
     //outtake speed stuff
     //hood min: 0.58, hood max: 0
-    public static double SPEED_CONST_VERY_CLOSE = 270, SPEED_CONST_CLOSE = 205, SPEED_CONST_FAR = 205, VERY_CLOSE_HOOD = 0.58, FAR_HOOD = 0, CLOSE_HOOD = 0;
+    public static double SPEED_CONST_VERY_CLOSE = 250, SPEED_CONST_CLOSE = 200, SPEED_CONST_FAR = 195, VERY_CLOSE_HOOD = 0.58, FAR_HOOD = 0, CLOSE_HOOD = 0;
 
     //configurable testing
     //public static double SPEED_CONST_VERY_CLOSE = configurableTeleop.VERY_CLOSE_SPEED, SPEED_CONST_CLOSE = configurableTeleop.CLOSE_SPEED, SPEED_CONST_FAR = configurableTeleop.FAR_SPEED, VERY_CLOSE_HOOD = configurableTeleop.CLOSER_HOOD, FAR_HOOD = configurableTeleop.FAR_HOOD, CLOSE_HOOD = configurableTeleop.CLOSE_HOOD;
@@ -35,6 +35,7 @@ public class Outtake {
     private static int maxClicks =  24680;
     private static int tolerance = 50;
     static double outtakePower = 0.0;
+    public static int blueX = 0, redX = 135;
 
     //stuff for auto aiming
     public static boolean isBlue = false;
@@ -56,6 +57,7 @@ public class Outtake {
     //state machine
     public static States currentState = States.AIM_CHAMBER;
     public static String currentDistance = "";
+    public static int outtakePosAuto = 0;
 
     public enum States {
         AIM_CHAMBER,
@@ -83,8 +85,9 @@ public class Outtake {
         //set blue/red aiming
         isBlue = Drivetrain.StaticVars.isBlue;
         start = Drivetrain.StaticVars.endPose;
+        outtakePosAuto = Drivetrain.StaticVars.outtakePos;
 
-        if (isBlue) {goalX = -10;} else {goalX = 135;}
+        if (isBlue) {goalX = blueX;} else {goalX = redX;}
     }
 
     public static void update(int targetClicks) {
@@ -102,17 +105,17 @@ public class Outtake {
         target = Math.max(0, Math.min(1, target));
         return (int) (maxClicks * target);
     }
-    public static int setTarget(double target) {
+    public static int setTarget(double target, boolean isTeleOp) {
         target = Math.max(0, Math.min(maxClicks, target));
-        return (int) target;
+        return (int) target + (isTeleOp ? outtakePosAuto : 0);
     }
 
-    public static double pointAtGoal(int adjust) {
+    public static double pointAtGoal() {
         double dx = goalX - robotX;
         double dy = goalY - robotY;
 
         double absoluteAngleToGoal = Math.toDegrees(Math.atan2(dy, dx));
-        absoluteAngleToGoal = (((absoluteAngleToGoal + adjust) % 360) + 360) % 360;
+        absoluteAngleToGoal = (((absoluteAngleToGoal) % 360) + 360) % 360;
 
         // Flip the angle calculation
         double relativeAngle = 360 - (absoluteAngleToGoal - (angleOffset + robotOrientation));
@@ -121,13 +124,13 @@ public class Outtake {
 
         return (relativeAngle * 65.871345) + 4000;
     }
-    public static double pointAtChamber(int adjust) {
+    public static double pointAtChamber() {
         double dx = goalX - robotX;
         double dy = chamberY - robotY;
         Indexer.chamberIncrease = 0;
 
         double absoluteAngleToGoal = Math.toDegrees(Math.atan2(dy, dx));
-        absoluteAngleToGoal = (((absoluteAngleToGoal + adjust) % 360) + 360) % 360;
+        absoluteAngleToGoal = (((absoluteAngleToGoal) % 360) + 360) % 360;
 
         // Flip the angle calculation
         double relativeAngle = 360 - (absoluteAngleToGoal + 90 - robotOrientation);
@@ -138,7 +141,7 @@ public class Outtake {
     }
 
 
-    public static void outtakeUpdate(int launch, int adjust) {
+    public static void outtakeUpdate(int launch, boolean isTeleOp) {
 
         if (launch > 0) {
             currentState = States.AIM_CHAMBER;
@@ -148,10 +151,10 @@ public class Outtake {
 
         switch (currentState) {
             case AIM_GOAL:
-                update(setTarget(pointAtGoal(adjust)));
+                update(setTarget(pointAtGoal(), isTeleOp));
                 break;
             case AIM_CHAMBER:
-                update(setTarget(pointAtChamber(adjust)));
+                update(setTarget(pointAtChamber(), isTeleOp));
                 break;
         }
     }
