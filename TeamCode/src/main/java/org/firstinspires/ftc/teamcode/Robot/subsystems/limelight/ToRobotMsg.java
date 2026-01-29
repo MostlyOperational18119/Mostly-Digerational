@@ -61,7 +61,7 @@ public class ToRobotMsg {
                     int posOrig = resultsPos;
 
                     while (resultsPos < (posOrig + aprilTagResultLength)) {
-//                        tagResults.add(new AprilTagResult(Arrays.copyOfRange(data, resultsPos, resultsPos+112)));
+                        tagResults.add(new AprilTagResult(Arrays.copyOfRange(data, resultsPos, resultsPos+AprilTagResult.APRIL_TAG_SIZE)));
 
                         resultsPos += AprilTagResult.APRIL_TAG_SIZE;
                     }
