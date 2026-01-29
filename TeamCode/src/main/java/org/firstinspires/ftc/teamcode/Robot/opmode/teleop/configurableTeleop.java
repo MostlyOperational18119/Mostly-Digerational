@@ -57,7 +57,7 @@ public class configurableTeleop extends LinearOpMode {
             Outtake.robotOrientation = Math.toDegrees(follower.getHeading());
 
             //Drivetrain.drive(y, x, rx);
-            Outtake.outtakeUpdate(-1, 0);
+            Outtake.outtakeUpdate(-1, true);
             Outtake.outtakeSpeed();
 
             //indexer state machines
