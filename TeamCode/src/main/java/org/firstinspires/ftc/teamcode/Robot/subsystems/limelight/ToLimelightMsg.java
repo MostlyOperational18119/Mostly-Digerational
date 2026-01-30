@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Robot.subsystems.limelight;
 
 import java.util.stream.IntStream;
 
+// TODO: USE A FUCKING PROTOBUF YOU ABSOLUTE MUPPET (FROM: DAMIEN, TO: FUTURE DAMIEN)
 public class ToLimelightMsg {
     byte[] magic = new byte[]{0x43, 0x4C, 0x49, 0x45, 0x4E, 0x54, 0x00};
     byte[] data = new byte[0xFF];
@@ -18,6 +19,7 @@ public class ToLimelightMsg {
     }
 
     ToLimelightMsg(byte color) {
+        // Dollar store memcpy
         IntStream.range(0, magic.length)
                 .forEach((int i) -> {
                     data[i] = magic[i];

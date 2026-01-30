@@ -128,10 +128,13 @@ public class Indexer {
     //these are tuned for each individual color sensor
     public static int getColorSlot (double red, double green, double blue, double distance) {
         if (distance < 35 && green / blue > 1.3 && green / blue < 1.6 && green > 90) {
+            // green
             return 2;
         } else if (distance < 35 && red / green > .9 && red / green < 1.2 && red > 85) {
+            // purple
             return 1;
         } else {
+            // none
             return 0;
         }
     }
@@ -260,6 +263,10 @@ public class Indexer {
     public static int nextBall(int chamberNum, int chamberIncrease, int[] pattern) {
         int patternIndex = (chamberNum + chamberIncrease) % 3;
         return pattern[patternIndex];
+    }
+
+    public static void updatePattern(int[] newPattern) {
+        pattern = newPattern;
     }
 
     //stuff for configurableTeleop
