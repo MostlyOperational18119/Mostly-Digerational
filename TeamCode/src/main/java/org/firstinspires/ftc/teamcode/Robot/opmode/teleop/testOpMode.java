@@ -29,6 +29,8 @@ public class testOpMode extends LinearOpMode {
         int currentTransfer = 0;
         int count = 0;
         int adjust = 0;
+        double noCorrectAdjust = 0.0;
+        boolean isCorrecting = true;
 
         Drivetrain.init(hardwareMap);
         Outtake.init(hardwareMap);
@@ -74,6 +76,32 @@ public class testOpMode extends LinearOpMode {
 //            if (X) {
 //                launch *= -1;
 //            }
+
+            if (X) {
+                isCorrecting = !isCorrecting;
+            }
+
+            if (isCorrecting) {
+                Outtake.outtakeUpdate(launch, true);
+            } else {
+                Outtake.update(Outtake.getRotationPosition(noCorrectAdjust));
+            }
+
+            if (isCorrecting) {
+                if (back) {
+                    adjust -= 3;
+                }
+                if (startButton) {
+                    adjust += 3;
+                }
+            } else {
+                if (back) {
+                    noCorrectAdjust -= 0.02;
+                }
+                if (startButton) {
+                    noCorrectAdjust += 0.02;
+                }
+            }
 
             if (back) {
                 adjust -= 1;
@@ -279,9 +307,9 @@ public class testOpMode extends LinearOpMode {
 //                } else
 //                    Outtake.f = 0;
 //            }
-            if (X) {
-               Outtake.FAR_HOOD += 0.01;
-            }
+//            if (X) {
+//               Outtake.FAR_HOOD += 0.01;
+//            }
             if (B) {
                 Outtake.FAR_HOOD -= 0.01;
             }
@@ -333,6 +361,7 @@ public class testOpMode extends LinearOpMode {
 //            telemetry.addData("supposed dist", Outtake.distance);
             telemetry.addData("speed const very close", Outtake.SPEED_CONST_VERY_CLOSE);
             telemetry.addData("angle adjustment", adjust);
+            telemetry.addData("Outtake encoder position", Drivetrain.outtakePosition());
 //            telemetry.addData("speed const close")
 //            telemetry.addData("hood angle", Outtake.CLOSE_HOOD);
 //            telemetry.addData("odometry X", Outtake.robotX);
