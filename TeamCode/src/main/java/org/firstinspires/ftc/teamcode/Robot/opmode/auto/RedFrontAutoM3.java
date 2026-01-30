@@ -35,7 +35,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
     public void runOpMode() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        Drivetrain.StaticVars.isBlue = false;
+        Outtake.StaticVars.isBlue = false;
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
@@ -111,8 +111,8 @@ public class RedFrontAutoM3 extends LinearOpMode {
                 Outtake.outtakeSpeed();
                 Outtake.outtakeUpdate(-1, false);
             }
-            Drivetrain.StaticVars.endPose = follower.getPose();
-            Drivetrain.StaticVars.outtakePos = Drivetrain.outtakePosition();
+            Outtake.StaticVars.endPose = follower.getPose();
+            Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
 
 
             telemetry.addData("clicks", Drivetrain.outtakePosition());
@@ -249,12 +249,12 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         Intake.intakeGo();
                         break;
                     case 12:
-                        Drivetrain.StaticVars.isBlue = true;
+                        Outtake.StaticVars.isBlue = true;
 //                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE * 1.1;
                         state = 13;
                         break;
                     case 13:
-                        Outtake.update(0);
+                        Outtake.update(0, false);
                         break;
 //                    case 12:
 //                        follower.followPath(intake2, 0.8, true);
@@ -377,8 +377,8 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //                        state = 23;
 //                        break;
 //                    case 23:
-//                        Drivetrain.StaticVars.isBlue = true;
-//                        Drivetrain.StaticVars.endPose = follower.getPose();
+//                        Outtake.StaticVars.isBlue = true;
+//                        Outtake.StaticVars.endPose = follower.getPose();
 //                        state = 24;
 //                        break;
                 }

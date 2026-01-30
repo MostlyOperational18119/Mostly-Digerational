@@ -35,7 +35,7 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
     public void runOpMode() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        Drivetrain.StaticVars.isBlue = true;
+        Outtake.StaticVars.isBlue = true;
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
@@ -108,15 +108,14 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
                 Outtake.outtakeSpeed();
                 Outtake.outtakeUpdate(-1, false);
             }
-            Drivetrain.StaticVars.endPose = follower.getPose();
-            Drivetrain.StaticVars.outtakePos = Drivetrain.outtakePosition();
+            Outtake.StaticVars.endPose = follower.getPose();
+            Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
 
 
-            telemetry.addData("clicks", Drivetrain.outtakePosition());
             telemetry.addData("time delta", System.currentTimeMillis() - launchDelayTimer);
             telemetry.addData("slot 1 state", Indexer.currentState1);
             telemetry.addData("robot x follower", follower.getPose().getX());
-            telemetry.addData("outtake position", Drivetrain.StaticVars.outtakePos);
+            telemetry.addData("outtake position", Outtake.StaticVars.outtakePos);
             telemetry.update();
 
             if (!follower.isBusy()) {
@@ -305,8 +304,8 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
 //                        Intake.intakeStop();
 //                        break;
 //                    case 18:
-//                        Drivetrain.StaticVars.isBlue = true;
-//                        Drivetrain.StaticVars.endPose = follower.getPose();
+//                        Outtake.StaticVars.isBlue = true;
+//                        Outtake.StaticVars.endPose = follower.getPose();
 //                        state = 19;
 //                        break;
 //                    case 17:
@@ -381,8 +380,8 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
                         state = 24;
                         break;
                     case 24:
-                        Outtake.update(0);
-                        Drivetrain.StaticVars.isBlue = true;
+                        Outtake.update(0, false);
+                        Outtake.StaticVars.isBlue = true;
 //                        Outtake.SPEED_CONST_FAR = 205;
                         break;
                 }

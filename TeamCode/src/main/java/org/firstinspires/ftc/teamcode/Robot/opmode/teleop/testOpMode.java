@@ -346,7 +346,7 @@ public class testOpMode extends LinearOpMode {
             telemetry.addData("left flywheel velocity", Outtake.outtakeMotorLeft.getVelocity());
             telemetry.addData("right flywheel velocity", Outtake.outtakeMotorRight.getVelocity());
             telemetry.addData("speed", Outtake.speed);
-            telemetry.addData("auto end outtake position", Drivetrain.StaticVars.outtakePos);
+            telemetry.addData("auto end outtake position", Outtake.StaticVars.outtakePos);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);
