@@ -35,7 +35,7 @@ public class RedBackAutoM3 extends LinearOpMode {
     public void runOpMode() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        Drivetrain.StaticVars.isBlue = false;
+        Outtake.StaticVars.isBlue = false;
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
@@ -108,8 +108,8 @@ public class RedBackAutoM3 extends LinearOpMode {
                 Outtake.outtakeSpeed();
                 Outtake.outtakeUpdate(-1, false);
             }
-            Drivetrain.StaticVars.endPose = follower.getPose();
-            Drivetrain.StaticVars.outtakePos = Drivetrain.outtakePosition();
+            Outtake.StaticVars.endPose = follower.getPose();
+            Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
 
 
             telemetry.addData("clicks", Drivetrain.outtakePosition());
@@ -361,9 +361,9 @@ public class RedBackAutoM3 extends LinearOpMode {
                         state = 24;
                         break;
                     case 24:
-                        Outtake.update(0);
+                        Outtake.update(0, false);
 //                        Outtake.SPEED_CONST_FAR = 205;
-                        Drivetrain.StaticVars.endPose = follower.getPose();
+                        Outtake.StaticVars.endPose = follower.getPose();
                         break;
                 }
             }

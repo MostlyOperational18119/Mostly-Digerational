@@ -35,7 +35,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
     public void runOpMode() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        Drivetrain.StaticVars.isBlue = true;
+        Outtake.StaticVars.isBlue = true;
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
@@ -107,8 +107,8 @@ public class BlueBackAutoM3 extends LinearOpMode {
                 Outtake.outtakeSpeed();
                 Outtake.outtakeUpdate(-1, false);
             }
-            Drivetrain.StaticVars.endPose = follower.getPose();
-            Drivetrain.StaticVars.outtakePos = Drivetrain.outtakePosition();
+            Outtake.StaticVars.endPose = follower.getPose();
+            Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
 
             telemetry.addData("clicks", Drivetrain.outtakePosition());
             telemetry.addData("time delta", System.currentTimeMillis() - launchDelayTimer);
@@ -298,8 +298,8 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         state = 23;
                         break;
 //                    case 18:
-//                        Drivetrain.StaticVars.isBlue = true;
-//                        Drivetrain.StaticVars.endPose = follower.getPose();
+//                        Outtake.StaticVars.isBlue = true;
+//                        Outtake.StaticVars.endPose = follower.getPose();
 //                        state = 19;
 //                        break;
 //                    case 17:
@@ -374,8 +374,8 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         state = 24;
                         break;
                     case 24:
-                        Outtake.update(0);
-                        Drivetrain.StaticVars.isBlue = true;
+                        Outtake.update(0, false);
+                        Outtake.StaticVars.isBlue = true;
                         break;
                 }
             }

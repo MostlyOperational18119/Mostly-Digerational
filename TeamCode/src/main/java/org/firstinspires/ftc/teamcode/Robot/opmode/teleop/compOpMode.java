@@ -114,7 +114,7 @@ public class compOpMode extends LinearOpMode {
             if (isCorrecting) {
                 Outtake.outtakeUpdate(launch, true);
             } else {
-                Outtake.update(Outtake.getRotationPosition(noCorrectAdjust));
+                Outtake.update(Outtake.getRotationPosition(noCorrectAdjust), false);
             }
 
             if (lb) {
@@ -165,7 +165,6 @@ public class compOpMode extends LinearOpMode {
 //            if (rb) {
 //                Outtake.angleOffset -= 1;
 //            }
-
             if (Y) {
                 if (Outtake.goalX == Outtake.redX) {
                     Outtake.goalX = Outtake.blueX + adjust;
@@ -173,6 +172,7 @@ public class compOpMode extends LinearOpMode {
                     Outtake.goalX = Outtake.redX + adjust;
                 }
             }
+            Outtake.goalX = Outtake.goalX + adjust;
 
 //            int[] slots = Indexer.slotColors();
 //            telemetry.addData("supposed dist", Outtake.distance);
@@ -191,8 +191,9 @@ public class compOpMode extends LinearOpMode {
             telemetry.addData("left flywheel velocity", Outtake.outtakeMotorLeft.getVelocity());
             telemetry.addData("right flywheel velocity", Outtake.outtakeMotorRight.getVelocity());
             telemetry.addData("speed", Outtake.speed);
-            telemetry.addData("Position", Drivetrain.StaticVars.endPose);
-            telemetry.addData("outtake position", Drivetrain.StaticVars.outtakePos);
+            telemetry.addData("Position", Outtake.StaticVars.endPose);
+            telemetry.addData("outtake position static variable", Outtake.StaticVars.outtakePos);
+            telemetry.addData("outtake pos auto", Outtake.outtakePosAuto);
             telemetry.addData("chamber count", numBalls);
             telemetry.update();
 //            telemetry.addData("launch", launch);

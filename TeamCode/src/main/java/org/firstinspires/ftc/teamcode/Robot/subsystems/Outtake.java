@@ -83,15 +83,15 @@ public class Outtake {
         rotateServo.setPower(0);
 
         //set blue/red aiming
-        isBlue = Drivetrain.StaticVars.isBlue;
-        start = Drivetrain.StaticVars.endPose;
-        outtakePosAuto = Drivetrain.StaticVars.outtakePos;
+        isBlue = Outtake.StaticVars.isBlue;
+        start = Outtake.StaticVars.endPose;
+        outtakePosAuto = Outtake.StaticVars.outtakePos;
 
         if (isBlue) {goalX = blueX;} else {goalX = redX;}
     }
 
-    public static void update(int targetClicks) {
-        int clicks = Drivetrain.outtakePosition();
+    public static void update(int targetClicks, boolean isTeleOp) {
+        int clicks = Drivetrain.outtakePosition() + (isTeleOp ? outtakePosAuto : 0);
 
         if (Math.abs(targetClicks - clicks) <= tolerance) {
             rotateServo.setPower(0);
@@ -105,9 +105,9 @@ public class Outtake {
         target = Math.max(0, Math.min(1, target));
         return (int) (maxClicks * target);
     }
-    public static int setTarget(double target, boolean isTeleOp) {
+    public static int setTarget(double target) {
         target = Math.max(0, Math.min(maxClicks, target));
-        return (int) target + (isTeleOp ? outtakePosAuto : 0);
+        return (int) target;
     }
 
     public static double pointAtGoal() {
@@ -151,10 +151,10 @@ public class Outtake {
 
         switch (currentState) {
             case AIM_GOAL:
-                update(setTarget(pointAtGoal(), isTeleOp));
+                update(setTarget(pointAtGoal()), isTeleOp);
                 break;
             case AIM_CHAMBER:
-                update(setTarget(pointAtChamber(), isTeleOp));
+                update(setTarget(pointAtChamber()), isTeleOp);
                 break;
         }
     }
@@ -219,5 +219,11 @@ public class Outtake {
     }
     public static double returnHoodPos(){
         return hood.getPosition();
+    }
+
+    public static class StaticVars {
+        public static boolean isBlue = false;
+         public static int outtakePos = 0;
+        public static Pose endPose = new Pose(16.641,16.1903, Math.toRadians(90));
     }
 }

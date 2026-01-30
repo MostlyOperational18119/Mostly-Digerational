@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
 @Autonomous(name = "testSwitchAuto")
 public class testSwitchAuto extends LinearOpMode {
@@ -12,8 +13,8 @@ public class testSwitchAuto extends LinearOpMode {
     public void runOpMode() {
         waitForStart();
         while (opModeIsActive()) {
-            Drivetrain.StaticVars.isBlue = false;
-            Drivetrain.StaticVars.endPose = new Pose(10, 50, 0);
+            Outtake.StaticVars.isBlue = false;
+            Outtake.StaticVars.endPose = new Pose(10, 50, 0);
         }
     }
 }
