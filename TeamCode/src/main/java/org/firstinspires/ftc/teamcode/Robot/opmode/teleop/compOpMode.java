@@ -14,9 +14,10 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
-@TeleOp(name="TeleOp")
+@TeleOp(name = "TeleOp")
 public class compOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -94,6 +95,12 @@ public class compOpMode extends LinearOpMode {
                 if (ballCountUnsafe.isPresent()) numBalls = ballCountUnsafe.get();
             }
 
+            if (limelightAvailable) {
+                Optional<Integer[]> patternUnsafe = limelight.getPattern();
+                // Essentially just update the pattern with the result thingy(tm) if it's present
+                patternUnsafe.ifPresent(integers -> Indexer.updatePattern(Arrays.stream(integers).mapToInt(i -> i).toArray()));
+            }
+
             if (isCorrecting) {
                 if (leftD) {
                     adjust -= 3;
@@ -135,7 +142,7 @@ public class compOpMode extends LinearOpMode {
                 Intake.intakeStop();
             }
 
-            if (isLaunching) {
+            if (!limelightAvailable && isLaunching) {
                 if (System.currentTimeMillis() - launchDelayTimer > 600) {
                     switch (launchCount) {
                         case 0:
@@ -155,7 +162,9 @@ public class compOpMode extends LinearOpMode {
                 }
             }
 
-            if (A) {
+            if (A && limelightAvailable) {
+                Indexer.startLaunch(numBalls);
+            } else if (A && !limelightAvailable) {
                 isLaunching = true;
             }
 

@@ -100,11 +100,11 @@ public class Limelight {
             for (AprilTagResult tagResult : tagResults) {
                 switch (tagResult.tagID) {
                     case 21:
-                        return Optional.of(new Integer[]{0, 1, 1});
+                        return Optional.of(new Integer[]{2, 1, 1});
                     case 22:
-                        return Optional.of(new Integer[]{1, 0, 1});
+                        return Optional.of(new Integer[]{1, 2, 1});
                     case 23:
-                        return Optional.of(new Integer[]{1, 1, 0});
+                        return Optional.of(new Integer[]{1, 1, 2});
                 }
             }
         }

@@ -19,6 +19,7 @@ public class ToLimelightMsg {
     }
 
     ToLimelightMsg(byte color) {
+        // Dollar store memcpy
         IntStream.range(0, magic.length)
                 .forEach((int i) -> {
                     data[i] = magic[i];
