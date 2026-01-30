@@ -84,7 +84,7 @@ public class testOpMode extends LinearOpMode {
             if (isCorrecting) {
                 Outtake.outtakeUpdate(launch, true);
             } else {
-                Outtake.update(Outtake.getRotationPosition(noCorrectAdjust));
+                Outtake.update(Outtake.getRotationPosition(noCorrectAdjust), true);
             }
 
             if (isCorrecting) {

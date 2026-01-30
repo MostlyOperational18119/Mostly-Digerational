@@ -35,7 +35,7 @@ public class Outtake {
     private static int maxClicks =  24680;
     private static int tolerance = 50;
     static double outtakePower = 0.0;
-    public static int blueX = 0, redX = 135;
+    public static int blueX = 9, redX = 135;
 
     //stuff for auto aiming
     public static boolean isBlue = false;
