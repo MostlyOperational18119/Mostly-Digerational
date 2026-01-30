@@ -9,8 +9,12 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ReadWriteFile;
 
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.Robot.opmode.teleop.configurableTeleop;
+
+import java.io.File;
 
 public class Outtake {
 
@@ -85,7 +89,23 @@ public class Outtake {
         //set blue/red aiming
         isBlue = Outtake.StaticVars.isBlue;
         start = Outtake.StaticVars.endPose;
-        outtakePosAuto = Outtake.StaticVars.outtakePos;
+
+        String fileName = "OuttakeVars.txt";
+
+        String outtakePos = "";
+
+        File myFile = AppUtil.getInstance().getSettingsFile(fileName);
+        if (myFile.exists()) {
+            outtakePos = ReadWriteFile.readFile(myFile);
+        }
+
+        try {
+            outtakePosAuto = Integer.parseInt(outtakePos);
+        }
+        catch (NumberFormatException e) {
+            outtakePosAuto = 0;
+        }
+
 
         if (isBlue) {goalX = blueX;} else {goalX = redX;}
     }
