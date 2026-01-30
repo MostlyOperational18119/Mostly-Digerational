@@ -15,6 +15,7 @@ public class testSwitchAuto extends LinearOpMode {
         while (opModeIsActive()) {
             Outtake.StaticVars.isBlue = false;
             Outtake.StaticVars.endPose = new Pose(10, 50, 0);
+
         }
     }
 }

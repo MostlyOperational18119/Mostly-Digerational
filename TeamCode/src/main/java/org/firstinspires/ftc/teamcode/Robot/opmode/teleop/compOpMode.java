@@ -103,10 +103,10 @@ public class compOpMode extends LinearOpMode {
 
             if (isCorrecting) {
                 if (leftD) {
-                    adjust -= 3;
+                    adjust -= 5;
                 }
                 if (rightD) {
-                    adjust += 3;
+                    adjust += 5;
                 }
             } else {
                 if (leftD) {
@@ -118,6 +118,7 @@ public class compOpMode extends LinearOpMode {
             }
 
             Drivetrain.drive(y, x, rx, rb);
+
             if (isCorrecting) {
                 Outtake.outtakeUpdate(launch, true);
             } else {
@@ -127,6 +128,7 @@ public class compOpMode extends LinearOpMode {
             if (lb) {
                 isCorrecting = !isCorrecting;
             }
+
             Outtake.outtakeSpeed();
 
             Indexer.updateSlot0();
@@ -175,7 +177,7 @@ public class compOpMode extends LinearOpMode {
 //                Outtake.angleOffset -= 1;
 //            }
             if (Y) {
-                if (Outtake.goalX == Outtake.redX) {
+                if (Outtake.goalX == Outtake.redX + adjust) {
                     Outtake.goalX = Outtake.blueX + adjust;
                 } else {
                     Outtake.goalX = Outtake.redX + adjust;
@@ -185,7 +187,7 @@ public class compOpMode extends LinearOpMode {
 
 //            int[] slots = Indexer.slotColors();
 //            telemetry.addData("supposed dist", Outtake.distance);
-            telemetry.addData("speed const very close", Outtake.SPEED_CONST_VERY_CLOSE);
+            telemetry.addData("manual adjust", isCorrecting);
             telemetry.addData("angle adjustment", adjust);
 //            telemetry.addData("speed const close")
 //            telemetry.addData("hood angle", Outtake.CLOSE_HOOD);

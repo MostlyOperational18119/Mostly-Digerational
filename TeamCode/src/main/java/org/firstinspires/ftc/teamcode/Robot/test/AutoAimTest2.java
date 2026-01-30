@@ -27,14 +27,12 @@ public class AutoAimTest2 extends LinearOpMode {
 //            Outtake.update(Outtake.setTarget(targetClicks));
 
             telemetry.addData("current position", Drivetrain.outtakePosition());
-//            telemetry.addData("target position", Outtake.setTarget(Outtake.pointAtGoal()));
-//            telemetry.addData("target setRotation", Outtake.setRotationPosition(Outtake.pointAtGoal()));
-//            telemetry.addData("target angle/clicks", Outtake.pointAtGoal());
+            //telemetry.addData("target position", Outtake.setTarget(Outtake.pointAtGoal()));
+            //telemetry.addData("target setRotation", Outtake.setRotationPosition(Outtake.pointAtGoal()));
+            telemetry.addData("target angle/clicks", Outtake.pointAtGoal());
             telemetry.addData("target angle", (targetClicks - 2816)/68.555);
 
             telemetry.update();
-
-            //Outtake.update(Outtake.setRotationPosition(Outtake.nicksLittleHelper()));
         }
     }
 }
