@@ -125,8 +125,6 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
             ReadWriteFile.writeFile(myFile, outtakePos);
 
 
-
-
             if (state != 24 && state != 25) {
                 Outtake.outtakeSpeed();
                 Outtake.outtakeUpdate(-1, false);

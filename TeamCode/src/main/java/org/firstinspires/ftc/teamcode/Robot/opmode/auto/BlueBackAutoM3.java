@@ -6,12 +6,18 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ReadWriteFile;
 
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.Robot.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 @Autonomous(name = "9BallBlueBackM3")
 public class BlueBackAutoM3 extends LinearOpMode {
@@ -103,6 +109,20 @@ public class BlueBackAutoM3 extends LinearOpMode {
             Outtake.robotOrientation = Math.toDegrees(follower.getHeading());
             Outtake.robotY = follower.getPose().getY();
             Outtake.robotX = follower.getPose().getX();
+
+            String outtakePos = Integer.toString(Drivetrain.outtakePosition());
+            String fileName = "OuttakeVars.txt";
+            String filePath = "org.firstinspires.ftc.teamcode.Robot.opmode.OuttakeVars.txt";
+
+            File myFile = AppUtil.getInstance().getSettingsFile(fileName);
+            try (FileWriter fw = new FileWriter(filePath, false)) {
+                // Opening with 'false' (or omitting it) overwrites the file
+                fw.write("");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ReadWriteFile.writeFile(myFile, outtakePos);
+
             if (state != 24 && state != 25) {
                 Outtake.outtakeSpeed();
                 Outtake.outtakeUpdate(-1, false);
