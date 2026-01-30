@@ -3,10 +3,11 @@ package org.firstinspires.ftc.teamcode.Robot.subsystems.limelight;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
+// TODO: USE A FUCKING PROTOBUF YOU ABSOLUTE MUPPET (FROM: DAMIEN, TO: FUTURE DAMIEN)
 public class AprilTagResult {
     // 112 is the base size (no homography matrix sadly)
     // add the size of the homography matrix ourselves (just the date itself)
-    public static int APRIL_TAG_SIZE = 112 + 72;
+    public static int APRIL_TAG_SIZE = 148;
 
     public int tagID;
     public int tagHamming; // error bits, not too useful (could be removed/ignored)
@@ -16,33 +17,31 @@ public class AprilTagResult {
     public double[][] cornerPoints;
 
     AprilTagResult(byte[] src) {
-        // Nobody cares about the pointer
+        // Nobody cares about the tag family pointer
         // could chop it off before sending to save 4 bytes, but I'm lazy
-        int pos = 3;
+        int pos = 7;
 
         tagID = intFromBytesRange(src, pos);
 
-        pos += 4;
+        pos += 4; // done with tag ID
 
         tagHamming = intFromBytesRange(src, pos);
 
-        pos += 4;
+        pos += 4; // done with hamming
 
         tagDecisionMargin = floatFromBytesRange(src, pos);
 
-        pos += 4;
+        pos += 4; // done with decision margin
 
         // Ignore the homography matrix pointer (doesn't matter imo)
-        pos += 8;
-
-        pos += 72; // 9 doubles, and doubles are 8 bytes each so 72 (8 is the size stuff which is earlier)
+        pos += 8; // done with homography matrix pointer
 
         centerPoint = new double[]{
                 doubleFromBytesRange(src, pos),
                 doubleFromBytesRange(src, pos + 8),
         };
 
-        pos += 16;
+        pos += 16; // done with center points
 
         cornerPoints = new double[][]{
                 {
@@ -55,7 +54,7 @@ public class AprilTagResult {
                 }
         };
 
-        pos += 32;
+        pos += 32; // done with corner points
 
         // homography matrix stub
         homographyMatrix = new double[][]{
@@ -76,9 +75,9 @@ public class AprilTagResult {
                 }
         };
 
-        pos += 72;
+        pos += 72; // done with (the actual) homography matrix
 
-        // If not, we fucked up (too short or long, oops D:)
+        // Hopefully I didn't mess up, otherwise we will be really sad :(
         assert (pos + 1) == APRIL_TAG_SIZE;
 
     }
