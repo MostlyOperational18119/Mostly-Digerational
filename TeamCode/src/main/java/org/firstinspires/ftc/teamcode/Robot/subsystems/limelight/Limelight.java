@@ -81,6 +81,10 @@ public class Limelight {
         out = new DataOutputStream(socket.getOutputStream());
     }
 
+    public void setChosenGoal(int goal) {
+        chosenGoal = goal;
+    }
+
     public Optional<Object> getResult(ToRobotMsg.ResultType type) {
         if (results == null || !results.containsKey(type)) return Optional.empty();
 

@@ -38,6 +38,8 @@ public class LimelightTest extends LinearOpMode {
             else telemetry.addLine("Pattern: unknown");
 
             telemetry.update();
+
+            sleep(50);
         }
     }
 }
