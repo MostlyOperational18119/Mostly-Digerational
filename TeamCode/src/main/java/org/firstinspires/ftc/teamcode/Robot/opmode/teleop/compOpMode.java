@@ -95,7 +95,7 @@ public class compOpMode extends LinearOpMode {
                 if (ballCountUnsafe.isPresent()) numBalls = ballCountUnsafe.get();
             }
 
-            if (limelightAvailable) {
+            if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
                 Optional<Integer[]> patternUnsafe = limelight.getPattern();
                 // Essentially just update the pattern with the result thingy(tm) if it's present
                 patternUnsafe.ifPresent(integers -> Indexer.updatePattern(Arrays.stream(integers).mapToInt(i -> i).toArray()));
