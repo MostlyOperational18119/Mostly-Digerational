@@ -50,6 +50,7 @@ public class compOpMode extends LinearOpMode {
         Limelight limelight;
         try {
             limelight = new Limelight();
+            limelight.setChosenGoal(Outtake.StaticVars.isBlue ? 0 : 1);
         } catch (IOException e) {
             limelightAvailable = false;
             limelight = null;
