@@ -36,7 +36,7 @@ public class compOpMode extends LinearOpMode {
         int adjust = 0;
         double noCorrectAdjust = 0.0;
         boolean isCorrecting = true;
-        boolean limelightAvailable = true;
+        boolean limelightAvailable = false;
         int numBalls = -1;
 
 //        Outtake.isBlue = false;
@@ -89,6 +89,10 @@ public class compOpMode extends LinearOpMode {
             //look at chamber or shoot
             if (X) {
                 launch *= -1;
+            }
+
+            if (limelightAvailable) {
+                limelight.update();
             }
 
             if (limelightAvailable && launch > 0) {
@@ -207,6 +211,7 @@ public class compOpMode extends LinearOpMode {
             telemetry.addData("outtake position static variable", Outtake.StaticVars.outtakePos);
             telemetry.addData("outtake pos auto", Outtake.outtakePosAuto);
             telemetry.addData("chamber count", numBalls);
+            telemetry.addData("limelight available", limelightAvailable);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);
