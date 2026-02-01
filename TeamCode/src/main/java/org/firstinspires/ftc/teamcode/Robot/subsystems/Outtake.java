@@ -201,9 +201,7 @@ public class Outtake {
             } else {
                 aimGoalX = closeRed;
             }
-            Indexer.LAUNCH_WAIT = 300;
-
-            //unique PIDF coefficients to better control recoil from Artifacts
+            //unique PIDF coefficients to better control recoil from artifacts
             outtakeMotorLeft.setVelocityPIDFCoefficients(VERY_CLOSE_P, VERY_CLOSE_I, VERY_CLOSE_D, 0);
             outtakeMotorRight.setVelocityPIDFCoefficients(VERY_CLOSE_P, VERY_CLOSE_I, VERY_CLOSE_D, 0);
         } else if (distance < 108) { //this is maximum minimum distance of the close zone
@@ -215,7 +213,6 @@ public class Outtake {
             } else {
                 aimGoalX = closeRed;
             }
-            Indexer.LAUNCH_WAIT = 400;
             outtakeMotorLeft.setVelocityPIDFCoefficients(CLOSE_P, CLOSE_I, CLOSE_D, 0);
             outtakeMotorRight.setVelocityPIDFCoefficients(CLOSE_P, CLOSE_I, CLOSE_D, 0);
         } else { //in all other situations, we'll be launching from the far zone

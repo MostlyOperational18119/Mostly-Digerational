@@ -200,7 +200,7 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
                         state = 5;
                         break;
                     case 5:
-                        follower.followPath(intakeToLaunch1, 1, true);
+                        follower.followPath(intakeToLaunch1, 0.7, true);
                         state = 6;
                         launchDelayTimer = System.currentTimeMillis();
                         break;
