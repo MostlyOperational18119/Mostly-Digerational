@@ -102,7 +102,6 @@ public class RedBackAutoM3 extends LinearOpMode {
 
 
         while (opModeIsActive()) {
-//            Outtake.update(targetClicks);
             follower.update();
             Indexer.updateSlot0();
             Indexer.updateSlot1();
@@ -310,6 +309,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                     case 16:
                         if (System.currentTimeMillis() - launchDelayTimer > 500) {
                             state = 23;
+                            Intake.intakeStop();
                         }
                         break;
 //                    case 17:
@@ -381,8 +381,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         break;
                     case 24:
                         Outtake.update(0, false);
-//                        Outtake.SPEED_CONST_FAR = 205;
-                        Outtake.StaticVars.endPose = follower.getPose();
+                        Outtake.StaticVars.isBlue = false;
                         break;
                 }
             }
