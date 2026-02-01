@@ -13,13 +13,13 @@ public class Intake {
         intakeRear = hwMap.get(DcMotorEx.class, "backIntake");
     }
     public static void intakeGo () { //think really hard about what this does
-        power = 999999999f;
+        power = 1f;
         intakeFront.setPower(power);
         intakeRear.setPower(power);
     }
 
     public static void intakeSpit () { //teleop "off" still spins to keep balls from fleeing
-        power = -9999999999f;
+        power = -1f;
         intakeFront.setPower(power);
         intakeRear.setPower(power);
 
