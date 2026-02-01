@@ -137,16 +137,25 @@ public class compOpMode extends LinearOpMode {
                     } else if (Indexer.slotColors()[1] != 0) {
                         launchDelayTimer = Indexer.launch1();
                     } else {
-                        // All slots empty, move to next state
+                        // All slots empty, stop launching
                         isLaunching = false;
                     }
                 }
             }
 
-            if (A) {
+            if (A && !isLaunching) {
                 isLaunching = true;
+                // Launch immediately on button press
+                if (Indexer.slotColors()[0] != 0) {
+                    launchDelayTimer = Indexer.launch0();
+                } else if (Indexer.slotColors()[2] != 0) {
+                    launchDelayTimer = Indexer.launch2();
+                } else if (Indexer.slotColors()[1] != 0) {
+                    launchDelayTimer = Indexer.launch1();
+                } else {
+                    isLaunching = false; // Nothing to launch
+                }
             }
-
             if (B && limelightAvailable) {
                 Indexer.startLaunch(numBalls);
             }

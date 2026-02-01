@@ -340,9 +340,8 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         state = 17;
                         break;
                     case 17:
-                        follower.followPath(intakeToLaunch3, 1, true);
+//                        follower.followPath(launchToPark, 0.6, true);
                         Intake.intakeStop();
-//                        Outtake.SPEED_CONST_FAR = 205;
                         state = 23;
                         break;
 //                    case 18:
