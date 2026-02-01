@@ -36,7 +36,7 @@ public class compOpMode extends LinearOpMode {
         int adjust = 0;
         double noCorrectAdjust = 0.0;
         boolean isCorrecting = true;
-        boolean limelightAvailable = false;
+        boolean limelightAvailable = true;
         int numBalls = -1;
 
 //        Outtake.isBlue = false;
@@ -80,6 +80,8 @@ public class compOpMode extends LinearOpMode {
             boolean rb = gamepad1.rightBumperWasPressed();
             boolean leftD = gamepad1.dpadLeftWasPressed();
             boolean rightD = gamepad1.dpadRightWasPressed();
+            boolean dpadDown = gamepad1.dpadDownWasPressed();
+            boolean dpadUp = gamepad1.dpadUpWasPressed();
 
             follower.update();
             Outtake.robotY = follower.getPose().getY();
@@ -89,10 +91,6 @@ public class compOpMode extends LinearOpMode {
             //look at chamber or shoot
             if (X) {
                 launch *= -1;
-            }
-
-            if (limelightAvailable) {
-                limelight.update();
             }
 
             if (limelightAvailable && launch > 0) {
@@ -107,10 +105,10 @@ public class compOpMode extends LinearOpMode {
             }
 
             if (leftD) {
-                adjust -= 75;
+                adjust -= 200;
             }
             if (rightD) {
-                adjust += 75;
+                adjust += 200;
             }
 
             Drivetrain.drive(y, x, rx, rb);
@@ -132,7 +130,7 @@ public class compOpMode extends LinearOpMode {
             }
 
             if (isLaunching) {
-                if (System.currentTimeMillis() - launchDelayTimer > Indexer.LAUNCH_WAIT) {
+                if (System.currentTimeMillis() - launchDelayTimer > 500) {
                     // Check and launch any remaining balls in the indexer
                     if (Indexer.slotColors()[0] != 0) {
                         launchDelayTimer = Indexer.launch0();
@@ -141,25 +139,49 @@ public class compOpMode extends LinearOpMode {
                     } else if (Indexer.slotColors()[1] != 0) {
                         launchDelayTimer = Indexer.launch1();
                     } else {
-                        // All slots empty, stop launching
+                        // All slots empty, move to next state
                         isLaunching = false;
                     }
                 }
             }
 
-            if (A && !isLaunching) {
+            if (A) {
                 isLaunching = true;
-                // Launch immediately on button press
-                if (Indexer.slotColors()[0] != 0) {
-                    launchDelayTimer = Indexer.launch0();
-                } else if (Indexer.slotColors()[2] != 0) {
-                    launchDelayTimer = Indexer.launch2();
-                } else if (Indexer.slotColors()[1] != 0) {
-                    launchDelayTimer = Indexer.launch1();
-                } else {
-                    isLaunching = false; // Nothing to launch
-                }
             }
+
+            switch (Outtake.currentDistance) {
+                case "very close":
+                    if (dpadUp) {
+                        Outtake.SPEED_CONST_VERY_CLOSE += 3;
+                    }
+                    if (dpadDown) {
+                        Outtake.SPEED_CONST_VERY_CLOSE -= 3;
+                    }
+                    telemetry.addLine("tuning close constant");
+                    telemetry.addData("SPEED_CONST_VERY_CLOSE", Outtake.SPEED_CONST_VERY_CLOSE);
+                    break;
+                case "close":
+                    if (dpadUp) {
+                        Outtake.SPEED_CONST_CLOSE += 3;
+                    }
+                    if (dpadDown) {
+                        Outtake.SPEED_CONST_FAR -= 3;
+                    }
+                    telemetry.addLine("tuning far constant");
+                    telemetry.addData("SPEED_CONST_CLOSE", Outtake.SPEED_CONST_CLOSE);
+                    break;
+                case "far":
+                    if (dpadUp) {
+                        Outtake.SPEED_CONST_FAR += 3;
+                    }
+                    if (dpadDown) {
+                        Outtake.SPEED_CONST_FAR -= 3;
+                    }
+                    telemetry.addLine("tuning close constant");
+                    telemetry.addData("SPEED_CONST_FAR", Outtake.SPEED_CONST_FAR);
+                    break;
+            }
+
             if (B && limelightAvailable) {
                 Indexer.startLaunch(numBalls);
             }
@@ -201,7 +223,6 @@ public class compOpMode extends LinearOpMode {
             telemetry.addData("outtake position static variable", Outtake.StaticVars.outtakePos);
             telemetry.addData("outtake pos auto", Outtake.outtakePosAuto);
             telemetry.addData("chamber count", numBalls);
-            telemetry.addData("limelight available", limelightAvailable);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);

@@ -196,7 +196,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         state = 5;
                         break;
                     case 5:
-                        follower.followPath(intakeToLaunch1, 1, true);
+                        follower.followPath(intakeToLaunch1, 0.7, true);
                         state = 6;
                         launchDelayTimer = System.currentTimeMillis();
                         break;
@@ -258,7 +258,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         state = 12;
                         break;
                     case 12:
-                        follower.followPath(intakeToLaunch2, 0.9, true);
+                        follower.followPath(intakeToLaunch2, 0.7, true);
                         state = 13;
                         launchDelayTimer = System.currentTimeMillis();
                         break;
