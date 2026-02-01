@@ -126,8 +126,7 @@ public class RedBackAuto6BallM3 extends LinearOpMode {
 
             if (state != 24 && state != 25) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, false);
-            }
+                Outtake.outtakeUpdate(-1, false, 0);            }
             Outtake.StaticVars.endPose = follower.getPose();
             Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
             Outtake.StaticVars.isBlue = false;
@@ -234,13 +233,13 @@ public class RedBackAuto6BallM3 extends LinearOpMode {
                             // Check and launch any remaining balls in the indexer
                             if (Indexer.slotColors()[0] != 0) {
                                 launchDelayTimer = Indexer.launch0();
-                                state = 1; // Stay in this state to check again
+                                state = 8; // Stay in this state to check again
                             } else if (Indexer.slotColors()[2] != 0) {
                                 launchDelayTimer = Indexer.launch2();
-                                state = 1; // Stay in this state to check again
+                                state = 8; // Stay in this state to check again
                             } else if (Indexer.slotColors()[1] != 0) {
                                 launchDelayTimer = Indexer.launch1();
-                                state = 1; // Stay in this state to check again
+                                state = 8; // Stay in this state to check again
                             } else {
                                 // All slots empty, move to next state
                                 state = 9;

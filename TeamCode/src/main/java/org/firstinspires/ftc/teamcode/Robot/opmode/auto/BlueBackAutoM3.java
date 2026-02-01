@@ -26,9 +26,9 @@ public class BlueBackAutoM3 extends LinearOpMode {
     Pose intakePrep1 = new Pose(46, 34, Math.toRadians(180));
     Pose intakePrep2 = new Pose(46, 58, Math.toRadians(180));
     Pose intakePrep3 = new Pose(46, 84, Math.toRadians(180));
-    Pose intakeEnd1 = new Pose(12, 34, Math.toRadians(180));
-    Pose intakeEnd2 = new Pose(12, 58, Math.toRadians(180));
-    Pose intakeEnd3 = new Pose(14, 84, Math.toRadians(180));
+    Pose intakeEnd1 = new Pose(15, 34, Math.toRadians(180));
+    Pose intakeEnd2 = new Pose(15, 58, Math.toRadians(180));
+    Pose intakeEnd3 = new Pose(15, 84, Math.toRadians(180));
     Pose park = new Pose(36, 8, Math.toRadians(180));
     Follower follower;
     PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
@@ -101,7 +101,6 @@ public class BlueBackAutoM3 extends LinearOpMode {
 
 
         while (opModeIsActive()) {
-//            Outtake.update(targetClicks);
             follower.update();
             Indexer.updateSlot0();
             Indexer.updateSlot1();
@@ -125,7 +124,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
 
             if (state != 24 && state != 25) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, false);
+                Outtake.outtakeUpdate(-1, false, 0);
             }
             Outtake.StaticVars.endPose = follower.getPose();
             Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
@@ -231,13 +230,13 @@ public class BlueBackAutoM3 extends LinearOpMode {
                             // Check and launch any remaining balls in the indexer
                             if (Indexer.slotColors()[0] != 0) {
                                 launchDelayTimer = Indexer.launch0();
-                                state = 1; // Stay in this state to check again
+                                state = 8; // Stay in this state to check again
                             } else if (Indexer.slotColors()[2] != 0) {
                                 launchDelayTimer = Indexer.launch2();
-                                state = 1; // Stay in this state to check again
+                                state = 8; // Stay in this state to check again
                             } else if (Indexer.slotColors()[1] != 0) {
                                 launchDelayTimer = Indexer.launch1();
-                                state = 1; // Stay in this state to check again
+                                state = 8; // Stay in this state to check again
                             } else {
                                 // All slots empty, move to next state
                                 state = 9;
@@ -259,7 +258,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         state = 12;
                         break;
                     case 12:
-                        follower.followPath(intakeToLaunch2, 1, true);
+                        follower.followPath(intakeToLaunch2, 0.9, true);
                         state = 13;
                         launchDelayTimer = System.currentTimeMillis();
                         break;
@@ -293,13 +292,13 @@ public class BlueBackAutoM3 extends LinearOpMode {
                             // Check and launch any remaining balls in the indexer
                             if (Indexer.slotColors()[0] != 0) {
                                 launchDelayTimer = Indexer.launch0();
-                                state = 1; // Stay in this state to check again
+                                state = 15; // Stay in this state to check again
                             } else if (Indexer.slotColors()[2] != 0) {
                                 launchDelayTimer = Indexer.launch2();
-                                state = 1; // Stay in this state to check again
+                                state = 15; // Stay in this state to check again
                             } else if (Indexer.slotColors()[1] != 0) {
                                 launchDelayTimer = Indexer.launch1();
-                                state = 1; // Stay in this state to check again
+                                state = 15; // Stay in this state to check again
                             } else {
                                 // All slots empty, move to next state
                                 state = 16;

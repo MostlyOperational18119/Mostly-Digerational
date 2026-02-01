@@ -26,9 +26,9 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
     Pose intakePrep1 = new Pose(46, 34, Math.toRadians(180));
     Pose intakePrep2 = new Pose(46, 58, Math.toRadians(180));
     Pose intakePrep3 = new Pose(46, 84, Math.toRadians(180));
-    Pose intakeEnd1 = new Pose(16, 34, Math.toRadians(180));
-    Pose intakeEnd2 = new Pose(16, 58, Math.toRadians(180));
-    Pose intakeEnd3 = new Pose(16, 84, Math.toRadians(180));
+    Pose intakeEnd1 = new Pose(18, 34, Math.toRadians(180));
+    Pose intakeEnd2 = new Pose(18, 58, Math.toRadians(180));
+    Pose intakeEnd3 = new Pose(18, 84, Math.toRadians(180));
     Pose park = new Pose(36, 8, Math.toRadians(180));
     Follower follower;
     PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
@@ -127,7 +127,7 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
 
             if (state != 24 && state != 25) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, false);
+                Outtake.outtakeUpdate(-1, false, 0);
             }
             Outtake.StaticVars.endPose = follower.getPose();
             Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();

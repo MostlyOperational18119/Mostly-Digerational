@@ -27,7 +27,7 @@ public class Outtake {
 
     //outtake speed stuff
     //hood min: 0.58, hood max: 0
-    public static double SPEED_CONST_VERY_CLOSE = 250, SPEED_CONST_CLOSE = 200, SPEED_CONST_FAR = 195, VERY_CLOSE_HOOD = 0.58, FAR_HOOD = 0, CLOSE_HOOD = 0;
+    public static double SPEED_CONST_VERY_CLOSE = 240, SPEED_CONST_CLOSE = 180, SPEED_CONST_FAR = 167.5, VERY_CLOSE_HOOD = 0.58, FAR_HOOD = 0, CLOSE_HOOD = 0;
 
     //configurable testing
     //public static double SPEED_CONST_VERY_CLOSE = configurableTeleop.VERY_CLOSE_SPEED, SPEED_CONST_CLOSE = configurableTeleop.CLOSE_SPEED, SPEED_CONST_FAR = configurableTeleop.FAR_SPEED, VERY_CLOSE_HOOD = configurableTeleop.CLOSER_HOOD, FAR_HOOD = configurableTeleop.FAR_HOOD, CLOSE_HOOD = configurableTeleop.CLOSE_HOOD;
@@ -40,6 +40,8 @@ public class Outtake {
     private static int tolerance = 50;
     static double outtakePower = 0.0;
     public static int blueX = 9, redX = 135;
+    public static int closeBlue = 2, closeRed = 142, farBlue = blueX, farRed = redX;
+    public static int chamberBX = 0, chamberRX = 144;
 
     //stuff for auto aiming
     public static boolean isBlue = false;
@@ -48,14 +50,15 @@ public class Outtake {
     public static double robotY = 72;
     public static double robotOrientation = 0;
     public static int angleOffset = 90;
-    public static double goalX;
+    public static double goalX, aimGoalX;
+    public static double chamberX;
     static double goalY = 144;
     static double chamberY = 96;
 
     //temporarily commented out for configurableTeleop
-    public static double VERY_CLOSE_P = 12, VERY_CLOSE_I = 1, VERY_CLOSE_D = 0;
-    public static double CLOSE_P = 12, CLOSE_I = 1, CLOSE_D = 0;
-    public static double FAR_P = 12, FAR_I = 1, FAR_D = 0;
+    public static double VERY_CLOSE_P = 12, VERY_CLOSE_I = 0.5, VERY_CLOSE_D = 0.5;
+    public static double CLOSE_P = 13, CLOSE_I = 1.5, CLOSE_D = 1;
+    public static double FAR_P = 13, FAR_I = 2, FAR_D = 0;
     //public static double p = configurableTeleop.p, i = configurableTeleop.i, d = configurableTeleop.d, f = configurableTeleop.f;
 
     //state machine
@@ -107,7 +110,7 @@ public class Outtake {
         }
 
 
-        if (isBlue) {goalX = blueX;} else {goalX = redX;}
+        if (isBlue) {goalX = blueX; chamberX = chamberBX;} else {goalX = redX; chamberX = chamberRX;}
     }
 
     public static void update(int targetClicks, boolean isTeleOp) {
@@ -125,13 +128,13 @@ public class Outtake {
         target = Math.max(0, Math.min(1, target));
         return (int) (maxClicks * target);
     }
-    public static int setTarget(double target) {
+    public static int setTarget(double target, int adjust) {
         target = Math.max(0, Math.min(maxClicks, target));
-        return (int) target;
+        return (int) target + adjust;
     }
 
     public static double pointAtGoal() {
-        double dx = goalX - robotX;
+        double dx = aimGoalX - robotX;
         double dy = goalY - robotY;
 
         double absoluteAngleToGoal = Math.toDegrees(Math.atan2(dy, dx));
@@ -145,23 +148,23 @@ public class Outtake {
         return (relativeAngle * 65.871345) + 4000;
     }
     public static double pointAtChamber() {
-        double dx = goalX - robotX;
+        double dx = chamberX - robotX;
         double dy = chamberY - robotY;
         Indexer.chamberIncrease = 0;
 
-        double absoluteAngleToGoal = Math.toDegrees(Math.atan2(dy, dx));
-        absoluteAngleToGoal = (((absoluteAngleToGoal) % 360) + 360) % 360;
+        double absoluteAngleToChamber = Math.toDegrees(Math.atan2(dy, dx));
+        absoluteAngleToChamber = (((absoluteAngleToChamber) % 360) + 360) % 360;
 
         // Flip the angle calculation
-        double relativeAngle = 360 - (absoluteAngleToGoal + 90 - robotOrientation);
+        double relativeAngle = 360 - (absoluteAngleToChamber -(angleOffset + robotOrientation));
 
         relativeAngle = ((relativeAngle % 360) + 360) % 360;
 
-        return (relativeAngle * 68.555) + 2816;
+        return (relativeAngle * 65.871345) + 2816;
     }
 
 
-    public static void outtakeUpdate(int launch, boolean isTeleOp) {
+    public static void outtakeUpdate(int launch, boolean isTeleOp, int adjust) {
 
         if (launch > 0) {
             currentState = States.AIM_CHAMBER;
@@ -171,10 +174,10 @@ public class Outtake {
 
         switch (currentState) {
             case AIM_GOAL:
-                update(setTarget(pointAtGoal()), isTeleOp);
+                update(setTarget(pointAtGoal(), adjust), isTeleOp);
                 break;
             case AIM_CHAMBER:
-                update(setTarget(pointAtChamber()), isTeleOp);
+                update(setTarget(pointAtChamber(), adjust), isTeleOp);
                 break;
         }
     }
@@ -192,6 +195,14 @@ public class Outtake {
             speed = SPEED_CONST_VERY_CLOSE * Math.sqrt(distance); //speed set to a tested value multiplied by distance
             currentDistance = "very close";
 
+            //modify constants for different zones
+            if (isBlue) {
+                aimGoalX = closeBlue;
+            } else {
+                aimGoalX = closeRed;
+            }
+            Indexer.LAUNCH_WAIT = 300;
+
             //unique PIDF coefficients to better control recoil from Artifacts
             outtakeMotorLeft.setVelocityPIDFCoefficients(VERY_CLOSE_P, VERY_CLOSE_I, VERY_CLOSE_D, 0);
             outtakeMotorRight.setVelocityPIDFCoefficients(VERY_CLOSE_P, VERY_CLOSE_I, VERY_CLOSE_D, 0);
@@ -199,12 +210,23 @@ public class Outtake {
             hood.setPosition(CLOSE_HOOD);
             speed = SPEED_CONST_CLOSE * Math.sqrt(distance);
             currentDistance = "close";
+            if (isBlue) {
+                aimGoalX = closeBlue;
+            } else {
+                aimGoalX = closeRed;
+            }
+            Indexer.LAUNCH_WAIT = 400;
             outtakeMotorLeft.setVelocityPIDFCoefficients(CLOSE_P, CLOSE_I, CLOSE_D, 0);
             outtakeMotorRight.setVelocityPIDFCoefficients(CLOSE_P, CLOSE_I, CLOSE_D, 0);
         } else { //in all other situations, we'll be launching from the far zone
             hood.setPosition(FAR_HOOD);
             speed = SPEED_CONST_FAR * Math.sqrt(distance);
             currentDistance = "far";
+            if (isBlue) {
+                aimGoalX = farBlue;
+            } else {
+                aimGoalX = farRed;
+            }
             outtakeMotorLeft.setVelocityPIDFCoefficients(FAR_P, FAR_I, FAR_D, 0);
             outtakeMotorRight.setVelocityPIDFCoefficients(FAR_P, FAR_I, FAR_D, 0);
         }

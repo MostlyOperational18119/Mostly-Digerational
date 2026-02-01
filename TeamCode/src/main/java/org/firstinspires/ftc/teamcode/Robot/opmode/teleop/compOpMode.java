@@ -106,34 +106,16 @@ public class compOpMode extends LinearOpMode {
                 patternUnsafe.ifPresent(integers -> Indexer.updatePattern(Arrays.stream(integers).mapToInt(i -> i).toArray()));
             }
 
-            if (isCorrecting) {
-                if (leftD) {
-                    adjust -= 5;
-                }
-                if (rightD) {
-                    adjust += 5;
-                }
-            } else {
-                if (leftD) {
-                    noCorrectAdjust -= 0.02;
-                }
-                if (rightD) {
-                    noCorrectAdjust += 0.02;
-                }
+            if (leftD) {
+                adjust -= 75;
+            }
+            if (rightD) {
+                adjust += 75;
             }
 
             Drivetrain.drive(y, x, rx, rb);
 
-            if (isCorrecting) {
-                Outtake.outtakeUpdate(launch, true);
-            } else {
-                Outtake.update(Outtake.getRotationPosition(noCorrectAdjust), false);
-            }
-
-            if (lb) {
-                isCorrecting = !isCorrecting;
-            }
-
+            Outtake.outtakeUpdate(launch, true, adjust);
             Outtake.outtakeSpeed();
 
             Indexer.updateSlot0();
@@ -149,31 +131,32 @@ public class compOpMode extends LinearOpMode {
                 Intake.intakeStop();
             }
 
-            if (!limelightAvailable && isLaunching) {
-                if (System.currentTimeMillis() - launchDelayTimer > 600) {
-                    switch (launchCount) {
-                        case 0:
-                            launchDelayTimer = Indexer.launch0();
-                            launchCount = 1;
-                            break;
-                        case 1:
-                            launchDelayTimer = Indexer.launch1();
-                            launchCount = 2;
-                            break;
-                        case 2:
-                            launchDelayTimer = Indexer.launch2();
-                            isLaunching = false;
-                            launchCount = 0;
-                            break;
+            if (isLaunching) {
+                if (System.currentTimeMillis() - launchDelayTimer > Indexer.LAUNCH_WAIT) {
+                    // Check and launch any remaining balls in the indexer
+                    if (Indexer.slotColors()[0] != 0) {
+                        launchDelayTimer = Indexer.launch0();
+                    } else if (Indexer.slotColors()[2] != 0) {
+                        launchDelayTimer = Indexer.launch2();
+                    } else if (Indexer.slotColors()[1] != 0) {
+                        launchDelayTimer = Indexer.launch1();
+                    } else {
+                        // All slots empty, move to next state
+                        isLaunching = false;
                     }
                 }
             }
 
-            if (A && limelightAvailable) {
-                Indexer.startLaunch(numBalls);
-            } else if (A && !limelightAvailable) {
+            if (A) {
                 isLaunching = true;
             }
+
+            if (B && limelightAvailable) {
+                Indexer.startLaunch(numBalls);
+            }
+//            } else if (A && !limelightAvailable) {
+//                isLaunching = true;
+//            }
 
 //            if (lb) {
 //                Outtake.angleOffset += 1;
@@ -182,14 +165,12 @@ public class compOpMode extends LinearOpMode {
 //                Outtake.angleOffset -= 1;
 //            }
             if (Y) {
-                if (Outtake.goalX == Outtake.redX + adjust) {
-                    Outtake.goalX = Outtake.blueX + adjust;
+                if (Outtake.goalX == Outtake.redX) {
+                    Outtake.goalX = Outtake.blueX;
                 } else {
-                    Outtake.goalX = Outtake.redX + adjust;
+                    Outtake.goalX = Outtake.redX;
                 }
             }
-            Outtake.goalX = Outtake.goalX + adjust;
-
 //            int[] slots = Indexer.slotColors();
 //            telemetry.addData("supposed dist", Outtake.distance);
             telemetry.addData("manual adjust", isCorrecting);
