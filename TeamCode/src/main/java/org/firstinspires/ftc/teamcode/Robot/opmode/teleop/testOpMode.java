@@ -5,12 +5,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.util.ReadWriteFile;
 
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.Robot.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
+
+import java.io.File;
 
 @TeleOp(name="TestOp")
 public class testOpMode extends LinearOpMode {
@@ -39,9 +43,15 @@ public class testOpMode extends LinearOpMode {
 
         Follower follower;
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(Outtake.start);
+        Pose testStart = new Pose(16.641,16.1903, Math.toRadians(90));
+        follower.setStartingPose(testStart);
 
         waitForStart();
+
+        //thank you claude
+        String fileName = "OuttakeVars.txt";
+        File myFile = AppUtil.getInstance().getSettingsFile(fileName);
+        ReadWriteFile.writeFile(myFile, "0");
 
         launchDelayTimer = System.currentTimeMillis();
 
@@ -77,41 +87,15 @@ public class testOpMode extends LinearOpMode {
 //                launch *= -1;
 //            }
 
-            if (X) {
-                isCorrecting = !isCorrecting;
-            }
-
-            if (isCorrecting) {
-                Outtake.outtakeUpdate(launch, true);
-            } else {
-                Outtake.update(Outtake.getRotationPosition(noCorrectAdjust), true);
-            }
-
-            if (isCorrecting) {
-                if (back) {
-                    adjust -= 3;
-                }
-                if (startButton) {
-                    adjust += 3;
-                }
-            } else {
-                if (back) {
-                    noCorrectAdjust -= 0.02;
-                }
-                if (startButton) {
-                    noCorrectAdjust += 0.02;
-                }
-            }
-
             if (back) {
-                adjust -= 1;
+                adjust -= 200;
             }
             if (startButton) {
-                adjust += 1;
+                adjust += 200;
             }
 
             Drivetrain.drive(y, x, rx, false);
-            Outtake.outtakeUpdate(-1, true);
+            Outtake.outtakeUpdate(-1, true, adjust);
             Outtake.outtakeSpeed();
 
             Indexer.updateSlot0();
@@ -141,21 +125,17 @@ public class testOpMode extends LinearOpMode {
             }
 
             if (isLaunching) {
-                if (System.currentTimeMillis() - launchDelayTimer > 600) {
-                    switch (launchCount) {
-                        case 0:
-                            launchDelayTimer = Indexer.launch0();
-                            launchCount = 1;
-                            break;
-                        case 1:
-                            launchDelayTimer = Indexer.launch2();
-                            launchCount = 2;
-                            break;
-                        case 2:
-                            launchDelayTimer = Indexer.launch1();
-                            isLaunching = false;
-                            launchCount = 0;
-                            break;
+                if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                    // Check and launch any remaining balls in the indexer
+                    if (Indexer.slotColors()[0] != 0) {
+                        launchDelayTimer = Indexer.launch0();
+                    } else if (Indexer.slotColors()[2] != 0) {
+                        launchDelayTimer = Indexer.launch2();
+                    } else if (Indexer.slotColors()[1] != 0) {
+                        launchDelayTimer = Indexer.launch1();
+                    } else {
+                        // All slots empty, move to next state
+                        isLaunching = false;
                     }
                 }
             }
@@ -180,10 +160,10 @@ public class testOpMode extends LinearOpMode {
             count = Math.abs(count%3);
 
             if (rb) {
-                Outtake.SPEED_CONST_CLOSE += 5;
+                Outtake.SPEED_CONST_VERY_CLOSE += 5;
             }
             if (lb) {
-                Outtake.SPEED_CONST_CLOSE -= 5;
+                Outtake.SPEED_CONST_VERY_CLOSE -= 5;
             }
 
             switch (Outtake.currentDistance) {
@@ -200,10 +180,10 @@ public class testOpMode extends LinearOpMode {
                             break;
                         case 1:
                             if (dpadUp) {
-                                Outtake.VERY_CLOSE_I += 0.5;
+                                Outtake.VERY_CLOSE_I += 0.25;
                             }
                             if (dpadDown) {
-                                Outtake.VERY_CLOSE_I -= 0.5;
+                                Outtake.VERY_CLOSE_I -= 0.25;
                             }
                             telemetry.addLine("tuning i");
                             break;
@@ -235,10 +215,10 @@ public class testOpMode extends LinearOpMode {
                             break;
                         case 1:
                             if (dpadUp) {
-                                Outtake.CLOSE_I += 0.5;
+                                Outtake.CLOSE_I += 0.25;
                             }
                             if (dpadDown) {
-                                Outtake.CLOSE_I -= 0.5;
+                                Outtake.CLOSE_I -= 0.25;
                             }
                             telemetry.addLine("tuning i");
                             break;
@@ -270,10 +250,10 @@ public class testOpMode extends LinearOpMode {
                             break;
                         case 1:
                             if (dpadUp) {
-                                Outtake.FAR_I += 0.5;
+                                Outtake.FAR_I += 0.25;
                             }
                             if (dpadDown) {
-                                Outtake.FAR_I -= 0.5;
+                                Outtake.FAR_I -= 0.25;
                             }
                             telemetry.addLine("tuning i");
                             break;
@@ -307,11 +287,11 @@ public class testOpMode extends LinearOpMode {
 //                } else
 //                    Outtake.f = 0;
 //            }
-//            if (X) {
-//               Outtake.FAR_HOOD += 0.01;
-//            }
+            if (X) {
+               Outtake.VERY_CLOSE_HOOD += 0.01;
+            }
             if (B) {
-                Outtake.FAR_HOOD -= 0.01;
+                Outtake.VERY_CLOSE_HOOD -= 0.01;
             }
 //
 //            if (Y) {
@@ -363,9 +343,10 @@ public class testOpMode extends LinearOpMode {
             telemetry.addData("angle adjustment", adjust);
             telemetry.addData("Outtake encoder position", Drivetrain.outtakePosition());
 //            telemetry.addData("speed const close")
-//            telemetry.addData("hood angle", Outtake.CLOSE_HOOD);
-//            telemetry.addData("odometry X", Outtake.robotX);
-//            telemetry.addData("odometry Y", Outtake.robotY);
+            telemetry.addData("hood angle", Outtake.VERY_CLOSE_HOOD);
+            telemetry.addData("odometry X", Outtake.robotX);
+            telemetry.addData("odometry Y", Outtake.robotY);
+            telemetry.addData("odometry heading", Outtake.robotOrientation);
 //            telemetry.addData("up position 0", Indexer.UP_POS_0);
 //            telemetry.addData("up position 1", Indexer.UP_POS_1);
 //            telemetry.addData("up position 2", Indexer.UP_POS_2);
@@ -375,7 +356,7 @@ public class testOpMode extends LinearOpMode {
             telemetry.addData("left flywheel velocity", Outtake.outtakeMotorLeft.getVelocity());
             telemetry.addData("right flywheel velocity", Outtake.outtakeMotorRight.getVelocity());
             telemetry.addData("speed", Outtake.speed);
-            telemetry.addData("auto end outtake position", Outtake.StaticVars.outtakePos);
+            telemetry.addData("auto end outtake position", Outtake.outtakePosAuto);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);

@@ -129,8 +129,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
 
             if (state != 13) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, false);
-            }
+                Outtake.outtakeUpdate(-1, false, 0);            }
             Outtake.StaticVars.endPose = follower.getPose();
             Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
 
@@ -264,7 +263,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 11:
-                        follower.followPath(launchToPark, 1, true);
+                        follower.followPath(launchToPark, 0.6, true);
                         state = 12;
                         Intake.intakeGo();
                         break;
