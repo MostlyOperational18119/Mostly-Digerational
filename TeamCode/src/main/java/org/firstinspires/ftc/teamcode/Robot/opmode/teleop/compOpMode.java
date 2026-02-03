@@ -93,9 +93,13 @@ public class compOpMode extends LinearOpMode {
                 launch *= -1;
             }
 
-            if (limelightAvailable && launch > 0) {
+            if (limelightAvailable) {
+                limelight.update();
+            }
+
+            if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
                 Optional<Integer> ballCountUnsafe = limelight.getBallCount();
-                if (ballCountUnsafe.isPresent()) numBalls = ballCountUnsafe.get();
+                if (ballCountUnsafe.isPresent() && ballCountUnsafe.get() != -1) numBalls = ballCountUnsafe.get();
             }
 
             if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
@@ -223,6 +227,7 @@ public class compOpMode extends LinearOpMode {
             telemetry.addData("outtake position static variable", Outtake.StaticVars.outtakePos);
             telemetry.addData("outtake pos auto", Outtake.outtakePosAuto);
             telemetry.addData("chamber count", numBalls);
+            telemetry.addData("outtake aim location (current state)", Outtake.currentState);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);
