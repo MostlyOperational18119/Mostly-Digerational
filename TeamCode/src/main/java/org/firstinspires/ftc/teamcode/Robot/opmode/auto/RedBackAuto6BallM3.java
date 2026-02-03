@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.auto;
 
+import android.util.Log;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -14,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -36,6 +39,41 @@ public class RedBackAuto6BallM3 extends LinearOpMode {
     int targetClicks = 0;
     long launchDelayTimer = 0;
     int launchCount = 0;
+    long delayTimer = 0;
+    int numBalls = -1;
+    boolean limelightAvailable = true;
+
+    Limelight limelight = null;
+
+
+    // Return value is true if we're done
+    boolean normalLaunch() {
+        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+            // Check and launch any remaining balls in the indexer
+            if (Indexer.slotColors()[0] != 0) {
+                delayTimer = Indexer.launch0();
+            } else if (Indexer.slotColors()[2] != 0) {
+                delayTimer = Indexer.launch2();
+            } else if (Indexer.slotColors()[1] != 0) {
+                delayTimer = Indexer.launch1();
+            } else {
+                // All slots empty, we're done, return true
+                return true;
+            }
+        }
+
+        // We wanna continue
+        return false;
+    }
+
+    // Return value is true if we're done
+    boolean launch() {
+        if (limelightAvailable && numBalls != -1) {
+            return Indexer.startLaunch(numBalls);
+        } else {
+            return normalLaunch();
+        }
+    }
 
     @Override
     public void runOpMode() {
@@ -47,6 +85,17 @@ public class RedBackAuto6BallM3 extends LinearOpMode {
         Indexer.init(hardwareMap);
 
 //        Outtake.SPEED_CONST_FAR = Outtake.SPEED_CONST_FAR / 1.1;
+
+        try {
+            limelight = new Limelight();
+        } catch (IOException e) {
+            limelightAvailable = false;
+            Log.e("RedBackAuto6BallM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
+        }
+
+        // Sanity check
+        // Either we have no limelight, or the limelight is NOT null
+        assert !limelightAvailable || limelight != null;
 
         toIntakePrep1 = follower.pathBuilder()
                 .addPath(new BezierLine(launch, intakePrep1))
@@ -98,12 +147,18 @@ public class RedBackAuto6BallM3 extends LinearOpMode {
         waitForStart();
 
         Outtake.outtakeSpeed();
-        launchDelayTimer= System.currentTimeMillis();
+        launchDelayTimer = System.currentTimeMillis();
 
 
         while (opModeIsActive()) {
 //            Outtake.update(targetClicks);
             follower.update();
+            if (limelightAvailable) {
+                limelight.update();
+                // Set the numBalls to- wait for this:
+                // The number of balls if we can get it (who would've guessed)
+                limelight.getBallCount().ifPresent(integer -> numBalls = integer);
+            }
             Indexer.updateSlot0();
             Indexer.updateSlot1();
             Indexer.updateSlot2();
@@ -126,7 +181,8 @@ public class RedBackAuto6BallM3 extends LinearOpMode {
 
             if (state != 24 && state != 25) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, false, 0);            }
+                Outtake.outtakeUpdate(-1, false, 0);
+            }
             Outtake.StaticVars.endPose = follower.getPose();
             Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
             Outtake.StaticVars.isBlue = false;
@@ -147,41 +203,7 @@ public class RedBackAuto6BallM3 extends LinearOpMode {
                         }
                         break;
                     case 0:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            switch (launchCount) {
-                                case 0:
-                                    launchDelayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    launchDelayTimer = Indexer.launch2();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    launchDelayTimer = Indexer.launch1();
-                                    state = 1;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
-                        break;
-                    case 1:
-                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
-                            // Check and launch any remaining balls in the indexer
-                            if (Indexer.slotColors()[0] != 0) {
-                                launchDelayTimer = Indexer.launch0();
-                                state = 1; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[2] != 0) {
-                                launchDelayTimer = Indexer.launch2();
-                                state = 1; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[1] != 0) {
-                                launchDelayTimer = Indexer.launch1();
-                                state = 1; // Stay in this state to check again
-                            } else {
-                                // All slots empty, move to next state
-                                state = 2;
-                            }
-                        }
+                        if (launch()) state = 2;
                         break;
                     case 2:
                         if (System.currentTimeMillis() - launchDelayTimer > 1000) {
@@ -210,41 +232,8 @@ public class RedBackAuto6BallM3 extends LinearOpMode {
                         }
                         break;
                     case 7:
-                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
-                            switch (launchCount) {
-                                case 0:
-                                    launchDelayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    launchDelayTimer = Indexer.launch2();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    launchDelayTimer = Indexer.launch1();
-                                    state = 8;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
-                        break;
-                    case 8:
-                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
-                            // Check and launch any remaining balls in the indexer
-                            if (Indexer.slotColors()[0] != 0) {
-                                launchDelayTimer = Indexer.launch0();
-                                state = 8; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[2] != 0) {
-                                launchDelayTimer = Indexer.launch2();
-                                state = 8; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[1] != 0) {
-                                launchDelayTimer = Indexer.launch1();
-                                state = 8; // Stay in this state to check again
-                            } else {
-                                // All slots empty, move to next state
-                                state = 9;
-                            }
-                        }
+                        // If we're done launching GTFO
+                        if(launch()) state = 9;
                         break;
                     case 9:
                         if (System.currentTimeMillis() - launchDelayTimer > 500) {
