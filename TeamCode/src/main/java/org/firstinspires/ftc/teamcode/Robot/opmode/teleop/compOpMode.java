@@ -133,7 +133,7 @@ public class compOpMode extends LinearOpMode {
                 Intake.intakeStop();
             }
 
-            if (isLaunching) {
+            if (isLaunching && !limelightAvailable) {
                 if (System.currentTimeMillis() - launchDelayTimer > 500) {
                     // Check and launch any remaining balls in the indexer
                     if (Indexer.slotColors()[0] != 0) {
@@ -146,6 +146,11 @@ public class compOpMode extends LinearOpMode {
                         // All slots empty, move to next state
                         isLaunching = false;
                     }
+                }
+            } else if (limelightAvailable && numBalls != -1) { // Don't wanna be useless if there are -1 balls due to... reasons...
+                if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                    Indexer.startLaunch(numBalls);
+                    isLaunching = false;
                 }
             }
 

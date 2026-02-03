@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.auto;
 
+import android.util.Log;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -14,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -36,6 +39,7 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
     int targetClicks = 0;
     long launchDelayTimer = 0;
     int launchCount = 0;
+    boolean limelightAvailable = true;
 
     @Override
     public void runOpMode() {
@@ -45,6 +49,19 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
+
+        Limelight limelight = null;
+
+        try {
+            limelight = new Limelight();
+        } catch (IOException e) {
+            limelightAvailable = false;
+            Log.e("BlueBackAuto6BallM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
+        }
+
+        // Sanity check
+        // Either we have no limelight, or the limelight is NOT null
+        assert !limelightAvailable || limelight != null;
 
 //        Outtake.SPEED_CONST_FAR = Outtake.SPEED_CONST_FAR / 1.1;
 
@@ -98,12 +115,15 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
         waitForStart();
 
         Outtake.outtakeSpeed();
-        launchDelayTimer= System.currentTimeMillis();
+        launchDelayTimer = System.currentTimeMillis();
 
 
         while (opModeIsActive()) {
 //            Outtake.update(targetClicks);
             follower.update();
+            if (limelightAvailable) {
+                limelight.update();
+            }
             Indexer.updateSlot0();
             Indexer.updateSlot1();
             Indexer.updateSlot2();
