@@ -244,9 +244,8 @@ public class Indexer {
 
     //Transfer Part Duex import
 
-    public static long startLaunch(int chamberNum) {
+    public static boolean startLaunch(int chamberNum) {
         int[] slots = Arrays.copyOf(slotColors(), 3);
-        long startTime = System.currentTimeMillis();
         if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
             currentState0 = States.LAUNCH;
             chamberIncrease += 1;
@@ -256,8 +255,12 @@ public class Indexer {
         } else if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
             currentState1 = States.LAUNCH;
             chamberIncrease += 1;
+        } else {
+            // Done launching, there's no more
+            return true;
         }
-        return startTime;
+        // Still more to launch
+        return false;
     }
 
     public static int nextBall(int chamberNum, int chamberIncrease, int[] pattern) {
