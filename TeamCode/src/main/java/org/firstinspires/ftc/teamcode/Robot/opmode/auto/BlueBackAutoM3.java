@@ -25,6 +25,7 @@ import java.io.IOException;
 @Autonomous(name = "9BallBlueBackM3")
 public class BlueBackAutoM3 extends LinearOpMode {
     Pose start = new Pose(56, 8, Math.toRadians(180));
+    Pose readObelisk = new Pose(56, 48, Math.toRadians(90));
     Pose launch = new Pose(56, 10, Math.toRadians(180));
     Pose intakePrep1 = new Pose(46, 34, Math.toRadians(180));
     Pose intakePrep2 = new Pose(46, 58, Math.toRadians(180));
@@ -34,8 +35,8 @@ public class BlueBackAutoM3 extends LinearOpMode {
     Pose intakeEnd3 = new Pose(15, 84, Math.toRadians(180));
     Pose park = new Pose(36, 8, Math.toRadians(180));
     Follower follower;
-    PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
-    int state = -1;
+    PathChain toObelisk, obeliskToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
+    int state = -3;
     int targetClicks = 0;
     long delayTimer = 0;
     int launchCount = 0;
@@ -68,6 +69,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
     // Return value is true if we're done
     boolean launch() {
         if (limelightAvailable && numBalls != -1) {
+            // TODO: ADD FALLBACK IN CASE WE DONT HAVE THE RIGHT TYPE OF BALLS TO COMPLETE THE PATTERN WHILE STILL HAVING SOME BALLS REMAINING
             return Indexer.startLaunch(numBalls);
         } else {
             return normalLaunch();
@@ -90,6 +92,16 @@ public class BlueBackAutoM3 extends LinearOpMode {
             limelightAvailable = false;
             Log.e("BlueBackAutoM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
         }
+
+        toObelisk = follower.pathBuilder()
+                .addPath(new BezierLine(start, readObelisk))
+                .setLinearHeadingInterpolation(start.getHeading(), readObelisk.getHeading())
+                .build();
+
+        obeliskToLaunch = follower.pathBuilder()
+                .addPath(new BezierLine(readObelisk, launch))
+                .setLinearHeadingInterpolation(readObelisk.getHeading(), launch.getHeading())
+                .build();
 
         toIntakePrep1 = follower.pathBuilder()
                 .addPath(new BezierLine(launch, intakePrep1))
@@ -187,13 +199,25 @@ public class BlueBackAutoM3 extends LinearOpMode {
 
             if (!follower.isBusy()) {
                 switch (state) {
-                    case -1:
+                    case -3:
                         if (System.currentTimeMillis() - delayTimer > 2000) {
-                            state = 0;
+                            state = -2;
                             delayTimer = System.currentTimeMillis();
                         }
                         break;
+                    case -2:
+                        follower.followPath(toObelisk, 1, true);
+                        state = 0;
+                        break;
+                    case -1:
+                        // Only proceed once we get the pattern
+                        if (limelight.getPattern().isPresent()) state = 0;
+                        break;
                     case 0:
+                        follower.followPath(obeliskToLaunch, 1, true);
+                        state = 1;
+                        break;
+                    case 1:
                         if (launch()) state = 2;
                         break;
                     case 2:
