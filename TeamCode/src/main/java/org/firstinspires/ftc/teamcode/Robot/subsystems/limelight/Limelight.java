@@ -25,24 +25,24 @@ public class Limelight {
 
     public boolean update() {
         try {
-            Log.i("BetterLimelight", "hello 3");
+            Log.i("Limelight", "hello 3");
 
             if (in.available() > 0) {
-                Log.i("BetterLimelight", String.format("hello 3 yes input %d", in.available()));
+                Log.i("Limelight", String.format("Limelight gave us %d of data", in.available()));
 
                 byte[] data = new byte[in.available()];
                 in.readFully(data);
 
                 if (new String(Arrays.copyOf(data, 5)).equals("Hello")) { // new byte[] { 0x48,0x65,0x6C,0x6C,0x6F }
-                    Log.i("BetterLimelight", "LL says hi :D");
+                    Log.i("Limelight", "Limelight says hi :D");
                 } else {
-                    Log.i("BetterLimelight", "hello 3 read data");
+                    Log.i("Limelight", "Limelight actually sent us some data");
 
                     ToRobotMsg message = new ToRobotMsg(data);
 
                     switch (message.type) {
                         case Connected:
-                            Log.i("BetterLimelight", "LimeLight says hi");
+                            Log.i("Limelight", "LimeLight says it's connected");
                             break;
                         case CurrentData:
 
@@ -50,24 +50,24 @@ public class Limelight {
                             results = message.results;
                             break;
                         default:
-                            Log.i("BetterLimelight", "what");
+                            Log.i("Limelight", "Limelight sent us a message of unknown type. Huh");
                     }
                 }
 
-                Log.i("BetterLimelight", "hello 3 done loop");
+                Log.i("Limelight", "hello 3 done loop");
 
             } else {
-                Log.i("BetterLimelight", "hello 4 no");
+                Log.i("Limelight", "Limelight sent us no message");
 
                 ToLimelightMsg message = new ToLimelightMsg((byte) chosenGoal);
 
-                Log.i("BetterLimelight", Arrays.toString(message.getData()));
+                Log.i("Limelight", Arrays.toString(message.getData()));
 
                 out.write(message.getData());
             }
             return true;
         } catch (IOException e) {
-            Log.e("BetterLimelight", e.getLocalizedMessage());
+            Log.e("Limelight", e.getLocalizedMessage());
 
             return false;
         }
