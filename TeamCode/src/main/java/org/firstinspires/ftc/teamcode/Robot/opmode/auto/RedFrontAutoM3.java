@@ -25,6 +25,7 @@ import java.io.IOException;
 @Autonomous(name = "RedFrontM3")
 public class RedFrontAutoM3 extends LinearOpMode {
     Pose start = new Pose(112, 134.5, Math.toRadians(180));
+    Pose readObelisk = new Pose(96, 120, Math.toRadians(120));
     Pose launch = new Pose(96, 96, Math.toRadians(180));
     Pose intakePrep1 = new Pose(104, 83, Math.toRadians(180));
     //    Pose intakePrep2 = new Pose(18, 83, Math.toRadians(180));
@@ -34,7 +35,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //    Pose intakeEnd3 = new Pose(14, 84, Math.toRadians(180));
     Pose park = new Pose(126, 100, Math.toRadians(180));
     Follower follower;
-    PathChain startToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
+    PathChain startToObelisk, obeliskToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
     int state = -1;
     int targetClicks = 0;
     long delayTimer = 0;
@@ -86,14 +87,20 @@ public class RedFrontAutoM3 extends LinearOpMode {
 
         try {
             limelight = new Limelight();
+            limelight.setChosenGoal(1);
         } catch (IOException e) {
             limelightAvailable = false;
             Log.e("BlueBackAutoM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
         }
 
-        startToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(start, launch))
-                .setLinearHeadingInterpolation(start.getHeading(), launch.getHeading())
+        startToObelisk = follower.pathBuilder()
+                .addPath(new BezierLine(start, readObelisk))
+                .setLinearHeadingInterpolation(start.getHeading(), readObelisk.getHeading())
+                .build();
+
+        startToObelisk = follower.pathBuilder()
+                .addPath(new BezierLine(readObelisk, launch))
+                .setLinearHeadingInterpolation(readObelisk.getHeading(), launch.getHeading())
                 .build();
 
         toIntakePrep1 = follower.pathBuilder()
@@ -203,12 +210,19 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 0:
-                        follower.followPath(startToLaunch, 0.8, true);
+                        follower.followPath(startToObelisk, 0.8, true);
                         delayTimer = System.currentTimeMillis();
                         state = 1;
 //                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
                         break;
                     case 1:
+                        if (!limelightAvailable || limelight.getPattern().isPresent()) {
+                            follower.followPath(obeliskToLaunch, 0.8, true);
+                            state = 2;
+                        }
+
+                        break;
+                    case 2:
                         // RETURNS TRUE IF WE'RE DONE, SO GTFO IF WE GOT TRUE
                         if (launch()) {
                             state = 3;
@@ -247,6 +261,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         // RETURNS TRUE IF WE'RE DONE, SO GTFO IF WE GOT TRUE
                         if (launch()) {
                             state = 10;
+                            // Aim at chamber now that we're done launching
                             launchNumberThing = 1;
                         }
                         break;

@@ -86,6 +86,7 @@ public class RedBackAutoM3 extends LinearOpMode {
 
         try {
             limelight = new Limelight();
+            limelight.setChosenGoal(1);
         } catch (IOException e) {
             limelightAvailable = false;
             Log.e("BlueBackAutoM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
