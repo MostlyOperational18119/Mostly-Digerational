@@ -208,8 +208,7 @@ public class BlueFrontAutoM3 extends LinearOpMode {
                         }
                         break;
                     case -1:
-                        if (!limelightAvailable || (limelightAvailable && limelight.getPattern().isPresent()))
-                        state = 0;
+                        if (!limelightAvailable || limelight.getPattern().isPresent()) state = 0;
 //                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
                         break;
                     case 0 :
