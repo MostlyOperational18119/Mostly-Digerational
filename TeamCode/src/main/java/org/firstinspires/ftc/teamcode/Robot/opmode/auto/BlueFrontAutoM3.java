@@ -86,6 +86,7 @@ public class BlueFrontAutoM3 extends LinearOpMode {
 
         try {
             limelight = new Limelight();
+            limelight.setChosenGoal(0);
         } catch (IOException e) {
             limelightAvailable = false;
             Log.e("RedBackAuto6BallM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
@@ -211,7 +212,7 @@ public class BlueFrontAutoM3 extends LinearOpMode {
                         if (!limelightAvailable || limelight.getPattern().isPresent()) state = 0;
 //                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
                         break;
-                    case 0 :
+                    case 0:
                         follower.followPath(obeliskToLaunch, 0.8, true);
                         state = 1;
                         break;
