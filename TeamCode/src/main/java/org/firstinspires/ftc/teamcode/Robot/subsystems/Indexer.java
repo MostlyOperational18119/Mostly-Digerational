@@ -247,15 +247,19 @@ public class Indexer {
     public static boolean startLaunch(int chamberNum) {
         int[] slots = Arrays.copyOf(slotColors(), 3);
         if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
+            Log.i("Indexer", "Launching slot 0");
             currentState0 = States.LAUNCH;
             chamberIncrease += 1;
         } else if (slots[2] == nextBall(chamberNum, chamberIncrease, pattern)) {
+            Log.i("Indexer", "Launching slot 2");
             currentState2 = States.LAUNCH;
             chamberIncrease += 1;
         } else if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
+            Log.i("Indexer", "Launching slot 1");
             currentState1 = States.LAUNCH;
             chamberIncrease += 1;
         } else {
+            Log.i("Indexer", "Launch done");
             // Done launching, there's no more
             return true;
         }

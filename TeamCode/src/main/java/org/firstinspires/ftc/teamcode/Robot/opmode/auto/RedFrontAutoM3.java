@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Autonomous(name = "RedFrontM3")
 public class RedFrontAutoM3 extends LinearOpMode {
@@ -40,7 +41,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
     int targetClicks = 0;
     long delayTimer = 0;
     int launchCount = 0;
-    int numBalls = -1;
+    int numBalls = 0;
     int launchNumberThing = -1;
     boolean limelightAvailable = true;
 
@@ -70,8 +71,10 @@ public class RedFrontAutoM3 extends LinearOpMode {
     // Return value is true if we're done
     boolean launch() {
         if (limelightAvailable && numBalls != -1) {
+            Log.i("RedFrontAutoM3", "Using Limelight-assisted launch");
             return Indexer.startLaunch(numBalls);
         } else {
+            Log.i("RedFrontAutoM3", "Using normal launch");
             return normalLaunch();
         }
     }
@@ -160,6 +163,8 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //            Outtake.update(targetClicks);
             follower.update();
             if (limelightAvailable) {
+                assert limelight != null;
+
                 limelight.update();
                 // Set the numBalls to- wait for this:
                 // The number of balls if we can get it (who would've guessed)
@@ -195,8 +200,13 @@ public class RedFrontAutoM3 extends LinearOpMode {
 
 
             telemetry.addData("clicks", Drivetrain.outtakePosition());
+            telemetry.addData("state", state);
+            telemetry.addData("num balls", numBalls);
+            telemetry.addData("pattern thing", Arrays.toString(Indexer.pattern));
             telemetry.addData("time delta", System.currentTimeMillis() - delayTimer);
+            telemetry.addData("slot 0 state", Indexer.currentState0);
             telemetry.addData("slot 1 state", Indexer.currentState1);
+            telemetry.addData("slot 2 state", Indexer.currentState2);
             telemetry.addData("robot x follower", follower.getPose().getX());
             telemetry.addData("flywheel speed target", Outtake.speed);
             telemetry.addData("flywheel speed", Outtake.outtakeMotorLeft.getVelocity());
