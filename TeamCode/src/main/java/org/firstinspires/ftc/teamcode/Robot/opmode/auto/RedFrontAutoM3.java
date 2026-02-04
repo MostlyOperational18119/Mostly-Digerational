@@ -217,6 +217,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         break;
                     case 1:
                         if (!limelightAvailable || limelight.getPattern().isPresent()) {
+                            Indexer.updatePattern(limelight.getPattern().get());
                             follower.followPath(obeliskToLaunch, 0.8, true);
                             state = 2;
                         }
