@@ -36,7 +36,7 @@ public class RedBackAutoM3 extends LinearOpMode {
     Pose park = new Pose(108, 8, Math.toRadians(180));
     Follower follower;
     PathChain toObelisk, obeliskToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
-    int state = -1;
+    int state = -2;
     int targetClicks = 0;
     long delayTimer = 0;
     int launchCount = 0;
@@ -204,7 +204,18 @@ public class RedBackAutoM3 extends LinearOpMode {
                             delayTimer = System.currentTimeMillis();
                         }
                         break;
+                    case -1:
+                        follower.followPath(toObelisk, 0.8, true);
+                        state = 0;
+                        break;
                     case 0:
+                        if (!limelightAvailable || limelight.getPattern().isPresent()) {
+                            Indexer.updatePattern(limelight.getPattern().get());
+                            follower.followPath(obeliskToLaunch, 0.8, true);
+                            state = 1;
+                        }
+                        break;
+                    case 1:
                         if (launch()) state = 2;
                         break;
                     case 2:
