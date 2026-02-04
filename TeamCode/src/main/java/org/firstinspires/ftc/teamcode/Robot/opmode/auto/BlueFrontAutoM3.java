@@ -25,6 +25,7 @@ import java.io.IOException;
 @Autonomous(name = "BlueFrontM3")
 public class BlueFrontAutoM3 extends LinearOpMode {
     Pose start = new Pose(32, 134.5, Math.toRadians(180));
+    Pose readObelisk = new Pose(48, 120, Math.toRadians(45));
     Pose launch = new Pose(48, 96, Math.toRadians(180));
     Pose intakePrep1 = new Pose(40, 83, Math.toRadians(180));
     //    Pose intakePrep2 = new Pose(18, 83, Math.toRadians(180));
@@ -34,8 +35,8 @@ public class BlueFrontAutoM3 extends LinearOpMode {
 //    Pose intakeEnd3 = new Pose(14, 84, Math.toRadians(180));
     Pose park = new Pose(18, 100, Math.toRadians(180));
     Follower follower;
-    PathChain startToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
-    int state = -1;
+    PathChain startToObelisk, obeliskToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
+    int state = -2;
     int targetClicks = 0;
     long delayTimer = 0;
     int launchCount = 0;
@@ -90,9 +91,14 @@ public class BlueFrontAutoM3 extends LinearOpMode {
             Log.e("RedBackAuto6BallM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
         }
 
-        startToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(start, launch))
-                .setLinearHeadingInterpolation(start.getHeading(), launch.getHeading())
+        startToObelisk = follower.pathBuilder()
+                .addPath(new BezierLine(start, readObelisk))
+                .setLinearHeadingInterpolation(start.getHeading(), readObelisk.getHeading())
+                .build();
+
+        obeliskToLaunch = follower.pathBuilder()
+                .addPath(new BezierLine(readObelisk, launch))
+                .setLinearHeadingInterpolation(readObelisk.getHeading(), launch.getHeading())
                 .build();
 
         toIntakePrep1 = follower.pathBuilder()
@@ -195,16 +201,20 @@ public class BlueFrontAutoM3 extends LinearOpMode {
 
             if (!follower.isBusy()) {
                 switch (state) {
-                    case -1:
+                    case -2:
                         if (System.currentTimeMillis() - delayTimer > 500) {
-                            state = 0;
+                            follower.followPath(startToObelisk, 1.0, true);
+                            state = -1;
                         }
                         break;
-                    case 0:
-                        follower.followPath(startToLaunch, 0.8, true);
-                        delayTimer = System.currentTimeMillis();
-                        state = 1;
+                    case -1:
+                        if (!limelightAvailable || (limelightAvailable && limelight.getPattern().isPresent()))
+                        state = 0;
 //                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
+                        break;
+                    case 0 :
+                        follower.followPath(obeliskToLaunch, 0.8, true);
+                        state = 1;
                         break;
                     case 1:
                         if (launch()) state = 3;
