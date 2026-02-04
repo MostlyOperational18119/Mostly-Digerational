@@ -40,6 +40,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
     long delayTimer = 0;
     int launchCount = 0;
     int numBalls = -1;
+    int launchNumberThing = -1;
     boolean limelightAvailable = true;
 
     Limelight limelight = null;
@@ -155,7 +156,8 @@ public class RedFrontAutoM3 extends LinearOpMode {
                 limelight.update();
                 // Set the numBalls to- wait for this:
                 // The number of balls if we can get it (who would've guessed)
-                limelight.getBallCount().ifPresent(integer -> numBalls = integer);
+                // It being 1 means we're looking at the chamber (this is bad)
+                if (launchNumberThing == 1) limelight.getBallCount().ifPresent(integer -> numBalls = integer);
             }
             Indexer.updateSlot0();
             Indexer.updateSlot1();
@@ -179,7 +181,8 @@ public class RedFrontAutoM3 extends LinearOpMode {
 
             if (state != 13) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, false, 0);            }
+                Outtake.outtakeUpdate(launchNumberThing, false, 0);
+            }
             Outtake.StaticVars.endPose = follower.getPose();
             Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
 
@@ -207,7 +210,10 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         break;
                     case 1:
                         // RETURNS TRUE IF WE'RE DONE, SO GTFO IF WE GOT TRUE
-                        if (launch()) state = 3;
+                        if (launch()) {
+                            state = 3;
+                            launchNumberThing = 1;
+                        }
                         break;
                     case 3:
                         if (System.currentTimeMillis() - delayTimer > 1000) {
@@ -227,6 +233,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
                     case 6:
                         follower.followPath(intakeToLaunch1, 1, true);
                         state = 7;
+                        launchNumberThing = -1;
                         delayTimer = System.currentTimeMillis();
                         break;
                     case 7:
@@ -238,7 +245,10 @@ public class RedFrontAutoM3 extends LinearOpMode {
                         break;
                     case 8:
                         // RETURNS TRUE IF WE'RE DONE, SO GTFO IF WE GOT TRUE
-                        if (launch()) state = 10;
+                        if (launch()) {
+                            state = 10;
+                            launchNumberThing = 1;
+                        }
                         break;
                     case 10:
                         if (System.currentTimeMillis() - delayTimer > 1000) {
