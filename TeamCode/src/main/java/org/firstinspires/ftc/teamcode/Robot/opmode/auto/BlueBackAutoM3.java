@@ -210,8 +210,12 @@ public class BlueBackAutoM3 extends LinearOpMode {
                         state = 0;
                         break;
                     case -1:
-                        // Only proceed once we get the pattern
-                        if (limelight.getPattern().isPresent()) state = 0;
+                        // Only proceed once we get the pattern if the limelight is active
+                        // Let's not softlock ourselves if the Limelight is not available
+                        if (!limelightAvailable || limelight.getPattern().isPresent()) {
+                            Indexer.updatePattern(limelight.getPattern().get());
+                            state = 0;
+                        }
                         break;
                     case 0:
                         follower.followPath(obeliskToLaunch, 1, true);

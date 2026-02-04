@@ -25,6 +25,7 @@ import java.io.IOException;
 @Autonomous(name = "9BallRedBackM3")
 public class RedBackAutoM3 extends LinearOpMode {
     Pose start = new Pose(88, 8, Math.toRadians(180));
+    Pose readObelisk = new Pose(88, 48, Math.toRadians(95));
     Pose launch = new Pose(88, 10, Math.toRadians(180));
     Pose intakePrep1 = new Pose(98, 34, Math.toRadians(180));
     Pose intakePrep2 = new Pose(98, 58, Math.toRadians(180));
@@ -34,7 +35,7 @@ public class RedBackAutoM3 extends LinearOpMode {
     Pose intakeEnd3 = new Pose(130, 84, Math.toRadians(180));
     Pose park = new Pose(108, 8, Math.toRadians(180));
     Follower follower;
-    PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
+    PathChain toObelisk, obeliskToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
     int state = -1;
     int targetClicks = 0;
     long delayTimer = 0;
@@ -92,6 +93,14 @@ public class RedBackAutoM3 extends LinearOpMode {
 
 //        Outtake.SPEED_CONST_FAR = Outtake.SPEED_CONST_FAR / 1.1;
 
+        toObelisk = follower.pathBuilder()
+                .addPath(new BezierLine(start, readObelisk))
+                .setLinearHeadingInterpolation(start.getHeading(), readObelisk.getHeading())
+                .build();
+        obeliskToLaunch = follower.pathBuilder()
+                .addPath(new BezierLine(readObelisk, launch))
+                .setLinearHeadingInterpolation(readObelisk.getHeading(), launch.getHeading())
+                .build();
         toIntakePrep1 = follower.pathBuilder()
                 .addPath(new BezierLine(launch, intakePrep1))
                 .setLinearHeadingInterpolation(launch.getHeading(), intakePrep1.getHeading())
@@ -188,48 +197,14 @@ public class RedBackAutoM3 extends LinearOpMode {
 
             if (!follower.isBusy()) {
                 switch (state) {
-                    case -1:
+                    case -2:
                         if (System.currentTimeMillis() - delayTimer > 2000) {
-                            state = 0;
+                            state = -1;
                             delayTimer = System.currentTimeMillis();
                         }
                         break;
                     case 0:
-                        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            switch (launchCount) {
-                                case 0:
-                                    delayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    delayTimer = Indexer.launch2();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    delayTimer = Indexer.launch1();
-                                    state = 1;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
-                        break;
-                    case 1:
-                        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
-                            // Check and launch any remaining balls in the indexer
-                            if (Indexer.slotColors()[0] != 0) {
-                                delayTimer = Indexer.launch0();
-                                state = 1; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[2] != 0) {
-                                delayTimer = Indexer.launch2();
-                                state = 1; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[1] != 0) {
-                                delayTimer = Indexer.launch1();
-                                state = 1; // Stay in this state to check again
-                            } else {
-                                // All slots empty, move to next state
-                                state = 2;
-                            }
-                        }
+                        if (launch()) state = 2;
                         break;
                     case 2:
                         if (System.currentTimeMillis() - delayTimer > 1000) {
@@ -258,41 +233,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case 7:
-                        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
-                            switch (launchCount) {
-                                case 0:
-                                    delayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    delayTimer = Indexer.launch2();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    delayTimer = Indexer.launch1();
-                                    state = 8;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
-                        break;
-                    case 8:
-                        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
-                            // Check and launch any remaining balls in the indexer
-                            if (Indexer.slotColors()[0] != 0) {
-                                delayTimer = Indexer.launch0();
-                                state = 8; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[2] != 0) {
-                                delayTimer = Indexer.launch2();
-                                state = 8; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[1] != 0) {
-                                delayTimer = Indexer.launch1();
-                                state = 8; // Stay in this state to check again
-                            } else {
-                                // All slots empty, move to next state
-                                state = 9;
-                            }
-                        }
+                        if (launch()) state = 9;
                         break;
                     case 9:
                         if (System.currentTimeMillis() - delayTimer > 500) {

@@ -272,6 +272,10 @@ public class Indexer {
         pattern = newPattern;
     }
 
+    public static void updatePattern(Integer[] newPattern) {
+        pattern = Arrays.stream(newPattern).mapToInt(i -> i).toArray();
+    }
+
     //stuff for configurableTeleop
     public static void updateWaitTime(double time) {
         LAUNCH_WAIT = time;
