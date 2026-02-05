@@ -206,12 +206,16 @@ public class RedBackAutoM3 extends LinearOpMode {
                         }
                         break;
                     case -1:
+                        // Start looking at the bloody obelisk
+                        // Wait, do we even need a path to obelisk anymore?
+                        Outtake.currentState = Outtake.States.AIM_OBELISK;
                         follower.followPath(toObelisk, 0.8, true);
                         state = 0;
                         break;
                     case 0:
                         if (!limelightAvailable || limelight.getPattern().isPresent()) {
                             Indexer.updatePattern(limelight.getPattern().get());
+                            Outtake.currentState = Outtake.States.AIM_GOAL;
                             follower.followPath(obeliskToLaunch, 0.8, true);
                             state = 1;
                         }

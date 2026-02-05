@@ -51,6 +51,8 @@ public class Outtake {
     public static double chamberX;
     static double goalY = 144;
     static double chamberY = 84;
+    public static double obeliskX = 72;
+    public static double obeliskY = 72;
 
     //temporarily commented out for configurableTeleop
     public static double VERY_CLOSE_P = 12, VERY_CLOSE_I = 0.5, VERY_CLOSE_D = 0.5;
@@ -65,7 +67,8 @@ public class Outtake {
 
     public enum States {
         AIM_CHAMBER,
-        AIM_GOAL
+        AIM_GOAL,
+        AIM_OBELISK
     }
 
     public static void init(HardwareMap hwMap) {
@@ -168,13 +171,30 @@ public class Outtake {
         return (relativeAngle * 65.871345) + 2816;
     }
 
+    public static double pointAtObelisk() {
+        double dx = obeliskX - robotX;
+        double dy = obeliskY - robotY;
+
+        double absoluteAngleToObelisk = Math.toDegrees(Math.atan2(dy, dx));
+        absoluteAngleToObelisk = (((absoluteAngleToObelisk) % 360) + 360) % 360;
+
+        // Flip the angle calculation
+        double relativeAngle = 360 - (absoluteAngleToObelisk - (angleOffset + robotOrientation));
+
+        relativeAngle = ((relativeAngle % 360) + 360) % 360;
+
+        return (relativeAngle * 65.871345) + 2816;
+    }
+
 
     public static void outtakeUpdate(int launch, boolean isTeleOp, int adjust) {
 
-        if (launch > 0) {
-            currentState = States.AIM_CHAMBER;
-        } else {
-            currentState = States.AIM_GOAL;
+        if (currentState != States.AIM_OBELISK) {
+            if (launch > 0) {
+                currentState = States.AIM_CHAMBER;
+            } else {
+                currentState = States.AIM_GOAL;
+            }
         }
 
         switch (currentState) {
@@ -183,6 +203,9 @@ public class Outtake {
                 break;
             case AIM_CHAMBER:
                 update(setTarget(pointAtChamber(), adjust), isTeleOp);
+                break;
+            case AIM_OBELISK:
+                update(setTarget(pointAtObelisk(), adjust), isTeleOp);
                 break;
         }
     }
