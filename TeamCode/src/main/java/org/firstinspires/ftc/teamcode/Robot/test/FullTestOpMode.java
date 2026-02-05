@@ -68,7 +68,7 @@ public class FullTestOpMode extends LinearOpMode {
                 long currentTime = System.currentTimeMillis();
                 if (currentTime-startTime > WAIT) {
                     startTime = System.currentTimeMillis();
-                    Indexer.startLaunch(0);
+                    Indexer.startLaunch(0, true);
                     Indexer.updateSlot0();
                     Indexer.updateSlot1();
                     Indexer.updateSlot2();

@@ -244,7 +244,7 @@ public class Indexer {
 
     //Transfer Part Duex import
 
-    public static boolean startLaunch(int chamberNum) {
+    public static boolean startLaunch(int chamberNum, boolean canRuinPattern) {
         int[] slots = Arrays.copyOf(slotColors(), 3);
         if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
             Log.i("Indexer", "Launching slot 0");
@@ -264,7 +264,7 @@ public class Indexer {
             if (isEmpty()) {
                 // Done launching, there's no more
                 return true;
-            } else {
+            } else if (canRuinPattern) {
                 Log.i("Indexer", "Launching the remaining ones");
 
                 if (slots[0] != 0) {

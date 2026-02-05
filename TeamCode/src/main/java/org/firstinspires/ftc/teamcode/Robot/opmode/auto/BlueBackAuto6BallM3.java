@@ -69,7 +69,7 @@ public class BlueBackAuto6BallM3 extends LinearOpMode {
     // Return value is true if we're done
     boolean launch() {
         if (limelightAvailable && numBalls != -1) {
-            return Indexer.startLaunch(numBalls);
+            return Indexer.startLaunch(numBalls, true);
         } else {
             return normalLaunch();
         }

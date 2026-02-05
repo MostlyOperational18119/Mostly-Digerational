@@ -72,7 +72,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
     boolean launch() {
         if (limelightAvailable && numBalls != -1) {
             Log.i("RedFrontAutoM3", "Using Limelight-assisted launch");
-            return Indexer.startLaunch(numBalls);
+            return Indexer.startLaunch(numBalls, true);
         } else {
             Log.i("RedFrontAutoM3", "Using normal launch");
             return normalLaunch();

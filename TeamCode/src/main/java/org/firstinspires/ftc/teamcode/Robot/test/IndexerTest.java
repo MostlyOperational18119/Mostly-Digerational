@@ -16,7 +16,7 @@ public class IndexerTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
 
-            Indexer.startLaunch(chamberNum);
+            Indexer.startLaunch(chamberNum, true);
             Indexer.updateSlot2();
             Indexer.updateSlot0();
             Indexer.updateSlot1();
