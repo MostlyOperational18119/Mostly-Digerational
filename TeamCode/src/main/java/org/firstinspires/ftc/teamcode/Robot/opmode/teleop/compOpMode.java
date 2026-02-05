@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.teleop;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -100,7 +99,8 @@ public class compOpMode extends LinearOpMode {
 
             if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
                 Optional<Integer> ballCountUnsafe = limelight.getBallCount();
-                if (ballCountUnsafe.isPresent() && ballCountUnsafe.get() != -1) numBalls = ballCountUnsafe.get();
+                if (ballCountUnsafe.isPresent() && ballCountUnsafe.get() != -1)
+                    numBalls = ballCountUnsafe.get();
             }
 
             if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {

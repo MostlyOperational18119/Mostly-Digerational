@@ -233,7 +233,7 @@ public class RedBackAuto6BallM3 extends LinearOpMode {
                         break;
                     case 7:
                         // If we're done launching GTFO
-                        if(launch()) state = 9;
+                        if (launch()) state = 9;
                         break;
                     case 9:
                         if (System.currentTimeMillis() - launchDelayTimer > 500) {

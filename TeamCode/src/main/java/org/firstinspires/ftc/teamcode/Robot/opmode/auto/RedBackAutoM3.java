@@ -152,7 +152,7 @@ public class RedBackAutoM3 extends LinearOpMode {
         waitForStart();
 
         Outtake.outtakeSpeed();
-        delayTimer= System.currentTimeMillis();
+        delayTimer = System.currentTimeMillis();
 
 
         while (opModeIsActive()) {
@@ -185,7 +185,8 @@ public class RedBackAutoM3 extends LinearOpMode {
 
             if (state != 24 && state != 25) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, false, 0);            }
+                Outtake.outtakeUpdate(-1, false, 0);
+            }
             Outtake.StaticVars.endPose = follower.getPose();
             Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
 

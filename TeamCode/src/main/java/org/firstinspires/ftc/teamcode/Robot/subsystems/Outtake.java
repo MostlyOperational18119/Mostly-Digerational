@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,7 +10,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.Robot.opmode.teleop.configurableTeleop;
 
 import java.io.File;
 
@@ -36,7 +33,7 @@ public class Outtake {
     public static double distance, speed;
 
     //stuff for aiming
-    private static int maxClicks =  24680;
+    private static int maxClicks = 24680;
     private static int tolerance = 50;
     static double outtakePower = 0.0;
     public static int blueX = 9, redX = 135;
@@ -45,7 +42,7 @@ public class Outtake {
 
     //stuff for auto aiming
     public static boolean isBlue = false;
-    public static Pose start = new Pose(16.641,16.1903, Math.toRadians(90));
+    public static Pose start = new Pose(16.641, 16.1903, Math.toRadians(90));
     public static double robotX = 72;
     public static double robotY = 72;
     public static double robotOrientation = 0;
@@ -104,13 +101,18 @@ public class Outtake {
 
         try {
             outtakePosAuto = Integer.parseInt(outtakePos);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             outtakePosAuto = 0;
         }
 
 
-        if (isBlue) {goalX = blueX; chamberX = chamberBX;} else {goalX = redX; chamberX = chamberRX;}
+        if (isBlue) {
+            goalX = blueX;
+            chamberX = chamberBX;
+        } else {
+            goalX = redX;
+            chamberX = chamberRX;
+        }
     }
 
     public static void update(int targetClicks, boolean isTeleOp) {
@@ -124,10 +126,12 @@ public class Outtake {
             rotateServo.setPower(outtakePower);
         }
     }
+
     public static int getRotationPosition(double target) {
         target = Math.max(0, Math.min(1, target));
         return (int) (maxClicks * target);
     }
+
     public static int setTarget(double target, int adjust) {
         target = Math.max(0, Math.min(maxClicks, target));
         return (int) target + adjust;
@@ -147,6 +151,7 @@ public class Outtake {
 
         return (relativeAngle * 65.871345) + 4000;
     }
+
     public static double pointAtChamber() {
         double dx = chamberX - robotX;
         double dy = chamberY - robotY;
@@ -156,7 +161,7 @@ public class Outtake {
         absoluteAngleToChamber = (((absoluteAngleToChamber) % 360) + 360) % 360;
 
         // Flip the angle calculation
-        double relativeAngle = 360 - (absoluteAngleToChamber -(angleOffset + robotOrientation));
+        double relativeAngle = 360 - (absoluteAngleToChamber - (angleOffset + robotOrientation));
 
         relativeAngle = ((relativeAngle % 360) + 360) % 360;
 
@@ -190,7 +195,7 @@ public class Outtake {
         distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
         //logic for setting motor speeds, launch angles, and PID values
-        if (distance < 60){ //when the robot is extremely close to the goal (very short distance)
+        if (distance < 60) { //when the robot is extremely close to the goal (very short distance)
             hood.setPosition(VERY_CLOSE_HOOD); //position of the hood -> small value
             speed = SPEED_CONST_VERY_CLOSE * Math.sqrt(distance); //speed set to a tested value multiplied by distance
             currentDistance = "very close";
@@ -234,35 +239,39 @@ public class Outtake {
     }
 
 
-
     //testing and making variables configurable
     public static void updatePID(double p, double i, double d, double f) {
         outtakeMotorLeft.setVelocityPIDFCoefficients(p, i, d, 0);
         outtakeMotorRight.setVelocityPIDFCoefficients(p, i, d, 0);
     }
-    public static void updateSpeedConsts(double close, double closer, double far){
+
+    public static void updateSpeedConsts(double close, double closer, double far) {
         SPEED_CONST_CLOSE = close;
         SPEED_CONST_VERY_CLOSE = closer;
         SPEED_CONST_FAR = far;
     }
-    public static void updateHoodPositions(double close, double closer, double far){
+
+    public static void updateHoodPositions(double close, double closer, double far) {
         VERY_CLOSE_HOOD = closer;
         CLOSE_HOOD = close;
         FAR_HOOD = far;
     }
+
     public static double testTelemetryMotor1() {
         return outtakeMotorLeft.getVelocity();
     }
+
     public static double testTelemetryMotor2() {
         return outtakeMotorRight.getVelocity();
     }
-    public static double returnHoodPos(){
+
+    public static double returnHoodPos() {
         return hood.getPosition();
     }
 
     public static class StaticVars {
         public static boolean isBlue = false;
-         public static int outtakePos = 0;
-        public static Pose endPose = new Pose(16.641,16.1903, Math.toRadians(90));
+        public static int outtakePos = 0;
+        public static Pose endPose = new Pose(16.641, 16.1903, Math.toRadians(90));
     }
 }

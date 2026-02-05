@@ -156,7 +156,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
         waitForStart();
 
         Outtake.outtakeSpeed();
-        delayTimer= System.currentTimeMillis();
+        delayTimer = System.currentTimeMillis();
 
 
         while (opModeIsActive()) {
@@ -169,7 +169,8 @@ public class RedFrontAutoM3 extends LinearOpMode {
                 // Set the numBalls to- wait for this:
                 // The number of balls if we can get it (who would've guessed)
                 // It being 1 means we're looking at the chamber (this is bad)
-                if (launchNumberThing == 1) limelight.getBallCount().ifPresent(integer -> numBalls = integer);
+                if (launchNumberThing == 1)
+                    limelight.getBallCount().ifPresent(integer -> numBalls = integer);
             }
             Indexer.updateSlot0();
             Indexer.updateSlot1();

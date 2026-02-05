@@ -1,21 +1,14 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import android.util.Log;
 
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import java.util.Arrays;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Robot.opmode.teleop.configurableTeleop;
-import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
+
+import java.util.Arrays;
 
 public class Indexer {
     public static Servo slot0, slot1, slot2;
@@ -94,39 +87,49 @@ public class Indexer {
         currentState0 = States.IDLE;
     }
 
-    public static double slotColor0Red () {
+    public static double slotColor0Red() {
         return slot0Sensor.red();
     }
-    public static double slotColor0Green () {
+
+    public static double slotColor0Green() {
         return slot0Sensor.green();
     }
-    public static double slotColor0Blue () {
+
+    public static double slotColor0Blue() {
         return slot0Sensor.blue();
     }
-    public static double slotColor1Red () {
+
+    public static double slotColor1Red() {
         return slot1Sensor.red();
     }
-    public static double slotColor1Green () {
+
+    public static double slotColor1Green() {
         return slot1Sensor.green();
     }
-    public static double slotColor1Blue () {
+
+    public static double slotColor1Blue() {
         return slot1Sensor.blue();
     }
-    public static double slotColor2Red () {
+
+    public static double slotColor2Red() {
         return slot2Sensor.red();
     }
-    public static double slotColor2Green () {
+
+    public static double slotColor2Green() {
         return slot2Sensor.green();
     }
-    public static double slotColor2Blue () {
+
+    public static double slotColor2Blue() {
         return slot2Sensor.blue();
     }
 
-    public static double slot0Distance() {return slot0Sensor.getDistance(DistanceUnit.MM);}
+    public static double slot0Distance() {
+        return slot0Sensor.getDistance(DistanceUnit.MM);
+    }
 
 
     //these are tuned for each individual color sensor
-    public static int getColorSlot (double red, double green, double blue, double distance) {
+    public static int getColorSlot(double red, double green, double blue, double distance) {
         if (distance < 35 && green / blue > 1.3 && green / blue < 1.6 && green > 90) {
             // green
             return 2;
@@ -139,20 +142,20 @@ public class Indexer {
         }
     }
 
-    public static int getColorSlot1 (double red, double green, double blue, double distance) {
-        if (distance < 35 && green/blue > 1.3 && green/blue < 1.6 && green > 65) {
+    public static int getColorSlot1(double red, double green, double blue, double distance) {
+        if (distance < 35 && green / blue > 1.3 && green / blue < 1.6 && green > 65) {
             return 2;
-        } else if (distance < 35 && red/green > .9 && red/green < 1.2 && blue > 45) {
+        } else if (distance < 35 && red / green > .9 && red / green < 1.2 && blue > 45) {
             return 1;
         } else {
             return 0;
         }
     }
 
-    public static int getColorSlot2 (double red, double green, double blue, double distance) {
-        if (distance < 35 && green/blue > 1.3 && green/blue < 1.6 && green > 150) {
+    public static int getColorSlot2(double red, double green, double blue, double distance) {
+        if (distance < 35 && green / blue > 1.3 && green / blue < 1.6 && green > 150) {
             return 2;
-        } else if (distance < 35 && red/green > .9 && red/green < 1.2 && red > 200 && blue > 400) {
+        } else if (distance < 35 && red / green > .9 && red / green < 1.2 && red > 200 && blue > 400) {
             return 1;
         } else {
             return 0;
@@ -168,11 +171,10 @@ public class Indexer {
         slots[2] = getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue(), slot2Sensor.getDistance(DistanceUnit.MM));
 
 
-
         return slots;
     }
 
-    public static void updateBrakePad () {
+    public static void updateBrakePad() {
         switch (currentStateBrake) {
             case LAUNCH:
                 brakePad.setPosition(BRAKE_DOWN);
@@ -182,7 +184,7 @@ public class Indexer {
         }
     }
 
-    public static void updateSlot0 () {
+    public static void updateSlot0() {
         switch (currentState0) {
             case LAUNCH:
                 currentStateBrake = States.LAUNCH;
@@ -202,7 +204,7 @@ public class Indexer {
         }
     }
 
-    public static void updateSlot1 () {
+    public static void updateSlot1() {
         switch (currentState1) {
             case LAUNCH:
                 currentStateBrake = States.LAUNCH;
@@ -222,7 +224,7 @@ public class Indexer {
         }
     }
 
-    public static void updateSlot2 () {
+    public static void updateSlot2() {
         switch (currentState2) {
             case LAUNCH:
                 currentStateBrake = States.LAUNCH;

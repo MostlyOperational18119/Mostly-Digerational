@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 @TeleOp(name = "new autoaim")
 public class AutoAimTest2 extends LinearOpMode {
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
 
         double targetClicks = 0;
 
@@ -30,7 +30,7 @@ public class AutoAimTest2 extends LinearOpMode {
             //telemetry.addData("target position", Outtake.setTarget(Outtake.pointAtGoal()));
             //telemetry.addData("target setRotation", Outtake.setRotationPosition(Outtake.pointAtGoal()));
             telemetry.addData("target angle/clicks", Outtake.pointAtGoal());
-            telemetry.addData("target angle", (targetClicks - 2816)/68.555);
+            telemetry.addData("target angle", (targetClicks - 2816) / 68.555);
 
             telemetry.update();
         }

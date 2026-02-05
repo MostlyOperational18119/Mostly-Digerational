@@ -5,11 +5,11 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Robot.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.Robot.pedroPathing.Constants;
 
 @TeleOp(name = "full test")
 public class FullTestOpMode extends LinearOpMode {
@@ -27,7 +27,7 @@ public class FullTestOpMode extends LinearOpMode {
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
 
-        Pose start = new Pose(72,72, Math.toRadians(90));
+        Pose start = new Pose(72, 72, Math.toRadians(90));
         Follower follower;
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
@@ -40,7 +40,7 @@ public class FullTestOpMode extends LinearOpMode {
             Outtake.robotY = follower.getPose().getY();
             Outtake.robotX = follower.getPose().getX();
             Outtake.robotOrientation = follower.getHeading();
-            
+
             float y = -gamepad1.left_stick_y;
             float x = gamepad1.left_stick_x;
             float rx = gamepad1.right_stick_x;
@@ -66,7 +66,7 @@ public class FullTestOpMode extends LinearOpMode {
 
             if ((A) && (launch < 0)) {
                 long currentTime = System.currentTimeMillis();
-                if (currentTime-startTime > WAIT) {
+                if (currentTime - startTime > WAIT) {
                     startTime = System.currentTimeMillis();
                     Indexer.startLaunch(0, true);
                     Indexer.updateSlot0();

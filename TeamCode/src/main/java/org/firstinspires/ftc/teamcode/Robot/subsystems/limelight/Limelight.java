@@ -91,7 +91,8 @@ public class Limelight {
     }
 
     public Optional<Integer> getBallCount() {
-        if (results == null || !results.containsKey(ToRobotMsg.ResultType.BallCount)) return Optional.empty();
+        if (results == null || !results.containsKey(ToRobotMsg.ResultType.BallCount))
+            return Optional.empty();
 
         return Optional.ofNullable((Integer) results.get(ToRobotMsg.ResultType.BallCount));
     }
