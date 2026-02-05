@@ -25,7 +25,7 @@ import java.io.IOException;
 @Autonomous(name = "9BallRedBackM3")
 public class RedBackAutoM3 extends LinearOpMode {
     Pose start = new Pose(88, 8, Math.toRadians(180));
-    Pose readObelisk = new Pose(88, 48, Math.toRadians(95));
+    Pose readObelisk = new Pose(88, 48, Math.toRadians(180));
     Pose launch = new Pose(88, 10, Math.toRadians(180));
     Pose intakePrep1 = new Pose(98, 34, Math.toRadians(180));
     Pose intakePrep2 = new Pose(98, 58, Math.toRadians(180));
