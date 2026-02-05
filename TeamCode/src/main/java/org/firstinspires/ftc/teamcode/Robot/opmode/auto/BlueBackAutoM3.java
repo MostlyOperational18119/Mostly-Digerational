@@ -70,7 +70,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
     boolean launch() {
         if (limelightAvailable && numBalls != -1) {
             // TODO: ADD FALLBACK IN CASE WE DONT HAVE THE RIGHT TYPE OF BALLS TO COMPLETE THE PATTERN WHILE STILL HAVING SOME BALLS REMAINING
-            return Indexer.startLaunch(numBalls);
+            return Indexer.startLaunch(numBalls, true);
         } else {
             return normalLaunch();
         }

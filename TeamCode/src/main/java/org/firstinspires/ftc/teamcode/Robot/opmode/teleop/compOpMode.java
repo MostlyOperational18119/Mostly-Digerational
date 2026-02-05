@@ -37,6 +37,7 @@ public class compOpMode extends LinearOpMode {
         double noCorrectAdjust = 0.0;
         boolean isCorrecting = true;
         boolean limelightAvailable = true;
+        boolean canRuinPattern = true;
         int numBalls = -1;
 
 //        Outtake.isBlue = false;
@@ -149,13 +150,19 @@ public class compOpMode extends LinearOpMode {
                 }
             } else if (limelightAvailable && numBalls != -1) { // Don't wanna be useless if there are -1 balls due to... reasons...
                 if (System.currentTimeMillis() - launchDelayTimer > 500) {
-                    Indexer.startLaunch(numBalls);
+                    Indexer.startLaunch(numBalls, canRuinPattern);
                     isLaunching = false;
                 }
             }
 
             if (A) {
                 isLaunching = true;
+                canRuinPattern = false;
+            }
+
+            if (B) {
+                isLaunching = true;
+                canRuinPattern = true;
             }
 
             switch (Outtake.currentDistance) {
@@ -191,9 +198,6 @@ public class compOpMode extends LinearOpMode {
                     break;
             }
 
-            if (B && limelightAvailable) {
-                Indexer.startLaunch(numBalls);
-            }
 //            } else if (A && !limelightAvailable) {
 //                isLaunching = true;
 //            }
