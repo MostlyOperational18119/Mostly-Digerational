@@ -16,7 +16,6 @@ public class Limelight {
     DataOutputStream out = null;
     Socket socket;
     int chosenGoal = 0;
-    //    Indexer.BallColor[] balls = new Indexer.BallColor[9];
     public HashMap<ToRobotMsg.ResultType, Object> results;
 
     public Limelight() throws IOException {
