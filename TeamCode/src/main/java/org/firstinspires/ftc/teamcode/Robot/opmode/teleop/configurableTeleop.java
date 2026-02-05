@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Robot.opmode.teleop;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -36,7 +35,7 @@ public class configurableTeleop extends LinearOpMode {
         Indexer.init(hardwareMap);
 
         Follower follower;
-        follower =  Constants.createFollower(hardwareMap);
+        follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(Outtake.start);
 
         waitForStart();

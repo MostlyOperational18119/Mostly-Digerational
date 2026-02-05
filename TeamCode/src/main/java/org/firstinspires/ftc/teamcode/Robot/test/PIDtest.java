@@ -1,15 +1,9 @@
 package org.firstinspires.ftc.teamcode.Robot.test;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-import android.widget.AdapterView;
-
-import com.pedropathing.follower.Follower;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Robot.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
@@ -17,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
-@TeleOp(name="PIDtest")
+@TeleOp(name = "PIDtest")
 public class PIDtest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -41,9 +35,9 @@ public class PIDtest extends LinearOpMode {
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
 
-        Pose start = new Pose(16.641,16.1903, Math.toRadians(90));
+        Pose start = new Pose(16.641, 16.1903, Math.toRadians(90));
         Follower follower;
-        follower =  Constants.createFollower(hardwareMap);
+        follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
 
         waitForStart();
@@ -146,9 +140,7 @@ public class PIDtest extends LinearOpMode {
                 PIDselect -= 1;
             }
 
-            PIDselect = Math.abs(PIDselect%4);
-
-
+            PIDselect = Math.abs(PIDselect % 4);
 
 
             //Outtake.updatePID(p, i, d, f);

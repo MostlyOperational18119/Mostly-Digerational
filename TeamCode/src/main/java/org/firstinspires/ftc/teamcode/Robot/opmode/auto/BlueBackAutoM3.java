@@ -154,7 +154,7 @@ public class BlueBackAutoM3 extends LinearOpMode {
         waitForStart();
 
         Outtake.outtakeSpeed();
-        delayTimer= System.currentTimeMillis();
+        delayTimer = System.currentTimeMillis();
 
 
         while (opModeIsActive()) {

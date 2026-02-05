@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.teleop;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
@@ -16,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
 
 import java.io.File;
 
-@TeleOp(name="TestOp")
+@TeleOp(name = "TestOp")
 public class testOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -43,7 +42,7 @@ public class testOpMode extends LinearOpMode {
 
         Follower follower;
         follower = Constants.createFollower(hardwareMap);
-        Pose testStart = new Pose(16.641,16.1903, Math.toRadians(90));
+        Pose testStart = new Pose(16.641, 16.1903, Math.toRadians(90));
         follower.setStartingPose(testStart);
 
         waitForStart();
@@ -151,13 +150,13 @@ public class testOpMode extends LinearOpMode {
             //    Outtake.angleOffset -= 1;
             //}
             if (dpadLeft) {
-                count -=1;
+                count -= 1;
             }
             if (dpadRight) {
-                count +=1;
+                count += 1;
             }
 
-            count = Math.abs(count%3);
+            count = Math.abs(count % 3);
 
             if (rb) {
                 Outtake.SPEED_CONST_VERY_CLOSE += 5;
@@ -288,7 +287,7 @@ public class testOpMode extends LinearOpMode {
 //                    Outtake.f = 0;
 //            }
             if (X) {
-               Outtake.VERY_CLOSE_HOOD += 0.01;
+                Outtake.VERY_CLOSE_HOOD += 0.01;
             }
             if (B) {
                 Outtake.VERY_CLOSE_HOOD -= 0.01;

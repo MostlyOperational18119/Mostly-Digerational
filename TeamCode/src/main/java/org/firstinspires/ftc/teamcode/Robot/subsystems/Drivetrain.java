@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 public class Drivetrain {
@@ -15,7 +12,7 @@ public class Drivetrain {
 //    public final static int UPPOS = 1;
 //    static public Servo BreakPad;
 
-    public static void init (HardwareMap hwMap) {
+    public static void init(HardwareMap hwMap) {
         frontLeft = hwMap.get(DcMotor.class, "motorFL");
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -62,6 +59,7 @@ public class Drivetrain {
         backRight.setPower(Range.clip(br, -1, 1));
 
     }
+
     public static int outtakePosition() {
         return -Intake.intakeFront.getCurrentPosition();
     }

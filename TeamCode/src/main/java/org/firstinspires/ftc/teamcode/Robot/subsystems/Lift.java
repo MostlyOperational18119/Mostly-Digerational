@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Lift {
-
     public static Servo lift1;
     private static Servo lift2;
     public static double UP1 = 0.82;
@@ -31,5 +30,4 @@ public class Lift {
         lift1.setPosition(UP1);
         lift2.setPosition(UP2);
     }
-
 }

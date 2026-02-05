@@ -7,24 +7,26 @@ public class Intake {
     static public DcMotorEx intakeFront, intakeRear;
     private static float power;
 
-    
-    public static void init (HardwareMap hwMap) {
+
+    public static void init(HardwareMap hwMap) {
         intakeFront = hwMap.get(DcMotorEx.class, "frontIntake");
         intakeRear = hwMap.get(DcMotorEx.class, "backIntake");
     }
-    public static void intakeGo () { //think really hard about what this does
+
+    public static void intakeGo() { //think really hard about what this does
         power = 1f;
         intakeFront.setPower(power);
         intakeRear.setPower(power);
     }
 
-    public static void intakeSpit () { //teleop "off" still spins to keep balls from fleeing
+    public static void intakeSpit() { //teleop "off" still spins to keep balls from fleeing
         power = -1f;
         intakeFront.setPower(power);
         intakeRear.setPower(power);
 
     }
-    public static void intakeStop () { //for auto: need to full stop at end
+
+    public static void intakeStop() { //for auto: need to full stop at end
         power = 0;
         intakeFront.setPower(power);
         intakeRear.setPower(power);

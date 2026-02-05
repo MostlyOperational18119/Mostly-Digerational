@@ -21,7 +21,6 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Optional;
 
 @Autonomous(name = "6BallBlueBackM3")
 public class BlueBackAuto6BallM3 extends LinearOpMode {
