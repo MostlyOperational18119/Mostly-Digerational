@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 @TeleOp(name = "Limelight")
@@ -34,7 +35,7 @@ public class LimelightTest extends LinearOpMode {
             if (ballCount.isPresent()) telemetry.addData("Ball count:", ballCount.get());
             else telemetry.addLine("Ball count: unknown");
 
-            if (pattern.isPresent()) telemetry.addData("Pattern:", pattern.get());
+            if (pattern.isPresent()) telemetry.addData("Pattern:", Arrays.toString(pattern.get()));
             else telemetry.addLine("Pattern: unknown");
 
             telemetry.update();
