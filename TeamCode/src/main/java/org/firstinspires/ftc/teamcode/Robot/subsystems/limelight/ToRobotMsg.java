@@ -57,17 +57,19 @@ public class ToRobotMsg {
                 if ((resultType & 0x8) != 0x0) {
                     ArrayList<AprilTagResult> tagResults = new ArrayList<>();
 
-                    byte aprilTagResultLength = data[resultsPos];
+                    byte aprilTagResultCount = data[resultsPos];
 
-                    int posOrig = resultsPos;
+                    int tagResultChoice = 0;
 
-                    while (resultsPos < (posOrig + aprilTagResultLength)) {
+                    while (tagResultChoice < aprilTagResultCount) {
                         AprilTagResult tagResult = new AprilTagResult(Arrays.copyOfRange(data, resultsPos, resultsPos + AprilTagResult.APRIL_TAG_SIZE));
                         tagResults.add(tagResult);
 
                         resultsPos += AprilTagResult.APRIL_TAG_SIZE;
 
                         Log.i("ToRobotMsg", String.format("Tag ID: %d", tagResult.tagID));
+
+                        tagResultChoice++;
                     }
 
                     this.results.put(ResultType.AprilTag, tagResults);
