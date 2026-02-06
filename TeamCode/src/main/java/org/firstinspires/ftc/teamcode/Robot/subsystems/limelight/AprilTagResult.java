@@ -5,87 +5,51 @@ import java.util.Arrays;
 
 // TODO: USE A FUCKING PROTOBUF YOU ABSOLUTE MUPPET (FROM: DAMIEN, TO: FUTURE DAMIEN)
 public class AprilTagResult {
-    // 112 is the base size (no homography matrix sadly)
-    // add the size of the homography matrix ourselves (just the date itself)
-    public static int APRIL_TAG_SIZE = 148;
+    // 56 is the size :P
+    public static int APRIL_TAG_SIZE = 56;
 
     public int tagID;
-    public int tagHamming; // error bits, not too useful (could be removed/ignored)
-    public float tagDecisionMargin; // same
-    public double[][] homographyMatrix; // evil
-    public double[] centerPoint;
-    public double[][] cornerPoints;
+    public double[] tagPos;
+    public double[] tagRot;
 
     AprilTagResult(byte[] src) {
         // Nobody cares about the tag family pointer
         // could chop it off before sending to save 4 bytes, but I'm lazy
-        int pos = 7;
+        int pos = 0;
 
         tagID = intFromBytesRange(src, pos);
 
         pos += 4; // done with tag ID
 
-        tagHamming = intFromBytesRange(src, pos);
-
-        pos += 4; // done with hamming
-
-        tagDecisionMargin = floatFromBytesRange(src, pos);
-
-        pos += 4; // done with decision margin
-
-        // Ignore the homography matrix pointer (doesn't matter imo)
-        pos += 8; // done with homography matrix pointer
-
-        centerPoint = new double[]{
+        // tag position
+        tagPos = new double[]{
                 doubleFromBytesRange(src, pos),
                 doubleFromBytesRange(src, pos + 8),
+                doubleFromBytesRange(src, pos + 16),
         };
 
-        pos += 16; // done with center points
+        pos += 24; // done with tag position
 
-        cornerPoints = new double[][]{
-                {
-                        doubleFromBytesRange(src, pos),
-                        doubleFromBytesRange(src, pos + 8),
-                },
-                {
-                        doubleFromBytesRange(src, pos + 16),
-                        doubleFromBytesRange(src, pos + 24),
-                }
+        // tag rotation
+        tagRot = new double[]{
+                doubleFromBytesRange(src, pos),
+                doubleFromBytesRange(src, pos + 8),
+                doubleFromBytesRange(src, pos + 16),
         };
 
-        pos += 32; // done with corner points
+        pos += 24; // done with tag rotation
 
-        // homography matrix stub
-        homographyMatrix = new double[][]{
-                {
-                        doubleFromBytesRange(src, pos),
-                        doubleFromBytesRange(src, pos + 8),
-                        doubleFromBytesRange(src, pos + 16)
-                },
-                {
-                        doubleFromBytesRange(src, pos + 24),
-                        doubleFromBytesRange(src, pos + 32),
-                        doubleFromBytesRange(src, pos + 40)
-                },
-                {
-                        doubleFromBytesRange(src, pos + 48),
-                        doubleFromBytesRange(src, pos + 56),
-                        doubleFromBytesRange(src, pos + 64)
-                }
-        };
-
-        pos += 72; // done with (the actual) homography matrix
+        pos += 4; // Remainder for alignment?
 
         // Hopefully I didn't mess up, otherwise we will be really sad :(
-        assert (pos + 1) == APRIL_TAG_SIZE;
-
+        assert pos == APRIL_TAG_SIZE;
     }
 
 
     static int intFromBytes(byte[] src) {
         assert src.length <= 4; // should be == maybe? idk
-        return ByteBuffer.wrap(src).getInt();
+        // TODO: MAYBE APPLY THIS TO ALL OF THEM?
+        return Integer.reverseBytes(ByteBuffer.wrap(src).getInt());
     }
 
     static int intFromBytesRange(byte[] src, int start) {

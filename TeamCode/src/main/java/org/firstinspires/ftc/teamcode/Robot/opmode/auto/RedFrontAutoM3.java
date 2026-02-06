@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.auto;
 
+import android.util.Log;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -14,14 +16,17 @@ import org.firstinspires.ftc.teamcode.Robot.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Indexer;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Autonomous(name = "RedFrontM3")
 public class RedFrontAutoM3 extends LinearOpMode {
     Pose start = new Pose(112, 134.5, Math.toRadians(180));
+    Pose readObelisk = new Pose(96, 120, Math.toRadians(120));
     Pose launch = new Pose(96, 96, Math.toRadians(180));
     Pose intakePrep1 = new Pose(104, 83, Math.toRadians(180));
     //    Pose intakePrep2 = new Pose(18, 83, Math.toRadians(180));
@@ -31,11 +36,48 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //    Pose intakeEnd3 = new Pose(14, 84, Math.toRadians(180));
     Pose park = new Pose(126, 100, Math.toRadians(180));
     Follower follower;
-    PathChain startToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
+    PathChain startToObelisk, obeliskToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
     int state = -1;
     int targetClicks = 0;
-    long launchDelayTimer = 0;
+    long delayTimer = 0;
     int launchCount = 0;
+    int numBalls = 0;
+    int launchNumberThing = -1;
+    boolean limelightAvailable = true;
+
+    Limelight limelight = null;
+
+
+    // Return value is true if we're done
+    boolean normalLaunch() {
+        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+            // Check and launch any remaining balls in the indexer
+            if (Indexer.slotColors()[0] != 0) {
+                delayTimer = Indexer.launch0();
+            } else if (Indexer.slotColors()[2] != 0) {
+                delayTimer = Indexer.launch2();
+            } else if (Indexer.slotColors()[1] != 0) {
+                delayTimer = Indexer.launch1();
+            } else {
+                // All slots empty, we're done, return true
+                return true;
+            }
+        }
+
+        // We wanna continue
+        return false;
+    }
+
+    // Return value is true if we're done
+    boolean launch() {
+        if (limelightAvailable && numBalls != -1) {
+            Log.i("RedFrontAutoM3", "Using Limelight-assisted launch");
+            return Indexer.startLaunch(numBalls, true);
+        } else {
+            Log.i("RedFrontAutoM3", "Using normal launch");
+            return normalLaunch();
+        }
+    }
 
     @Override
     public void runOpMode() {
@@ -46,9 +88,22 @@ public class RedFrontAutoM3 extends LinearOpMode {
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
 
-        startToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(start, launch))
-                .setLinearHeadingInterpolation(start.getHeading(), launch.getHeading())
+        try {
+            limelight = new Limelight();
+            limelight.setChosenGoal(1);
+        } catch (IOException e) {
+            limelightAvailable = false;
+            Log.e("BlueBackAutoM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
+        }
+
+        startToObelisk = follower.pathBuilder()
+                .addPath(new BezierLine(start, readObelisk))
+                .setLinearHeadingInterpolation(start.getHeading(), readObelisk.getHeading())
+                .build();
+
+        startToObelisk = follower.pathBuilder()
+                .addPath(new BezierLine(readObelisk, launch))
+                .setLinearHeadingInterpolation(readObelisk.getHeading(), launch.getHeading())
                 .build();
 
         toIntakePrep1 = follower.pathBuilder()
@@ -101,12 +156,22 @@ public class RedFrontAutoM3 extends LinearOpMode {
         waitForStart();
 
         Outtake.outtakeSpeed();
-        launchDelayTimer= System.currentTimeMillis();
+        delayTimer = System.currentTimeMillis();
 
 
         while (opModeIsActive()) {
 //            Outtake.update(targetClicks);
             follower.update();
+            if (limelightAvailable) {
+                assert limelight != null;
+
+                limelight.update();
+                // Set the numBalls to- wait for this:
+                // The number of balls if we can get it (who would've guessed)
+                // It being 1 means we're looking at the chamber (this is bad)
+                if (launchNumberThing == 1)
+                    limelight.getBallCount().ifPresent(integer -> numBalls = integer);
+            }
             Indexer.updateSlot0();
             Indexer.updateSlot1();
             Indexer.updateSlot2();
@@ -129,14 +194,20 @@ public class RedFrontAutoM3 extends LinearOpMode {
 
             if (state != 13) {
                 Outtake.outtakeSpeed();
-                Outtake.outtakeUpdate(-1, false, 0);            }
+                Outtake.outtakeUpdate(launchNumberThing, false, 0);
+            }
             Outtake.StaticVars.endPose = follower.getPose();
             Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
 
 
             telemetry.addData("clicks", Drivetrain.outtakePosition());
-            telemetry.addData("time delta", System.currentTimeMillis() - launchDelayTimer);
+            telemetry.addData("state", state);
+            telemetry.addData("num balls", numBalls);
+            telemetry.addData("pattern thing", Arrays.toString(Indexer.pattern));
+            telemetry.addData("time delta", System.currentTimeMillis() - delayTimer);
+            telemetry.addData("slot 0 state", Indexer.currentState0);
             telemetry.addData("slot 1 state", Indexer.currentState1);
+            telemetry.addData("slot 2 state", Indexer.currentState2);
             telemetry.addData("robot x follower", follower.getPose().getX());
             telemetry.addData("flywheel speed target", Outtake.speed);
             telemetry.addData("flywheel speed", Outtake.outtakeMotorLeft.getVelocity());
@@ -145,55 +216,33 @@ public class RedFrontAutoM3 extends LinearOpMode {
             if (!follower.isBusy()) {
                 switch (state) {
                     case -1:
-                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                        if (System.currentTimeMillis() - delayTimer > 500) {
                             state = 0;
                         }
                         break;
                     case 0:
-                        follower.followPath(startToLaunch, 0.8, true);
-                        launchDelayTimer = System.currentTimeMillis();
+                        follower.followPath(startToObelisk, 0.8, true);
+                        delayTimer = System.currentTimeMillis();
                         state = 1;
 //                        Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
                         break;
                     case 1:
-                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
-                            switch (launchCount) {
-                                case 0:
-                                    launchDelayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    launchDelayTimer = Indexer.launch2();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    launchDelayTimer = Indexer.launch1();
-                                    state = 2;
-                                    launchCount = 0;
-                                    break;
-                            }
+                        if (!limelightAvailable || limelight.getPattern().isPresent()) {
+                            Indexer.updatePattern(limelight.getPattern().get());
+                            follower.followPath(obeliskToLaunch, 0.8, true);
+                            state = 2;
                         }
+
                         break;
                     case 2:
-                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
-                            // Check and launch any remaining balls in the indexer
-                            if (Indexer.slotColors()[0] != 0) {
-                                launchDelayTimer = Indexer.launch0();
-                                state = 1; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[2] != 0) {
-                                launchDelayTimer = Indexer.launch2();
-                                state = 1; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[1] != 0) {
-                                launchDelayTimer = Indexer.launch1();
-                                state = 1; // Stay in this state to check again
-                            } else {
-                                // All slots empty, move to next state
-                                state = 3;
-                            }
+                        // RETURNS TRUE IF WE'RE DONE, SO GTFO IF WE GOT TRUE
+                        if (launch()) {
+                            state = 3;
+                            launchNumberThing = 1;
                         }
                         break;
                     case 3:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                        if (System.currentTimeMillis() - delayTimer > 1000) {
                             state = 4;
                         }
                         break;
@@ -210,55 +259,26 @@ public class RedFrontAutoM3 extends LinearOpMode {
                     case 6:
                         follower.followPath(intakeToLaunch1, 1, true);
                         state = 7;
-                        launchDelayTimer = System.currentTimeMillis();
+                        launchNumberThing = -1;
+                        delayTimer = System.currentTimeMillis();
                         break;
                     case 7:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                        if (System.currentTimeMillis() - delayTimer > 1000) {
                             state = 8;
-                            launchDelayTimer = System.currentTimeMillis();
+                            delayTimer = System.currentTimeMillis();
 //                            Outtake.SPEED_CONST_CLOSE = Outtake.SPEED_CONST_CLOSE / 1.1;
                         }
                         break;
                     case 8:
-                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
-                            switch (launchCount) {
-                                case 0:
-                                    launchDelayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    Intake.intakeStop();
-                                    break;
-                                case 1:
-                                    launchDelayTimer = Indexer.launch2();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    launchDelayTimer = Indexer.launch1();
-                                    state = 9;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
-                        break;
-                    case 9:
-                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
-                            // Check and launch any remaining balls in the indexer
-                            if (Indexer.slotColors()[0] != 0) {
-                                launchDelayTimer = Indexer.launch0();
-                                state = 1; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[2] != 0) {
-                                launchDelayTimer = Indexer.launch2();
-                                state = 1; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[1] != 0) {
-                                launchDelayTimer = Indexer.launch1();
-                                state = 1; // Stay in this state to check again
-                            } else {
-                                // All slots empty, move to next state
-                                state = 10;
-                            }
+                        // RETURNS TRUE IF WE'RE DONE, SO GTFO IF WE GOT TRUE
+                        if (launch()) {
+                            state = 10;
+                            // Aim at chamber now that we're done launching
+                            launchNumberThing = 1;
                         }
                         break;
                     case 10:
-                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+                        if (System.currentTimeMillis() - delayTimer > 1000) {
                             state = 11;
                         }
                         break;
@@ -283,21 +303,21 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //                        follower.followPath(intakeToLaunch2, 1, true);
 //                        Intake.intakeStop();
 //                        state = 14;
-//                        launchDelayTimer = System.currentTimeMillis();
+//                        delayTimer = System.currentTimeMillis();
 //                        break;
 //                    case 14:
-//                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+//                        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
 //                            switch (launchCount) {
 //                                case 0:
-//                                    launchDelayTimer = Indexer.launch0();
+//                                    delayTimer = Indexer.launch0();
 //                                    launchCount = 1;
 //                                    break;
 //                                case 1:
-//                                    launchDelayTimer = Indexer.launch1();
+//                                    delayTimer = Indexer.launch1();
 //                                    launchCount = 2;
 //                                    break;
 //                                case 2:
-//                                    launchDelayTimer = Indexer.launch2();
+//                                    delayTimer = Indexer.launch2();
 //                                    state = 14;
 //                                    launchCount = 0;
 //                                    break;
@@ -305,22 +325,22 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //                        }
 //                        break;
 //                    case 15:
-//                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+//                        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
 //                            for (int i = 0; i < 3; i++) {
 //                                switch (i) {
 //                                    case 0:
 //                                        if (Indexer.slotColors()[i] != 0) {
-//                                            launchDelayTimer = Indexer.launch0();
+//                                            delayTimer = Indexer.launch0();
 //                                        }
 //                                        break;
 //                                    case 1:
 //                                        if (Indexer.slotColors()[i] != 0) {
-//                                            launchDelayTimer = Indexer.launch1();
+//                                            delayTimer = Indexer.launch1();
 //                                        }
 //                                        break;
 //                                    case 2:
 //                                        if (Indexer.slotColors()[i] != 0) {
-//                                            launchDelayTimer = Indexer.launch2();
+//                                            delayTimer = Indexer.launch2();
 //                                        }
 //                                        state = 16;
 //                                        break;
@@ -329,7 +349,7 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //                        }
 //                        break;
 //                    case 16:
-//                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
+//                        if (System.currentTimeMillis() - delayTimer > 1000) {
 //                            state = 17;
 //                        }
 //                        break;
@@ -346,21 +366,21 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //                        follower.followPath(intakeToLaunch3, 1, true);
 //                        Intake.intakeStop();
 //                        state = 20;
-//                        launchDelayTimer = System.currentTimeMillis();
+//                        delayTimer = System.currentTimeMillis();
 //                        break;
 //                    case 20:
-//                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+//                        if (System.currentTimeMillis() - delayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
 //                            switch (launchCount) {
 //                                case 0:
-//                                    launchDelayTimer = Indexer.launch0();
+//                                    delayTimer = Indexer.launch0();
 //                                    launchCount = 1;
 //                                    break;
 //                                case 1:
-//                                    launchDelayTimer = Indexer.launch1();
+//                                    delayTimer = Indexer.launch1();
 //                                    launchCount = 2;
 //                                    break;
 //                                case 2:
-//                                    launchDelayTimer = Indexer.launch2();
+//                                    delayTimer = Indexer.launch2();
 //                                    state = 21;
 //                                    launchCount = 0;
 //                                    break;
@@ -368,22 +388,22 @@ public class RedFrontAutoM3 extends LinearOpMode {
 //                        }
 //                        break;
 //                    case 21:
-//                        if (System.currentTimeMillis() - launchDelayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+//                        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
 //                            for (int i = 0; i < 3; i++) {
 //                                switch (i) {
 //                                    case 0:
 //                                        if (Indexer.slotColors()[i] != 0) {
-//                                            launchDelayTimer = Indexer.launch0();
+//                                            delayTimer = Indexer.launch0();
 //                                        }
 //                                        break;
 //                                    case 1:
 //                                        if (Indexer.slotColors()[i] != 0) {
-//                                            launchDelayTimer = Indexer.launch1();
+//                                            delayTimer = Indexer.launch1();
 //                                        }
 //                                        break;
 //                                    case 2:
 //                                        if (Indexer.slotColors()[i] != 0) {
-//                                            launchDelayTimer = Indexer.launch2();
+//                                            delayTimer = Indexer.launch2();
 //                                        }
 //                                        state = 22;
 //                                        break;
