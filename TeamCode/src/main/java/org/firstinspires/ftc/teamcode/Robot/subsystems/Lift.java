@@ -11,11 +11,11 @@ public class Lift {
 
     public static void init(HardwareMap hwMap) {
         lift1 = hwMap.get(Servo.class, "lift1");
-        //lift2 = hwMap.get(Servo.class, "lift2");
+        lift2 = hwMap.get(Servo.class, "lift2");
 
         //initialize to start position
-        lift1.setPosition(0.82);
-        //lift2.setPosition(0.82);
+        lift1.setPosition(UP1);
+        lift2.setPosition(UP2);
     }
 
     public static void lift() {

@@ -329,11 +329,7 @@ public class testOpMode extends LinearOpMode {
 //            }
 
             if (Y) {
-                if (Outtake.goalX == Outtake.redX) {
-                    Outtake.goalX = Outtake.blueX;
-                } else {
-                    Outtake.goalX = Outtake.redX;
-                }
+                Outtake.isBlue = !Outtake.isBlue;
             }
 
 //            int[] slots = Indexer.slotColors();
