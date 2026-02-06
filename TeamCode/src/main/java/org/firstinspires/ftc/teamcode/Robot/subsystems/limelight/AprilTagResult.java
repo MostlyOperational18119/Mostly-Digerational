@@ -5,8 +5,7 @@ import java.util.Arrays;
 
 // TODO: USE A FUCKING PROTOBUF YOU ABSOLUTE MUPPET (FROM: DAMIEN, TO: FUTURE DAMIEN)
 public class AprilTagResult {
-    // 112 is the base size (no homography matrix sadly)
-    // add the size of the homography matrix ourselves (just the date itself)
+    // 56 is the size :P
     public static int APRIL_TAG_SIZE = 56;
 
     public int tagID;
@@ -40,14 +39,17 @@ public class AprilTagResult {
 
         pos += 24; // done with tag rotation
 
+        pos += 4; // Remainder for alignment?
+
         // Hopefully I didn't mess up, otherwise we will be really sad :(
-        assert (pos + 1) == APRIL_TAG_SIZE;
+        assert pos == APRIL_TAG_SIZE;
     }
 
 
     static int intFromBytes(byte[] src) {
         assert src.length <= 4; // should be == maybe? idk
-        return ByteBuffer.wrap(src).getInt();
+        // TODO: MAYBE APPLY THIS TO ALL OF THEM?
+        return Integer.reverseBytes(ByteBuffer.wrap(src).getInt());
     }
 
     static int intFromBytesRange(byte[] src, int start) {
