@@ -1,21 +1,14 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import android.util.Log;
 
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import java.util.Arrays;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Robot.opmode.teleop.configurableTeleop;
-import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
+
+import java.util.Arrays;
 
 public class Indexer {
     public static Servo slot0, slot1, slot2;
@@ -94,39 +87,49 @@ public class Indexer {
         currentState0 = States.IDLE;
     }
 
-    public static double slotColor0Red () {
+    public static double slotColor0Red() {
         return slot0Sensor.red();
     }
-    public static double slotColor0Green () {
+
+    public static double slotColor0Green() {
         return slot0Sensor.green();
     }
-    public static double slotColor0Blue () {
+
+    public static double slotColor0Blue() {
         return slot0Sensor.blue();
     }
-    public static double slotColor1Red () {
+
+    public static double slotColor1Red() {
         return slot1Sensor.red();
     }
-    public static double slotColor1Green () {
+
+    public static double slotColor1Green() {
         return slot1Sensor.green();
     }
-    public static double slotColor1Blue () {
+
+    public static double slotColor1Blue() {
         return slot1Sensor.blue();
     }
-    public static double slotColor2Red () {
+
+    public static double slotColor2Red() {
         return slot2Sensor.red();
     }
-    public static double slotColor2Green () {
+
+    public static double slotColor2Green() {
         return slot2Sensor.green();
     }
-    public static double slotColor2Blue () {
+
+    public static double slotColor2Blue() {
         return slot2Sensor.blue();
     }
 
-    public static double slot0Distance() {return slot0Sensor.getDistance(DistanceUnit.MM);}
+    public static double slot0Distance() {
+        return slot0Sensor.getDistance(DistanceUnit.MM);
+    }
 
 
     //these are tuned for each individual color sensor
-    public static int getColorSlot (double red, double green, double blue, double distance) {
+    public static int getColorSlot(double red, double green, double blue, double distance) {
         if (distance < 35 && green / blue > 1.3 && green / blue < 1.6 && green > 90) {
             // green
             return 2;
@@ -139,20 +142,20 @@ public class Indexer {
         }
     }
 
-    public static int getColorSlot1 (double red, double green, double blue, double distance) {
-        if (distance < 35 && green/blue > 1.3 && green/blue < 1.6 && green > 65) {
+    public static int getColorSlot1(double red, double green, double blue, double distance) {
+        if (distance < 35 && green / blue > 1.3 && green / blue < 1.6 && green > 65) {
             return 2;
-        } else if (distance < 35 && red/green > .9 && red/green < 1.2 && blue > 45) {
+        } else if (distance < 35 && red / green > .9 && red / green < 1.2 && blue > 45) {
             return 1;
         } else {
             return 0;
         }
     }
 
-    public static int getColorSlot2 (double red, double green, double blue, double distance) {
-        if (distance < 35 && green/blue > 1.3 && green/blue < 1.6 && green > 150) {
+    public static int getColorSlot2(double red, double green, double blue, double distance) {
+        if (distance < 35 && green / blue > 1.3 && green / blue < 1.6 && green > 150) {
             return 2;
-        } else if (distance < 35 && red/green > .9 && red/green < 1.2 && red > 200 && blue > 400) {
+        } else if (distance < 35 && red / green > .9 && red / green < 1.2 && red > 200 && blue > 400) {
             return 1;
         } else {
             return 0;
@@ -168,11 +171,10 @@ public class Indexer {
         slots[2] = getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue(), slot2Sensor.getDistance(DistanceUnit.MM));
 
 
-
         return slots;
     }
 
-    public static void updateBrakePad () {
+    public static void updateBrakePad() {
         switch (currentStateBrake) {
             case LAUNCH:
                 brakePad.setPosition(BRAKE_DOWN);
@@ -182,7 +184,7 @@ public class Indexer {
         }
     }
 
-    public static void updateSlot0 () {
+    public static void updateSlot0() {
         switch (currentState0) {
             case LAUNCH:
                 currentStateBrake = States.LAUNCH;
@@ -202,7 +204,7 @@ public class Indexer {
         }
     }
 
-    public static void updateSlot1 () {
+    public static void updateSlot1() {
         switch (currentState1) {
             case LAUNCH:
                 currentStateBrake = States.LAUNCH;
@@ -222,7 +224,7 @@ public class Indexer {
         }
     }
 
-    public static void updateSlot2 () {
+    public static void updateSlot2() {
         switch (currentState2) {
             case LAUNCH:
                 currentStateBrake = States.LAUNCH;
@@ -244,20 +246,52 @@ public class Indexer {
 
     //Transfer Part Duex import
 
-    public static long startLaunch(int chamberNum) {
+    public static boolean startLaunch(int chamberNum, boolean canRuinPattern) {
         int[] slots = Arrays.copyOf(slotColors(), 3);
-        long startTime = System.currentTimeMillis();
         if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
+            Log.i("Indexer", "Launching slot 0");
             currentState0 = States.LAUNCH;
             chamberIncrease += 1;
         } else if (slots[2] == nextBall(chamberNum, chamberIncrease, pattern)) {
+            Log.i("Indexer", "Launching slot 2");
             currentState2 = States.LAUNCH;
             chamberIncrease += 1;
         } else if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
+            Log.i("Indexer", "Launching slot 1");
             currentState1 = States.LAUNCH;
             chamberIncrease += 1;
+        } else {
+            Log.i("Indexer", "Matched launch done");
+
+            if (isEmpty()) {
+                // Done launching, there's no more
+                return true;
+            } else if (canRuinPattern) {
+                Log.i("Indexer", "Launching the remaining ones");
+
+                if (slots[0] != 0) {
+                    Log.i("Indexer", "Unordered launching slot 0");
+                    currentState0 = States.LAUNCH;
+                    chamberIncrease += 1;
+                } else if (slots[2] != 0) {
+                    Log.i("Indexer", "Unordered launching slot 2");
+                    currentState2 = States.LAUNCH;
+                    chamberIncrease += 1;
+                } else if (slots[1] != 0) {
+                    Log.i("Indexer", "Unordered launching slot 1");
+                    currentState1 = States.LAUNCH;
+                    chamberIncrease += 1;
+                } else {
+                    Log.i("Indexer", "Wtf");
+                }
+            }
         }
-        return startTime;
+        // Still more to launch
+        return false;
+    }
+
+    public static boolean startLaunch(int chamberNum) {
+        return startLaunch(chamberNum, true);
     }
 
     public static int nextBall(int chamberNum, int chamberIncrease, int[] pattern) {
@@ -269,10 +303,20 @@ public class Indexer {
         pattern = newPattern;
     }
 
+    public static void updatePattern(Integer[] newPattern) {
+        pattern = Arrays.stream(newPattern).mapToInt(i -> i).toArray();
+    }
+
     //stuff for configurableTeleop
     public static void updateWaitTime(double time) {
         LAUNCH_WAIT = time;
     }
 
 
+    public static boolean isEmpty() {
+        int[] slots = Arrays.copyOf(slotColors(), 3);
+
+        // If it's zero, it's all empty :D
+        return Arrays.stream(slots).max().getAsInt() == 0;
+    }
 }

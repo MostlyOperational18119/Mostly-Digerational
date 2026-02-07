@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.teleop;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -37,6 +36,7 @@ public class compOpMode extends LinearOpMode {
         double noCorrectAdjust = 0.0;
         boolean isCorrecting = true;
         boolean limelightAvailable = true;
+        boolean canRuinPattern = true;
         int numBalls = -1;
 
 //        Outtake.isBlue = false;
@@ -94,9 +94,14 @@ public class compOpMode extends LinearOpMode {
                 launch *= -1;
             }
 
-            if (limelightAvailable && launch > 0) {
+            if (limelightAvailable) {
+                limelight.update();
+            }
+
+            if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
                 Optional<Integer> ballCountUnsafe = limelight.getBallCount();
-                if (ballCountUnsafe.isPresent()) numBalls = ballCountUnsafe.get();
+                if (ballCountUnsafe.isPresent() && ballCountUnsafe.get() != -1)
+                    numBalls = ballCountUnsafe.get();
             }
 
             if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
@@ -130,7 +135,7 @@ public class compOpMode extends LinearOpMode {
                 Intake.intakeStop();
             }
 
-            if (isLaunching) {
+            if (isLaunching && !limelightAvailable) {
                 if (System.currentTimeMillis() - launchDelayTimer > 500) {
                     // Check and launch any remaining balls in the indexer
                     if (Indexer.slotColors()[0] != 0) {
@@ -144,10 +149,21 @@ public class compOpMode extends LinearOpMode {
                         isLaunching = false;
                     }
                 }
+            } else if (limelightAvailable && numBalls != -1) { // Don't wanna be useless if there are -1 balls due to... reasons...
+                if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                    Indexer.startLaunch(numBalls, canRuinPattern);
+                    isLaunching = false;
+                }
             }
 
             if (A) {
                 isLaunching = true;
+                canRuinPattern = false;
+            }
+
+            if (B) {
+                isLaunching = true;
+                canRuinPattern = true;
             }
 
             switch (Outtake.currentDistance) {
@@ -183,9 +199,6 @@ public class compOpMode extends LinearOpMode {
                     break;
             }
 
-            if (B && limelightAvailable) {
-                Indexer.startLaunch(numBalls);
-            }
 //            } else if (A && !limelightAvailable) {
 //                isLaunching = true;
 //            }
@@ -228,6 +241,7 @@ public class compOpMode extends LinearOpMode {
             telemetry.addData("outtake position static variable", Outtake.StaticVars.outtakePos);
             telemetry.addData("outtake pos auto", Outtake.outtakePosAuto);
             telemetry.addData("chamber count", numBalls);
+            telemetry.addData("outtake aim location (current state)", Outtake.currentState);
             telemetry.update();
 //            telemetry.addData("launch", launch);
 //            telemetry.addData("slot0", slots[0]);
