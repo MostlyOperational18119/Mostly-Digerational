@@ -170,38 +170,38 @@ public class compOpMode extends LinearOpMode {
                 canRuinPattern = true;
             }
 
-            switch (Outtake.currentDistance) {
-                case "very close":
-                    if (dpadUp) {
-                        Outtake.SPEED_CONST_VERY_CLOSE += 3;
-                    }
-                    if (dpadDown) {
-                        Outtake.SPEED_CONST_VERY_CLOSE -= 3;
-                    }
-                    telemetry.addLine("tuning close constant");
-                    telemetry.addData("SPEED_CONST_VERY_CLOSE", Outtake.SPEED_CONST_VERY_CLOSE);
-                    break;
-                case "close":
-                    if (dpadUp) {
-                        Outtake.SPEED_CONST_CLOSE += 3;
-                    }
-                    if (dpadDown) {
-                        Outtake.SPEED_CONST_FAR -= 3;
-                    }
-                    telemetry.addLine("tuning far constant");
-                    telemetry.addData("SPEED_CONST_CLOSE", Outtake.SPEED_CONST_CLOSE);
-                    break;
-                case "far":
-                    if (dpadUp) {
-                        Outtake.SPEED_CONST_FAR += 3;
-                    }
-                    if (dpadDown) {
-                        Outtake.SPEED_CONST_FAR -= 3;
-                    }
-                    telemetry.addLine("tuning close constant");
-                    telemetry.addData("SPEED_CONST_FAR", Outtake.SPEED_CONST_FAR);
-                    break;
-            }
+//            switch (Outtake.currentDistance) {
+//                case "very close":
+//                    if (dpadUp) {
+//                        Outtake.SPEED_CONST_VERY_CLOSE += 3;
+//                    }
+//                    if (dpadDown) {
+//                        Outtake.SPEED_CONST_VERY_CLOSE -= 3;
+//                    }
+//                    telemetry.addLine("tuning close constant");
+//                    telemetry.addData("SPEED_CONST_VERY_CLOSE", Outtake.SPEED_CONST_VERY_CLOSE);
+//                    break;
+//                case "close":
+//                    if (dpadUp) {
+//                        Outtake.SPEED_CONST_CLOSE += 3;
+//                    }
+//                    if (dpadDown) {
+//                        Outtake.SPEED_CONST_FAR -= 3;
+//                    }
+//                    telemetry.addLine("tuning far constant");
+//                    telemetry.addData("SPEED_CONST_CLOSE", Outtake.SPEED_CONST_CLOSE);
+//                    break;
+//                case "far":
+//                    if (dpadUp) {
+//                        Outtake.SPEED_CONST_FAR += 3;
+//                    }
+//                    if (dpadDown) {
+//                        Outtake.SPEED_CONST_FAR -= 3;
+//                    }
+//                    telemetry.addLine("tuning close constant");
+//                    telemetry.addData("SPEED_CONST_FAR", Outtake.SPEED_CONST_FAR);
+//                    break;
+//            }
 
 //            } else if (A && !limelightAvailable) {
 //                isLaunching = true;
@@ -224,10 +224,11 @@ public class compOpMode extends LinearOpMode {
 //                    Lift.unlift();
 //                }
 //            }
-//            int[] slots = Indexer.slotColors();
+            int[] slots = Indexer.slotColors();
 //            telemetry.addData("supposed dist", Outtake.distance);
             telemetry.addData("manual adjust", isCorrecting);
             telemetry.addData("angle adjustment", adjust);
+            telemetry.addData("pattern", Arrays.toString(Indexer.pattern));
 //            telemetry.addData("speed const close")
 //            telemetry.addData("hood angle", Outtake.CLOSE_HOOD);
 //            telemetry.addData("odometry X", Outtake.robotX);
@@ -246,11 +247,11 @@ public class compOpMode extends LinearOpMode {
             telemetry.addData("outtake pos auto", Outtake.outtakePosAuto);
             telemetry.addData("chamber count", numBalls);
             telemetry.addData("outtake aim location (current state)", Outtake.currentState);
+            telemetry.addData("launch", launch);
+            telemetry.addData("slot0", slots[0]);
+            telemetry.addData("slot1", slots[1]);
+            telemetry.addData("slot2", slots[2]);
             telemetry.update();
-//            telemetry.addData("launch", launch);
-//            telemetry.addData("slot0", slots[0]);
-//            telemetry.addData("slot1", slots[1]);
-//            telemetry.addData("slot2", slots[2]);
 //            telemetry.update();
         }
     }

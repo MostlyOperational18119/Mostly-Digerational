@@ -56,7 +56,7 @@ public class Outtake {
 
     //temporarily commented out for configurableTeleop
     public static double VERY_CLOSE_P = 12, VERY_CLOSE_I = 0.5, VERY_CLOSE_D = 0.5;
-    public static double CLOSE_P = 13, CLOSE_I = 1, CLOSE_D = 1.25;
+    public static double CLOSE_P = 13, CLOSE_I = 1, CLOSE_D = 2.5;
     public static double FAR_P = 13, FAR_I = 2, FAR_D = 0;
     //public static double p = configurableTeleop.p, i = configurableTeleop.i, d = configurableTeleop.d, f = configurableTeleop.f;
 
