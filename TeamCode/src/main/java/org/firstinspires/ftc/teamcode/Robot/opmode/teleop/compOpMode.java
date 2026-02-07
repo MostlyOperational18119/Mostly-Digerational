@@ -82,6 +82,7 @@ public class compOpMode extends LinearOpMode {
             boolean rightD = gamepad1.dpadRightWasPressed();
             boolean dpadDown = gamepad1.dpadDownWasPressed();
             boolean dpadUp = gamepad1.dpadUpWasPressed();
+            boolean startButton = gamepad1.startWasPressed();
 
             follower.update();
             Outtake.robotY = follower.getPose().getY();
@@ -196,12 +197,16 @@ public class compOpMode extends LinearOpMode {
 //                Outtake.angleOffset -= 1;
 //            }
             if (Y) {
-                if (Outtake.goalX == Outtake.redX) {
-                    Outtake.goalX = Outtake.blueX;
-                } else {
-                    Outtake.goalX = Outtake.redX;
-                }
+                Outtake.isBlue = !Outtake.isBlue;
             }
+
+//            if (startButton) {
+//                if (Lift.lift1.getPosition() == Lift.UP1) {
+//                    Lift.lift();
+//                } else {
+//                    Lift.unlift();
+//                }
+//            }
 //            int[] slots = Indexer.slotColors();
 //            telemetry.addData("supposed dist", Outtake.distance);
             telemetry.addData("manual adjust", isCorrecting);
