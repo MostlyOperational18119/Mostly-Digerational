@@ -83,6 +83,7 @@ public class compOpMode extends LinearOpMode {
             boolean dpadDown = gamepad1.dpadDownWasPressed();
             boolean dpadUp = gamepad1.dpadUpWasPressed();
             boolean startButton = gamepad1.startWasPressed();
+            boolean backButton = gamepad1.backWasPressed();
 
             follower.update();
             Outtake.robotY = follower.getPose().getY();
@@ -90,7 +91,9 @@ public class compOpMode extends LinearOpMode {
             Outtake.robotOrientation = Math.toDegrees(follower.getHeading());
 
             //look at chamber or shoot
-            if (X) {
+            if (backButton) {
+                Outtake.currentState = Outtake.States.AIM_OBELISK;
+            } else if (X) {
                 launch *= -1;
             }
 
