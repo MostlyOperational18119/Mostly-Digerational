@@ -92,7 +92,8 @@ public class compOpMode extends LinearOpMode {
 
             //look at chamber or shoot
             if (backButton) {
-                Outtake.currentState = Outtake.States.AIM_OBELISK;
+                if (Outtake.currentState == Outtake.States.AIM_OBELISK) Outtake.currentState = Outtake.States.AIM_GOAL;
+                else Outtake.currentState = Outtake.States.AIM_OBELISK;
             } else if (X) {
                 launch *= -1;
             }
