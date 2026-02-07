@@ -14,8 +14,8 @@ public class Lift {
         lift2 = hwMap.get(Servo.class, "lift2");
 
         //initialize to start position
-        lift1.setPosition(UP1);
-        lift2.setPosition(UP2);
+        //lift1.setPosition(UP1);
+        //lift2.setPosition(UP2);
     }
 
     public static void lift() {
