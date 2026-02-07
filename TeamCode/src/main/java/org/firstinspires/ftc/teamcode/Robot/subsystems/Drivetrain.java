@@ -25,7 +25,9 @@ public class Drivetrain {
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeft = hwMap.get(DcMotor.class, "motorBL");
-        backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight = hwMap.get(DcMotor.class, "motorBR");
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);

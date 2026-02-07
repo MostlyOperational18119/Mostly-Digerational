@@ -38,6 +38,7 @@ public class compOpMode extends LinearOpMode {
         boolean limelightAvailable = true;
         boolean canRuinPattern = true;
         int numBalls = -1;
+        int i = 0;
 
 //        Outtake.isBlue = false;
 //        Outtake.start = new Pose(16.641,16.1903, Math.toRadians(90));
@@ -47,14 +48,14 @@ public class compOpMode extends LinearOpMode {
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
         Lift.init(hardwareMap);
-        Limelight limelight;
-        try {
-            limelight = new Limelight();
-            limelight.setChosenGoal(Outtake.StaticVars.isBlue ? 0 : 1);
-        } catch (IOException e) {
-            limelightAvailable = false;
-            limelight = null;
-        }
+//        Limelight limelight;
+//        try {
+//            limelight = new Limelight();
+//            limelight.setChosenGoal(Outtake.StaticVars.isBlue ? 0 : 1);
+//        } catch (IOException e) {
+//            limelightAvailable = false;
+//            limelight = null;
+//        }
 
         Follower follower;
         follower = Constants.createFollower(hardwareMap);
@@ -98,21 +99,21 @@ public class compOpMode extends LinearOpMode {
                 launch *= -1;
             }
 
-            if (limelightAvailable) {
-                limelight.update();
-            }
-
-            if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
-                Optional<Integer> ballCountUnsafe = limelight.getBallCount();
-                if (ballCountUnsafe.isPresent() && ballCountUnsafe.get() != -1)
-                    numBalls = ballCountUnsafe.get();
-            }
-
-            if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
-                Optional<Integer[]> patternUnsafe = limelight.getPattern();
-                // Essentially just update the pattern with the result thingy(tm) if it's present
-                patternUnsafe.ifPresent(integers -> Indexer.updatePattern(Arrays.stream(integers).mapToInt(i -> i).toArray()));
-            }
+//            if (limelightAvailable) {
+//                limelight.update();
+//            }
+//
+//            if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
+//                Optional<Integer> ballCountUnsafe = limelight.getBallCount();
+//                if (ballCountUnsafe.isPresent() && ballCountUnsafe.get() != -1)
+//                    numBalls = ballCountUnsafe.get();
+//            }
+//
+//            if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
+//                Optional<Integer[]> patternUnsafe = limelight.getPattern();
+//                // Essentially just update the pattern with the result thingy(tm) if it's present
+//                patternUnsafe.ifPresent(integers -> Indexer.updatePattern(Arrays.stream(integers).mapToInt(i -> i).toArray()));
+//            }
 
             if (leftD) {
                 adjust -= 200;
@@ -138,27 +139,31 @@ public class compOpMode extends LinearOpMode {
             } else {
                 Intake.intakeStop();
             }
-
-            if (isLaunching && !limelightAvailable) {
+            if (isLaunching/* && !limelightAvailable*/) {
                 if (System.currentTimeMillis() - launchDelayTimer > 500) {
-                    // Check and launch any remaining balls in the indexer
-                    if (Indexer.slotColors()[0] != 0) {
-                        launchDelayTimer = Indexer.launch0();
-                    } else if (Indexer.slotColors()[2] != 0) {
-                        launchDelayTimer = Indexer.launch2();
-                    } else if (Indexer.slotColors()[1] != 0) {
-                        launchDelayTimer = Indexer.launch1();
-                    } else {
-                        // All slots empty, move to next state
-                        isLaunching = false;
+                    switch (i) {
+                        case 0:
+                            launchDelayTimer = Indexer.launch0();
+                            i++;
+                            break;
+                        case 1:
+                            launchDelayTimer = Indexer.launch2();
+                            i++;
+                            break;
+                        case 2:
+                            launchDelayTimer = Indexer.launch1();
+                            isLaunching = false;
+                            i = 0;
+                            break;
                     }
                 }
-            } else if (limelightAvailable && numBalls != -1) { // Don't wanna be useless if there are -1 balls due to... reasons...
-                if (System.currentTimeMillis() - launchDelayTimer > 500) {
-                    Indexer.startLaunch(numBalls, canRuinPattern);
-                    isLaunching = false;
-                }
             }
+//            else if (limelightAvailable && numBalls != -1) { // Don't wanna be useless if there are -1 balls due to... reasons...
+//                if (System.currentTimeMillis() - launchDelayTimer > 500) {
+//                    Indexer.startLaunch(numBalls, canRuinPattern);
+//                    isLaunching = false;
+//                }
+//            }
 
             if (A) {
                 isLaunching = true;
