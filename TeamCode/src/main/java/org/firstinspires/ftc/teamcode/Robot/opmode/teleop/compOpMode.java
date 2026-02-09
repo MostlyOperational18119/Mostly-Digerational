@@ -35,7 +35,7 @@ public class compOpMode extends LinearOpMode {
         int adjust = 0;
         double noCorrectAdjust = 0.0;
         boolean isCorrecting = true;
-        boolean limelightAvailable = true;
+        boolean limelightAvailable = false;
         boolean canRuinPattern = true;
         int numBalls = -1;
 
@@ -47,14 +47,6 @@ public class compOpMode extends LinearOpMode {
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
         Lift.init(hardwareMap);
-        Limelight limelight;
-        try {
-            limelight = new Limelight();
-            limelight.setChosenGoal(Outtake.StaticVars.isBlue ? 0 : 1);
-        } catch (IOException e) {
-            limelightAvailable = false;
-            limelight = null;
-        }
 
         Follower follower;
         follower = Constants.createFollower(hardwareMap);
@@ -98,22 +90,6 @@ public class compOpMode extends LinearOpMode {
                 launch *= -1;
             }
 
-            if (limelightAvailable) {
-                limelight.update();
-            }
-
-            if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
-                Optional<Integer> ballCountUnsafe = limelight.getBallCount();
-                if (ballCountUnsafe.isPresent() && ballCountUnsafe.get() != -1)
-                    numBalls = ballCountUnsafe.get();
-            }
-
-            if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
-                Optional<Integer[]> patternUnsafe = limelight.getPattern();
-                // Essentially just update the pattern with the result thingy(tm) if it's present
-                patternUnsafe.ifPresent(integers -> Indexer.updatePattern(Arrays.stream(integers).mapToInt(i -> i).toArray()));
-            }
-
             if (leftD) {
                 adjust -= 200;
             }
@@ -139,7 +115,7 @@ public class compOpMode extends LinearOpMode {
                 Intake.intakeStop();
             }
 
-            if (isLaunching && !limelightAvailable) {
+            if (isLaunching) {
                 if (System.currentTimeMillis() - launchDelayTimer > 500) {
                     // Check and launch any remaining balls in the indexer
                     if (Indexer.slotColors()[0] != 0) {
@@ -152,11 +128,6 @@ public class compOpMode extends LinearOpMode {
                         // All slots empty, move to next state
                         isLaunching = false;
                     }
-                }
-            } else if (limelightAvailable && numBalls != -1) { // Don't wanna be useless if there are -1 balls due to... reasons...
-                if (System.currentTimeMillis() - launchDelayTimer > 500) {
-                    Indexer.startLaunch(numBalls, canRuinPattern);
-                    isLaunching = false;
                 }
             }
 
