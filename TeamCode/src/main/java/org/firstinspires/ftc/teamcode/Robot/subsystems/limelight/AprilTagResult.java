@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Robot.subsystems.limelight;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Arrays;
+import java.util.Collections;
 
 // TODO: USE A FUCKING PROTOBUF YOU ABSOLUTE MUPPET (FROM: DAMIEN, TO: FUTURE DAMIEN)
 public class AprilTagResult {
@@ -48,8 +50,9 @@ public class AprilTagResult {
 
     static int intFromBytes(byte[] src) {
         assert src.length <= 4; // should be == maybe? idk
-        // TODO: MAYBE APPLY THIS TO ALL OF THEM?
-        return Integer.reverseBytes(ByteBuffer.wrap(src).getInt());
+        return ByteBuffer.wrap(src)
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .getInt();
     }
 
     static int intFromBytesRange(byte[] src, int start) {
@@ -58,7 +61,9 @@ public class AprilTagResult {
 
     static float floatFromBytes(byte[] src) {
         assert src.length <= 4; // should be == maybe? idk
-        return ByteBuffer.wrap(src).getFloat();
+        return ByteBuffer.wrap(src)
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .getFloat();
     }
 
     static float floatFromBytesRange(byte[] src, int start) {
@@ -67,7 +72,9 @@ public class AprilTagResult {
 
     static double doubleFromBytes(byte[] src) {
         assert src.length <= 8; // should be == maybe? idk
-        return ByteBuffer.wrap(src).getDouble();
+        return ByteBuffer.wrap(src)
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .getDouble();
     }
 
     static double doubleFromBytesRange(byte[] src, int start) {
