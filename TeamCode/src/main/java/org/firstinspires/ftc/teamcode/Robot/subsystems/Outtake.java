@@ -24,7 +24,7 @@ public class Outtake {
 
     //outtake speed stuff
     //hood min: 0.58, hood max: 0
-    public static double SPEED_CONST_VERY_CLOSE = 240, SPEED_CONST_CLOSE = 180, SPEED_CONST_FAR = 167.5, VERY_CLOSE_HOOD = 0.58, FAR_HOOD = 0, CLOSE_HOOD = 0;
+    public static double SPEED_CONST_VERY_CLOSE = 240, SPEED_CONST_CLOSE = 180, SPEED_CONST_FAR = 167.5, VERY_CLOSE_HOOD = 0.71, FAR_HOOD = 0.2, CLOSE_HOOD = 0.2; //up 0.2, low .71
 
     //configurable testing
     //public static double SPEED_CONST_VERY_CLOSE = configurableTeleop.VERY_CLOSE_SPEED, SPEED_CONST_CLOSE = configurableTeleop.CLOSE_SPEED, SPEED_CONST_FAR = configurableTeleop.FAR_SPEED, VERY_CLOSE_HOOD = configurableTeleop.CLOSER_HOOD, FAR_HOOD = configurableTeleop.FAR_HOOD, CLOSE_HOOD = configurableTeleop.CLOSE_HOOD;
@@ -191,7 +191,6 @@ public class Outtake {
 
     public static void outtakeUpdate(int launch, boolean isTeleOp, int adjust) {
 
-        if (currentState != States.AIM_OBELISK) {
             if (launch > 0) {
                 currentState = States.AIM_CHAMBER;
             } else if (launch == -1) {
@@ -199,7 +198,6 @@ public class Outtake {
             } else if (launch == -2) {
                 currentState = States.AIM_OBELISK;
             }
-        }
 
         switch (currentState) {
             case AIM_GOAL:
