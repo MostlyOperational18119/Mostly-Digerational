@@ -34,6 +34,9 @@ public class testOpMode extends LinearOpMode {
         int adjust = 0;
         double noCorrectAdjust = 0.0;
         boolean isCorrecting = true;
+        double closeHoodAdjust = 0.0;
+        double veryCloseHoodAdjust = 0.0;
+        double farHoodAdjust = 0.0;
 
         Drivetrain.init(hardwareMap);
         Outtake.init(hardwareMap);
@@ -167,111 +170,134 @@ public class testOpMode extends LinearOpMode {
 
             switch (Outtake.currentDistance) {
                 case "very close":
-                    switch (count) {
-                        case 0:
-                            if (dpadUp) {
-                                Outtake.VERY_CLOSE_P += 0.5;
-                            }
-                            if (dpadDown) {
-                                Outtake.VERY_CLOSE_P -= 0.5;
-                            }
-                            telemetry.addLine("tuning p");
-                            break;
-                        case 1:
-                            if (dpadUp) {
-                                Outtake.VERY_CLOSE_I += 0.25;
-                            }
-                            if (dpadDown) {
-                                Outtake.VERY_CLOSE_I -= 0.25;
-                            }
-                            telemetry.addLine("tuning i");
-                            break;
-                        case 2:
-                            if (dpadUp) {
-                                Outtake.VERY_CLOSE_D += 0.5;
-                            }
-                            if (dpadDown) {
-                                Outtake.VERY_CLOSE_D -= 0.5;
-                            }
-                            telemetry.addLine("tuning d");
-                            break;
+//                    switch (count) {
+//                        case 0:
+//                            if (dpadUp) {
+//                                Outtake.VERY_CLOSE_P += 0.5;
+//                            }
+//                            if (dpadDown) {
+//                                Outtake.VERY_CLOSE_P -= 0.5;
+//                            }
+//                            telemetry.addLine("tuning p");
+//                            break;
+//                        case 1:
+//                            if (dpadUp) {
+//                                Outtake.VERY_CLOSE_I += 0.25;
+//                            }
+//                            if (dpadDown) {
+//                                Outtake.VERY_CLOSE_I -= 0.25;
+//                            }
+//                            telemetry.addLine("tuning i");
+//                            break;
+//                        case 2:
+//                            if (dpadUp) {
+//                                Outtake.VERY_CLOSE_D += 0.5;
+//                            }
+//                            if (dpadDown) {
+//                                Outtake.VERY_CLOSE_D -= 0.5;
+//                            }
+//                            telemetry.addLine("tuning d");
+//                            break;
+//                    }
+//                    Outtake.updatePID(Outtake.VERY_CLOSE_P, Outtake.VERY_CLOSE_I, Outtake.VERY_CLOSE_D, 0);
+//                    telemetry.addData("p", Outtake.VERY_CLOSE_P);
+//                    telemetry.addData("i", Outtake.VERY_CLOSE_I);
+//                    telemetry.addData("d", Outtake.VERY_CLOSE_D);
+                    if (dpadUp) {
+                        veryCloseHoodAdjust += 0.01;
                     }
-                    Outtake.updatePID(Outtake.VERY_CLOSE_P, Outtake.VERY_CLOSE_I, Outtake.VERY_CLOSE_D, 0);
-                    telemetry.addData("p", Outtake.VERY_CLOSE_P);
-                    telemetry.addData("i", Outtake.VERY_CLOSE_I);
-                    telemetry.addData("d", Outtake.VERY_CLOSE_D);
+                    if (dpadDown) {
+                        veryCloseHoodAdjust -= 0.01;
+                    }
                     break;
                 case "close":
-                    switch (count) {
-                        case 0:
-                            if (dpadUp) {
-                                Outtake.CLOSE_P += 0.5;
-                            }
-                            if (dpadDown) {
-                                Outtake.CLOSE_P -= 0.5;
-                            }
-                            telemetry.addLine("tuning p");
-                            break;
-                        case 1:
-                            if (dpadUp) {
-                                Outtake.CLOSE_I += 0.25;
-                            }
-                            if (dpadDown) {
-                                Outtake.CLOSE_I -= 0.25;
-                            }
-                            telemetry.addLine("tuning i");
-                            break;
-                        case 2:
-                            if (dpadUp) {
-                                Outtake.CLOSE_D += 0.5;
-                            }
-                            if (dpadDown) {
-                                Outtake.CLOSE_D -= 0.5;
-                            }
-                            telemetry.addLine("tuning d");
-                            break;
+//                    switch (count) {
+//                        case 0:
+//                            if (dpadUp) {
+//                                Outtake.CLOSE_P += 0.5;
+//                            }
+//                            if (dpadDown) {
+//                                Outtake.CLOSE_P -= 0.5;
+//                            }
+//                            telemetry.addLine("tuning p");
+//                            break;
+//                        case 1:
+//                            if (dpadUp) {
+//                                Outtake.CLOSE_I += 0.25;
+//                            }
+//                            if (dpadDown) {
+//                                Outtake.CLOSE_I -= 0.25;
+//                            }
+//                            telemetry.addLine("tuning i");
+//                            break;
+//                        case 2:
+//                            if (dpadUp) {
+//                                Outtake.CLOSE_D += 0.5;
+//                            }
+//                            if (dpadDown) {
+//                                Outtake.CLOSE_D -= 0.5;
+//                            }
+//                            telemetry.addLine("tuning d");
+//                            break;
+//                    }
+//                    Outtake.updatePID(Outtake.CLOSE_P, Outtake.CLOSE_I, Outtake.CLOSE_D, 0);
+//                    telemetry.addData("p", Outtake.CLOSE_P);
+//                    telemetry.addData("i", Outtake.CLOSE_I);
+//                    telemetry.addData("d", Outtake.CLOSE_D);
+                    if (dpadUp) {
+                        closeHoodAdjust += 0.01;
                     }
-                    Outtake.updatePID(Outtake.CLOSE_P, Outtake.CLOSE_I, Outtake.CLOSE_D, 0);
-                    telemetry.addData("p", Outtake.CLOSE_P);
-                    telemetry.addData("i", Outtake.CLOSE_I);
-                    telemetry.addData("d", Outtake.CLOSE_D);
+                    if (dpadDown) {
+                        closeHoodAdjust -= 0.01;
+                    }
                     break;
                 case "far":
-                    switch (count) {
-                        case 0:
-                            if (dpadUp) {
-                                Outtake.FAR_P += 0.5;
-                            }
-                            if (dpadDown) {
-                                Outtake.FAR_P -= 0.5;
-                            }
-                            telemetry.addLine("tuning p");
-                            break;
-                        case 1:
-                            if (dpadUp) {
-                                Outtake.FAR_I += 0.25;
-                            }
-                            if (dpadDown) {
-                                Outtake.FAR_I -= 0.25;
-                            }
-                            telemetry.addLine("tuning i");
-                            break;
-                        case 2:
-                            if (dpadUp) {
-                                Outtake.FAR_D += 0.5;
-                            }
-                            if (dpadDown) {
-                                Outtake.FAR_D -= 0.5;
-                            }
-                            telemetry.addLine("tuning d");
-                            break;
+//                    switch (count) {
+//                        case 0:
+//                            if (dpadUp) {
+//                                Outtake.FAR_P += 0.5;
+//                            }
+//                            if (dpadDown) {
+//                                Outtake.FAR_P -= 0.5;
+//                            }
+//                            telemetry.addLine("tuning p");
+//                            break;
+//                        case 1:
+//                            if (dpadUp) {
+//                                Outtake.FAR_I += 0.25;
+//                            }
+//                            if (dpadDown) {
+//                                Outtake.FAR_I -= 0.25;
+//                            }
+//                            telemetry.addLine("tuning i");
+//                            break;
+//                        case 2:
+//                            if (dpadUp) {
+//                                Outtake.FAR_D += 0.5;
+//                            }
+//                            if (dpadDown) {
+//                                Outtake.FAR_D -= 0.5;
+//                            }
+//                            telemetry.addLine("tuning d");
+//                            break;
+//                    }
+//                    Outtake.updatePID(Outtake.FAR_P, Outtake.FAR_I, Outtake.FAR_D, 0);
+//                    telemetry.addData("p", Outtake.FAR_P);
+//                    telemetry.addData("i", Outtake.FAR_I);
+//                    telemetry.addData("d", Outtake.FAR_D);
+                    if (dpadUp) {
+                        farHoodAdjust += 0.01;
                     }
-                    Outtake.updatePID(Outtake.FAR_P, Outtake.FAR_I, Outtake.FAR_D, 0);
-                    telemetry.addData("p", Outtake.FAR_P);
-                    telemetry.addData("i", Outtake.FAR_I);
-                    telemetry.addData("d", Outtake.FAR_D);
+                    if (dpadDown) {
+                        farHoodAdjust -= 0.01;
+                    }
                     break;
             }
+            Outtake.updateHoodPositions(Outtake.CLOSE_HOOD + closeHoodAdjust, Outtake.VERY_CLOSE_HOOD + veryCloseHoodAdjust, Outtake.FAR_HOOD + farHoodAdjust);
+            telemetry.addData("very close hood adjust", veryCloseHoodAdjust);
+            telemetry.addData("close hood adjust", closeHoodAdjust);
+            telemetry.addData("far hood adjust", farHoodAdjust);
+
 //            if (dpadLeft) {
 //                //Outtake.SPEED_CONST_FAR += 2;
 //                if (Outtake.d <= 20) {

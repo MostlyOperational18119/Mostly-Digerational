@@ -23,8 +23,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 
-@Autonomous(name = "RedFrontM3")
-public class RedFrontAutoM3 extends LinearOpMode {
+@Autonomous(name = "RedFront6")
+public class RedFront6 extends LinearOpMode {
     Pose start = new Pose(112, 134.5, Math.toRadians(180));
     Pose readObelisk = new Pose(96, 120, Math.toRadians(120));
     Pose launch = new Pose(96, 96, Math.toRadians(180));

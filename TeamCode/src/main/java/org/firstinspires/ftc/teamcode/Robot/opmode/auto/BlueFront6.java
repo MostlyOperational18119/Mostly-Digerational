@@ -22,8 +22,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-@Autonomous(name = "BlueFrontM3")
-public class BlueFrontAutoM3 extends LinearOpMode {
+@Autonomous(name = "BlueFront6")
+public class BlueFront6 extends LinearOpMode {
     Pose start = new Pose(32, 134.5, Math.toRadians(180));
     Pose readObelisk = new Pose(48, 120, Math.toRadians(45));
     Pose launch = new Pose(48, 96, Math.toRadians(180));

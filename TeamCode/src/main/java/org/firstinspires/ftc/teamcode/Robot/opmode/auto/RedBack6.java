@@ -22,24 +22,24 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-@Autonomous(name = "9BallBlueBackM3")
-public class BlueBackAutoM3 extends LinearOpMode {
-    Pose start = new Pose(56, 8, Math.toRadians(180));
-    Pose readObelisk = new Pose(56, 48, Math.toRadians(90));
-    Pose launch = new Pose(56, 10, Math.toRadians(180));
-    Pose intakePrep1 = new Pose(46, 34, Math.toRadians(180));
-    Pose intakePrep2 = new Pose(46, 58, Math.toRadians(180));
-    Pose intakePrep3 = new Pose(46, 84, Math.toRadians(180));
-    Pose intakeEnd1 = new Pose(15, 34, Math.toRadians(180));
-    Pose intakeEnd2 = new Pose(15, 58, Math.toRadians(180));
-    Pose intakeEnd3 = new Pose(15, 84, Math.toRadians(180));
-    Pose park = new Pose(36, 8, Math.toRadians(180));
+@Autonomous(name = "RedBack6")
+public class RedBack6 extends LinearOpMode {
+    Pose start = new Pose(88, 8, Math.toRadians(180));
+    Pose launch = new Pose(88, 10, Math.toRadians(180));
+    Pose intakePrep1 = new Pose(98, 34, Math.toRadians(180));
+    Pose intakePrep2 = new Pose(98, 58, Math.toRadians(180));
+    Pose intakePrep3 = new Pose(98, 84, Math.toRadians(180));
+    Pose intakeEnd1 = new Pose(129, 34, Math.toRadians(180));
+    Pose intakeEnd2 = new Pose(129, 58, Math.toRadians(180));
+    Pose intakeEnd3 = new Pose(130, 84, Math.toRadians(180));
+    Pose park = new Pose(108, 8, Math.toRadians(180));
     Follower follower;
-    PathChain toObelisk, obeliskToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
-    int state = -3;
+    PathChain toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
+    int state = -1;
     int targetClicks = 0;
-    long delayTimer = 0;
+    long launchDelayTimer = 0;
     int launchCount = 0;
+    long delayTimer = 0;
     int numBalls = -1;
     boolean limelightAvailable = true;
 
@@ -69,7 +69,6 @@ public class BlueBackAutoM3 extends LinearOpMode {
     // Return value is true if we're done
     boolean launch() {
         if (limelightAvailable && numBalls != -1) {
-            // TODO: ADD FALLBACK IN CASE WE DONT HAVE THE RIGHT TYPE OF BALLS TO COMPLETE THE PATTERN WHILE STILL HAVING SOME BALLS REMAINING
             return Indexer.startLaunch(numBalls, true);
         } else {
             return normalLaunch();
@@ -80,29 +79,23 @@ public class BlueBackAutoM3 extends LinearOpMode {
     public void runOpMode() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        Outtake.StaticVars.isBlue = true;
+        Outtake.StaticVars.isBlue = false;
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
+
 //        Outtake.SPEED_CONST_FAR = Outtake.SPEED_CONST_FAR / 1.1;
 
         try {
             limelight = new Limelight();
-            limelight.setChosenGoal(0);
         } catch (IOException e) {
             limelightAvailable = false;
-            Log.e("BlueBackAutoM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
+            Log.e("RedBackAuto6BallM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
         }
 
-        toObelisk = follower.pathBuilder()
-                .addPath(new BezierLine(start, readObelisk))
-                .setLinearHeadingInterpolation(start.getHeading(), readObelisk.getHeading())
-                .build();
-
-        obeliskToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(readObelisk, launch))
-                .setLinearHeadingInterpolation(readObelisk.getHeading(), launch.getHeading())
-                .build();
+        // Sanity check
+        // Either we have no limelight, or the limelight is NOT null
+        assert !limelightAvailable || limelight != null;
 
         toIntakePrep1 = follower.pathBuilder()
                 .addPath(new BezierLine(launch, intakePrep1))
@@ -154,10 +147,11 @@ public class BlueBackAutoM3 extends LinearOpMode {
         waitForStart();
 
         Outtake.outtakeSpeed();
-        delayTimer = System.currentTimeMillis();
+        launchDelayTimer = System.currentTimeMillis();
 
 
         while (opModeIsActive()) {
+//            Outtake.update(targetClicks);
             follower.update();
             if (limelightAvailable) {
                 limelight.update();
@@ -191,42 +185,28 @@ public class BlueBackAutoM3 extends LinearOpMode {
             }
             Outtake.StaticVars.endPose = follower.getPose();
             Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
+            Outtake.StaticVars.isBlue = false;
+
 
             telemetry.addData("clicks", Drivetrain.outtakePosition());
-            telemetry.addData("time delta", System.currentTimeMillis() - delayTimer);
+            telemetry.addData("time delta", System.currentTimeMillis() - launchDelayTimer);
             telemetry.addData("slot 1 state", Indexer.currentState1);
             telemetry.addData("robot x follower", follower.getPose().getX());
             telemetry.update();
 
             if (!follower.isBusy()) {
                 switch (state) {
-                    case -3:
-                        if (System.currentTimeMillis() - delayTimer > 2000) {
-                            state = -2;
-                            delayTimer = System.currentTimeMillis();
-                        }
-                        break;
-                    case -2:
-                        follower.followPath(toObelisk, 1, true);
-                        state = 0;
-                        break;
                     case -1:
-                        // Only proceed once we get the pattern if the limelight is active
-                        // Let's not softlock ourselves if the Limelight is not available
-                        if (!limelightAvailable || limelight.getPattern().isPresent()) {
-                            Indexer.updatePattern(limelight.getPattern().get());
+                        if (System.currentTimeMillis() - launchDelayTimer > 2000) {
                             state = 0;
+                            launchDelayTimer = System.currentTimeMillis();
                         }
                         break;
                     case 0:
-                        follower.followPath(obeliskToLaunch, 1, true);
-                        state = 1;
-                        break;
-                    case 1:
                         if (launch()) state = 2;
                         break;
                     case 2:
-                        if (System.currentTimeMillis() - delayTimer > 500) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
                             state = 3;
                         }
                         break;
@@ -243,71 +223,90 @@ public class BlueBackAutoM3 extends LinearOpMode {
                     case 5:
                         follower.followPath(intakeToLaunch1, 0.7, true);
                         state = 6;
-                        delayTimer = System.currentTimeMillis();
+                        launchDelayTimer = System.currentTimeMillis();
                         break;
                     case 6:
-                        if (System.currentTimeMillis() - delayTimer > 700) {
+                        if (System.currentTimeMillis() - launchDelayTimer > 1000) {
                             Intake.intakeStop();
                             state = 7;
                         }
                         break;
                     case 7:
+                        // If we're done launching GTFO
                         if (launch()) state = 9;
                         break;
                     case 9:
-                        if (System.currentTimeMillis() - delayTimer > 500) {
-                            state = 10;
+                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                            state = 23;
                         }
                         break;
-                    case 10:
-                        follower.followPath(toIntakePrep2, 1, true);
-                        state = 11;
-                        Intake.intakeGo();
-                        break;
-                    case 11:
-                        follower.followPath(intake2, 0.8, true);
-                        state = 12;
-                        break;
-                    case 12:
-                        follower.followPath(intakeToLaunch2, 0.7, true);
-                        state = 13;
-                        delayTimer = System.currentTimeMillis();
-                        break;
-                    case 13:
-                        if (launch()) state = 15;
-                        break;
-                    case 15:
-                        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
-                            // Check and launch any remaining balls in the indexer
-                            if (Indexer.slotColors()[0] != 0) {
-                                delayTimer = Indexer.launch0();
-                                state = 15; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[2] != 0) {
-                                delayTimer = Indexer.launch2();
-                                state = 15; // Stay in this state to check again
-                            } else if (Indexer.slotColors()[1] != 0) {
-                                delayTimer = Indexer.launch1();
-                                state = 15; // Stay in this state to check again
-                            } else {
-                                // All slots empty, move to next state
-                                state = 16;
-                            }
-                        }
-                        break;
-                    case 16:
-                        if (System.currentTimeMillis() - delayTimer > 500) {
-                            state = 17;
-                        }
-                        break;
-                    case 17:
-//                        follower.followPath(launchToPark, 0.6, true);
-                        Intake.intakeStop();
-                        state = 23;
-                        break;
-//                    case 18:
-//                        Outtake.StaticVars.isBlue = true;
-//                        Outtake.StaticVars.endPose = follower.getPose();
-//                        state = 19;
+//                    case 10:
+//                        follower.followPath(toIntakePrep2, 1, true);
+//                        state = 11;
+//                        Intake.intakeGo();
+//                        break;
+//                    case 11:
+//                        follower.followPath(intake2, 0.8, true);
+//                        state = 12;
+//                        break;
+//                    case 12:
+//                        follower.followPath(intakeToLaunch2, .8, true);
+//                        state = 13;
+//                        launchDelayTimer = System.currentTimeMillis();
+//                        break;
+//                    case 13:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+//                            Intake.intakeStop();
+//                            state = 14;
+//                        }
+//                        break;
+//                    case 14:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+//                            switch (launchCount) {
+//                                case 0:
+//                                    launchDelayTimer = Indexer.launch0();
+//                                    launchCount = 1;
+//                                    break;
+//                                case 1:
+//                                    launchDelayTimer = Indexer.launch1();
+//                                    launchCount = 2;
+//                                    break;
+//                                case 2:
+//                                    launchDelayTimer = Indexer.launch2();
+//                                    state = 15;
+//                                    launchCount = 0;
+//                                    break;
+//                            }
+//                        }
+//                        break;
+//                    case 15:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+//                            for (int i = 0; i < 3; i++) {
+//                                switch (i) {
+//                                    case 0:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch0();
+//                                        }
+//                                        break;
+//                                    case 1:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch1();
+//                                        }
+//                                        break;
+//                                    case 2:
+//                                        if (Indexer.slotColors()[i] != 0) {
+//                                            launchDelayTimer = Indexer.launch2();
+//                                        }
+//                                        state = 16;
+//                                        break;
+//                                }
+//                            }
+//                        }
+//                        break;
+//                    case 16:
+//                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
+//                            state = 23;
+//                        }
 //                        break;
 //                    case 17:
 //                        follower.followPath(toIntakePrep3, 1, true);
@@ -321,27 +320,27 @@ public class BlueBackAutoM3 extends LinearOpMode {
 //                    case 19:
 //                        follower.followPath(intakeToLaunch3, 1, true);
 //                        state = 20;
-//                        delayTimer = System.currentTimeMillis();
+//                        launchDelayTimer = System.currentTimeMillis();
 //                        break;
 //                    case 20:
-//                        if (System.currentTimeMillis() - delayTimer > 500) {
+//                        if (System.currentTimeMillis() - launchDelayTimer > 500) {
 //                            Intake.intakeStop();
 //                            state = 21;
 //                        }
 //                        break;
 //                    case 21:
-//                        if (System.currentTimeMillis() - delayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
+//                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
 //                            switch (launchCount) {
 //                                case 0:
-//                                    delayTimer = Indexer.launch0();
+//                                    launchDelayTimer = Indexer.launch0();
 //                                    launchCount = 1;
 //                                    break;
 //                                case 1:
-//                                    delayTimer = Indexer.launch1();
+//                                    launchDelayTimer = Indexer.launch1();
 //                                    launchCount = 2;
 //                                    break;
 //                                case 2:
-//                                    delayTimer = Indexer.launch2();
+//                                    launchDelayTimer = Indexer.launch2();
 //                                    state = 19;
 //                                    launchCount = 0;
 //                                    break;
@@ -349,22 +348,22 @@ public class BlueBackAutoM3 extends LinearOpMode {
 //                        }
 //                        break;
 //                    case 22:
-//                        if (System.currentTimeMillis() - delayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
+//                        if (System.currentTimeMillis() - launchDelayTimer > 1000 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 50) {
 //                            for (int i = 0; i < 3; i++) {
 //                                switch (i) {
 //                                    case 0:
 //                                        if (Indexer.slotColors()[i] != 0) {
-//                                            delayTimer = Indexer.launch0();
+//                                            launchDelayTimer = Indexer.launch0();
 //                                        }
 //                                        break;
 //                                    case 1:
 //                                        if (Indexer.slotColors()[i] != 0) {
-//                                            delayTimer = Indexer.launch1();
+//                                            launchDelayTimer = Indexer.launch1();
 //                                        }
 //                                        break;
 //                                    case 2:
 //                                        if (Indexer.slotColors()[i] != 0) {
-//                                            delayTimer = Indexer.launch2();
+//                                            launchDelayTimer = Indexer.launch2();
 //                                        }
 //                                        state = 23;
 //                                        break;
@@ -372,17 +371,13 @@ public class BlueBackAutoM3 extends LinearOpMode {
 //                            }
 //                        }
 //                        break;
-//                    case 23:
-//                        follower.followPath(launchToPark, 1, true);
-//                        state = 60;
-//                        break;
                     case 23:
                         follower.followPath(launchToPark, 1, true);
                         state = 24;
                         break;
                     case 24:
                         Outtake.update(0, false);
-                        Outtake.StaticVars.isBlue = true;
+//                        Outtake.SPEED_CONST_FAR = 205;
                         break;
                 }
             }

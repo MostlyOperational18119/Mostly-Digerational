@@ -22,8 +22,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-@Autonomous(name = "6BallBlueBackM3")
-public class BlueBackAuto6BallM3 extends LinearOpMode {
+@Autonomous(name = "BlueBack6")
+public class BlueBack6 extends LinearOpMode {
     Pose start = new Pose(56, 8, Math.toRadians(180));
     Pose launch = new Pose(56, 10, Math.toRadians(180));
     Pose intakePrep1 = new Pose(46, 34, Math.toRadians(180));

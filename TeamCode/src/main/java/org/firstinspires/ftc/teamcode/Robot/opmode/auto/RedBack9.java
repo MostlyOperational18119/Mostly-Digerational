@@ -22,8 +22,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-@Autonomous(name = "9BallRedBackM3")
-public class RedBackAutoM3 extends LinearOpMode {
+@Autonomous(name = "RedBack9")
+public class RedBack9 extends LinearOpMode {
     Pose start = new Pose(88, 8, Math.toRadians(180));
     Pose readObelisk = new Pose(88, 48, Math.toRadians(180));
     Pose launch = new Pose(88, 10, Math.toRadians(180));
