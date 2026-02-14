@@ -86,7 +86,8 @@ public class Outtake {
         outtakeMotorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //initialize to start positions (placeholders)
-        hood.setPosition(FAR_HOOD);
+        Outtake.hood.setPosition(/*VERY_CLOSE_HOOD*/ FAR_HOOD);
+
         rotateServo.setPower(0);
 
         //set blue/red aiming
@@ -151,8 +152,9 @@ public class Outtake {
         double relativeAngle = 360 - (absoluteAngleToGoal - (angleOffset + robotOrientation));
 
         relativeAngle = ((relativeAngle % 360) + 360) % 360;
+        
+        return (relativeAngle * 65.871345) + 3900;
 
-        return (relativeAngle * 65.871345) + 4000;
     }
 
     public static double pointAtChamber() {
@@ -244,7 +246,10 @@ public class Outtake {
             outtakeMotorLeft.setVelocityPIDFCoefficients(CLOSE_P, CLOSE_I, CLOSE_D, 0);
             outtakeMotorRight.setVelocityPIDFCoefficients(CLOSE_P, CLOSE_I, CLOSE_D, 0);
         } else { //in all other situations, we'll be launching from the far zone
+            
             hood.setPosition(FAR_HOOD);
+            //hood.setPosition(VERY_CLOSE_HOOD);
+            
             speed = SPEED_CONST_FAR * Math.sqrt(distance);
             currentDistance = "far";
             if (isBlue) {
