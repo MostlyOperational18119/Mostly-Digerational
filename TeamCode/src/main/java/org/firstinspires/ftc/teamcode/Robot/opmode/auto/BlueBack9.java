@@ -22,21 +22,21 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-@Autonomous(name = "9BallRedBackM3")
-public class RedBackAutoM3 extends LinearOpMode {
-    Pose start = new Pose(88, 8, Math.toRadians(180));
-    Pose readObelisk = new Pose(88, 48, Math.toRadians(180));
-    Pose launch = new Pose(88, 10, Math.toRadians(180));
-    Pose intakePrep1 = new Pose(98, 34, Math.toRadians(180));
-    Pose intakePrep2 = new Pose(98, 58, Math.toRadians(180));
-    Pose intakePrep3 = new Pose(98, 84, Math.toRadians(180));
-    Pose intakeEnd1 = new Pose(129, 34, Math.toRadians(180));
-    Pose intakeEnd2 = new Pose(129, 58, Math.toRadians(180));
-    Pose intakeEnd3 = new Pose(130, 84, Math.toRadians(180));
-    Pose park = new Pose(108, 8, Math.toRadians(180));
+@Autonomous(name = "BlueBack9")
+public class BlueBack9 extends LinearOpMode {
+    Pose start = new Pose(56, 8, Math.toRadians(180));
+    Pose readObelisk = new Pose(56, 48, Math.toRadians(90));
+    Pose launch = new Pose(56, 10, Math.toRadians(180));
+    Pose intakePrep1 = new Pose(46, 34, Math.toRadians(180));
+    Pose intakePrep2 = new Pose(46, 58, Math.toRadians(180));
+    Pose intakePrep3 = new Pose(46, 84, Math.toRadians(180));
+    Pose intakeEnd1 = new Pose(15, 34, Math.toRadians(180));
+    Pose intakeEnd2 = new Pose(15, 58, Math.toRadians(180));
+    Pose intakeEnd3 = new Pose(15, 84, Math.toRadians(180));
+    Pose park = new Pose(36, 8, Math.toRadians(180));
     Follower follower;
     PathChain toObelisk, obeliskToLaunch, toIntakePrep1, intake1, intakeToLaunch1, toIntakePrep2, intake2, intakeToLaunch2, toIntakePrep3, intake3, intakeToLaunch3, launchToPark;
-    int state = -2;
+    int state = -3;
     int targetClicks = 0;
     long delayTimer = 0;
     int launchCount = 0;
@@ -69,6 +69,7 @@ public class RedBackAutoM3 extends LinearOpMode {
     // Return value is true if we're done
     boolean launch() {
         if (limelightAvailable && numBalls != -1) {
+            // TODO: ADD FALLBACK IN CASE WE DONT HAVE THE RIGHT TYPE OF BALLS TO COMPLETE THE PATTERN WHILE STILL HAVING SOME BALLS REMAINING
             return Indexer.startLaunch(numBalls, true);
         } else {
             return normalLaunch();
@@ -79,29 +80,30 @@ public class RedBackAutoM3 extends LinearOpMode {
     public void runOpMode() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(start);
-        Outtake.StaticVars.isBlue = false;
+        Outtake.StaticVars.isBlue = true;
         Outtake.init(hardwareMap);
         Intake.init(hardwareMap);
         Indexer.init(hardwareMap);
+//        Outtake.SPEED_CONST_FAR = Outtake.SPEED_CONST_FAR / 1.1;
 
         try {
             limelight = new Limelight();
-            limelight.setChosenGoal(1);
+            limelight.setChosenGoal(0);
         } catch (IOException e) {
             limelightAvailable = false;
             Log.e("BlueBackAutoM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
         }
 
-//        Outtake.SPEED_CONST_FAR = Outtake.SPEED_CONST_FAR / 1.1;
-
         toObelisk = follower.pathBuilder()
                 .addPath(new BezierLine(start, readObelisk))
                 .setLinearHeadingInterpolation(start.getHeading(), readObelisk.getHeading())
                 .build();
+
         obeliskToLaunch = follower.pathBuilder()
                 .addPath(new BezierLine(readObelisk, launch))
                 .setLinearHeadingInterpolation(readObelisk.getHeading(), launch.getHeading())
                 .build();
+
         toIntakePrep1 = follower.pathBuilder()
                 .addPath(new BezierLine(launch, intakePrep1))
                 .setLinearHeadingInterpolation(launch.getHeading(), intakePrep1.getHeading())
@@ -190,7 +192,6 @@ public class RedBackAutoM3 extends LinearOpMode {
             Outtake.StaticVars.endPose = follower.getPose();
             Outtake.StaticVars.outtakePos = Drivetrain.outtakePosition();
 
-
             telemetry.addData("clicks", Drivetrain.outtakePosition());
             telemetry.addData("time delta", System.currentTimeMillis() - delayTimer);
             telemetry.addData("slot 1 state", Indexer.currentState1);
@@ -199,32 +200,29 @@ public class RedBackAutoM3 extends LinearOpMode {
 
             if (!follower.isBusy()) {
                 switch (state) {
-                    case -2:
+                    case -3:
                         if (System.currentTimeMillis() - delayTimer > 2000) {
-                            state = -1;
+                            state = -2;
                             delayTimer = System.currentTimeMillis();
                         }
                         break;
                     case -1:
-                        // Start looking at the bloody obelisk
-                        // Wait, do we even need a path to obelisk anymore?
-                        Outtake.currentState = Outtake.States.AIM_OBELISK;
-                        follower.followPath(toObelisk, 0.8, true);
-                        state = 0;
-                        break;
-                    case 0:
+                        // Only proceed once we get the pattern if the limelight is active
+                        // Let's not softlock ourselves if the Limelight is not available
                         if (!limelightAvailable || limelight.getPattern().isPresent()) {
                             Indexer.updatePattern(limelight.getPattern().get());
-                            Outtake.currentState = Outtake.States.AIM_GOAL;
-                            follower.followPath(obeliskToLaunch, 0.8, true);
-                            state = 1;
+                            state = 0;
                         }
+                        break;
+                    case 0:
+                        follower.followPath(obeliskToLaunch, 1, true);
+                        state = 1;
                         break;
                     case 1:
                         if (launch()) state = 2;
                         break;
                     case 2:
-                        if (System.currentTimeMillis() - delayTimer > 1000) {
+                        if (System.currentTimeMillis() - delayTimer > 500) {
                             state = 3;
                         }
                         break;
@@ -244,7 +242,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         delayTimer = System.currentTimeMillis();
                         break;
                     case 6:
-                        if (System.currentTimeMillis() - delayTimer > 1000) {
+                        if (System.currentTimeMillis() - delayTimer > 700) {
                             Intake.intakeStop();
                             state = 7;
                         }
@@ -259,12 +257,12 @@ public class RedBackAutoM3 extends LinearOpMode {
                         break;
                     case 10:
                         follower.followPath(toIntakePrep2, 1, true);
-                        state = 11;
+                        state = 10;
                         Intake.intakeGo();
                         break;
-                    case 11:
+                    case 10:
                         follower.followPath(intake2, 0.8, true);
-                        state = 12;
+                        state = 11;
                         break;
                     case 12:
                         follower.followPath(intakeToLaunch2, 0.7, true);
@@ -272,29 +270,7 @@ public class RedBackAutoM3 extends LinearOpMode {
                         delayTimer = System.currentTimeMillis();
                         break;
                     case 13:
-                        if (System.currentTimeMillis() - delayTimer > 500) {
-                            Intake.intakeStop();
-                            state = 14;
-                        }
-                        break;
-                    case 14:
-                        if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
-                            switch (launchCount) {
-                                case 0:
-                                    delayTimer = Indexer.launch0();
-                                    launchCount = 1;
-                                    break;
-                                case 1:
-                                    delayTimer = Indexer.launch2();
-                                    launchCount = 2;
-                                    break;
-                                case 2:
-                                    delayTimer = Indexer.launch1();
-                                    state = 15;
-                                    launchCount = 0;
-                                    break;
-                            }
-                        }
+                        if (launch()) state = 15;
                         break;
                     case 15:
                         if (System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
@@ -316,10 +292,28 @@ public class RedBackAutoM3 extends LinearOpMode {
                         break;
                     case 16:
                         if (System.currentTimeMillis() - delayTimer > 500) {
-                            state = 23;
-                            Intake.intakeStop();
+                            state = 17;
                         }
                         break;
+                    case 15:
+                        follower.followPath(toIntakePrep3, 1, true);
+                        state = 16;
+                        Intake.intakeGo();
+                        break;
+                    case 16:
+                        follower.followPath(intake3, 0.8, true);
+                        state = 17;
+                        break;
+                    case 17:
+//                        follower.followPath(launchToPark, 0.6, true);
+                        Intake.intakeStop();
+                        state = 23;
+                        break;
+//                    case 18:
+//                        Outtake.StaticVars.isBlue = true;
+//                        Outtake.StaticVars.endPose = follower.getPose();
+//                        state = 19;
+//                        break;
 //                    case 17:
 //                        follower.followPath(toIntakePrep3, 1, true);
 //                        state = 18;
@@ -383,13 +377,17 @@ public class RedBackAutoM3 extends LinearOpMode {
 //                            }
 //                        }
 //                        break;
+//                    case 23:
+//                        follower.followPath(launchToPark, 1, true);
+//                        state = 60;
+//                        break;
                     case 23:
                         follower.followPath(launchToPark, 1, true);
                         state = 24;
                         break;
                     case 24:
                         Outtake.update(0, false);
-                        Outtake.StaticVars.isBlue = false;
+                        Outtake.StaticVars.isBlue = true;
                         break;
                 }
             }

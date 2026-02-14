@@ -194,8 +194,10 @@ public class Outtake {
         if (currentState != States.AIM_OBELISK) {
             if (launch > 0) {
                 currentState = States.AIM_CHAMBER;
-            } else {
+            } else if (launch == -1) {
                 currentState = States.AIM_GOAL;
+            } else if (launch == -2) {
+                currentState = States.AIM_OBELISK;
             }
         }
 
