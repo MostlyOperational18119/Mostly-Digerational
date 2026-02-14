@@ -31,12 +31,16 @@ public class LimelightTest extends LinearOpMode {
 
             Optional<Integer> ballCount = limelight.getBallCount();
             Optional<Integer[]> pattern = limelight.getPattern();
+            Optional<double[]> goalTagPosition = limelight.getGoalTagPosition();
 
             if (ballCount.isPresent()) telemetry.addData("Ball count:", ballCount.get());
             else telemetry.addLine("Ball count: unknown");
 
             if (pattern.isPresent()) telemetry.addData("Pattern:", Arrays.toString(pattern.get()));
             else telemetry.addLine("Pattern: unknown");
+
+            if (goalTagPosition.isPresent()) telemetry.addData("Goal tag position:", Arrays.toString(goalTagPosition.get()));
+            else telemetry.addLine("Goal tag position: unknown");
 
             telemetry.update();
 

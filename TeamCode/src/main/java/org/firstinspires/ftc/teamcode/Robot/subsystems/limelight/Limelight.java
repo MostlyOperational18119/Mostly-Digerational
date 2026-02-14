@@ -115,4 +115,25 @@ public class Limelight {
 
         return Optional.empty();
     }
+
+    public Optional<AprilTagResult> getGoalTag() {
+        if (results != null && results.containsKey(ToRobotMsg.ResultType.AprilTag)) {
+            ArrayList<AprilTagResult> tagResults = (ArrayList<AprilTagResult>) results.get(ToRobotMsg.ResultType.AprilTag);
+
+            for (AprilTagResult tagResult : tagResults) {
+                // Is BLUE (and we chose blue) or RED (and we chose red)
+                if ((chosenGoal == 0 && tagResult.tagID == 20) || (chosenGoal == 1 && tagResult.tagID == 23))
+                    return Optional.of(tagResult);
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    public Optional<double[]> getGoalTagPosition() {
+        Optional<AprilTagResult> goalTag = getGoalTag();
+
+        // Get the tagPos if present, otherwise just don't
+        return goalTag.map(aprilTagResult -> aprilTagResult.tagPos);
+    }
 }
