@@ -29,7 +29,7 @@ public class BlueBack3 extends LinearOpMode {
     Pose park = new Pose(36, 8, Math.toRadians(180));
     Follower follower;
     PathChain launchToPark;
-    int state = -1;
+    int state = -2;
     long delayTimer = 0;
     int launchCount = 0;
     int numBalls = -1;
@@ -78,7 +78,7 @@ public class BlueBack3 extends LinearOpMode {
             limelight = new Limelight();
         } catch (IOException e) {
             limelightAvailable = false;
-            Log.e("BlueBackAuto6BallM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
+            Log.e("BlueBackAuto3BallM3", String.format("No limelight, error was: %s", e.getLocalizedMessage()));
         }
 
         // Sanity check

@@ -252,11 +252,11 @@ public class Indexer {
             Log.i("Indexer", "Launching slot 0");
             currentState0 = States.LAUNCH;
             chamberIncrease += 1;
-        } else if (slots[2] == nextBall(chamberNum, chamberIncrease, pattern)) {
+        } if (slots[2] == nextBall(chamberNum, chamberIncrease, pattern)) {
             Log.i("Indexer", "Launching slot 2");
             currentState2 = States.LAUNCH;
             chamberIncrease += 1;
-        } else if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
+        } if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
             Log.i("Indexer", "Launching slot 1");
             currentState1 = States.LAUNCH;
             chamberIncrease += 1;
@@ -273,17 +273,20 @@ public class Indexer {
                     Log.i("Indexer", "Unordered launching slot 0");
                     currentState0 = States.LAUNCH;
                     chamberIncrease += 1;
-                } else if (slots[2] != 0) {
+                }
+                if (slots[2] != 0) {
                     Log.i("Indexer", "Unordered launching slot 2");
                     currentState2 = States.LAUNCH;
                     chamberIncrease += 1;
-                } else if (slots[1] != 0) {
+                }
+                if (slots[1] != 0) {
                     Log.i("Indexer", "Unordered launching slot 1");
                     currentState1 = States.LAUNCH;
                     chamberIncrease += 1;
-                } else {
-                    Log.i("Indexer", "Wtf");
                 }
+//                else {
+//                    Log.i("Indexer", "Wtf");
+//                }
             }
         }
         // Still more to launch
