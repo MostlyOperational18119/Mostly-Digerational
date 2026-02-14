@@ -5,6 +5,7 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.AprilTagResult;
 import org.firstinspires.ftc.teamcode.Robot.subsystems.limelight.Limelight;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class LimelightTest extends LinearOpMode {
 
             Optional<Integer> ballCount = limelight.getBallCount();
             Optional<Integer[]> pattern = limelight.getPattern();
-            Optional<double[]> goalTagPosition = limelight.getGoalTagPosition();
+            Optional<AprilTagResult> goalTag = limelight.getGoalTag();
 
             if (ballCount.isPresent()) telemetry.addData("Ball count:", ballCount.get());
             else telemetry.addLine("Ball count: unknown");
@@ -39,8 +40,13 @@ public class LimelightTest extends LinearOpMode {
             if (pattern.isPresent()) telemetry.addData("Pattern:", Arrays.toString(pattern.get()));
             else telemetry.addLine("Pattern: unknown");
 
-            if (goalTagPosition.isPresent()) telemetry.addData("Goal tag position:", Arrays.toString(goalTagPosition.get()));
-            else telemetry.addLine("Goal tag position: unknown");
+            if (goalTag.isPresent()) {
+                telemetry.addData("Goal tag position:", Arrays.toString(goalTag.get().tagPos));
+                telemetry.addData("Goal tag ID:", goalTag.get().tagID);
+            } else {
+                telemetry.addLine("Goal tag position: unknown");
+                telemetry.addLine("Goal tag ID: unknown");
+            }
 
             telemetry.update();
 
