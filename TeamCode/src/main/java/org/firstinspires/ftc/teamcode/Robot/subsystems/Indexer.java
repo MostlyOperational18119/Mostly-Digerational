@@ -60,6 +60,8 @@ public class Indexer {
 
 
     public static long launch0() {
+        Log.i("Indexer", "Launching slot 0");
+
         currentState0 = States.LAUNCH;
         startTime = System.currentTimeMillis();
 
@@ -68,6 +70,8 @@ public class Indexer {
     }
 
     public static long launch1() {
+        Log.i("Indexer", "Launching slot 1");
+
         currentState1 = States.LAUNCH;
         startTime = System.currentTimeMillis();
 
@@ -76,6 +80,8 @@ public class Indexer {
     }
 
     public static long launch2() {
+        Log.i("Indexer", "Launching slot 2");
+
         currentState2 = States.LAUNCH;
         startTime = System.currentTimeMillis();
 
@@ -250,41 +256,36 @@ public class Indexer {
         if (currentState0 == States.LAUNCH || currentState1 == States.LAUNCH || currentState2 == States.LAUNCH) return false;
 
         int[] slots = Arrays.copyOf(slotColors(), 3);
+
+        Log.i("Indexer", String.format("Current slot colors: %s", Arrays.toString(slots)));
+
         if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
-            Log.i("Indexer", "Launching slot 0");
-            currentState0 = States.LAUNCH;
-            chamberIncrease += 1;
+            Indexer.launch0();
         } if (slots[2] == nextBall(chamberNum, chamberIncrease, pattern)) {
-            Log.i("Indexer", "Launching slot 2");
-            currentState2 = States.LAUNCH;
-            chamberIncrease += 1;
+            Indexer.launch2();
         } if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
-            Log.i("Indexer", "Launching slot 1");
-            currentState1 = States.LAUNCH;
-            chamberIncrease += 1;
+            Indexer.launch1();
         } else {
             Log.i("Indexer", "Matched launch done");
 
-            if (isEmpty()) {
+            if (!canRuinPattern || isEmpty()) {
                 // Done launching, there's no more
+                chamberIncrease = 0;
                 return true;
             } else if (canRuinPattern) {
                 Log.i("Indexer", "Launching the remaining ones");
 
                 if (slots[0] != 0) {
                     Log.i("Indexer", "Unordered launching slot 0");
-                    currentState0 = States.LAUNCH;
-                    chamberIncrease += 1;
+                    Indexer.launch0();
                 }
                 if (slots[2] != 0) {
                     Log.i("Indexer", "Unordered launching slot 2");
-                    currentState2 = States.LAUNCH;
-                    chamberIncrease += 1;
+                    Indexer.launch2();
                 }
                 if (slots[1] != 0) {
                     Log.i("Indexer", "Unordered launching slot 1");
-                    currentState1 = States.LAUNCH;
-                    chamberIncrease += 1;
+                    Indexer.launch1();
                 }
 //                else {
 //                    Log.i("Indexer", "Wtf");
@@ -297,6 +298,9 @@ public class Indexer {
 
     public static int nextBall(int chamberNum, int chamberIncrease, int[] pattern) {
         int patternIndex = (chamberNum + chamberIncrease) % 3;
+
+        Log.i("Indexer", String.format("Next color in pattern should be %d", pattern[patternIndex]));
+
         return pattern[patternIndex];
     }
 
