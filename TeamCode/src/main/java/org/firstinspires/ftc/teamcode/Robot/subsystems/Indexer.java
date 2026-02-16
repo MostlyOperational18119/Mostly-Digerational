@@ -305,10 +305,14 @@ public class Indexer {
     }
 
     public static void updatePattern(int[] newPattern) {
+        Log.i("Indexer", String.format("New pattern: %s", Arrays.toString(newPattern)));
+
         pattern = newPattern;
     }
 
     public static void updatePattern(Integer[] newPattern) {
+        Log.i("Indexer", String.format("New pattern: %s", Arrays.toString(newPattern)));
+
         pattern = Arrays.stream(newPattern).mapToInt(i -> i).toArray();
     }
 
