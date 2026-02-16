@@ -165,8 +165,20 @@ public class compOpMode extends LinearOpMode {
             }
 
             if (B) {
-                isLaunching = true;
-                canRuinPattern = true;
+
+                int slots[] =
+                if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
+                    Indexer.launch0();
+                    zeroHasLaunched = true;
+                } else if (slots[2] == nextBall(chamberNum, chamberIncrease, pattern)) {
+                    Indexer.launch2();
+                    twoHasLaunched = true;
+                } else if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
+                    Indexer.launch1();
+                    oneHasLaunched = true;
+                } else {
+                    Log.i("Indexer", "No balls to launch :P");
+                }
             }
 
             switch (Outtake.currentDistance) {
