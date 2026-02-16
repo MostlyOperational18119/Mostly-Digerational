@@ -190,16 +190,6 @@ public class Outtake {
 
 
     public static void outtakeUpdate(int launch, boolean isTeleOp, int adjust) {
-
-<<<<<<< Updated upstream
-            if (launch > 0) {
-                currentState = States.AIM_CHAMBER;
-            } else if (launch == -1) {
-                currentState = States.AIM_GOAL;
-            } else if (launch == -2) {
-                currentState = States.AIM_OBELISK;
-            }
-=======
         if (launch > 0) {
             currentState = States.AIM_CHAMBER;
         } else if (launch == -1) {
@@ -207,7 +197,6 @@ public class Outtake {
         } else if (launch == -2) {
             currentState = States.AIM_OBELISK;
         }
->>>>>>> Stashed changes
 
         switch (currentState) {
             case AIM_GOAL:
