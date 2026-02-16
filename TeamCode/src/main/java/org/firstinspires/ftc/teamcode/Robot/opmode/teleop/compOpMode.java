@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Robot.opmode.teleop;
 
+import android.util.Log;
+
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -151,6 +153,7 @@ public class compOpMode extends LinearOpMode {
                 }
             } else if (isLaunching && numBalls != -1) { // Don't wanna be useless if there are -1 balls due to... reasons...
                 if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                    Log.i("compOpMode", String.format("Calling Limelight launch (we %s ruin the pattern)", (canRuinPattern ? "can" : "cannot")));
                     isLaunching = !Indexer.startLaunch(numBalls, canRuinPattern);
                     launchDelayTimer = System.currentTimeMillis();
                 }
