@@ -20,7 +20,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 @Autonomous(name = "BlueBack3NoLimelight")
-public class BlueBackAuto3Ball extends LinearOpMode {
+public class BlueBack3NL extends LinearOpMode {
     Pose start = new Pose(56, 8, Math.toRadians(180));
     Pose launch = new Pose(56, 10, Math.toRadians(180));
     Pose intakePrep1 = new Pose(46, 34, Math.toRadians(180));
