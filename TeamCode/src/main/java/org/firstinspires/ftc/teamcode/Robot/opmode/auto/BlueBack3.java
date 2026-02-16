@@ -25,7 +25,7 @@ import java.io.IOException;
 @Autonomous(name = "BlueBack3")
 public class BlueBack3 extends LinearOpMode {
     Pose start = new Pose(56, 8, Math.toRadians(180));
-    Pose launch = new Pose(56, 10, Math.toRadians(180));
+    Pose launchPos = new Pose(56, 10, Math.toRadians(180));
     Pose park = new Pose(36, 8, Math.toRadians(180));
     Follower follower;
     PathChain launchToPark, startToLaunch;
@@ -92,13 +92,13 @@ public class BlueBack3 extends LinearOpMode {
 //        Outtake.SPEED_CONST_FAR = Outtake.SPEED_CONST_FAR / 1.1;
 
         startToLaunch = follower.pathBuilder()
-                .addPath(new BezierLine(start, launch))
-                .setLinearHeadingInterpolation(start.getHeading(), launch.getHeading())
+                .addPath(new BezierLine(start, launchPos))
+                .setLinearHeadingInterpolation(start.getHeading(), launchPos.getHeading())
                 .build();
 
         launchToPark = follower.pathBuilder()
-                .addPath(new BezierLine(launch, park))
-                .setLinearHeadingInterpolation(launch.getHeading(), park.getHeading())
+                .addPath(new BezierLine(launchPos, park))
+                .setLinearHeadingInterpolation(launchPos.getHeading(), park.getHeading())
                 .build();
 
         waitForStart();
@@ -152,6 +152,10 @@ public class BlueBack3 extends LinearOpMode {
             telemetry.addData("slot 1 state", Indexer.currentState1);
             telemetry.addData("robot x follower", follower.getPose().getX());
             telemetry.addData("outtake position", Outtake.StaticVars.outtakePos);
+            telemetry.addData("0 state", Indexer.currentState0);
+            telemetry.addData("1 state", Indexer.currentState1);
+            telemetry.addData("2 state", Indexer.currentState2);
+            telemetry.addData("follower busy", follower.isBusy());
             telemetry.update();
 
             if (!follower.isBusy()) {
@@ -185,6 +189,9 @@ public class BlueBack3 extends LinearOpMode {
                         if (launch()) state = 2;
                         break;
                     case 2:
+                        Indexer.oneHasLaunched = false;
+                        Indexer.zeroHasLaunched = false;
+                        Indexer.twoHasLaunched = false;
 //                        Outtake.outtakeUpdate(-1, false, 0);
 //                        Outtake.outtakeSpeed();
                         if (System.currentTimeMillis() - delayTimer > 500) {

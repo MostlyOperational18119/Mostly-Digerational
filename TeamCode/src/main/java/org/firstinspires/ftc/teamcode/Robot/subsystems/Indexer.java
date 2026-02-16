@@ -17,6 +17,10 @@ public class Indexer {
     public static double UP_POS_2 = 1.0, DOWN_POS_2 = 0.43, MID_POS_2 = 0.66;
     public static double BRAKE_DOWN = 0, BRAKE_UP = 0;
 
+    public static boolean zeroHasLaunched = false;
+    public static boolean oneHasLaunched = false;
+    public static boolean twoHasLaunched = false;
+
     //temporarily commented out for configurableTeleop
     public static double LAUNCH_WAIT = 400;
 
@@ -261,35 +265,31 @@ public class Indexer {
 
         if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
             Indexer.launch0();
-        } if (slots[2] == nextBall(chamberNum, chamberIncrease, pattern)) {
+            zeroHasLaunched = true;
+        } else if (slots[2] == nextBall(chamberNum, chamberIncrease, pattern)) {
             Indexer.launch2();
-        } if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
+            twoHasLaunched = true;
+        } else if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
             Indexer.launch1();
+            oneHasLaunched = true;
         } else {
             Log.i("Indexer", "Matched launch done");
 
-            if (!canRuinPattern || isEmpty()) {
+            if (!canRuinPattern /*|| isEmpty()*/) {
                 // Done launching, there's no more
                 chamberIncrease = 0;
                 return true;
-            } else if (canRuinPattern) {
-                Log.i("Indexer", "Launching the remaining ones");
-
-                if (slots[0] != 0) {
-                    Log.i("Indexer", "Unordered launching slot 0");
+            } else {
+                if (!zeroHasLaunched) {
+                    zeroHasLaunched = true;
                     Indexer.launch0();
-                }
-                if (slots[2] != 0) {
-                    Log.i("Indexer", "Unordered launching slot 2");
+                } else if (!oneHasLaunched && currentState0 != States.LAUNCH) {
+                    oneHasLaunched = true;
+                    Indexer.launch1();
+                } else if (!twoHasLaunched && currentState0 != States.LAUNCH && currentState1 != States.LAUNCH) {
+                    twoHasLaunched = true;
                     Indexer.launch2();
                 }
-                if (slots[1] != 0) {
-                    Log.i("Indexer", "Unordered launching slot 1");
-                    Indexer.launch1();
-                }
-//                else {
-//                    Log.i("Indexer", "Wtf");
-//                }
             }
         }
         // Still more to launch
