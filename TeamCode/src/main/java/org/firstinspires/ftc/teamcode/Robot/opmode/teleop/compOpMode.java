@@ -149,10 +149,10 @@ public class compOpMode extends LinearOpMode {
                         isLaunching = false;
                     }
                 }
-            } else if (limelightAvailable && numBalls != -1) { // Don't wanna be useless if there are -1 balls due to... reasons...
+            } else if (isLaunching && numBalls != -1) { // Don't wanna be useless if there are -1 balls due to... reasons...
                 if (System.currentTimeMillis() - launchDelayTimer > 500) {
-                    Indexer.startLaunch(numBalls, canRuinPattern);
-                    isLaunching = false;
+                    isLaunching = !Indexer.startLaunch(numBalls, canRuinPattern);
+                    launchDelayTimer = System.currentTimeMillis();
                 }
             }
 
@@ -223,7 +223,10 @@ public class compOpMode extends LinearOpMode {
 //            int[] slots = Indexer.slotColors();
 //            telemetry.addData("supposed dist", Outtake.distance);
             telemetry.addData("manual adjust", isCorrecting);
+            telemetry.addData("launching", isLaunching);
+            telemetry.addData("can we ruin the pattern", canRuinPattern);
             telemetry.addData("angle adjustment", adjust);
+            telemetry.addData("limelight available", limelightAvailable);
 //            telemetry.addData("speed const close")
 //            telemetry.addData("hood angle", Outtake.CLOSE_HOOD);
 //            telemetry.addData("odometry X", Outtake.robotX);

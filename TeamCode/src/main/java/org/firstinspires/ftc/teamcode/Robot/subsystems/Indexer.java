@@ -247,6 +247,8 @@ public class Indexer {
     //Transfer Part Duex import
 
     public static boolean startLaunch(int chamberNum, boolean canRuinPattern) {
+        if (currentState0 == States.LAUNCH || currentState1 == States.LAUNCH || currentState2 == States.LAUNCH) return false;
+
         int[] slots = Arrays.copyOf(slotColors(), 3);
         if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
             Log.i("Indexer", "Launching slot 0");

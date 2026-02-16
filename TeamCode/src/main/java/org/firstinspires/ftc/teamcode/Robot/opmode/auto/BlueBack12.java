@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-@Autonomous(name = "BlueBack9")
+@Autonomous(name = "BlueBack12")
 public class BlueBack12 extends LinearOpMode {
     Pose start = new Pose(56, 8, Math.toRadians(180));
     Pose readObelisk = new Pose(56, 48, Math.toRadians(90));

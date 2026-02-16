@@ -50,7 +50,7 @@ public class Outtake {
     public static double goalX, aimGoalX;
     public static double chamberX;
     static double goalY = 144;
-    static double chamberY = 84;
+    static double chamberY = 96;
     public static double obeliskX = 72;
     public static double obeliskY = 72;
 
@@ -108,8 +108,9 @@ public class Outtake {
         } catch (NumberFormatException e) {
             outtakePosAuto = 0;
         }
+    }
 
-
+    public static void update(int targetClicks, boolean isTeleOp) {
         if (isBlue) {
             goalX = blueX;
             chamberX = chamberBX;
@@ -117,9 +118,7 @@ public class Outtake {
             goalX = redX;
             chamberX = chamberRX;
         }
-    }
 
-    public static void update(int targetClicks, boolean isTeleOp) {
         int clicks = Drivetrain.outtakePosition() + (isTeleOp ? outtakePosAuto : 0);
 
         if (Math.abs(targetClicks - clicks) <= tolerance) {
@@ -170,7 +169,7 @@ public class Outtake {
 
         relativeAngle = ((relativeAngle % 360) + 360) % 360;
 
-        return (relativeAngle * 65.871345) + 2816;
+        return (relativeAngle * 65.871345) + 3900;
     }
 
     public static double pointAtObelisk() {
@@ -185,7 +184,7 @@ public class Outtake {
 
         relativeAngle = ((relativeAngle % 360) + 360) % 360;
 
-        return (relativeAngle * 65.871345) + 2816;
+        return (relativeAngle * 65.871345) + 3900;
     }
 
 
