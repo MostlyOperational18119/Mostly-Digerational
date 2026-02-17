@@ -29,6 +29,7 @@ public class compOpMode extends LinearOpMode {
         long startTime0 = 0, startTime1, startTime2;
         final long WAIT = 300;
         final long LAUNCH_TIME = 150;
+        long delayTimer = 0;
         long launchDelayTimer = 0;
         boolean isLaunching = false;
         int launchCount = 0;
@@ -164,22 +165,21 @@ public class compOpMode extends LinearOpMode {
                 canRuinPattern = false;
             }
 
-            if (B) {
-
-                int slots[] =
-                if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
-                    Indexer.launch0();
-                    zeroHasLaunched = true;
-                } else if (slots[2] == nextBall(chamberNum, chamberIncrease, pattern)) {
-                    Indexer.launch2();
-                    twoHasLaunched = true;
-                } else if (slots[1] == nextBall(chamberNum, chamberIncrease, pattern)) {
-                    Indexer.launch1();
-                    oneHasLaunched = true;
-                } else {
-                    Log.i("Indexer", "No balls to launch :P");
+            if (B && launchCount == 0) {
+                delayTimer = Indexer.launch0();
+                launchCount = 1;
+            } else if (launchCount > 0 && System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+                    switch (launchCount) {
+                        case 1:
+                            delayTimer = Indexer.launch2();
+                            launchCount = 2;
+                            break;
+                        case 2:
+                            delayTimer = Indexer.launch1();
+                            launchCount = 0;
+                            break;
+                    }
                 }
-            }
 
             switch (Outtake.currentDistance) {
                 case "very close":
