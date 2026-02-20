@@ -52,7 +52,7 @@ public class Outtake {
     static double goalY = 144;
     static double chamberY = 96;
     public static double obeliskX = 72;
-    public static double obeliskY = 72;
+    public static double obeliskY = 144;
 
     //temporarily commented out for configurableTeleop
     public static double VERY_CLOSE_P = 12, VERY_CLOSE_I = 0.5, VERY_CLOSE_D = 0.5;

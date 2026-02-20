@@ -68,11 +68,19 @@ public class Limelight {
         } catch (IOException e) {
             Log.e("Limelight", e.getLocalizedMessage());
 
+            Log.w("Limelight", "Sooooooo, there was an error. Let's just reconnect to the camera");
+
+            try {
+                connect();
+            } catch (IOException ex) {
+                Log.e("Limelight", String.format("OH NOOOOOO WE COULDN'T RECONNECT (error was %s), we're cooked", ex.getLocalizedMessage()));
+            }
+
             return false;
         }
     }
 
-    // Doesn't need to be public, probably just going to cause problems
+    // The thing that does the connection thing
     private void connect() throws IOException {
         socket = new Socket("10.12.194.1", 8888);
 
