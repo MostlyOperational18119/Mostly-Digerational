@@ -86,6 +86,7 @@ public class compOpMode extends LinearOpMode {
             boolean dpadDown = gamepad1.dpadDownWasPressed();
             boolean dpadUp = gamepad1.dpadUpWasPressed();
             boolean startButton = gamepad1.startWasPressed();
+            boolean backButton = gamepad1.backWasPressed();
 
             follower.update();
             Outtake.robotY = follower.getPose().getY();
@@ -94,11 +95,13 @@ public class compOpMode extends LinearOpMode {
 
             //look at chamber or shoot
             if (X) {
-                launch *= -1;
+                if (launch != -2) launch *= -1;
             }
 
             if (limelightAvailable) {
-                limelight.update();
+                if (!limelight.update()) {
+                    Log.i("compOpMode", "Limelight encountered some issue, hopefully it's reconnected");
+                }
             }
 
             if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
@@ -110,7 +113,10 @@ public class compOpMode extends LinearOpMode {
             if (limelightAvailable && Outtake.currentState == Outtake.States.AIM_CHAMBER) {
                 Optional<Integer[]> patternUnsafe = limelight.getPattern();
                 // Essentially just update the pattern with the result thingy(tm) if it's present
-                patternUnsafe.ifPresent(integers -> Indexer.updatePattern(Arrays.stream(integers).mapToInt(i -> i).toArray()));
+                patternUnsafe.ifPresent(integers -> {
+                    Log.i("compOpMode", String.format("Pattern found: %s", Arrays.toString(integers)));
+                    Indexer.updatePattern(Arrays.stream(integers).mapToInt(i -> i).toArray());
+                });
             }
 
             if (leftD) {
@@ -226,6 +232,12 @@ public class compOpMode extends LinearOpMode {
 //            }
             if (Y) {
                 Outtake.isBlue = !Outtake.isBlue;
+            }
+
+            if (startButton) {
+                launch = -2;
+            } else if (backButton) {
+                launch = -1;
             }
 
 //            if (startButton) {
