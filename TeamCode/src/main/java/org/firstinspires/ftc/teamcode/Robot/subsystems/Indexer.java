@@ -20,6 +20,9 @@ public class Indexer {
     public static boolean zeroHasLaunched = false;
     public static boolean oneHasLaunched = false;
     public static boolean twoHasLaunched = false;
+    public static boolean zeroHasIncremented = false;
+    public static boolean oneHasIncremented = false;
+    public static boolean twoHasIncremented = false;
 
     //temporarily commented out for configurableTeleop
     public static double LAUNCH_WAIT = 400;
@@ -199,9 +202,10 @@ public class Indexer {
             case LAUNCH:
                 currentStateBrake = States.LAUNCH;
                 slot0.setPosition(UP_POS_0);
-                if (getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue(), slot0Sensor.getDistance(DistanceUnit.MM)) == 0) {
+                if (getColorSlot(slot0Sensor.red(), slot0Sensor.green(), slot0Sensor.blue(), slot0Sensor.getDistance(DistanceUnit.MM)) == 0 && !zeroHasIncremented) {
                     //slot0.setPosition(MID_POS_0);
                     chamberIncrease += 1;
+                    zeroHasIncremented = true;
                 }
                 if (System.currentTimeMillis() - startTime > LAUNCH_WAIT) {
                     currentState0 = States.IDLE;
@@ -219,9 +223,10 @@ public class Indexer {
             case LAUNCH:
                 currentStateBrake = States.LAUNCH;
                 slot1.setPosition(UP_POS_1);
-                if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue(), slot1Sensor.getDistance(DistanceUnit.MM)) == 0) {
+                if (getColorSlot1(slot1Sensor.red(), slot1Sensor.green(), slot1Sensor.blue(), slot1Sensor.getDistance(DistanceUnit.MM)) == 0 && !oneHasIncremented) {
                     //slot1.setPosition(MID_POS_1);
                     chamberIncrease += 1;
+                    oneHasIncremented = true;
                 }
                 if (System.currentTimeMillis() - startTime > LAUNCH_WAIT) {
                     currentState1 = States.IDLE;
@@ -239,9 +244,10 @@ public class Indexer {
             case LAUNCH:
                 currentStateBrake = States.LAUNCH;
                 slot2.setPosition(UP_POS_2);
-                if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue(), slot2Sensor.getDistance(DistanceUnit.MM)) == 0) {
+                if (getColorSlot2(slot2Sensor.red(), slot2Sensor.green(), slot2Sensor.blue(), slot2Sensor.getDistance(DistanceUnit.MM)) == 0 && !oneHasIncremented) {
                     //slot2.setPosition(MID_POS_2);
                     chamberIncrease += 1;
+                    twoHasIncremented = true;
                 }
                 if (System.currentTimeMillis() - startTime > LAUNCH_WAIT) {
                     currentState2 = States.IDLE;
@@ -256,11 +262,24 @@ public class Indexer {
 
     //Transfer Part Duex import
 
+    public static void preLaunch() {
+        chamberIncrease = 0;
+
+        zeroHasLaunched = false;
+        zeroHasIncremented = false;
+        oneHasLaunched = false;
+        oneHasIncremented = false;
+        twoHasLaunched = false;
+        twoHasIncremented = false;
+    }
+
     public static boolean startLaunch(int chamberNum, boolean canRuinPattern) {
         if (currentState0 == States.LAUNCH || currentState1 == States.LAUNCH || currentState2 == States.LAUNCH) return false;
 
         int[] slots = Arrays.copyOf(slotColors(), 3);
 
+
+        Log.i("Indexer", String.format("Chamber increase: %d", chamberIncrease));
         Log.i("Indexer", String.format("Current slot colors: %s", Arrays.toString(slots)));
 
         if (slots[0] == nextBall(chamberNum, chamberIncrease, pattern)) {
