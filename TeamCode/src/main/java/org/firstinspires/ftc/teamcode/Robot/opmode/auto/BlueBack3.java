@@ -189,9 +189,8 @@ public class BlueBack3 extends LinearOpMode {
                         if (launch()) state = 2;
                         break;
                     case 2:
-                        Indexer.oneHasLaunched = false;
-                        Indexer.zeroHasLaunched = false;
-                        Indexer.twoHasLaunched = false;
+                        // PREP FOR LAUNCH, WE NEED TO CALL THIS
+                        Indexer.preLaunch();
 //                        Outtake.outtakeUpdate(-1, false, 0);
 //                        Outtake.outtakeSpeed();
                         if (System.currentTimeMillis() - delayTimer > 500) {

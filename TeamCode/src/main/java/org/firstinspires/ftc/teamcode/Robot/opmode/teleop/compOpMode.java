@@ -144,6 +144,8 @@ public class compOpMode extends LinearOpMode {
                 Intake.intakeStop();
             }
 
+            if (numBalls == -1 || !limelightAvailable) isLaunching = false;
+
             if (isLaunching && !limelightAvailable) {
                 if (System.currentTimeMillis() - launchDelayTimer > 500) {
                     // Check and launch any remaining balls in the indexer
@@ -159,14 +161,21 @@ public class compOpMode extends LinearOpMode {
                     }
                 }
             } else if (isLaunching && numBalls != -1) { // Don't wanna be useless if there are -1 balls due to... reasons...
-                if (System.currentTimeMillis() - launchDelayTimer > 500) {
+                if (System.currentTimeMillis() - launchDelayTimer > 1500) {
                     Log.i("compOpMode", String.format("Calling Limelight launch (we %s ruin the pattern)", (canRuinPattern ? "can" : "cannot")));
                     isLaunching = !Indexer.startLaunch(numBalls, canRuinPattern);
+
+                    // Maybe this is a good idea?
+                    if (!isLaunching) Indexer.chamberIncrease = 0;
+
                     launchDelayTimer = System.currentTimeMillis();
                 }
             }
 
-            if (A) {
+            if (A && !isLaunching) {
+                // PREP FOR LAUNCH, VERY MUCH NEEDED
+                Indexer.preLaunch();
+
                 isLaunching = true;
                 canRuinPattern = false;
             }
@@ -247,7 +256,10 @@ public class compOpMode extends LinearOpMode {
 //                    Lift.unlift();
 //                }
 //            }
-//            int[] slots = Indexer.slotColors();
+            int[] slots = Indexer.slotColors();
+
+            Log.i("compOpMode", String.format("Current slot colors: %s", Arrays.toString(slots)));
+
 //            telemetry.addData("supposed dist", Outtake.distance);
             telemetry.addData("manual adjust", isCorrecting);
             telemetry.addData("launching", isLaunching);
