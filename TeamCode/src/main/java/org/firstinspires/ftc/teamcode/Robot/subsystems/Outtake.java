@@ -24,7 +24,7 @@ public class Outtake {
 
     //outtake speed stuff
     //hood min: 0.58, hood max: 0
-    public static double SPEED_CONST_VERY_CLOSE = 240, SPEED_CONST_CLOSE = 180, SPEED_CONST_FAR = 167.5, VERY_CLOSE_HOOD = 0.71, FAR_HOOD = 0.2, CLOSE_HOOD = 0.2; //up 0.2, low .71
+    public static double SPEED_CONST_VERY_CLOSE = 240, SPEED_CONST_CLOSE = 180, SPEED_CONST_FAR = 167.5, VERY_CLOSE_HOOD = 0.71, FAR_HOOD = 0.31, CLOSE_HOOD = 0.25; //up 0.2, low .71
 
     //configurable testing
     //public static double SPEED_CONST_VERY_CLOSE = configurableTeleop.VERY_CLOSE_SPEED, SPEED_CONST_CLOSE = configurableTeleop.CLOSE_SPEED, SPEED_CONST_FAR = configurableTeleop.FAR_SPEED, VERY_CLOSE_HOOD = configurableTeleop.CLOSER_HOOD, FAR_HOOD = configurableTeleop.FAR_HOOD, CLOSE_HOOD = configurableTeleop.CLOSE_HOOD;
@@ -152,7 +152,7 @@ public class Outtake {
 
         relativeAngle = ((relativeAngle % 360) + 360) % 360;
         
-        return (relativeAngle * 65.871345) + 3900;
+        return (relativeAngle * 65.871345) + 4000;
 
     }
 
