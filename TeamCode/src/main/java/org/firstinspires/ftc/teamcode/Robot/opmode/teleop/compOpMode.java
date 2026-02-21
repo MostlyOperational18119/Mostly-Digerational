@@ -183,7 +183,7 @@ public class compOpMode extends LinearOpMode {
             if (B && launchCount == 0) {
                 delayTimer = Indexer.launch0();
                 launchCount = 1;
-            } else if (launchCount > 0 && System.currentTimeMillis() - delayTimer > 700 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 20) {
+            } else if (launchCount > 0 && System.currentTimeMillis() - delayTimer > 500 && Outtake.outtakeMotorLeft.getVelocity() >= Outtake.speed - 100) {
                     switch (launchCount) {
                         case 1:
                             delayTimer = Indexer.launch2();
