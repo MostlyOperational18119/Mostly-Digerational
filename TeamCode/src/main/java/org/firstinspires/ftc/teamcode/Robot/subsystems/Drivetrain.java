@@ -12,6 +12,8 @@ public class Drivetrain {
 //    public final static int UPPOS = 1;
 //    static public Servo BreakPad;
 
+
+
     public static void init(HardwareMap hwMap) {
         frontLeft = hwMap.get(DcMotor.class, "motorFL");
         frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -29,6 +31,10 @@ public class Drivetrain {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //BreakPad = hwMap.get(Servo.class, "BreakPad");
     }
+
+
+
+
 
 //    static public void BreakPadDown () {
 //        BreakPad.setPosition(DOWNPOS);
